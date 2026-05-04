@@ -362,24 +362,28 @@
         "sliding_image_fyTDBM": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/BunBoo_a_pink_bunny_costume_under_a_spotlight_on_a_dark_background.png",
             "alt_text": ""
           }
         },
         "sliding_image_VJYKJM": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_BunBoo_the_pink_bunny_onesie_on_a_white_background.png",
             "alt_text": ""
           }
         },
         "sliding_image_r3B4Vd": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/DinoBoo_the_Green_dinosaur_costume_on_a_black_background_with_spotlight_and_smoke_effects.png",
             "alt_text": ""
           }
         },
         "sliding_image_Qf9MyM": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_DinoBoo_the_green_dinosaur_onesie_on_a_white_background.png",
             "alt_text": ""
           }
         },
@@ -392,6 +396,7 @@
         "sliding_image_PqwkYT": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_ShaBoo_the_blue_shark_onesie_on_a_white_background.png",
             "alt_text": ""
           }
         },
@@ -404,12 +409,14 @@
         "sliding_image_6iDdnn": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_FoxBoo_the_pink_and_white_animal_onesie_on_a_white_background.png",
             "alt_text": ""
           }
         },
         "sliding_image_Hfz6Kq": {
           "type": "sliding_image",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_GriBoo_the_dragon-themed_onesie_on_a_white_background.png",
             "alt_text": ""
           }
         }
