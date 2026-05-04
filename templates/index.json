@@ -1137,6 +1137,7 @@
         "feature_667RJ4": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Close-up_of_pink_plush_bunny_ears_with_white_tips_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1218,6 +1219,7 @@
         "feature_BgAGCC": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Pink_bunny_hooded_towel_with_white_accents_on_a_red_background_BunBoo.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1333,8 +1335,10 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/BunBoo_Background_homepage.png",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/Child_in_a_pink_bunny_costume_holding_a_hairbrush_against_a_black_background_BunBoo.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
@@ -1385,6 +1389,7 @@
         "feature_ywdycx": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Blue_triangular_fabric_sample_on_a_white_background_ShaBoo_head.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1466,6 +1471,7 @@
         "feature_edCmTh": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Shaboo_Blue_shark-shaped_container_with_a_white_interior_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1581,8 +1587,10 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/Shaboo_Background_Colorful_markers_and_paper_on_a_wooden_table_with_a_blurred_indoor_background.png",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/Shaboo_Foreground_Kid_Child_wearing_a_blue_shark_costume_with_painted_face_on_a_white_background.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
