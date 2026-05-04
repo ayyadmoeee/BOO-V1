@@ -1,0 +1,591 @@
+{%- liquid
+  assign id = section.id
+  assign slides = section.blocks
+-%}
+
+<style>
+.carousel-arc-{{ id }} {
+  background: #0a0a0a;
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.carousel-arc-scene-{{ id }} {
+  perspective: 2500px;
+  perspective-origin: center center;
+  display: flex;
+  justify-content: center;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* Perspective vignette - depth gradient behind object */
+.carousel-arc-scene-{{ id }}::before {
+  content: '';
+  position: absolute;
+  inset: -200px;
+  background: radial-gradient(ellipse at center, 
+    rgba(10, 10, 10, 0.3) 0%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(5, 5, 5, 0.9) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.carousel-arc-track-{{ id }} {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  transform-style: preserve-3d;
+  cursor: grab;
+  user-select: none;
+  z-index: 1;
+}
+
+/* Grounding shadow - soft contact shadow beneath center face */
+.carousel-arc-track-{{ id }}::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 60px;
+  background: radial-gradient(ellipse, 
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.08) 40%,
+    transparent 100%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.carousel-arc-track-{{ id }}:active {
+  cursor: grabbing;
+}
+
+.carousel-arc-item-{{ id }} {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  transform-origin: center center;
+  transition: opacity 0.3s ease;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  cursor: pointer;
+}
+
+/* Center panel - sharp, fully opaque, blocks side panels */
+.carousel-arc-item-{{ id }}[data-center="true"] {
+  filter: contrast(1.2) brightness(1.08);
+  z-index: 20 !important; /* Highest z-index to block side panels */
+  opacity: 1 !important; /* Fully opaque for true occlusion */
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  /* Sharp silhouette - no edge softness */
+  /* Slight falloff toward bottom for grounding */
+  mask-image: linear-gradient(to bottom, 
+    black 0%,
+    black 85%,
+    rgba(0, 0, 0, 0.95) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, 
+    black 0%,
+    black 85%,
+    rgba(0, 0, 0, 0.95) 100%);
+}
+
+/* Side panels - true occlusion, clipped by center panel */
+.carousel-arc-item-{{ id }}[data-side="left"] {
+  /* Clip to show only outer portion - inner edge hidden by center */
+  clip-path: polygon(0 0, 45% 0, 45% 100%, 0 100%);
+  filter: contrast(0.8) brightness(0.65);
+  z-index: 5; /* Behind center panel */
+  /* Dark shadow on inner edge (occlusion boundary, not highlight) */
+  box-shadow: 
+    inset -1px 0 0 rgba(0, 0, 0, 0.6),
+    inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-arc-item-{{ id }}[data-side="right"] {
+  /* Clip to show only outer portion - inner edge hidden by center */
+  clip-path: polygon(55% 0, 100% 0, 100% 100%, 55% 100%);
+  filter: contrast(0.8) brightness(0.65);
+  z-index: 5; /* Behind center panel */
+  /* Dark shadow on inner edge (occlusion boundary, not highlight) */
+  box-shadow: 
+    inset 1px 0 0 rgba(0, 0, 0, 0.6),
+    inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Outer panels - further back, more clipped, with edge softness */
+.carousel-arc-item-{{ id }}[data-side="left"][data-depth="2"] {
+  clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%);
+  z-index: 3;
+  /* Micro softness on outer edges - reduced contrast on far silhouette */
+  filter: contrast(0.75) brightness(0.6);
+  mask-image: linear-gradient(to right, 
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, 
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%);
+}
+
+.carousel-arc-item-{{ id }}[data-side="right"][data-depth="2"] {
+  clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);
+  z-index: 3;
+  /* Micro softness on outer edges - reduced contrast on far silhouette */
+  filter: contrast(0.75) brightness(0.6);
+  mask-image: linear-gradient(to left, 
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, 
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%);
+}
+
+.carousel-arc-item-{{ id }} img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .carousel-arc-track-{{ id }} {
+    width: 400px;
+    height: 400px;
+  }
+}
+</style>
+
+<section class="carousel-arc-{{ id }}">
+  <div class="carousel-arc-scene-{{ id }}">
+    <div class="carousel-arc-track-{{ id }}" data-track>
+      {%- for block in slides -%}
+        <div
+          class="carousel-arc-item-{{ id }}"
+          data-index="{{ forloop.index0 }}">
+          {%- if block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 1200 }}"
+              alt="{{ block.settings.image.alt | escape }}"
+              loading="lazy">
+          {%- else -%}
+            <div style="width: 100%; height: 100%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; border-radius: 16px;">
+              {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const track = document.querySelector('[data-track]');
+  if (!track) return;
+
+  const items = [...track.children];
+  const total = items.length;
+
+  if (total === 0) return;
+
+  // Floating active index for continuous interpolation
+  let active = 0;
+  let target = 0;
+  let hoveredIndex = -1; // Track which card is being hovered
+
+  // Animation loop
+  let animationId = null;
+  let isAnimating = true;
+
+  function animate() {
+    // Normalize target periodically to prevent extreme values
+    normalizeTarget();
+    
+    // Directional easing bias: forward motion slower/heavier, backward faster/lighter
+    const diff = target - active;
+    let easingFactor = 0.08; // Base easing
+    
+    if (diff > 0) {
+      // Forward motion: slower, heavier (0.06)
+      easingFactor = 0.06;
+    } else if (diff < 0) {
+      // Backward motion: slightly faster, lighter (0.1)
+      easingFactor = 0.1;
+    }
+    
+    // Interpolate active towards target with directional bias
+    active += (target - active) * easingFactor;
+    
+    render();
+    
+    if (isAnimating) {
+      animationId = requestAnimationFrame(animate);
+    }
+  }
+
+  function render() {
+    // 3D linear arrangement creating hexagon-like optical illusion
+    // Center rectangle faces camera, side rectangles rotated and pushed back
+    const cardWidth = 420;
+    const horizontalOffset = 180; // Small horizontal offset between cards
+    const baseRotationAngle = 28; // Base rotation for first sides
+    const depthOffset = 350; // Stronger depth separation (increased from 200)
+    
+    items.forEach((item, i) => {
+      // Calculate position relative to active (center)
+      let position = i - active;
+      
+      // Normalize position for infinite loop
+      while (position > total / 2) {
+        position -= total;
+      }
+      while (position < -total / 2) {
+        position += total;
+      }
+      
+      const abs = Math.abs(position);
+      
+      // Show 6 images: center + 2-3 on each side
+      if (abs > 3) {
+        item.style.opacity = 0;
+        item.style.pointerEvents = 'none';
+        item.style.zIndex = 0;
+        item.removeAttribute('data-side');
+        return;
+      }
+      
+      let translateX = 0;
+      let translateY = 0;
+      let translateZ = 0;
+      let rotateY = 0;
+      let scale = 1;
+      let opacity = 1;
+      
+      // Remove attributes
+      item.removeAttribute('data-side');
+      item.removeAttribute('data-center');
+      
+      if (abs === 0) {
+        // Center rectangle - faces camera directly, sharp and lit
+        translateX = 0;
+        translateY = 0;
+        translateZ = 0; // Clearly forward
+        rotateY = 0;
+        scale = 1;
+        opacity = 1; // Fully opaque
+        item.setAttribute('data-center', 'true');
+      } else {
+        // Side rectangles - rotated around Y-axis and pushed back
+        // Non-linear horizontal spacing for motion parallax
+        let spacingMultiplier = 1;
+        if (abs === 1) {
+          spacingMultiplier = 1; // First sides: normal spacing
+        } else if (abs === 2) {
+          spacingMultiplier = 1.15; // Outer sides: slightly more spaced
+        } else {
+          spacingMultiplier = 1.3; // Far sides: more spaced
+        }
+        translateX = position * horizontalOffset * spacingMultiplier;
+        
+        // Vertical parallax - side cards sit slightly lower
+        translateY = 8 + (abs * 2); // Progressive vertical offset
+        
+        // Depth compression with visual advancement: strong jump center→first, weaker first→second
+        if (abs === 1) {
+          translateZ = -depthOffset; // First sides: -350px (strong jump)
+        } else if (abs === 2) {
+          translateZ = -depthOffset * 1.35; // Outer sides: -472px (weaker jump)
+        } else {
+          translateZ = -depthOffset * 1.75; // Far sides: -612px (compressed)
+        }
+        
+        // Stronger rotation on outer cards for edge clipping effect
+        if (abs === 1) {
+          rotateY = position * baseRotationAngle; // ±28°
+        } else if (abs === 2) {
+          rotateY = position * (baseRotationAngle + 10); // ±38° for sharper edges
+        } else {
+          rotateY = position * (baseRotationAngle + 15); // ±43° for outer cards
+        }
+        
+        scale = 0.8;
+        
+        // Non-linear opacity - but higher for true occlusion (not just visual)
+        if (abs === 1) {
+          opacity = 0.85; // First sides: more opaque for solid feel
+        } else if (abs === 2) {
+          opacity = 0.5; // Outer sides: medium opacity
+        } else {
+          opacity = 0.25; // Far sides: low opacity
+        }
+        
+        // Set side and depth attributes for CSS occlusion
+        if (position < 0) {
+          item.setAttribute('data-side', 'left');
+        } else {
+          item.setAttribute('data-side', 'right');
+        }
+        item.setAttribute('data-depth', abs.toString());
+      }
+      
+      // Hover effect - make hovered card fully visible
+      if (i === hoveredIndex && abs !== 0) {
+        opacity = 1;
+        scale = 0.9;
+        translateZ = -abs * 200; // Bring forward
+        item.removeAttribute('data-side'); // Remove clipping on hover
+        item.style.filter = 'contrast(1.1) brightness(1.05)'; // Sharper on hover
+      }
+      
+      item.style.opacity = opacity;
+      item.style.pointerEvents = 'auto';
+      // Z-index for true occlusion: center highest, sides behind
+      if (abs === 0) {
+        item.style.zIndex = 20; // Center panel blocks everything
+      } else if (abs === 1) {
+        item.style.zIndex = 5; // First sides behind center
+      } else if (abs === 2) {
+        item.style.zIndex = 3; // Outer sides further back
+      } else {
+        item.style.zIndex = 1; // Far sides furthest back
+      }
+      
+      // Transform order: translateX, translateY, translateZ, rotateY (creates hexagon illusion)
+      item.style.transform = `
+        translateX(${translateX}px)
+        translateY(${translateY}px)
+        translateZ(${translateZ}px)
+        rotateY(${rotateY}deg)
+        scale(${scale})
+      `;
+    });
+  }
+
+  function next() {
+    target += 1;
+  }
+
+  function prev() {
+    target -= 1;
+  }
+
+  // Normalize target to prevent extreme values (but allow infinite loop)
+  function normalizeTarget() {
+    while (target - active > total / 2) {
+      target -= total;
+      active -= total;
+    }
+    while (active - target > total / 2) {
+      target += total;
+      active += total;
+    }
+  }
+
+  // Pause on hover
+  const section = track.closest('section');
+  if (section) {
+    let isPaused = false;
+    let autoplayTimer = null;
+
+    function startAutoplay() {
+      if (isPaused) return;
+      stopAutoplay();
+      autoplayTimer = setInterval(() => {
+        next();
+      }, 3000);
+    }
+
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    section.addEventListener('mouseenter', () => {
+      isPaused = true;
+      stopAutoplay();
+    });
+
+    section.addEventListener('mouseleave', () => {
+      isPaused = false;
+      startAutoplay();
+    });
+
+    // Drag/swipe functionality
+    let isDragging = false;
+    let startX = 0;
+    let startTarget = 0;
+    let dragOffset = 0;
+
+    function handleStart(e) {
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startTarget = target;
+      dragOffset = 0;
+      stopAutoplay();
+      e.preventDefault();
+    }
+
+    function handleMove(e) {
+      if (!isDragging) return;
+      
+      const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      dragOffset = startX - currentX;
+      
+      // Convert pixel drag to target offset (sensitivity for hexagon rotation)
+      const slideOffset = dragOffset / 150;
+      target = startTarget + slideOffset;
+      
+      e.preventDefault();
+    }
+
+    function handleEnd(e) {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      
+      // Snap to nearest slide based on drag distance
+      const slideOffset = dragOffset / 150;
+      if (Math.abs(slideOffset) > 0.3) {
+        if (slideOffset > 0) {
+          target = Math.ceil(startTarget + slideOffset);
+        } else {
+          target = Math.floor(startTarget + slideOffset);
+        }
+      } else {
+        target = Math.round(startTarget + slideOffset);
+      }
+      
+      normalizeTarget();
+      
+      // Resume autoplay after delay
+      setTimeout(() => {
+        if (!isPaused) {
+          startAutoplay();
+        }
+      }, 2000);
+    }
+
+    // Mouse events
+    track.addEventListener('mousedown', handleStart);
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('mouseleave', handleEnd);
+
+    // Touch events
+    track.addEventListener('touchstart', handleStart, { passive: false });
+    window.addEventListener('touchmove', handleMove, { passive: false });
+    window.addEventListener('touchend', handleEnd);
+    window.addEventListener('touchcancel', handleEnd);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          prev();
+          stopAutoplay();
+          setTimeout(startAutoplay, 2000);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          next();
+          stopAutoplay();
+          setTimeout(startAutoplay, 2000);
+        }
+      }
+    });
+
+    // Hover functionality - make hovered card fully opaque
+    items.forEach((item, i) => {
+      item.addEventListener('mouseenter', () => {
+        hoveredIndex = i;
+      });
+      item.addEventListener('mouseleave', () => {
+        hoveredIndex = -1;
+      });
+    });
+
+    // Start animation loop
+    animate();
+    startAutoplay();
+
+    // Cleanup on section unload
+    document.addEventListener('shopify:section:unload', function(e) {
+      if (e.detail.sectionId === '{{ id }}') {
+        isAnimating = false;
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        stopAutoplay();
+      }
+    });
+  } else {
+    animate();
+    setInterval(() => {
+      next();
+    }, 3000);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "3D Arc Carousel",
+  "tag": "section",
+  "class": "section",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D Hexagon Carousel",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

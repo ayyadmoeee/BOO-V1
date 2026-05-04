@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "about_us_glass": {
+      "type": "about-us-glass",
+      "blocks": {
+        "value_1": {
+          "type": "value_card",
+          "settings": {
+            "icon_svg": "",
+            "title": "Design first",
+            "text": "<p>We obsess over details to keep every interaction clean and intentional.</p>"
+          }
+        },
+        "value_2": {
+          "type": "value_card",
+          "settings": {
+            "icon_svg": "",
+            "title": "Built with care",
+            "text": "<p>From materials to support, quality stays at the center.</p>"
+          }
+        },
+        "value_3": {
+          "type": "value_card",
+          "settings": {
+            "icon_svg": "",
+            "title": "Always improving",
+            "text": "<p>We listen, iterate, and keep refining what we deliver.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "value_1",
+        "value_2",
+        "value_3"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "kicker": "About us",
+        "heading": "We build products with clarity and purpose.",
+        "heading_tag": "h2",
+        "text": "<p>Tell your brand story here. Share your mission, values, and what makes your team different.</p>",
+        "button_label": "Explore products",
+        "button_link": "shopify://collections/all",
+        "image": "shopify://shop_images/Foreground.png",
+        "image_position": "left",
+        "stat_1_value": "2000+",
+        "stat_1_label": "happy customers",
+        "stat_2_value": "4.9/5",
+        "stat_2_label": "average rating",
+        "stat_3_value": "24/7",
+        "stat_3_label": "support",
+        "max_width": 1400,
+        "hero_padding": 30,
+        "hero_gap": 26,
+        "cards_gap": 18,
+        "cards_per_row": 3,
+        "card_padding": 24,
+        "heading_size": 48,
+        "body_text_size": 17,
+        "card_title_size": 22,
+        "card_text_size": 15,
+        "kicker_color": "#4f4f4f",
+        "heading_color": "#121212",
+        "body_color": "#2c2c2c",
+        "button_background_color": "#121212",
+        "button_text_color": "#ffffff",
+        "button_border_color": "#262626",
+        "stat_value_color": "#121212",
+        "stat_label_color": "#505050",
+        "value_title_color": "#121212",
+        "value_text_color": "#2f2f2f",
+        "icon_background_color": "#121212",
+        "icon_background_opacity": 8,
+        "icon_color": "#121212",
+        "media_background_color": "#ffffff",
+        "media_background_opacity": 14,
+        "media_placeholder_text_color": "#5a6470",
+        "media_placeholder_gradient_start_color": "#ffffff",
+        "media_placeholder_gradient_start_opacity": 26,
+        "media_placeholder_gradient_end_color": "#ffffff",
+        "media_placeholder_gradient_end_opacity": 8,
+        "background_color": "#f4f6f8",
+        "background_gradient": "",
+        "glass_color": "#ffffff",
+        "glass_opacity": 18,
+        "card_glass_opacity": 16,
+        "glass_border_color": "#ffffff",
+        "glass_border_opacity": 44,
+        "glass_blur": 16,
+        "corner_radius": 20,
+        "panel_shadow_opacity": 18,
+        "shadow_color": "#000000",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "about_us_glass",
+    "main"
+  ]
+}

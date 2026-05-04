@@ -1,0 +1,97 @@
+{% comment %}
+  Rendered by /recommendations/products?section_id=cart-recommendations&product_id=...&limit=3
+{% endcomment %}
+{% if recommendations.performed and recommendations.products_count > 0 %}
+  <div class="cart-recs">
+    <div class="cart-recs__head">
+      <h2 class="cart-recs__title">Our recommendations</h2>
+    </div>
+
+    <ul class="cart-recs__list" role="list">
+      {% for product in recommendations.products %}
+        {% assign v = product.selected_or_first_available_variant %}
+
+        <li class="cart-recs__item">
+          <div class="cart-recs__row">
+            <a class="cart-recs__media" href="{{ product.url }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 352 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width="352"
+                  height="{{ 352 | divided_by: product.featured_image.aspect_ratio | ceil }}"
+                >
+              {% endif %}
+            </a>
+
+            <div class="cart-recs__content">
+              <div class="cart-recs__content-main">
+                <div class="cart-recs__info">
+                  <p class="cart-recs__vendor">{{ product.vendor }}</p>
+                  <a class="cart-recs__name" href="{{ product.url }}">{{ product.title }}</a>
+                </div>
+                <div class="cart-recs__price">{{ v.price | money_without_trailing_zeros }}</div>
+              </div>
+
+              {%- comment -%}
+                Simple "Available in X colors" heuristic:
+                If product has an option named Color/Colour, count unique values; else hide.
+              {%- endcomment -%}
+              {% assign color_index = nil %}
+              {% for opt in product.options %}
+                {% assign opt_down = opt | downcase %}
+                {% if opt_down == 'color' or opt_down == 'colour' %}
+                  {% assign color_index = forloop.index0 %}
+                {% endif %}
+              {% endfor %}
+              {% if color_index != nil %}
+                {% assign colors = '' %}
+                {% for variant in product.variants %}
+                  {% assign val = variant.options[color_index] %}
+                  {% unless colors contains val %}
+                    {% assign colors = colors | append: val | append: '|' %}
+                  {% endunless %}
+                {% endfor %}
+                {% assign color_count = colors | split: '|' | reject: '' | size %}
+                <div class="cart-recs__meta">Available in {{ color_count }} colors</div>
+              {% endif %}
+
+              <div class="cart-recs__cta">
+                <product-form>
+                  <form method="post" action="/cart/add" class="cart-recs__form" data-type="add-to-cart-form">
+                    <input type="hidden" name="id" value="{{ v.id }}">
+                    <button type="submit" class="cart-recs__add">
+                      ADD <span aria-hidden="true">+</span>
+                    </button>
+                  </form>
+                </product-form>
+              </div>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+/* Recommendations styling - matches cart items layout */
+.cart-recs__head { margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,.08); margin-bottom: 16px; }
+.cart-recs__title { margin: 0; font-size: 12px; opacity: .85; color: #111; text-transform: uppercase; letter-spacing: 0.04em; }
+.cart-recs__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.cart-recs__row { display: grid; grid-template-columns: 130px 1fr; gap: 14px; }
+.cart-recs__media { width: 100%; aspect-ratio: 4/5; border-radius: 8px; overflow: hidden; background: #f3f3f3; display: block; }
+.cart-recs__media img { width: 100%; height: 100%; object-fit: cover; display:block; }
+.cart-recs__content { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.cart-recs__content-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.cart-recs__info { flex: 1; min-width: 0; }
+.cart-recs__vendor { margin: 0 0 2px; font-size: 12px; opacity: .8; color: #111; line-height: 1.3; }
+.cart-recs__name { display:block; margin: 0 0 4px; font-size: 13px; line-height: 1.25; color: #111; text-decoration:none; font-weight: 500; }
+.cart-recs__price { font-size: 13px; font-weight: 600; color: #111; white-space: nowrap; flex-shrink: 0; }
+.cart-recs__meta { font-size: 12px; opacity: .75; margin: 0 0 10px; color: #111; }
+.cart-recs__cta { margin-top: 0; }
+.cart-recs__add { border: 1px solid rgba(183,172,164,.9); background: transparent; padding: 10px 14px; font-size: 12px; letter-spacing: .06em; cursor: pointer; color: #111; text-transform: uppercase; font-weight: 500; transition: background 0.2s ease; }
+.cart-recs__add:hover { background: rgba(183,172,164,.1); }
+{% endstylesheet %}
+

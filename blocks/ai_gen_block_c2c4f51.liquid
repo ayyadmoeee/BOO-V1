@@ -1,0 +1,1160 @@
+{% doc %}
+  @prompt
+    Act as a senior Shopify theme developer and award-winning frontend designer.
+    
+    Your task is to create a highly animated Shopify landing page section that looks like a premium Awwwards-level ecommerce website.
+    
+    TECH STACK
+    - Shopify Liquid
+    - HTML5
+    - modern CSS (flexbox + grid)
+    - vanilla JavaScript
+    - GSAP for animation
+    - mobile-first responsive architecture
+    
+    SECTION STRUCTURE
+    
+    1. Hero Container
+    - full viewport height
+    - max width 1600px centered
+    - padding responsive using clamp()
+    - responsive grid layout
+    
+    2. Background
+    - animated gradient background slowly shifting colors
+    - subtle noise texture overlay
+    - optional floating abstract shapes
+    
+    3. Headline
+    - large typography using clamp for scaling
+    - example:
+      clamp(2.5rem, 5vw, 6rem)
+    
+    Animation:
+    - each word reveals sequentially
+    - letters animate upward with opacity fade
+    - slight stagger timing
+    
+    4. Subheading
+    - fades in 0.5 seconds after headline
+    - subtle blur to sharp transition
+    
+    5. Product Image
+    
+    Animation:
+    - floating effect using translateY loop
+    - parallax movement when user scrolls
+    - slight rotation for realism
+    
+    6. CTA Button
+    
+    Design:
+    - rounded button
+    - gradient border
+    - strong contrast color
+    
+    Animation:
+    - magnetic hover effect
+    - glow animation
+    - ripple click feedback
+    
+    7. Micro Interactions
+    - hover effects on text
+    - smooth easing transitions
+    - cursor interaction
+    
+    RESPONSIVE DESIGN
+    
+    Mobile (320px–768px)
+    - stacked layout
+    - image below text
+    - larger tap targets
+    - simplified animations
+    
+    Tablet (768px–1024px)
+    - balanced spacing
+    - medium typography
+    - reduced motion if needed
+    
+    Desktop (1024px–1920px)
+    - split layout
+    - parallax effects enabled
+    
+    Ultra-wide / TV screens (1920px+)
+    - max container width
+    - balanced white space
+    - center-focused design
+    
+    SHOPIFY THEME SETTINGS
+    
+    Create editable settings for:
+    
+    - hero title
+    - subtitle
+    - button text
+    - button link
+    - product image upload
+    - gradient background colors
+    - enable/disable animations
+    
+    PERFORMANCE OPTIMIZATION
+    
+    - lazy load images
+    - defer JavaScript
+    - compress animations
+    - avoid layout shift
+    - optimized for Lighthouse score
+    
+    ACCESSIBILITY
+    
+    - proper heading hierarchy
+    - aria labels for buttons
+    - color contrast accessible
+    - reduced motion option
+    
+    OUTPUT
+    
+    Return:
+    1. Shopify Liquid section code
+    2. CSS styles
+    3. JavaScript animation code
+    4. schema settings for Shopify editor, make it more animation like very extreme advanced animation !!
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  @keyframes ai-hero-gradient-extreme-{{ ai_gen_id }} {
+    0% {
+      background-position: 0% 0%;
+      filter: hue-rotate(0deg);
+    }
+    25% {
+      background-position: 100% 0%;
+      filter: hue-rotate(90deg);
+    }
+    50% {
+      background-position: 100% 100%;
+      filter: hue-rotate(180deg);
+    }
+    75% {
+      background-position: 0% 100%;
+      filter: hue-rotate(270deg);
+    }
+    100% {
+      background-position: 0% 0%;
+      filter: hue-rotate(360deg);
+    }
+  }
+
+  @keyframes ai-hero-particle-float-{{ ai_gen_id }} {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg) scale(1);
+      opacity: 0.8;
+    }
+    25% {
+      transform: translate(100px, -100px) rotate(90deg) scale(1.5);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate(200px, 50px) rotate(180deg) scale(0.8);
+      opacity: 0.6;
+    }
+    75% {
+      transform: translate(-50px, 150px) rotate(270deg) scale(1.2);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes ai-hero-glow-pulse-{{ ai_gen_id }} {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.5),
+                  0 0 40px rgba(78, 205, 196, 0.3),
+                  0 0 60px rgba(255, 230, 109, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(255, 107, 107, 0.8),
+                  0 0 80px rgba(78, 205, 196, 0.6),
+                  0 0 120px rgba(255, 230, 109, 0.4);
+    }
+  }
+
+  @keyframes ai-hero-text-glitch-{{ ai_gen_id }} {
+    0%, 90%, 100% {
+      transform: translate(0);
+      text-shadow: none;
+    }
+    92% {
+      transform: translate(-2px, 2px);
+      text-shadow: 2px -2px 0 rgba(255, 0, 0, 0.7),
+                   -2px 2px 0 rgba(0, 255, 255, 0.7);
+    }
+    94% {
+      transform: translate(2px, -2px);
+      text-shadow: -2px 2px 0 rgba(255, 0, 0, 0.7),
+                   2px -2px 0 rgba(0, 255, 255, 0.7);
+    }
+    96% {
+      transform: translate(-2px, -2px);
+      text-shadow: 2px 2px 0 rgba(255, 0, 0, 0.7),
+                   -2px -2px 0 rgba(0, 255, 255, 0.7);
+    }
+  }
+
+  @keyframes ai-hero-rotate-3d-{{ ai_gen_id }} {
+    0% {
+      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    }
+    25% {
+      transform: perspective(1000px) rotateY(5deg) rotateX(-5deg);
+    }
+    50% {
+      transform: perspective(1000px) rotateY(0deg) rotateX(5deg);
+    }
+    75% {
+      transform: perspective(1000px) rotateY(-5deg) rotateX(-5deg);
+    }
+    100% {
+      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    }
+  }
+
+  @keyframes ai-hero-border-spin-{{ ai_gen_id }} {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  .ai-hero-container-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background: {{ block.settings.gradient_color_1 }};
+    background: radial-gradient(
+      circle at 20% 50%,
+      {{ block.settings.gradient_color_1 }} 0%,
+      {{ block.settings.gradient_color_2 }} 40%,
+      {{ block.settings.gradient_color_3 }} 100%
+    );
+    background-size: 400% 400%;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-gradient-extreme-{{ ai_gen_id }} {{ block.settings.gradient_speed }}s ease-in-out infinite;
+    {% endif %}
+  }
+
+  .ai-hero-noise-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: {{ block.settings.noise_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .ai-hero-particles-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .ai-hero-particle-{{ ai_gen_id }} {
+    position: absolute;
+    border-radius: 50%;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-particle-float-{{ ai_gen_id }} 15s ease-in-out infinite;
+    {% endif %}
+  }
+
+  .ai-hero-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    max-width: min(1600px, 100%);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 6rem) clamp(1rem, 3vw, 3rem);
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+    z-index: 1;
+  }
+
+  @media (min-width: 768px) {
+    .ai-hero-wrapper-{{ ai_gen_id }} {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .ai-hero-content-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    order: 2;
+  }
+
+  @media (min-width: 768px) {
+    .ai-hero-content-{{ ai_gen_id }} {
+      order: 1;
+    }
+  }
+
+  .ai-hero-headline-{{ ai_gen_id }} {
+    font-size: clamp(2.5rem, 5vw, 6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    overflow: hidden;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-text-glitch-{{ ai_gen_id }} 8s ease-in-out infinite;
+    {% endif %}
+  }
+
+  .ai-hero-word-{{ ai_gen_id }} {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    margin-right: 0.3em;
+  }
+
+  .ai-hero-word-{{ ai_gen_id }}:last-child {
+    margin-right: 0;
+  }
+
+  .ai-hero-letter-{{ ai_gen_id }} {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%) rotateX(-90deg);
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
+  }
+
+  .ai-hero-subheading-{{ ai_gen_id }} {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    line-height: 1.6;
+    color: {{ block.settings.subtext_color }};
+    max-width: 600px;
+    opacity: 0;
+    filter: blur(10px);
+    will-change: opacity, filter, transform;
+  }
+
+  .ai-hero-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    order: 1;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-rotate-3d-{{ ai_gen_id }} 10s ease-in-out infinite;
+    {% endif %}
+  }
+
+  @media (min-width: 768px) {
+    .ai-hero-image-wrapper-{{ ai_gen_id }} {
+      order: 2;
+    }
+  }
+
+  .ai-hero-image-glow-{{ ai_gen_id }} {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-glow-pulse-{{ ai_gen_id }} 3s ease-in-out infinite;
+    {% endif %}
+    z-index: -1;
+  }
+
+  .ai-hero-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotateZ(-10deg);
+    will-change: transform, opacity;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ai-hero-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .ai-hero-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }} {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 2vw, 1.25rem) clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    font-weight: 600;
+    text-decoration: none;
+    color: {{ block.settings.button_text_color }};
+    background: {{ block.settings.button_bg_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    will-change: transform, opacity;
+    align-self: flex-start;
+    min-width: 200px;
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(
+      90deg,
+      {{ block.settings.button_border_color_1 }},
+      {{ block.settings.button_border_color_2 }},
+      {{ block.settings.button_border_color_1 }},
+      {{ block.settings.button_border_color_2 }}
+    );
+    background-size: 200% 100%;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    {% if block.settings.enable_animations %}
+    animation: ai-hero-border-spin-{{ ai_gen_id }} 3s linear infinite;
+    {% endif %}
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }}:hover::before {
+    opacity: 1;
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    transform: translate(-50%, -50%);
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+                height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ai-hero-cta-{{ ai_gen_id }}.ai-hero-ripple-{{ ai_gen_id }}::after {
+    width: 400px;
+    height: 400px;
+  }
+
+  .ai-hero-cta-inner-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ai-hero-cursor-follower-{{ ai_gen_id }} {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 2px solid {{ block.settings.text_color }};
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.3s ease;
+    opacity: 0;
+    mix-blend-mode: difference;
+  }
+
+  .ai-hero-cursor-follower-{{ ai_gen_id }}.active {
+    opacity: 0.8;
+    transform: scale(1.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-hero-container-{{ ai_gen_id }},
+    .ai-hero-particle-{{ ai_gen_id }},
+    .ai-hero-image-wrapper-{{ ai_gen_id }},
+    .ai-hero-headline-{{ ai_gen_id }},
+    .ai-hero-image-glow-{{ ai_gen_id }},
+    .ai-hero-cta-{{ ai_gen_id }}::before {
+      animation: none !important;
+    }
+
+    .ai-hero-cta-{{ ai_gen_id }} {
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ai-hero-wrapper-{{ ai_gen_id }} {
+      text-align: center;
+    }
+
+    .ai-hero-content-{{ ai_gen_id }} {
+      align-items: center;
+    }
+
+    .ai-hero-cta-{{ ai_gen_id }} {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .ai-hero-cursor-follower-{{ ai_gen_id }} {
+      display: none;
+    }
+  }
+{% endstyle %}
+
+<extreme-hero-{{ ai_gen_id }} class="ai-hero-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-noise-{{ ai_gen_id }}"></div>
+
+  {% if block.settings.show_floating_shapes %}
+    <div class="ai-hero-particles-{{ ai_gen_id }}" data-particles></div>
+  {% endif %}
+
+  <div class="ai-hero-cursor-follower-{{ ai_gen_id }}" data-cursor></div>
+
+  <div class="ai-hero-wrapper-{{ ai_gen_id }}">
+    <div class="ai-hero-content-{{ ai_gen_id }}">
+      {% if block.settings.headline != blank %}
+        <h1 class="ai-hero-headline-{{ ai_gen_id }}" data-hero-headline>
+          {% assign words = block.settings.headline | split: ' ' %}
+          {% for word in words %}
+            <span class="ai-hero-word-{{ ai_gen_id }}">
+              {% assign letters = word | split: '' %}
+              {% for letter in letters %}
+                <span class="ai-hero-letter-{{ ai_gen_id }}">{{ letter }}</span>
+              {% endfor %}
+            </span>
+          {% endfor %}
+        </h1>
+      {% endif %}
+
+      {% if block.settings.subheading != blank %}
+        <p class="ai-hero-subheading-{{ ai_gen_id }}" data-hero-subheading>
+          {{ block.settings.subheading }}
+        </p>
+      {% endif %}
+
+      {% if block.settings.button_text != blank %}
+        <a
+          href="{{ block.settings.button_link }}"
+          class="ai-hero-cta-{{ ai_gen_id }}"
+          data-hero-cta
+          aria-label="{{ block.settings.button_text }}"
+        >
+          <span class="ai-hero-cta-inner-{{ ai_gen_id }}">{{ block.settings.button_text }}</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-hero-image-wrapper-{{ ai_gen_id }}" data-hero-image-wrapper>
+      <div class="ai-hero-image-glow-{{ ai_gen_id }}"></div>
+      {% if block.settings.product_image %}
+        <img
+          src="{{ block.settings.product_image | image_url: width: 1200 }}"
+          alt="{{ block.settings.product_image.alt | escape }}"
+          class="ai-hero-image-{{ ai_gen_id }}"
+          data-hero-image
+          loading="eager"
+          width="{{ block.settings.product_image.width }}"
+          height="{{ block.settings.product_image.height }}"
+        >
+      {% else %}
+        <div class="ai-hero-image-placeholder-{{ ai_gen_id }}">
+          {{ 'product-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</extreme-hero-{{ ai_gen_id }}>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+<script>
+(function() {
+  class ExtremeHero{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.animationsEnabled = {{ block.settings.enable_animations | json }};
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.gsapLoaded = false;
+      this.mouseX = 0;
+      this.mouseY = 0;
+      this.checkGSAP();
+    }
+
+    checkGSAP() {
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        this.gsapLoaded = true;
+        this.init();
+      } else {
+        setTimeout(() => this.checkGSAP(), 100);
+      }
+    }
+
+    init() {
+      if (!this.animationsEnabled || this.reducedMotion) {
+        this.showContentImmediately();
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+      this.createParticles();
+      this.animateHeadlineExtreme();
+      this.animateSubheadingExtreme();
+      this.animateImageExtreme();
+      this.animateCTAExtreme();
+      this.setupExtremeButton();
+      this.setupRippleEffect();
+      this.setupParallaxExtreme();
+      this.setupCursorFollower();
+      this.setupScrollAnimations();
+    }
+
+    showContentImmediately() {
+      const letters = this.querySelectorAll('.ai-hero-letter-{{ ai_gen_id }}');
+      const subheading = this.querySelector('.ai-hero-subheading-{{ ai_gen_id }}');
+      const image = this.querySelector('.ai-hero-image-{{ ai_gen_id }}');
+      const cta = this.querySelector('.ai-hero-cta-{{ ai_gen_id }}');
+
+      letters.forEach(letter => {
+        letter.style.opacity = '1';
+        letter.style.transform = 'translateY(0) rotateX(0)';
+      });
+
+      if (subheading) {
+        subheading.style.opacity = '1';
+        subheading.style.filter = 'blur(0)';
+      }
+
+      if (image) {
+        image.style.opacity = '1';
+        image.style.transform = 'translateY(0) scale(1) rotateZ(0)';
+      }
+
+      if (cta) {
+        cta.style.opacity = '1';
+        cta.style.transform = 'translateY(0) scale(1)';
+      }
+    }
+
+    createParticles() {
+      const container = this.querySelector('[data-particles]');
+      if (!container) return;
+
+      const colors = ['{{ block.settings.shape_color_1 }}', '{{ block.settings.shape_color_2 }}', '{{ block.settings.shape_color_3 }}'];
+      
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'ai-hero-particle-{{ ai_gen_id }}';
+        
+        const size = Math.random() * 100 + 50;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 15;
+        
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.background = color;
+        particle.style.left = x + '%';
+        particle.style.top = y + '%';
+        particle.style.opacity = Math.random() * 0.3 + 0.1;
+        particle.style.animationDelay = delay + 's';
+        particle.style.animationDuration = duration + 's';
+        
+        container.appendChild(particle);
+      }
+    }
+
+    animateHeadlineExtreme() {
+      const words = this.querySelectorAll('.ai-hero-word-{{ ai_gen_id }}');
+
+      words.forEach((word, wordIndex) => {
+        const letters = word.querySelectorAll('.ai-hero-letter-{{ ai_gen_id }}');
+
+        letters.forEach((letter, letterIndex) => {
+          gsap.fromTo(letter,
+            {
+              opacity: 0,
+              y: 150,
+              rotationX: -90,
+              rotationZ: Math.random() * 360,
+              scale: 0
+            },
+            {
+              opacity: 1,
+              y: 0,
+              rotationX: 0,
+              rotationZ: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: 'elastic.out(1, 0.5)',
+              delay: wordIndex * 0.15 + letterIndex * 0.05
+            }
+          );
+        });
+      });
+    }
+
+    animateSubheadingExtreme() {
+      const subheading = this.querySelector('.ai-hero-subheading-{{ ai_gen_id }}');
+      if (!subheading) return;
+
+      gsap.fromTo(subheading,
+        {
+          opacity: 0,
+          filter: 'blur(20px)',
+          y: 50,
+          scale: 0.8
+        },
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          y: 0,
+          scale: 1,
+          duration: 1.5,
+          delay: 0.8,
+          ease: 'power3.out'
+        }
+      );
+    }
+
+    animateImageExtreme() {
+      const image = this.querySelector('.ai-hero-image-{{ ai_gen_id }}');
+      if (!image) return;
+
+      gsap.fromTo(image,
+        {
+          opacity: 0,
+          y: 100,
+          scale: 0.5,
+          rotationZ: -30,
+          rotationY: 45
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          rotationZ: 0,
+          rotationY: 0,
+          duration: 2,
+          delay: 0.4,
+          ease: 'elastic.out(1, 0.6)'
+        }
+      );
+
+      gsap.to(image, {
+        y: -30,
+        rotationZ: 3,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
+    }
+
+    animateCTAExtreme() {
+      const cta = this.querySelector('.ai-hero-cta-{{ ai_gen_id }}');
+      if (!cta) return;
+
+      gsap.fromTo(cta,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.5,
+          rotationX: -45
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          rotationX: 0,
+          duration: 1.2,
+          delay: 1.2,
+          ease: 'back.out(2)'
+        }
+      );
+    }
+
+    setupExtremeButton() {
+      const button = this.querySelector('.ai-hero-cta-{{ ai_gen_id }}');
+      if (!button) return;
+
+      button.addEventListener('mouseenter', () => {
+        gsap.to(button, {
+          scale: 1.15,
+          rotationZ: 2,
+          duration: 0.4,
+          ease: 'back.out(2)'
+        });
+      });
+
+      button.addEventListener('mouseleave', () => {
+        gsap.to(button, {
+          scale: 1,
+          rotationZ: 0,
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'elastic.out(1, 0.4)'
+        });
+      });
+
+      button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        gsap.to(button, {
+          x: x * 0.5,
+          y: y * 0.5,
+          rotationY: x * 0.1,
+          rotationX: -y * 0.1,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+    }
+
+    setupRippleEffect() {
+      const button = this.querySelector('.ai-hero-cta-{{ ai_gen_id }}');
+      if (!button) return;
+
+      button.addEventListener('click', function(e) {
+        this.classList.add('ai-hero-ripple-{{ ai_gen_id }}');
+
+        gsap.to(this, {
+          scale: 0.95,
+          duration: 0.1,
+          yoyo: true,
+          repeat: 1,
+          ease: 'power2.inOut'
+        });
+
+        setTimeout(() => {
+          this.classList.remove('ai-hero-ripple-{{ ai_gen_id }}');
+        }, 800);
+      });
+    }
+
+    setupParallaxExtreme() {
+      const imageWrapper = this.querySelector('[data-hero-image-wrapper]');
+      const content = this.querySelector('.ai-hero-content-{{ ai_gen_id }}');
+      
+      if (imageWrapper) {
+        gsap.to(imageWrapper, {
+          y: -100,
+          rotationY: 15,
+          scrollTrigger: {
+            trigger: this,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5
+          }
+        });
+      }
+
+      if (content) {
+        gsap.to(content, {
+          y: 50,
+          scrollTrigger: {
+            trigger: this,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1
+          }
+        });
+      }
+    }
+
+    setupCursorFollower() {
+      const cursor = this.querySelector('[data-cursor]');
+      if (!cursor || window.innerWidth < 768) return;
+
+      let cursorX = 0;
+      let cursorY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+      });
+
+      const animateCursor = () => {
+        cursorX += (this.mouseX - cursorX) * 0.15;
+        cursorY += (this.mouseY - cursorY) * 0.15;
+
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+
+        requestAnimationFrame(animateCursor);
+      };
+
+      animateCursor();
+
+      const interactiveElements = this.querySelectorAll('a, button, [data-hero-image]');
+      
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.classList.add('active');
+        });
+        
+        el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('active');
+        });
+      });
+
+      this.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '0.8';
+      });
+
+      this.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+      });
+    }
+
+    setupScrollAnimations() {
+      const headline = this.querySelector('[data-hero-headline]');
+      
+      if (headline) {
+        gsap.to(headline, {
+          scale: 0.9,
+          opacity: 0.5,
+          scrollTrigger: {
+            trigger: this,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1
+          }
+        });
+      }
+    }
+  }
+
+  customElements.define('extreme-hero-{{ ai_gen_id }}', ExtremeHero{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Extreme animated hero",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Premium Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover our exclusive range of handcrafted products designed for those who appreciate quality and elegance."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient color 1",
+      "default": "#1a1a2e"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient color 2",
+      "default": "#16213e"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_3",
+      "label": "Gradient color 3",
+      "default": "#0f3460"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Headline color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subheading color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color_1",
+      "label": "Border gradient start",
+      "default": "#ff6b6b"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color_2",
+      "label": "Border gradient end",
+      "default": "#4ecdc4"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Floating particles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_floating_shapes",
+      "label": "Show floating particles",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "shape_color_1",
+      "label": "Particle color 1",
+      "default": "#ff6b6b"
+    },
+    {
+      "type": "color",
+      "id": "shape_color_2",
+      "label": "Particle color 2",
+      "default": "#4ecdc4"
+    },
+    {
+      "type": "color",
+      "id": "shape_color_3",
+      "label": "Particle color 3",
+      "default": "#ffe66d"
+    },
+    {
+      "type": "header",
+      "content": "Effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable animations",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "gradient_speed",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "s",
+      "label": "Gradient animation speed",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "noise_opacity",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "label": "Noise texture opacity",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Extreme animated hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,24 @@
+<section class="messi-section">
+  <h2 class="messi-heading">
+    {{ section.settings.heading_text }}
+  </h2>
+</section>
+
+{% schema %}
+{
+  "name": "Messi Header Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading text",
+      "default": "Messi"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Messi Header"
+    }
+  ]
+}
+{% endschema %}

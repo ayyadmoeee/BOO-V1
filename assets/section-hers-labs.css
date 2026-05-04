@@ -1,0 +1,105 @@
+/* Hers Labs Section Styles */
+.hers-labs {
+  position: relative;
+  min-height: 50rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hers-labs__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.hers-labs__background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hers-labs__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.hers-labs__container {
+  position: relative;
+  z-index: 2;
+}
+
+.hers-labs__content {
+  max-width: 60rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+.hers-labs__heading {
+  font-size: clamp(3.2rem, 6vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 2rem 0;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.hers-labs__subheading {
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  line-height: 1.5;
+  margin: 0 0 3.2rem 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 400;
+}
+
+.hers-labs__button {
+  display: inline-block;
+  padding: 1.4rem 3.2rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.hers-labs__button:hover,
+.hers-labs__button:focus-visible {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 749px) {
+  .hers-labs {
+    min-height: 40rem;
+  }
+
+  .hers-labs__content {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hers-labs__button {
+    transition: none;
+  }
+
+  .hers-labs__button:hover,
+  .hers-labs__button:focus-visible {
+    transform: none;
+  }
+}
+

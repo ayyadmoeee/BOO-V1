@@ -1,0 +1,984 @@
+{% doc %}
+  @prompt
+    Create a pixel-perfect split-screen product page layout for Dawn theme with these exact specifications:
+    
+    OVERALL LAYOUT (Desktop): Split layout with left product media area and right frosted glass product info panel. Dark green gradient background (darker top, lighter bottom). Huge semi-transparent vertical product name text in background behind all content.
+    
+    HEADER: Dark green header with white brand logo (left), rounded pill navigation container (center-left) containing Home, Shop All, About, Contact Us with Shop All highlighted, and three white icons on right (search, account, cart). Header must be responsive with clean spacing.
+    
+    BACKGROUND PRODUCT NAME: Massive vertical typography showing product title rotated 90 degrees, positioned center-right behind main content. Very light white color with transparency blending into green background. Must be behind all elements (lower z-index) and scale/reposition responsively on smaller screens.
+    
+    LEFT SIDE (Product Media): White rounded square container centered in left half, holding product image with padding. Simple black chevron navigation arrows (left/right) for carousel. Subtle or no shadow. Must remain centered and balanced.
+    
+    RIGHT SIDE (Glass Panel): Tall rounded rectangle with frosted glass effect (dark green fill + backdrop blur + subtle border highlight + soft shadow). Large border radius. Contains: 1) Large bold white product title, 2) White price text below, 3) "Size (Age)" label with rounded dropdown (lighter green background, white text, dropdown caret), 4) "Quantity" label with pill-style quantity selector (minus button, number, plus button in rounded green style), 5) Wide black pill "Add to cart" button with white text, 6) Thin horizontal divider, 7) Small white description text below. Consistent left-aligned padding throughout.
+    
+    TYPOGRAPHY: Clean modern sans-serif. Large bold title, medium weight labels, comfortable line-height. All panel text white/off-white.
+    
+    RESPONSIVENESS (CRITICAL): Must look premium on Desktop, Tablet, and Mobile. Desktop: preserve split layout with background text. Tablet: reduce sizes but keep structure. Mobile: stack cleanly while maintaining background text effect (scaled/repositioned), no overflow, Add to cart button visible and tappable, carousel arrows usable, header functional (hamburger menu if needed). Frosted glass effect with graceful fallback.
+    
+    THEME EDITOR CUSTOMIZATION: Background gradient colors, background product-name text (toggle, opacity, size, position), panel border radius, blur strength, title font size, spacing/padding. Product-name text auto-uses product title.
+    
+    TECHNICAL: Dawn-compatible, clean code, optimized performance, no duplicate containers. Implement as product page section/template. Match exact spacing, colors, shadows, border radius, and layering from reference., Fix the CURRENT “Split screen product” section you generated (edit the same section only). Do NOT create a new layout/box/section. Make it match my original design and reference screenshot exactly. Here are the exact differences to correct:
+    
+    Left Product Image Box Size + Shape: The left white media box is currently too large and the proportions are not matching my original. Match the exact size and rounded corners from my original layout: the left image container should be a smaller rounded square/rounded-rectangle (not oversized), centered on the left side with balanced spacing to the edges and to the right panel. Keep the product image centered inside with the same padding as my original.
+    
+    Right Glass Panel Size + Position: The right glass info panel (green frosted card) sizing and placement must match my original: it should be slightly more compact and positioned so the overall composition feels centered and balanced. Adjust padding inside the panel so the title, price, dropdown, quantity, button, and description spacing match my original.
+    
+    Background Product Name Placement + Direction (Important): The huge background text “DinoBoo” is wrong. In my original, the big background word is placed behind the layout in a specific position and direction. Right now it appears mirrored/opposite compared to what I need. Fix it so the word reads in the correct direction (same orientation as my original / previous screenshot), with the same opacity and scale. It must sit behind the left media box and the right panel, slightly offset (not centered incorrectly), and should not look reversed.
+    
+    Background Text Location: Reposition the large background “DinoBoo” so it aligns like my original: it should appear behind the middle area between left media and right panel, peeking through with partial letters visible (not fully centered, not too high/low). Keep it subtle and not overpowering.
+    
+    , bro i want it the same of the productglass card but to be mobile freindly and tablet friendly and desktop friendly please dont change the other things and designs and sizes
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-split-product-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(180deg, {{ block.settings.gradient_top }} 0%, {{ block.settings.gradient_bottom }} 100%);
+    overflow: hidden;
+  }
+
+  .ai-split-product-bg-text-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: {{ block.settings.bg_text_size }}px;
+    font-weight: 900;
+    color: {{ block.settings.bg_text_color }};
+    opacity: {{ block.settings.bg_text_opacity | divided_by: 100.0 }};
+    white-space: nowrap;
+    z-index: 1;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .ai-split-product-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.column_gap }}px;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px;
+    min-height: 100vh;
+    align-items: center;
+  }
+
+  .ai-split-product-media-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+    background: #ffffff;
+    border-radius: {{ block.settings.media_radius }}px;
+    padding: {{ block.settings.media_padding }}px;
+    width: 100%;
+    max-width: {{ block.settings.media_max_width }}px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .ai-split-product-media-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: {{ block.settings.media_radius | minus: 8 }}px;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    z-index: 3;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }}--prev {
+    left: -60px;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }}--next {
+    right: -60px;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }} svg {
+    width: 32px;
+    height: 32px;
+    stroke: #000000;
+    stroke-width: 2;
+  }
+
+  .ai-split-product-info-{{ ai_gen_id }} {
+    background: {{ block.settings.glass_bg }};
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border: 1px solid {{ block.settings.glass_border }};
+    border-radius: {{ block.settings.glass_radius }}px;
+    padding: {{ block.settings.glass_padding }}px;
+    box-shadow: 0 8px 32px {{ block.settings.glass_shadow }};
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.content_gap }}px;
+    min-height: 550px;
+    max-width: 480px;
+    justify-self: start;
+  }
+
+  .ai-split-product-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ai-split-product-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    color: {{ block.settings.text_color }};
+    font-weight: 500;
+  }
+
+  .ai-split-product-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.label_size }}px;
+    color: {{ block.settings.text_color }};
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .ai-split-product-select-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 14px 16px;
+    background: {{ block.settings.input_bg }};
+    color: {{ block.settings.text_color }};
+    border: 1px solid {{ block.settings.input_border }};
+    border-radius: {{ block.settings.input_radius }}px;
+    font-size: 16px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+
+  .ai-split-product-quantity-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: {{ block.settings.input_bg }};
+    border: 1px solid {{ block.settings.input_border }};
+    border-radius: {{ block.settings.input_radius }}px;
+    padding: 8px 12px;
+    width: fit-content;
+  }
+
+  .ai-split-product-qty-btn-{{ ai_gen_id }} {
+    background: transparent;
+    border: none;
+    color: {{ block.settings.text_color }};
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-split-product-qty-btn-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-split-product-qty-input-{{ ai_gen_id }} {
+    background: transparent;
+    border: none;
+    color: {{ block.settings.text_color }};
+    text-align: center;
+    width: 40px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .ai-split-product-add-btn-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 16px 32px;
+    background: {{ block.settings.button_bg }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-split-product-add-btn-{{ ai_gen_id }}:hover {
+    opacity: 0.9;
+  }
+
+  .ai-split-product-divider-{{ ai_gen_id }} {
+    height: 1px;
+    background: {{ block.settings.divider_color }};
+    opacity: 0.3;
+    margin: {{ block.settings.divider_spacing }}px 0;
+  }
+
+  .ai-split-product-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-split-product-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 50px 30px;
+      min-height: auto;
+    }
+
+    .ai-split-product-bg-text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.bg_text_size }}px * 0.6);
+      top: 40%;
+    }
+
+    .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }}--prev {
+      left: 10px;
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }}--next {
+      right: 10px;
+    }
+
+    .ai-split-product-info-{{ ai_gen_id }} {
+      min-height: auto;
+      max-width: 100%;
+      justify-self: center;
+      width: 100%;
+      padding: 35px;
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.9);
+    }
+
+    .ai-split-product-price-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.price_size }}px * 0.95);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-split-product-{{ ai_gen_id }} {
+      min-height: auto;
+    }
+
+    .ai-split-product-container-{{ ai_gen_id }} {
+      padding: 30px 20px;
+      gap: 30px;
+    }
+
+    .ai-split-product-bg-text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.bg_text_size }}px * 0.35);
+      top: 35%;
+    }
+
+    .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+      max-width: 100%;
+      padding: calc({{ block.settings.media_padding }}px * 0.8);
+    }
+
+    .ai-split-product-info-{{ ai_gen_id }} {
+      padding: 28px;
+      border-radius: calc({{ block.settings.glass_radius }}px * 0.8);
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.75);
+    }
+
+    .ai-split-product-price-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.price_size }}px * 0.85);
+    }
+
+    .ai-split-product-label-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.label_size }}px * 0.95);
+    }
+
+    .ai-split-product-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.95);
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }} svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }}--prev {
+      left: 5px;
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }}--next {
+      right: 5px;
+    }
+
+    .ai-split-product-select-{{ ai_gen_id }},
+    .ai-split-product-qty-input-{{ ai_gen_id }} {
+      font-size: 15px;
+    }
+
+    .ai-split-product-add-btn-{{ ai_gen_id }} {
+      padding: 14px 28px;
+      font-size: calc({{ block.settings.button_font_size }}px * 0.95);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-split-product-container-{{ ai_gen_id }} {
+      padding: 20px 16px;
+    }
+
+    .ai-split-product-bg-text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.bg_text_size }}px * 0.25);
+    }
+
+    .ai-split-product-info-{{ ai_gen_id }} {
+      padding: 24px;
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.65);
+    }
+  }
+
+  @supports not (backdrop-filter: blur(10px)) {
+    .ai-split-product-info-{{ ai_gen_id }} {
+      background: {{ block.settings.glass_bg_fallback }};
+    }
+  }
+{% endstyle %}
+
+<product-split-screen-{{ ai_gen_id }}
+  class="ai-split-product-{{ ai_gen_id }}"
+  data-product-id="{{ product.id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.show_bg_text %}
+    <div class="ai-split-product-bg-text-{{ ai_gen_id }}">
+      {{ product.title }}
+    </div>
+  {% endif %}
+
+  <div class="ai-split-product-container-{{ ai_gen_id }}">
+    <div class="ai-split-product-media-{{ ai_gen_id }}">
+      <div class="ai-split-product-media-wrapper-{{ ai_gen_id }}">
+        {% if product.featured_media %}
+          <img
+            src="{{ product.featured_media | image_url: width: 800 }}"
+            alt="{{ product.featured_media.alt | escape }}"
+            width="800"
+            height="800"
+            loading="eager"
+            class="ai-split-product-image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <button
+          class="ai-split-product-nav-{{ ai_gen_id }} ai-split-product-nav-{{ ai_gen_id }}--prev"
+          aria-label="Previous image"
+        >
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button
+          class="ai-split-product-nav-{{ ai_gen_id }} ai-split-product-nav-{{ ai_gen_id }}--next"
+          aria-label="Next image"
+        >
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+    </div>
+
+    <div class="ai-split-product-info-{{ ai_gen_id }}">
+      <h1 class="ai-split-product-title-{{ ai_gen_id }}">{{ product.title }}</h1>
+
+      <div class="ai-split-product-price-{{ ai_gen_id }}">
+        {{ product.selected_or_first_available_variant.price | money }}
+      </div>
+
+      {% if product.has_only_default_variant == false %}
+        <div>
+          <label class="ai-split-product-label-{{ ai_gen_id }}" for="variant-select-{{ ai_gen_id }}">
+            {{ block.settings.variant_label }}
+          </label>
+          <select
+            id="variant-select-{{ ai_gen_id }}"
+            name="id"
+            class="ai-split-product-select-{{ ai_gen_id }}"
+          >
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      <div>
+        <label class="ai-split-product-label-{{ ai_gen_id }}">{{ block.settings.quantity_label }}</label>
+        <div class="ai-split-product-quantity-{{ ai_gen_id }}">
+          <button
+            type="button"
+            class="ai-split-product-qty-btn-{{ ai_gen_id }}"
+            data-action="decrease"
+            aria-label="Decrease quantity"
+          >−</button>
+          <input
+            type="number"
+            class="ai-split-product-qty-input-{{ ai_gen_id }}"
+            value="1"
+            min="1"
+            name="quantity"
+            aria-label="Quantity"
+          >
+          <button
+            type="button"
+            class="ai-split-product-qty-btn-{{ ai_gen_id }}"
+            data-action="increase"
+            aria-label="Increase quantity"
+          >+</button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="ai-split-product-add-btn-{{ ai_gen_id }}"
+        data-add-to-cart
+      >
+        {{ block.settings.button_label }}
+      </button>
+
+      {% if product.description != blank %}
+        <div class="ai-split-product-divider-{{ ai_gen_id }}"></div>
+        <div class="ai-split-product-description-{{ ai_gen_id }}">
+          {{ product.description | strip_html | truncate: 200 }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</product-split-screen-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductSplitScreen{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentMediaIndex = 0;
+        this.productId = this.dataset.productId;
+      }
+
+      connectedCallback() {
+        this.mediaWrapper = this.querySelector('.ai-split-product-media-wrapper-{{ ai_gen_id }}');
+        this.prevBtn = this.querySelector('.ai-split-product-nav-{{ ai_gen_id }}--prev');
+        this.nextBtn = this.querySelector('.ai-split-product-nav-{{ ai_gen_id }}--next');
+        this.variantSelect = this.querySelector('#variant-select-{{ ai_gen_id }}');
+        this.qtyInput = this.querySelector('.ai-split-product-qty-input-{{ ai_gen_id }}');
+        this.qtyBtns = this.querySelectorAll('.ai-split-product-qty-btn-{{ ai_gen_id }}');
+        this.addToCartBtn = this.querySelector('[data-add-to-cart]');
+        this.priceElement = this.querySelector('.ai-split-product-price-{{ ai_gen_id }}');
+
+        this.setupEventListeners();
+        this.fetchProductData();
+      }
+
+      setupEventListeners() {
+        if (this.prevBtn) {
+          this.prevBtn.addEventListener('click', () => this.navigateMedia(-1));
+        }
+        if (this.nextBtn) {
+          this.nextBtn.addEventListener('click', () => this.navigateMedia(1));
+        }
+
+        if (this.variantSelect) {
+          this.variantSelect.addEventListener('change', (e) => this.handleVariantChange(e));
+        }
+
+        this.qtyBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => this.handleQuantityChange(e));
+        });
+
+        if (this.addToCartBtn) {
+          this.addToCartBtn.addEventListener('click', () => this.addToCart());
+        }
+      }
+
+      async fetchProductData() {
+        try {
+          const response = await fetch(`/products/${this.productId}.js`);
+          this.productData = await response.json();
+          this.media = this.productData.media || [];
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+        }
+      }
+
+      navigateMedia(direction) {
+        if (!this.media || this.media.length <= 1) return;
+
+        this.currentMediaIndex += direction;
+        if (this.currentMediaIndex < 0) {
+          this.currentMediaIndex = this.media.length - 1;
+        } else if (this.currentMediaIndex >= this.media.length) {
+          this.currentMediaIndex = 0;
+        }
+
+        const currentMedia = this.media[this.currentMediaIndex];
+        const img = this.mediaWrapper.querySelector('img');
+        if (img && currentMedia) {
+          img.src = currentMedia.src;
+          img.alt = currentMedia.alt || '';
+        }
+      }
+
+      handleVariantChange(e) {
+        const variantId = e.target.value;
+        const variant = this.productData.variants.find(v => v.id == variantId);
+        if (variant && this.priceElement) {
+          const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: '{{ cart.currency.iso_code }}'
+          });
+          this.priceElement.textContent = formatter.format(variant.price / 100);
+        }
+      }
+
+      handleQuantityChange(e) {
+        const action = e.currentTarget.dataset.action;
+        let currentValue = parseInt(this.qtyInput.value) || 1;
+
+        if (action === 'increase') {
+          currentValue++;
+        } else if (action === 'decrease' && currentValue > 1) {
+          currentValue--;
+        }
+
+        this.qtyInput.value = currentValue;
+      }
+
+      async addToCart() {
+        const variantId = this.variantSelect ? this.variantSelect.value : this.productData.variants[0].id;
+        const quantity = parseInt(this.qtyInput.value) || 1;
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: variantId,
+              quantity: quantity
+            })
+          });
+
+          if (response.ok) {
+            window.location.href = '/cart';
+          }
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+        }
+      }
+    }
+
+    customElements.define('product-split-screen-{{ ai_gen_id }}', ProductSplitScreen{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Split screen product",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Content gap",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "gradient_top",
+      "label": "Gradient top",
+      "default": "#0d4c07"
+    },
+    {
+      "type": "color",
+      "id": "gradient_bottom",
+      "label": "Gradient bottom",
+      "default": "#1a7a10"
+    },
+    {
+      "type": "header",
+      "content": "Background product name"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bg_text",
+      "label": "Show background text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "bg_text_size",
+      "min": 100,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Text size",
+      "default": 240
+    },
+    {
+      "type": "color",
+      "id": "bg_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_opacity",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Product media"
+    },
+    {
+      "type": "range",
+      "id": "media_max_width",
+      "min": 300,
+      "max": 700,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "media_padding",
+      "min": 20,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "label": "Inner padding",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "media_radius",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Glass panel"
+    },
+    {
+      "type": "color",
+      "id": "glass_bg",
+      "label": "Background",
+      "default": "rgba(13, 76, 7, 0.4)"
+    },
+    {
+      "type": "color",
+      "id": "glass_bg_fallback",
+      "label": "Background fallback",
+      "default": "rgba(13, 76, 7, 0.85)"
+    },
+    {
+      "type": "color",
+      "id": "glass_border",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "color",
+      "id": "glass_shadow",
+      "label": "Shadow color",
+      "default": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Blur strength",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "glass_radius",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "glass_padding",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Title size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Price size",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Label size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Form elements"
+    },
+    {
+      "type": "text",
+      "id": "variant_label",
+      "label": "Variant label",
+      "default": "Size (Age)"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "color",
+      "id": "input_bg",
+      "label": "Input background",
+      "default": "rgba(26, 122, 16, 0.5)"
+    },
+    {
+      "type": "color",
+      "id": "input_border",
+      "label": "Input border",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "range",
+      "id": "input_radius",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Add to cart button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "divider_spacing",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Spacing",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split screen product"
+    }
+  ]
+}
+{% endschema %}

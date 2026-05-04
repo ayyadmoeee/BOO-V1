@@ -1,0 +1,529 @@
+{% doc %}
+  @prompt
+    Create a pixel-accurate Shop All section with exactly 5 product tiles in a single horizontal row. Must match reference video exactly at 100% zoom.
+    
+    EXACT DIMENSIONS (MANDATORY):
+    - Tile width: 316-318px
+    - Tile height: 673px (tall portrait card)
+    - All 5 tiles equal size
+    - Gap between tiles: 32px
+    - Border radius: 18-22px
+    - Soft subtle shadow (not harsh)
+    - Large gallery-style outer margins left/right
+    - Large top padding (row starts lower on page, not near top)
+    
+    LAYOUT (STRICT - NO WRAPPING):
+    - Always 5 tiles in ONE ROW at ALL breakpoints
+    - Mobile (0-767px): 5 tiles single row, shrink proportionally to fit
+    - Tablet (768-1024px): 5 tiles single row, shrink proportionally to fit
+    - Desktop (1025px+): 5 tiles single row, exact dimensions above
+    - Use grid-template-columns: repeat(5, 1fr) with no wrapping
+    - Fixed aspect ratio maintained across all devices
+    - NO stacking, NO wrapping, NO multi-row, NO carousel
+    
+    HOVER EFFECTS (PIXEL-ACCURATE TO VIDEO):
+    - Hovered tile: stays sharp and clear
+    - All OTHER tiles: blur + fade (reduce opacity)
+    - Blur must be clearly visible
+    - Vertical product name label appears on hovered tile ONLY
+    - Label position: bottom-right corner of tile
+    - Label style: white text, rotated 90 degrees (transform: rotate(90deg))
+    - Label only visible on hover
+    - Smooth transitions (0.3s ease), not abrupt
+    - Desktop only (no hover effects on mobile/tablet)
+    
+    CUSTOM IMAGE CONTROL (CRITICAL):
+    - Each tile has separate product picker AND custom image picker
+    - Product picker: selects which product to link to
+    - Custom image picker: choose exact image to display (NOT forced to use product featured image)
+    - Support images, videos, or GIFs per tile
+    - 5 independent blocks in theme editor (one per tile)
+    
+    THEME EDITOR CONTROLS (MANDATORY):
+    Per tile (5 blocks):
+    - Product picker (for link)
+    - Custom image/video/GIF picker (what displays in tile)
+    - Blur intensity slider (0-100%)
+    
+    Global section settings:
+    - Gap between tiles (default 32px)
+    - Outer padding top (large, default ~80-100px)
+    - Outer padding left/right (large gallery margins)
+    - Outer padding bottom
+    - Border radius (default 18-22px)
+    - Shadow intensity
+    - Hover blur strength
+    - Hover fade opacity
+    - Hover label font size
+    - Hover label font weight
+    
+    TECHNICAL:
+    - Dawn theme compatible
+    - Stable in theme editor and live storefront
+    - No code edits required for content management
+    - Maintain exact proportions and aspect ratio across all screen sizes
+    - Preserve visual consistency with reference video, Build a pixel-accurate “Shop All” page section for Shopify (Dawn-compatible) that recreates exactly what is shown in my reference video. This page contains ONLY 5 products and must match the video in layout, sizing, spacing, padding, hover effects, and behavior at 100% browser zoom.
+    
+    Core Objective: Replicate the exact visual design and interaction from the reference video. The implementation must be pixel-accurate at 100% zoom. The final result must look and behave the same as the video on desktop and must remain the same layout on mobile and tablet with no layout changes.
+    
+    Breakpoints (Strict): The layout must remain identical across Mobile (0px–767px), Tablet (768px–1024px), and Desktop (1025px+). At ALL breakpoints, ALL 5 products must appear in ONE SINGLE ROW. No wrapping, no stacking, and no multi-row layouts are allowed. Layouts such as 2+2+1, 3+2, sliders, or carousels are NOT allowed. A forced 5-column layout must be used at all breakpoints. The row must remain a single line; on smaller screens the tiles must shrink proportionally to fit while preserving their proportions and aspect ratio. Use a fixed aspect ratio and consistent height so the tiles remain visually identical to the video across all devices.
+    
+    Tile Count: Exactly 5 tiles, no more and no less. Each tile must link to its corresponding Shopify product. Each tile must support the same media behavior shown in the video (image, video, or GIF if applicable).
+    
+    Mandatory Dimensions and Visual Specs (from reference video at 100% zoom): Tile size per box is mandatory. Width must be approximately 316–318px. Height must be approximately 673px. Shape must be a tall portrait card. All 5 tiles must be equal in size. Spacing must match the video: gap between tiles approximately 32px, large gallery-style outer margins on the left and right, and large top padding so the row starts lower on the page and not near the top. Border radius must be approximately 18–22px. Shadow must be soft and subtle, not harsh, Hover Behavior (Must Match Video Exactly): On desktop hover, the hovered tile must remain sharp while all other tiles become blurred and faded. Blur must be clearly visible and opacity must be reduced. On hover, the hovered tile must display the product name as a vertical label positioned on the bottom-right side of the tile. The text must be white, rotated 90 degrees (vertical), appear only on hover, and match the placement shown in the video exactly. Hover transitions must be smooth and not abrupt.
+    
+    Customization Requirements (Mandatory, Theme Editor): The section must be fully customizable from the Shopify Theme Editor. For each of the 5 tiles, there must be a product picker to select which product the tile links to, and a custom image selector that allows choosing or uploading the exact photo shown in the tile. The tile must NOT be forced to use the product featured image; the chosen custom image must be what displays. If the video shows video or GIF behavior, each tile must allow choosing image, video, or GIF accordingly. Global Theme Editor controls are required or strongly preferred for gap between tiles, outer padding (top/left/right/bottom), border radius, hover blur strength, hover fade opacity, and hover label font size and weight.
+    
+    Shopify Technical Requirements: The solution must be compatible with Shopify Dawn theme. It must be implemented either as a dedicated custom section used on the Shop All template or as a custom Shop All page template. The section must be stable in the Theme Editor and on the live storefront and must not require any code edits from me to manage the content.
+    , Hover Behavior (Must Match Video Exactly): On desktop hover, the hovered tile must remain sharp while all other tiles become blurred and faded. Blur must be clearly visible and opacity must be reduced. On hover, the hovered tile must display the product name as a vertical label positioned on the bottom-right side of the tile. The text must be white, rotated 90 degrees (vertical), appear only on hover, and match the placement shown in the video exactly. Hover transitions must be smooth and not abrupt.
+    
+    Customization Requirements (Mandatory, Theme Editor): The section must be fully customizable from the Shopify Theme Editor. For each of the 5 tiles, there must be a product picker to select which product the tile links to, and a custom image selector that allows choosing or uploading the exact photo shown in the tile. The tile must NOT be forced to use the product featured image; the chosen custom image must be what displays. If the video shows video or GIF behavior, each tile must allow choosing image, video, or GIF accordingly. Global Theme Editor controls are required or strongly preferred for gap between tiles, outer padding (top/left/right/bottom), border radius, hover blur strength, hover fade opacity, and hover label font size and weight.
+    
+    Shopify Technical Requirements: The solution must be compatible with Shopify Dawn theme. It must be implemented either as a dedicated custom section used on the Shop All template or as a custom Shop All page template. The section must be stable in the Theme Editor and on the live storefront and must not require any code edits from me to manage the content.
+    
+    Final Acceptance Criteria: At 100% browser zoom, the layout must visually match the reference video in tile size (approximately 316–318px width and 673px height), spacing, padding, border radius, shadow softness, hover blur and fade effect, vertical product name label on hover at the bottom-right, and overall look and feel. On mobile and tablet, the layout must remain exact
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-shop-all-gallery-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.padding_top }}px {{ block.settings.padding_horizontal }}px {{ block.settings.padding_bottom }}px;
+    box-sizing: border-box;
+  }
+
+  .ai-shop-all-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.tile_gap }}px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ai-shop-all-tile-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 317 / 673;
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    box-shadow: 0 {{ block.settings.shadow_vertical }}px {{ block.settings.shadow_blur }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity | divided_by: 100.0 }});
+  }
+
+  .ai-shop-all-tile-link-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ai-shop-all-tile-link-{{ ai_gen_id }}[aria-disabled="true"] {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .ai-shop-all-tile-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-shop-all-empty-message-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .ai-shop-all-product-label-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: {{ block.settings.label_color }};
+    font-size: {{ block.settings.label_font_size }}px;
+    font-weight: {{ block.settings.label_font_weight }};
+    transform: rotate(90deg);
+    transform-origin: bottom right;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+  }
+
+  @media (min-width: 1025px) {
+    .ai-shop-all-gallery-{{ ai_gen_id }}:hover .ai-shop-all-tile-{{ ai_gen_id }} {
+      filter: blur({{ block.settings.hover_blur }}px);
+      opacity: {{ block.settings.hover_opacity | divided_by: 100.0 }};
+    }
+
+    .ai-shop-all-gallery-{{ ai_gen_id }}:hover .ai-shop-all-tile-{{ ai_gen_id }}:hover {
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    .ai-shop-all-tile-{{ ai_gen_id }}:hover .ai-shop-all-product-label-{{ ai_gen_id }} {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .ai-shop-all-gallery-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_top | times: 0.6 }}px {{ block.settings.padding_horizontal | times: 0.5 }}px {{ block.settings.padding_bottom | times: 0.6 }}px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ai-shop-all-gallery-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_top | times: 0.4 }}px {{ block.settings.padding_horizontal | times: 0.3 }}px {{ block.settings.padding_bottom | times: 0.4 }}px;
+    }
+
+    .ai-shop-all-grid-{{ ai_gen_id }} {
+      gap: {{ block.settings.tile_gap | times: 0.5 }}px;
+    }
+  }
+{% endstyle %}
+
+<shop-all-gallery-{{ ai_gen_id }} class="ai-shop-all-gallery-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-shop-all-grid-{{ ai_gen_id }}">
+    {% for i in (1..5) %}
+      {% liquid
+        assign product_key = 'product_' | append: i
+        assign image_key = 'custom_image_' | append: i
+        assign product = block.settings[product_key]
+        assign custom_image = block.settings[image_key]
+      %}
+
+      <div class="ai-shop-all-tile-{{ ai_gen_id }}">
+        {% if product != blank %}
+          <a 
+            href="{{ product.url }}" 
+            class="ai-shop-all-tile-link-{{ ai_gen_id }}"
+            aria-label="{{ product.title | escape }}"
+          >
+            {% if custom_image != blank %}
+              <img
+                src="{{ custom_image | image_url: width: 800 }}"
+                alt="{{ custom_image.alt | default: product.title | escape }}"
+                loading="lazy"
+                width="800"
+                height="800"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% elsif product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                loading="lazy"
+                width="800"
+                height="800"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+                <div class="ai-shop-all-empty-message-{{ ai_gen_id }}">Add an image</div>
+              </div>
+            {% endif %}
+            
+            <div class="ai-shop-all-product-label-{{ ai_gen_id }}">
+              {{ product.title }}
+            </div>
+          </a>
+        {% else %}
+          <div class="ai-shop-all-tile-link-{{ ai_gen_id }}" aria-disabled="true">
+            {% if custom_image != blank %}
+              <img
+                src="{{ custom_image | image_url: width: 800 }}"
+                alt="{{ custom_image.alt | escape }}"
+                loading="lazy"
+                width="800"
+                height="800"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+                <div class="ai-shop-all-empty-message-{{ ai_gen_id }}">Select product {{ i }}</div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</shop-all-gallery-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ShopAllGallery{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.tiles = this.querySelectorAll('.ai-shop-all-tile-{{ ai_gen_id }}');
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        this.tiles.forEach((tile) => {
+          const link = tile.querySelector('.ai-shop-all-tile-link-{{ ai_gen_id }}');
+          if (link && link.getAttribute('aria-disabled') === 'true') {
+            link.setAttribute('tabindex', '-1');
+          }
+        });
+      }
+    }
+
+    customElements.define('shop-all-gallery-{{ ai_gen_id }}', ShopAllGallery{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop All gallery",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image_1",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image_2",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image_3",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image_4",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image_5",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Left and right padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "tile_gap",
+      "min": 8,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap between tiles",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Shadow"
+    },
+    {
+      "type": "range",
+      "id": "shadow_vertical",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical offset",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Blur",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Hover effects"
+    },
+    {
+      "type": "range",
+      "id": "hover_blur",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Blur strength",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "hover_opacity",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Fade opacity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Product label"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "label_font_size",
+      "min": 10,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "label_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Font weight",
+      "default": 600
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop All gallery"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1164 @@
+{% doc %}
+  @prompt
+    Create a full-width footer section with a dark green/dark teal solid background. The footer should have 6 vertical columns aligned horizontally with these exact headings and links:
+    
+    Column 1 - Tools: Create, Publish, Engage, Analyze, Collaborate
+    Column 2 - Features: AI Assistant, Start Page, Integrations, iOS App, Android App, Browser Extension
+    Column 3 - Resources: Blog, Content Library, Social Media Terms, Glossary, Free Marketing Tools, AI Social Media Post Generator, Compare Buffer, Community
+    Column 4 - Transparency: Open Hub, Transparent Metrics, Transparent Pricing, Transparent Salaries, Product Roadmap
+    Column 5 - Support: Help Center, Status, Changelog, Request a Feature
+    Column 6 - Company: About, Careers, Press, Legal, Sitemap
+    
+    Use clean sans-serif typography with light green text for all headings and links. Headings should be slightly bolder and brighter than links. Links should have no underline, medium font size, and even vertical spacing.
+    
+    At the bottom left, include a customizable brand logo (icon + text) in light green. At the bottom right, include a horizontal row of social media icons (Instagram, Facebook, X/Twitter, LinkedIn, Threads) in white or light green with even spacing, followed by a copyright line reading "Copyright ©2025 Buffer | Privacy | Terms | Security" in small, light gray/muted green text.
+    
+    The footer should have large top and bottom padding, wide spacing between columns, flat design with no borders, no card backgrounds, no shadows, and strong contrast. Professional minimal SaaS style with all content aligned to the top and fully responsive on mobile., MAKE IT LOOK CLASSIER AND MORE SIMPLE AND ADD THE LOGO OF SOCIAL MEDIA THAT I WANT TO MAKE THEM AS PERMALINKS PLEASE
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-footer-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .ai-footer-columns-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: {{ block.settings.column_gap }}px;
+    margin-bottom: {{ block.settings.bottom_section_spacing }}px;
+    padding-bottom: {{ block.settings.bottom_section_spacing }}px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ai-footer-column-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_font_size }}px;
+    font-weight: {{ block.settings.heading_font_weight }};
+    margin: 0 0 {{ block.settings.heading_margin }}px 0;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
+  }
+
+  .ai-footer-link-{{ ai_gen_id }} {
+    color: {{ block.settings.link_color }};
+    font-size: {{ block.settings.link_font_size }}px;
+    text-decoration: none;
+    margin-bottom: {{ block.settings.link_spacing }}px;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+    opacity: 0.85;
+  }
+
+  .ai-footer-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+    opacity: 1;
+  }
+
+  .ai-footer-bottom-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .ai-footer-brand-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ai-footer-brand-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.brand_icon_size }}px;
+    height: {{ block.settings.brand_icon_size }}px;
+    flex-shrink: 0;
+  }
+
+  .ai-footer-brand-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-footer-brand-text-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.brand_text_size }}px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-footer-right-section-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.social_section_gap }}px;
+  }
+
+  .ai-footer-social-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.social_icon_spacing }}px;
+  }
+
+  .ai-footer-social-link-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ block.settings.social_icon_size }}px;
+    height: {{ block.settings.social_icon_size }}px;
+    color: {{ block.settings.social_icon_color }};
+    transition: all 0.3s ease;
+    opacity: 0.8;
+  }
+
+  .ai-footer-social-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.social_icon_hover_color }};
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
+  .ai-footer-social-link-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-footer-divider-{{ ai_gen_id }} {
+    width: 1px;
+    height: {{ block.settings.social_icon_size }}px;
+    background-color: {{ block.settings.divider_color }};
+    opacity: 0.4;
+  }
+
+  .ai-footer-copyright-{{ ai_gen_id }} {
+    color: {{ block.settings.copyright_color }};
+    font-size: {{ block.settings.copyright_font_size }}px;
+    line-height: 1.5;
+    opacity: 0.7;
+  }
+
+  .ai-footer-copyright-link-{{ ai_gen_id }} {
+    color: {{ block.settings.copyright_color }};
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-footer-copyright-link-{{ ai_gen_id }}:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-footer-columns-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px 30px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-footer-container-{{ ai_gen_id }} {
+      padding: 0 20px;
+    }
+
+    .ai-footer-columns-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px 20px;
+    }
+
+    .ai-footer-bottom-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .ai-footer-right-section-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .ai-footer-divider-{{ ai_gen_id }} {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-footer-columns-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+  }
+{% endstyle %}
+
+<footer-section-{{ ai_gen_id }} class="ai-footer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-footer-container-{{ ai_gen_id }}">
+    <div class="ai-footer-columns-{{ ai_gen_id }}">
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_1_heading }}</h3>
+        {% if block.settings.column_1_link_1_text != blank %}
+          <a href="{{ block.settings.column_1_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_1_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_1_link_2_text != blank %}
+          <a href="{{ block.settings.column_1_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_1_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_1_link_3_text != blank %}
+          <a href="{{ block.settings.column_1_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_1_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_1_link_4_text != blank %}
+          <a href="{{ block.settings.column_1_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_1_link_4_text }}</a>
+        {% endif %}
+        {% if block.settings.column_1_link_5_text != blank %}
+          <a href="{{ block.settings.column_1_link_5_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_1_link_5_text }}</a>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_2_heading }}</h3>
+        {% if block.settings.column_2_link_1_text != blank %}
+          <a href="{{ block.settings.column_2_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_2_link_2_text != blank %}
+          <a href="{{ block.settings.column_2_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_2_link_3_text != blank %}
+          <a href="{{ block.settings.column_2_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_2_link_4_text != blank %}
+          <a href="{{ block.settings.column_2_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_4_text }}</a>
+        {% endif %}
+        {% if block.settings.column_2_link_5_text != blank %}
+          <a href="{{ block.settings.column_2_link_5_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_5_text }}</a>
+        {% endif %}
+        {% if block.settings.column_2_link_6_text != blank %}
+          <a href="{{ block.settings.column_2_link_6_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_2_link_6_text }}</a>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_3_heading }}</h3>
+        {% if block.settings.column_3_link_1_text != blank %}
+          <a href="{{ block.settings.column_3_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_2_text != blank %}
+          <a href="{{ block.settings.column_3_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_3_text != blank %}
+          <a href="{{ block.settings.column_3_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_4_text != blank %}
+          <a href="{{ block.settings.column_3_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_4_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_5_text != blank %}
+          <a href="{{ block.settings.column_3_link_5_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_5_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_6_text != blank %}
+          <a href="{{ block.settings.column_3_link_6_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_6_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_7_text != blank %}
+          <a href="{{ block.settings.column_3_link_7_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_7_text }}</a>
+        {% endif %}
+        {% if block.settings.column_3_link_8_text != blank %}
+          <a href="{{ block.settings.column_3_link_8_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_3_link_8_text }}</a>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_4_heading }}</h3>
+        {% if block.settings.column_4_link_1_text != blank %}
+          <a href="{{ block.settings.column_4_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_4_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_4_link_2_text != blank %}
+          <a href="{{ block.settings.column_4_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_4_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_4_link_3_text != blank %}
+          <a href="{{ block.settings.column_4_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_4_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_4_link_4_text != blank %}
+          <a href="{{ block.settings.column_4_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_4_link_4_text }}</a>
+        {% endif %}
+        {% if block.settings.column_4_link_5_text != blank %}
+          <a href="{{ block.settings.column_4_link_5_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_4_link_5_text }}</a>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_5_heading }}</h3>
+        {% if block.settings.column_5_link_1_text != blank %}
+          <a href="{{ block.settings.column_5_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_5_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_5_link_2_text != blank %}
+          <a href="{{ block.settings.column_5_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_5_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_5_link_3_text != blank %}
+          <a href="{{ block.settings.column_5_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_5_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_5_link_4_text != blank %}
+          <a href="{{ block.settings.column_5_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_5_link_4_text }}</a>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3 class="ai-footer-column-heading-{{ ai_gen_id }}">{{ block.settings.column_6_heading }}</h3>
+        {% if block.settings.column_6_link_1_text != blank %}
+          <a href="{{ block.settings.column_6_link_1_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_6_link_1_text }}</a>
+        {% endif %}
+        {% if block.settings.column_6_link_2_text != blank %}
+          <a href="{{ block.settings.column_6_link_2_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_6_link_2_text }}</a>
+        {% endif %}
+        {% if block.settings.column_6_link_3_text != blank %}
+          <a href="{{ block.settings.column_6_link_3_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_6_link_3_text }}</a>
+        {% endif %}
+        {% if block.settings.column_6_link_4_text != blank %}
+          <a href="{{ block.settings.column_6_link_4_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_6_link_4_text }}</a>
+        {% endif %}
+        {% if block.settings.column_6_link_5_text != blank %}
+          <a href="{{ block.settings.column_6_link_5_url }}" class="ai-footer-link-{{ ai_gen_id }}">{{ block.settings.column_6_link_5_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-footer-bottom-{{ ai_gen_id }}">
+      <div class="ai-footer-brand-{{ ai_gen_id }}">
+        {% if block.settings.brand_icon != blank %}
+          <div class="ai-footer-brand-icon-{{ ai_gen_id }}">
+            <img src="{{ block.settings.brand_icon | image_url: width: 100 }}" alt="{{ block.settings.brand_text }}" loading="lazy">
+          </div>
+        {% endif %}
+        {% if block.settings.brand_text != blank %}
+          <div class="ai-footer-brand-text-{{ ai_gen_id }}">{{ block.settings.brand_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="ai-footer-right-section-{{ ai_gen_id }}">
+        <div class="ai-footer-social-{{ ai_gen_id }}">
+          {% if block.settings.instagram_url != blank %}
+            <a href="{{ block.settings.instagram_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.facebook_url != blank %}
+            <a href="{{ block.settings.facebook_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.twitter_url != blank %}
+            <a href="{{ block.settings.twitter_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.linkedin_url != blank %}
+            <a href="{{ block.settings.linkedin_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.threads_url != blank %}
+            <a href="{{ block.settings.threads_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Threads">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.186 3.5c-2.77 0-4.96.86-6.32 2.48-.93 1.11-1.48 2.58-1.6 4.27l2.48.23c.09-1.28.47-2.34 1.13-3.15.95-1.16 2.47-1.75 4.31-1.75 1.64 0 2.96.48 3.82 1.39.67.71 1.01 1.62 1.01 2.71 0 .73-.16 1.35-.48 1.86-.27.43-.66.79-1.17 1.07-.11-.61-.29-1.15-.54-1.62-.51-1.01-1.35-1.79-2.51-2.33-1.16-.54-2.54-.81-4.13-.81h-.5v2.5h.5c1.27 0 2.28.21 3.02.62.74.41 1.27.98 1.59 1.71.32.73.48 1.58.48 2.55 0 .97-.16 1.82-.48 2.55-.32.73-.85 1.3-1.59 1.71-.74.41-1.75.62-3.02.62-1.64 0-2.96-.48-3.82-1.39-.67-.71-1.01-1.62-1.01-2.71h-2.5c0 1.69.55 3.16 1.6 4.27 1.36 1.62 3.55 2.48 6.32 2.48 1.58 0 2.96-.27 4.13-.81 1.16-.54 2-.32 2.51-2.33.25-.47.43-1.01.54-1.62.51.28.9.64 1.17 1.07.32.51.48 1.13.48 1.86 0 1.09-.34 2-.01 2.71-.86.91-2.18 1.39-3.82 1.39-1.84 0-3.36-.59-4.31-1.75-.66-.81-1.04-1.87-1.13-3.15l-2.48.23c.12 1.69.67 3.16 1.6 4.27 1.36 1.62 3.55 2.48 6.32 2.48s4.96-.86 6.32-2.48c.93-1.11 1.48-2.58 1.6-4.27-.12-1.69-.67-3.16-1.6-4.27-1.36-1.62-3.55-2.48-6.32-2.48z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.youtube_url != blank %}
+            <a href="{{ block.settings.youtube_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.tiktok_url != blank %}
+            <a href="{{ block.settings.tiktok_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+              </svg>
+            </a>
+          {% endif %}
+          {% if block.settings.pinterest_url != blank %}
+            <a href="{{ block.settings.pinterest_url }}" class="ai-footer-social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+
+        <div class="ai-footer-divider-{{ ai_gen_id }}"></div>
+
+        <div class="ai-footer-copyright-{{ ai_gen_id }}">
+          {{ block.settings.copyright_text }}
+          {% if block.settings.privacy_url != blank %}
+            | <a href="{{ block.settings.privacy_url }}" class="ai-footer-copyright-link-{{ ai_gen_id }}">Privacy</a>
+          {% endif %}
+          {% if block.settings.terms_url != blank %}
+            | <a href="{{ block.settings.terms_url }}" class="ai-footer-copyright-link-{{ ai_gen_id }}">Terms</a>
+          {% endif %}
+          {% if block.settings.security_url != blank %}
+            | <a href="{{ block.settings.security_url }}" class="ai-footer-copyright-link-{{ ai_gen_id }}">Security</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer-section-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Premium footer",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0a3d05"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "#4a7a45"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Column spacing",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_section_spacing",
+      "min": 30,
+      "max": 80,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom section spacing",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#c8e6c0"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading font size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "heading_font_weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "label": "Heading font weight",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "heading_margin",
+      "min": 12,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading margin",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#9bc794"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#c8e6c0"
+    },
+    {
+      "type": "range",
+      "id": "link_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Link font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "link_spacing",
+      "min": 8,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Link spacing",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Column 1 - Tools"
+    },
+    {
+      "type": "text",
+      "id": "column_1_heading",
+      "label": "Heading",
+      "default": "Tools"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_1_text",
+      "label": "Link 1 text",
+      "default": "Create"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_2_text",
+      "label": "Link 2 text",
+      "default": "Publish"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_3_text",
+      "label": "Link 3 text",
+      "default": "Engage"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_4_text",
+      "label": "Link 4 text",
+      "default": "Analyze"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_5_text",
+      "label": "Link 5 text",
+      "default": "Collaborate"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 2 - Features"
+    },
+    {
+      "type": "text",
+      "id": "column_2_heading",
+      "label": "Heading",
+      "default": "Features"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_1_text",
+      "label": "Link 1 text",
+      "default": "AI Assistant"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_2_text",
+      "label": "Link 2 text",
+      "default": "Start Page"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_3_text",
+      "label": "Link 3 text",
+      "default": "Integrations"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_4_text",
+      "label": "Link 4 text",
+      "default": "iOS App"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_5_text",
+      "label": "Link 5 text",
+      "default": "Android App"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_6_text",
+      "label": "Link 6 text",
+      "default": "Browser Extension"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_6_url",
+      "label": "Link 6 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 3 - Resources"
+    },
+    {
+      "type": "text",
+      "id": "column_3_heading",
+      "label": "Heading",
+      "default": "Resources"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_1_text",
+      "label": "Link 1 text",
+      "default": "Blog"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_2_text",
+      "label": "Link 2 text",
+      "default": "Content Library"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_3_text",
+      "label": "Link 3 text",
+      "default": "Social Media Terms"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_4_text",
+      "label": "Link 4 text",
+      "default": "Glossary"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_5_text",
+      "label": "Link 5 text",
+      "default": "Free Marketing Tools"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_6_text",
+      "label": "Link 6 text",
+      "default": "AI Social Media Post Generator"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_6_url",
+      "label": "Link 6 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_7_text",
+      "label": "Link 7 text",
+      "default": "Compare Buffer"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_7_url",
+      "label": "Link 7 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_8_text",
+      "label": "Link 8 text",
+      "default": "Community"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_8_url",
+      "label": "Link 8 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 4 - Transparency"
+    },
+    {
+      "type": "text",
+      "id": "column_4_heading",
+      "label": "Heading",
+      "default": "Transparency"
+    },
+    {
+      "type": "text",
+      "id": "column_4_link_1_text",
+      "label": "Link 1 text",
+      "default": "Open Hub"
+    },
+    {
+      "type": "url",
+      "id": "column_4_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_4_link_2_text",
+      "label": "Link 2 text",
+      "default": "Transparent Metrics"
+    },
+    {
+      "type": "url",
+      "id": "column_4_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_4_link_3_text",
+      "label": "Link 3 text",
+      "default": "Transparent Pricing"
+    },
+    {
+      "type": "url",
+      "id": "column_4_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_4_link_4_text",
+      "label": "Link 4 text",
+      "default": "Transparent Salaries"
+    },
+    {
+      "type": "url",
+      "id": "column_4_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_4_link_5_text",
+      "label": "Link 5 text",
+      "default": "Product Roadmap"
+    },
+    {
+      "type": "url",
+      "id": "column_4_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 5 - Support"
+    },
+    {
+      "type": "text",
+      "id": "column_5_heading",
+      "label": "Heading",
+      "default": "Support"
+    },
+    {
+      "type": "text",
+      "id": "column_5_link_1_text",
+      "label": "Link 1 text",
+      "default": "Help Center"
+    },
+    {
+      "type": "url",
+      "id": "column_5_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_5_link_2_text",
+      "label": "Link 2 text",
+      "default": "Status"
+    },
+    {
+      "type": "url",
+      "id": "column_5_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_5_link_3_text",
+      "label": "Link 3 text",
+      "default": "Changelog"
+    },
+    {
+      "type": "url",
+      "id": "column_5_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_5_link_4_text",
+      "label": "Link 4 text",
+      "default": "Request a Feature"
+    },
+    {
+      "type": "url",
+      "id": "column_5_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 6 - Company"
+    },
+    {
+      "type": "text",
+      "id": "column_6_heading",
+      "label": "Heading",
+      "default": "Company"
+    },
+    {
+      "type": "text",
+      "id": "column_6_link_1_text",
+      "label": "Link 1 text",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "column_6_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_6_link_2_text",
+      "label": "Link 2 text",
+      "default": "Careers"
+    },
+    {
+      "type": "url",
+      "id": "column_6_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_6_link_3_text",
+      "label": "Link 3 text",
+      "default": "Press"
+    },
+    {
+      "type": "url",
+      "id": "column_6_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_6_link_4_text",
+      "label": "Link 4 text",
+      "default": "Legal"
+    },
+    {
+      "type": "url",
+      "id": "column_6_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_6_link_5_text",
+      "label": "Link 5 text",
+      "default": "Sitemap"
+    },
+    {
+      "type": "url",
+      "id": "column_6_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_icon",
+      "label": "Brand icon"
+    },
+    {
+      "type": "range",
+      "id": "brand_icon_size",
+      "min": 24,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 36
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand text",
+      "default": "Buffer"
+    },
+    {
+      "type": "range",
+      "id": "brand_text_size",
+      "min": 14,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Text size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "url",
+      "id": "threads_url",
+      "label": "Threads URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Icon color",
+      "default": "#c8e6c0"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_hover_color",
+      "label": "Icon hover color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 18,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "social_icon_spacing",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon spacing",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "social_section_gap",
+      "min": 20,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Social section gap",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "Copyright ©2025 Buffer"
+    },
+    {
+      "type": "url",
+      "id": "privacy_url",
+      "label": "Privacy URL"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "Terms URL"
+    },
+    {
+      "type": "url",
+      "id": "security_url",
+      "label": "Security URL"
+    },
+    {
+      "type": "color",
+      "id": "copyright_color",
+      "label": "Text color",
+      "default": "#7a9e75"
+    },
+    {
+      "type": "range",
+      "id": "copyright_font_size",
+      "min": 11,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 13
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium footer"
+    }
+  ]
+}
+{% endschema %}

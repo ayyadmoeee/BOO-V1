@@ -1,0 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "cart_page_background": "#b7aca4",
+        "cart_page_background_custom": "",
+        "cart_box_background": "linear-gradient(135deg, rgba(200, 200, 200, 0.6), rgba(160, 160, 160, 0.45) 100%)",
+        "cart_box_background_custom": "",
+        "cart_page_bg_image": "shopify://shop_images/DRIGOBOO_6.jpg",
+        "product_box_background": "rgba(255, 255, 255, 0.08)",
+        "product_box_background_custom": "",
+        "cart_box_radius": 24,
+        "cart_text_font": "assistant_n4",
+        "cart_text_scale": 100,
+        "cart_text_color": "#5d616e",
+        "quantity_border_transparent": true,
+        "quantity_border_color": "#ffffff",
+        "quantity_radius": 100,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "summary_background": "linear-gradient(135deg, rgba(200, 200, 200, 0.6), rgba(160, 160, 160, 0.45) 100%)",
+        "summary_background_custom": "",
+        "summary_radius": 24,
+        "summary_text_font": "assistant_n4",
+        "summary_text_scale": 100,
+        "summary_text_color": "#f5f7ff",
+        "padding_top": 20,
+        "padding_bottom": 40,
+        "summary_title_text": "Summary",
+        "original_price_text": "Price",
+        "after_discount_text": "After discount price",
+        "show_after_discount_line": false,
+        "delivery_text": "Shipping",
+        "total_text": "Total",
+        "delivery_price_label": "4",
+        "free_delivery_min": 200,
+        "checkout_button_hover_color": "#3b4759",
+        "checkout_button_radius": 14,
+        "payment_method_1_label": "COD",
+        "payment_method_2_label": "WHISH",
+        "payment_icon_size": 30,
+        "payment_method_2_icon": "shopify://shop_images/whishpay.CgBAaM5Z.svg"
+      }
+    }
+  },
+  "order": [
+    "cart-items",
+    "cart-footer"
+  ]
+}

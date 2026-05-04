@@ -1,0 +1,1384 @@
+{% doc %}
+  @prompt
+    Create a split-layout contact section with an image on the left (40% width) and contact form with information on the right (60% width). The right side should include a large "Contact Us" heading, a contact form with fields for Full Name, E-mail, and Message, contact information displaying an email address and location (San Francisco, California), a rounded black submit button labeled "Contact Us", and clickable social media icons (Facebook, Instagram, WhatsApp) at the bottom right that can be linked to custom URLs through theme settings. The icons should be styled consistently and have hover effects. The design should have a clean, modern aesthetic with a light beige/cream background, proper spacing between elements, and be fully responsive on mobile devices with the image stacking above the form.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign overlay_alpha = block.settings.overlay_opacity | divided_by: 100.0 %}
+{% assign content_bg_alpha = block.settings.content_background_opacity | divided_by: 100.0 %}
+{% assign content_border_alpha = block.settings.content_border_opacity | divided_by: 100.0 %}
+{% assign content_shadow_alpha = block.settings.content_shadow_opacity | divided_by: 100.0 %}
+{% assign input_bg_alpha = block.settings.input_background_opacity | divided_by: 100.0 %}
+
+{% if block.settings.heading_font or block.settings.body_font or block.settings.button_font %}
+  <style>
+    {% if block.settings.heading_font %}{{ block.settings.heading_font | font_face: font_display: 'swap' }}{% endif %}
+    {% if block.settings.body_font %}{{ block.settings.body_font | font_face: font_display: 'swap' }}{% endif %}
+    {% if block.settings.button_font %}{{ block.settings.button_font | font_face: font_display: 'swap' }}{% endif %}
+  </style>
+{% endif %}
+
+{% style %}
+  .ai-contact-split-{{ ai_gen_id }} {
+    --ai-contact-type-scale: clamp(0.52, calc(0.52 + (100vw - 900px) / 1020px * 0.48), 1);
+    --ai-contact-spacing-scale: clamp(0.42, calc(0.42 + (100vw - 900px) / 1020px * 0.58), 1);
+    --ai-contact-panel-width: clamp(220px, 38vw, 600px);
+    --ai-contact-side-offset: clamp(0px, calc((100vw - 900px) * 0.10), 100px);
+    --ai-contact-frame-width: calc(var(--ai-contact-panel-width) + var(--ai-contact-side-offset));
+    display: block;
+    width: 100%;
+    min-height: 100svh;
+    height: auto;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: visible;
+    {% if block.settings.image %}
+      background-image: url('{{ block.settings.image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+    {% else %}
+      background-color: {{ block.settings.background_color | color_modify: 'alpha', block.settings.background_opacity | divided_by: 100.0 }};
+    {% endif %}
+  }
+
+  .ai-contact-split-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: {{ block.settings.overlay_color | color_modify: 'alpha', overlay_alpha }};
+    z-index: 1;
+  }
+
+  .ai-contact-split-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    width: min(100%, {{ block.settings.max_width }}px);
+    min-height: 100svh;
+    height: auto;
+    margin: 0 auto;
+    padding: 0 clamp(12px, 2vw, 28px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
+  .ai-contact-split-fit-{{ ai_gen_id }} {
+    width: min(100%, var(--ai-contact-frame-width));
+    min-height: 100svh;
+    height: auto;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  .ai-contact-split-content-{{ ai_gen_id }} {
+    width: min(100%, var(--ai-contact-panel-width));
+    max-width: var(--ai-contact-panel-width);
+    min-width: 0;
+    min-height: auto;
+    height: auto;
+    margin-right: var(--ai-contact-side-offset);
+    padding: calc({{ block.settings.content_padding }}px * var(--ai-contact-spacing-scale));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: none;
+    overflow-y: visible;
+    box-sizing: border-box;
+    background: {{ block.settings.content_background_color | color_modify: 'alpha', content_bg_alpha }};
+    backdrop-filter: blur({{ block.settings.content_backdrop_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.content_backdrop_blur }}px);
+    border-left: {{ block.settings.content_border_width }}px solid {{ block.settings.content_border_color | color_modify: 'alpha', content_border_alpha }};
+    border-radius: {{ block.settings.content_border_radius }}px;
+    box-shadow: 0 8px 32px {{ block.settings.content_shadow_color | color_modify: 'alpha', content_shadow_alpha }};
+  }
+
+  .ai-contact-split-heading-{{ ai_gen_id }} {
+    font-size: calc({{ block.settings.heading_size }}px * var(--ai-contact-type-scale));
+    color: {{ block.settings.heading_color }};
+    font-family: {% if block.settings.heading_font %}{{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }}{% else %}inherit{% endif %};
+    font-weight: {{ block.settings.heading_font_weight }};
+    font-style: {% if block.settings.heading_font %}{{ block.settings.heading_font.style }}{% else %}normal{% endif %};
+    margin: 0 0 calc({{ block.settings.spacing }}px * var(--ai-contact-spacing-scale)) 0;
+    letter-spacing: {{ block.settings.heading_letter_spacing | divided_by: 1000.0 }}em;
+    line-height: {{ block.settings.heading_line_height }};
+    opacity: {{ block.settings.heading_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-contact-split-form-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: calc({{ block.settings.field_spacing }}px * var(--ai-contact-spacing-scale));
+    margin-bottom: calc({{ block.settings.spacing }}px * var(--ai-contact-spacing-scale));
+  }
+
+  .ai-contact-split-field-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: calc(8px * var(--ai-contact-spacing-scale));
+  }
+
+  .ai-contact-split-label-{{ ai_gen_id }} {
+    font-size: calc({{ block.settings.label_size }}px * var(--ai-contact-type-scale));
+    color: {{ block.settings.text_color }};
+    font-family: {% if block.settings.body_font %}{{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }}{% else %}inherit{% endif %};
+    font-weight: {{ block.settings.label_font_weight }};
+    opacity: {{ block.settings.label_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-contact-split-input-{{ ai_gen_id }},
+  .ai-contact-split-textarea-{{ ai_gen_id }} {
+    padding:
+      calc({{ block.settings.input_padding }}px * var(--ai-contact-spacing-scale))
+      calc({{ block.settings.input_padding | times: 1.5 }}px * var(--ai-contact-spacing-scale));
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: calc({{ block.settings.input_border_radius }}px * var(--ai-contact-spacing-scale));
+    font-size: calc({{ block.settings.input_text_size }}px * var(--ai-contact-type-scale));
+    color: {{ block.settings.input_text_color }};
+    background: {{ block.settings.input_background | color_modify: 'alpha', input_bg_alpha }};
+    backdrop-filter: blur({{ block.settings.input_backdrop_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.input_backdrop_blur }}px);
+    font-family: {% if block.settings.body_font %}{{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }}{% else %}inherit{% endif %};
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ai-contact-split-input-{{ ai_gen_id }}::placeholder,
+  .ai-contact-split-textarea-{{ ai_gen_id }}::placeholder {
+    color: {{ block.settings.placeholder_color }};
+    opacity: {{ block.settings.placeholder_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-contact-split-input-{{ ai_gen_id }}:focus,
+  .ai-contact-split-textarea-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.input_focus_color }};
+    box-shadow: 0 0 0 2px {{ block.settings.input_focus_color | color_modify: 'alpha', 0.2 }};
+  }
+
+  .ai-contact-split-textarea-{{ ai_gen_id }} {
+    min-height: calc({{ block.settings.textarea_min_height }}px * var(--ai-contact-spacing-scale));
+    resize: {{ block.settings.textarea_resize }};
+    border-radius: calc({{ block.settings.input_border_radius }}px * var(--ai-contact-spacing-scale));
+  }
+
+  .ai-contact-split-button-{{ ai_gen_id }} {
+    appearance: none;
+    -webkit-appearance: none;
+    overflow: hidden;
+    width: 100%;
+    padding:
+      calc({{ block.settings.button_padding }}px * var(--ai-contact-spacing-scale))
+      calc({{ block.settings.button_padding | times: 1.5 }}px * var(--ai-contact-spacing-scale));
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    border-radius: calc({{ block.settings.button_border_radius | default: 24 }}px * var(--ai-contact-spacing-scale));
+    font-size: calc({{ block.settings.button_text_size }}px * var(--ai-contact-type-scale));
+    font-family: {% if block.settings.button_font %}{{ block.settings.button_font.family }}, {{ block.settings.button_font.fallback_families }}{% else %}inherit{% endif %};
+    font-weight: {{ block.settings.button_font_weight }};
+    opacity: {{ block.settings.button_opacity | divided_by: 100.0 }};
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .ai-contact-split-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    opacity: {{ block.settings.button_hover_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-contact-split-button-{{ ai_gen_id }}:focus,
+  .ai-contact-split-button-{{ ai_gen_id }}:active {
+    outline: none;
+    border-color: {{ block.settings.button_border_color }};
+  }
+
+  .ai-contact-split-info-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: calc({{ block.settings.info_spacing }}px * var(--ai-contact-spacing-scale));
+    margin-bottom: calc({{ block.settings.spacing }}px * var(--ai-contact-spacing-scale));
+  }
+
+  .ai-contact-split-info-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: calc(12px * var(--ai-contact-spacing-scale));
+    font-size: calc({{ block.settings.info_text_size }}px * var(--ai-contact-type-scale));
+    color: {{ block.settings.info_text_color }};
+    font-family: {% if block.settings.body_font %}{{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }}{% else %}inherit{% endif %};
+    opacity: {{ block.settings.info_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-contact-split-info-icon-{{ ai_gen_id }} {
+    width: calc(20px * var(--ai-contact-spacing-scale));
+    height: calc(20px * var(--ai-contact-spacing-scale));
+    flex-shrink: 0;
+  }
+
+  .ai-contact-split-info-icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.icon_color }};
+  }
+
+  .ai-contact-split-social-{{ ai_gen_id }} {
+    display: flex;
+    gap: calc({{ block.settings.social_spacing }}px * var(--ai-contact-spacing-scale));
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: calc({{ block.settings.social_margin_top }}px * var(--ai-contact-spacing-scale));
+  }
+
+  .ai-contact-split-social-link-{{ ai_gen_id }} {
+    width: calc({{ block.settings.social_icon_size }}px * var(--ai-contact-spacing-scale));
+    height: calc({{ block.settings.social_icon_size }}px * var(--ai-contact-spacing-scale));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.social_bg_color }};
+    border-radius: calc({{ block.settings.social_border_radius | default: 8 }}px * var(--ai-contact-spacing-scale));
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+  }
+
+  .ai-contact-split-social-link-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.social_hover_bg_color }};
+    transform: translateY(-3px);
+  }
+
+  .ai-contact-split-social-link-{{ ai_gen_id }} svg {
+    width: calc({{ block.settings.social_icon_size | times: 0.5 }}px * var(--ai-contact-spacing-scale));
+    height: calc({{ block.settings.social_icon_size | times: 0.5 }}px * var(--ai-contact-spacing-scale));
+    fill: {{ block.settings.social_icon_color }};
+  }
+
+  .ai-contact-split-success-{{ ai_gen_id }} {
+    padding:
+      calc(16px * var(--ai-contact-spacing-scale))
+      calc(20px * var(--ai-contact-spacing-scale));
+    background-color: {{ block.settings.success_bg_color }};
+    color: {{ block.settings.success_text_color }};
+    border-radius: calc({{ block.settings.message_border_radius }}px * var(--ai-contact-spacing-scale));
+    border: {{ block.settings.success_border_width }}px solid {{ block.settings.success_border_color }};
+    margin-bottom: calc({{ block.settings.spacing }}px * var(--ai-contact-spacing-scale));
+    font-size: calc({{ block.settings.message_text_size }}px * var(--ai-contact-type-scale));
+    font-family: {% if block.settings.body_font %}{{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }}{% else %}inherit{% endif %};
+  }
+
+  .ai-contact-split-error-{{ ai_gen_id }} {
+    padding:
+      calc(16px * var(--ai-contact-spacing-scale))
+      calc(20px * var(--ai-contact-spacing-scale));
+    background-color: {{ block.settings.error_bg_color }};
+    color: {{ block.settings.error_text_color }};
+    border-radius: calc({{ block.settings.message_border_radius }}px * var(--ai-contact-spacing-scale));
+    border: {{ block.settings.error_border_width }}px solid {{ block.settings.error_border_color }};
+    margin-bottom: calc({{ block.settings.spacing }}px * var(--ai-contact-spacing-scale));
+    font-size: calc({{ block.settings.message_text_size }}px * var(--ai-contact-type-scale));
+    font-family: {% if block.settings.body_font %}{{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }}{% else %}inherit{% endif %};
+  }
+
+
+  @media screen and (min-width: 1400px) {
+    .ai-contact-split-{{ ai_gen_id }} {
+      --ai-contact-side-offset: 0px;
+    }
+    .ai-contact-split-container-{{ ai_gen_id }} {
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-contact-split-{{ ai_gen_id }} {
+      --ai-contact-type-scale: 0.8;
+      --ai-contact-spacing-scale: 0.76;
+      --ai-contact-panel-width: 420px;
+      --ai-contact-side-offset: 0px;
+    }
+
+    .ai-contact-split-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_top_padding | default: 24 }}px 10px 0;
+      min-height: auto;
+      height: auto;
+      align-items: flex-start;
+    }
+
+    .ai-contact-split-fit-{{ ai_gen_id }} {
+      min-height: auto;
+      height: auto;
+    }
+
+    .ai-contact-split-content-{{ ai_gen_id }} {
+      margin-right: 0;
+      min-height: auto;
+      height: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .ai-contact-split-{{ ai_gen_id }} {
+      --ai-contact-type-scale: 0.74;
+      --ai-contact-spacing-scale: 0.7;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .ai-contact-split-{{ ai_gen_id }} {
+      background-attachment: scroll;
+    }
+  }
+{% endstyle %}
+
+<contact-split-{{ ai_gen_id }} class="ai-contact-split-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-contact-split-container-{{ ai_gen_id }}">
+    <div class="ai-contact-split-fit-{{ ai_gen_id }}">
+      <div class="ai-contact-split-content-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-contact-split-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+
+      {%- form 'contact' -%}
+        {% if form.posted_successfully? %}
+          <div class="ai-contact-split-success-{{ ai_gen_id }}">
+            {{ block.settings.success_message }}
+          </div>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="ai-contact-split-error-{{ ai_gen_id }}">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="ai-contact-split-form-{{ ai_gen_id }}">
+          <div class="ai-contact-split-field-{{ ai_gen_id }}">
+            <label class="ai-contact-split-label-{{ ai_gen_id }}" for="contact-name-{{ ai_gen_id }}">
+              {{ block.settings.name_label }}
+            </label>
+            <input
+              type="text"
+              id="contact-name-{{ ai_gen_id }}"
+              name="contact[name]"
+              class="ai-contact-split-input-{{ ai_gen_id }}"
+              value="{% if form.name %}{{ form.name }}{% endif %}"
+              placeholder="{{ block.settings.name_placeholder }}"
+              required
+            >
+          </div>
+
+          <div class="ai-contact-split-field-{{ ai_gen_id }}">
+            <label class="ai-contact-split-label-{{ ai_gen_id }}" for="contact-email-{{ ai_gen_id }}">
+              {{ block.settings.email_label }}
+            </label>
+            <input
+              type="email"
+              id="contact-email-{{ ai_gen_id }}"
+              name="contact[email]"
+              class="ai-contact-split-input-{{ ai_gen_id }}"
+              value="{% if form.email %}{{ form.email }}{% endif %}"
+              placeholder="{{ block.settings.email_placeholder }}"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="ai-contact-split-field-{{ ai_gen_id }}">
+            <label class="ai-contact-split-label-{{ ai_gen_id }}" for="contact-message-{{ ai_gen_id }}">
+              {{ block.settings.message_label }}
+            </label>
+            <textarea
+              id="contact-message-{{ ai_gen_id }}"
+              name="contact[body]"
+              class="ai-contact-split-textarea-{{ ai_gen_id }}"
+              placeholder="{{ block.settings.message_placeholder }}"
+              required
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <button type="submit" class="ai-contact-split-button-{{ ai_gen_id }}">
+            {{ block.settings.button_text }}
+          </button>
+        </div>
+      {%- endform -%}
+
+      <div class="ai-contact-split-info-{{ ai_gen_id }}">
+        {% if block.settings.email_address != blank %}
+          <div class="ai-contact-split-info-item-{{ ai_gen_id }}">
+            <div class="ai-contact-split-info-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+            </div>
+            <span>{{ block.settings.email_address }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.location != blank %}
+          <div class="ai-contact-split-info-item-{{ ai_gen_id }}">
+            <div class="ai-contact-split-info-icon-{{ ai_gen_id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </div>
+            <span>{{ block.settings.location }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ai-contact-split-social-{{ ai_gen_id }}">
+        {% if block.settings.facebook_url != blank %}
+          <a
+            href="{{ block.settings.facebook_url }}"
+            class="ai-contact-split-social-link-{{ ai_gen_id }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if block.settings.instagram_url != blank %}
+          <a
+            href="{{ block.settings.instagram_url }}"
+            class="ai-contact-split-social-link-{{ ai_gen_id }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if block.settings.whatsapp_phone != blank or block.settings.whatsapp_url != blank %}
+          {%- liquid
+            assign whatsapp_link = block.settings.whatsapp_url
+            if block.settings.whatsapp_phone != blank
+              assign phone_clean = block.settings.whatsapp_phone | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace: ')', '' | replace: '+', ''
+              assign whatsapp_link = 'https://wa.me/' | append: phone_clean
+              if block.settings.whatsapp_message != blank
+                assign message_encoded = block.settings.whatsapp_message | url_encode
+                assign whatsapp_link = whatsapp_link | append: '?text=' | append: message_encoded
+              endif
+            endif
+          -%}
+          <a
+            href="{{ whatsapp_link }}"
+            class="ai-contact-split-social-link-{{ ai_gen_id }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if block.settings.tiktok_url != blank %}
+          <a
+            href="{{ block.settings.tiktok_url }}"
+            class="ai-contact-split-social-link-{{ ai_gen_id }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    </div>
+  </div>
+</contact-split-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ContactSplit{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.isSetup = false;
+      }
+
+      connectedCallback() {
+        if (this.isSetup) return;
+        this.isSetup = true;
+
+        this.form = this.querySelector('form');
+        if (this.form) this.form.addEventListener('submit', this.handleSubmit);
+      }
+
+      disconnectedCallback() {
+        if (!this.isSetup) return;
+        this.isSetup = false;
+        if (this.form) this.form.removeEventListener('submit', this.handleSubmit);
+      }
+
+      handleSubmit(event) {
+        const nameInput = this.querySelector('input[name="contact[name]"]');
+        const emailInput = this.querySelector('input[name="contact[email]"]');
+        const messageInput = this.querySelector('textarea[name="contact[body]"]');
+
+        if (!nameInput || !emailInput || !messageInput) return;
+
+        if (!nameInput.value.trim() || !emailInput.value.trim() || !messageInput.value.trim()) {
+          event.preventDefault();
+          alert('Please fill in all required fields.');
+          return false;
+        }
+      }
+    }
+
+    if (!customElements.get('contact-split-{{ ai_gen_id }}')) {
+      customElements.define('contact-split-{{ ai_gen_id }}', ContactSplit{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Content padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Section spacing",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_top_padding",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image",
+      "info": "This image will be used as the full background"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "info": "Darken the background image for better text readability",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "content_background_color",
+      "label": "Content background color",
+      "default": "#ffffff",
+      "info": "Background color for the form container"
+    },
+    {
+      "type": "range",
+      "id": "content_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content background opacity",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "content_backdrop_blur",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Content backdrop blur",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "content_border_width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Content border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "content_border_color",
+      "label": "Content border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "content_border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content border opacity",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "content_shadow_color",
+      "label": "Content shadow color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "content_shadow_opacity",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Content shadow opacity",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "content_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Content border radius",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Heading font weight",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "heading_letter_spacing",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "label": "Heading letter spacing (×0.001em)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "label": "Heading line height",
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "heading_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Heading opacity",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Form fields"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "name_label",
+      "label": "Name label",
+      "default": "Full Name"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "name_placeholder",
+      "label": "Name placeholder",
+      "default": "Enter your full name"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "email_label",
+      "label": "Email label",
+      "default": "E-mail"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email address"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message_label",
+      "label": "Message label",
+      "default": "Message"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "message_placeholder",
+      "label": "Message placeholder",
+      "default": "Write your message here"
+    },
+    {
+      "type": "range",
+      "id": "field_spacing",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Field spacing",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Label size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "label_font_weight",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "label": "Label font weight",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "label_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Label opacity",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Input style"
+    },
+    {
+      "type": "range",
+      "id": "input_padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Input padding",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "input_border_width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Border color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "input_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "input_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Background opacity",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "input_backdrop_blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Backdrop blur",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder color",
+      "default": "#2d2d2d"
+    },
+    {
+      "type": "range",
+      "id": "placeholder_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Placeholder opacity",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "input_focus_color",
+      "label": "Focus border color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "textarea_min_height",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Textarea min height",
+      "default": 120
+    },
+    {
+      "type": "select",
+      "id": "textarea_resize",
+      "label": "Textarea resize",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "vertical", "label": "Vertical" },
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "both", "label": "Both" }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "header",
+      "content": "Submit button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Contact Us"
+    },
+    {
+      "type": "range",
+      "id": "button_padding",
+      "min": 10,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Button padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Submit button border radius",
+      "default": 24
+    },
+    {
+      "type": "font_picker",
+      "id": "button_font",
+      "label": "Button font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Hover background color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "label": "Font weight",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "button_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "button_hover_opacity",
+      "min": 80,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Hover opacity",
+      "default": 95
+    },
+    {
+      "type": "header",
+      "content": "Contact information"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email address",
+      "default": "hello@example.com"
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Location",
+      "default": "San Francisco, California"
+    },
+    {
+      "type": "range",
+      "id": "info_spacing",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Info spacing",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "info_text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "info_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "info_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_phone",
+      "label": "WhatsApp Phone Number",
+      "info": "Enter phone number with country code (e.g., 1234567890). Leave blank to use URL instead."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "WhatsApp Pre-filled Message",
+      "info": "Optional message to pre-fill when opening WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "WhatsApp URL (Alternative)",
+      "info": "Use this if you prefer a custom WhatsApp URL instead of phone number"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 32,
+      "max": 56,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "social_spacing",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon spacing",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "social_margin_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin above icons",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "social_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Social icon border radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "social_bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "social_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5dc"
+    },
+    {
+      "type": "range",
+      "id": "background_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Background opacity (when no image)",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "assistant_n4",
+      "info": "Used for labels, inputs, info text, and messages"
+    },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for contacting us! We'll get back to you soon."
+    },
+    {
+      "type": "range",
+      "id": "message_text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Message text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "message_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Message border radius",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "message_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Message border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "success_bg_color",
+      "label": "Success background",
+      "default": "#d4edda"
+    },
+    {
+      "type": "color",
+      "id": "success_text_color",
+      "label": "Success text color",
+      "default": "#155724"
+    },
+    {
+      "type": "color",
+      "id": "success_border_color",
+      "label": "Success border color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "success_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Success border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "error_bg_color",
+      "label": "Error background",
+      "default": "#f8d7da"
+    },
+    {
+      "type": "color",
+      "id": "error_text_color",
+      "label": "Error text color",
+      "default": "#721c24"
+    },
+    {
+      "type": "color",
+      "id": "error_border_color",
+      "label": "Error border color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "error_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Error border width",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split contact section"
+    }
+  ]
+}
+{% endschema %}

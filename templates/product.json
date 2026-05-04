@@ -1,0 +1,519 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "product_glass_card_emPGMm": {
+      "type": "product-glass-card",
+      "blocks": {
+        "payment_method_WhnrXW": {
+          "type": "payment_method",
+          "settings": {
+            "label": "COD"
+          }
+        },
+        "payment_method_qjJX9j": {
+          "type": "payment_method",
+          "settings": {
+            "label": "Payment method",
+            "icon": "shopify://shop_images/whishpay.CgBAaM5Z.svg"
+          }
+        },
+        "accordion_pKAFh6": {
+          "type": "accordion",
+          "settings": {
+            "heading": "DESCRIPTION",
+            "content_type": "product_description",
+            "custom_content": "<p>The bounciest baby in the room. Soft enough for newborns.<br/><br/><strong>Age: 0 – 3 Years</strong><br/></p><ul><li>Ultra-soft fabric safe</li><li>Full zip for quick and easy dressing</li><li>Most gifted BOO character for baby showers in Lebanon</li><li>Free shipping on orders over $45<br/><br/>بدلة حيوانات للأطفال في لبنان — زي أرنب ناعم من عمر 0 أشهر حتى 3 سنوات<br/></li></ul><p>Costume lapin pour enfants au Liban, de 0 à 3 ans.</p>"
+          }
+        },
+        "accordion_tUCwB8": {
+          "type": "accordion",
+          "settings": {
+            "heading": "SHIPPING POLICY",
+            "content_type": "shipping_policy",
+            "custom_content": ""
+          }
+        },
+        "accordion_NDykjW": {
+          "type": "accordion",
+          "settings": {
+            "heading": "REFUND POLICY",
+            "content_type": "refund_policy",
+            "custom_content": ""
+          }
+        }
+      },
+      "block_order": [
+        "payment_method_WhnrXW",
+        "payment_method_qjJX9j",
+        "accordion_pKAFh6",
+        "accordion_tUCwB8",
+        "accordion_NDykjW"
+      ],
+      "name": "Product glass card 1st dinaboo",
+      "settings": {
+        "section_bg_color": "#1e1f56",
+        "section_bg_gradient": "linear-gradient(155deg, rgba(32, 2, 68, 1) 1%, rgba(91, 50, 154, 1) 76%)",
+        "min_height": 880,
+        "container_width": 1300,
+        "section_padding": 90,
+        "side_padding": 80,
+        "middle_text": "FoxBoo",
+        "middle_width": 260,
+        "middle_text_shift": 100,
+        "inside_text_shift": 100,
+        "middle_text_color": "#ffffff",
+        "middle_text_opacity": 100,
+        "middle_text_size": 140,
+        "middle_letter_spacing": 0,
+        "middle_text_blur": 0,
+        "word_left_cut": 0,
+        "word_right_cut": 0,
+        "word_inside_opacity": 55,
+        "word_inside_blur": 4,
+        "image_border_radius": 8,
+        "gallery_image_size_desktop": 900,
+        "gallery_image_size_mobile": 360,
+        "gallery_arrow_size": 30,
+        "gallery_arrow_color": "#ffffff",
+        "glass_card_bg_color": "#7f7a9f",
+        "glass_card_bg_gradient": "",
+        "glass_border_radius": 18,
+        "glass_opacity": 80,
+        "glass_blur": 14,
+        "glass_blur_mobile_offset": -10,
+        "glass_opacity_mobile_factor": 55,
+        "glass_border_width": 0,
+        "glass_border_opacity": 0,
+        "product_page_font": "inter_n4",
+        "text_color": "#ffffff",
+        "title_size": 52,
+        "price_size": 18,
+        "minimal_price_size": 16,
+        "discounted_price_color": "#e53935",
+        "original_price_padding_left": 0,
+        "original_price_padding_right": 0,
+        "original_price_padding_left_mobile": 0,
+        "original_price_padding_right_mobile": 0,
+        "discounted_price_padding_left": 0,
+        "discounted_price_padding_right": 0,
+        "discounted_price_padding_left_mobile": 0,
+        "discounted_price_padding_right_mobile": 0,
+        "sale_badge_size": 12,
+        "sale_badge_background_color": "#e42b2c",
+        "sale_badge_text_color": "#ffffff",
+        "sale_badge_border_color": "#e42c2c",
+        "sale_badge_border_radius": 8,
+        "button_text": "Add to cart",
+        "button_text_color": "#ffffff",
+        "payment_icon_whish": "shopify://shop_images/whishpay.CgBAaM5Z.svg",
+        "append_color_option": true,
+        "size_guide_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png",
+        "size_guide_link_spacing": 16,
+        "size_guide_heading": "CHOOSE YOUR SIZE",
+        "size_guide_heading_size": 24,
+        "size_guide_heading_color": "#ffffff",
+        "size_guide_heading_weight": "600",
+        "size_guide_heading_letter_spacing": 0,
+        "size_guide_heading_align": "left",
+        "fit_label": "FIT",
+        "show_selected_size": true,
+        "description_heading": "DESCRIPTION",
+        "shipping_heading": "SHIPPING POLICY",
+        "accordion_title_size": 15,
+        "accordion_content_size": 12,
+        "accordion_max_height": 220
+      }
+    },
+    "17672968382ad3b9cf": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_preview_badge_6PU49G": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_b6JCey": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_preview_badge_6PU49G",
+        "judge_me_reviews_review_widget_b6JCey"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "center_product_carousel_a7WNBt": {
+      "type": "center-product-carousel",
+      "blocks": {
+        "product_UcciW6": {
+          "type": "product",
+          "settings": {
+            "product": "shaboo",
+            "badge_text": "",
+            "media_source": "custom_video",
+            "custom_media": "shopify://shop_images/SHABOO.png",
+            "external_gif_url": "",
+            "custom_video": "shopify://files/videos/-_1.mp4",
+            "alt_text": "",
+            "focal_position": "top"
+          }
+        },
+        "product_b93bK7": {
+          "type": "product",
+          "settings": {
+            "product": "griboo",
+            "badge_text": "",
+            "media_source": "custom_video",
+            "external_gif_url": "",
+            "custom_video": "shopify://files/videos/-.mp4",
+            "alt_text": "",
+            "focal_position": "top"
+          }
+        },
+        "product_pijJkt": {
+          "type": "product",
+          "settings": {
+            "product": "bunboo",
+            "badge_text": "",
+            "media_source": "custom_video",
+            "external_gif_url": "",
+            "custom_video": "shopify://files/videos/-_2.mp4",
+            "alt_text": "",
+            "focal_position": "top"
+          }
+        },
+        "product_Kkyxaa": {
+          "type": "product",
+          "settings": {
+            "product": "dinoboo",
+            "badge_text": "",
+            "media_source": "custom_video",
+            "external_gif_url": "",
+            "custom_video": "shopify://files/videos/6349070-hd_1080_1920_25fps.mp4",
+            "alt_text": "",
+            "focal_position": "top"
+          }
+        },
+        "product_mb8wdT": {
+          "type": "product",
+          "settings": {
+            "product": "foxboo",
+            "badge_text": "",
+            "media_source": "custom_video",
+            "external_gif_url": "",
+            "custom_video": "shopify://files/videos/6349070-hd_1080_1920_25fps.mp4",
+            "alt_text": "",
+            "focal_position": "top"
+          }
+        }
+      },
+      "block_order": [
+        "product_UcciW6",
+        "product_b93bK7",
+        "product_pijJkt",
+        "product_Kkyxaa",
+        "product_mb8wdT"
+      ],
+      "name": "Center Product Carousel",
+      "settings": {
+        "heading": "You Might Also Like",
+        "heading_tag": "h2",
+        "subheading": "",
+        "alignment": "center",
+        "heading_size": 24,
+        "heading_color": "#000000",
+        "gap": 0,
+        "card_radius": 10,
+        "card_bottom_radius": 10,
+        "card_width": 400,
+        "show_vendor": false,
+        "show_color_swatches": true,
+        "card_content_bg_color": "",
+        "card_title_color": "#000000",
+        "card_normal_price_color": "#000000",
+        "card_discounted_price_color": "#ff0000",
+        "card_caret_color": "#000000",
+        "card_badge_bg_color": "",
+        "card_badge_text_color": "",
+        "mobile_info_text_size": 9,
+        "mobile_info_price_size": 9,
+        "card_content_border_color": "#000000",
+        "card_content_border_width": 0,
+        "card_content_border_radius": 0,
+        "card_content_padding": 6,
+        "card_content_margin": 0,
+        "show_arrows": true,
+        "arrow_style": "glass",
+        "arrow_size": 72,
+        "arrow_radius": 44,
+        "arrow_bg_color": "#000000",
+        "arrow_icon_color": "#ffffff",
+        "arrow_border_color": "#323332",
+        "show_dots": false,
+        "autoplay": false,
+        "autoplay_seconds": 3,
+        "bottom_padding": 0,
+        "bottom_margin": 0
+      }
+    },
+    "section_clickable_lookbook_YR9hQz": {
+      "type": "section-clickable-lookbook",
+      "blocks": {
+        "lookbook_image_KrQhEx": {
+          "type": "lookbook_image",
+          "settings": {
+            "image": "shopify://shop_images/Bernabeu.webp",
+            "image_mobile": "shopify://shop_images/555.jpg"
+          }
+        },
+        "hotspot_DEkPQ4": {
+          "type": "hotspot",
+          "settings": {
+            "product": "bunboo",
+            "product_metafield_key": "custom.lookbook_hotspot_product_1",
+            "dot_x": 0,
+            "dot_y": 0,
+            "dot_x_metafield_key": "custom.hotspot_1_x",
+            "dot_y_metafield_key": "custom.hotspot_1_y",
+            "use_mobile_position": true,
+            "dot_x_mobile": 0,
+            "dot_y_mobile": 0,
+            "dot_x_mobile_metafield_key": "custom.hotspot_1_x_mobile",
+            "dot_y_mobile_metafield_key": "custom.hotspot_1_y_mobile",
+            "tooltip_position": "bottom",
+            "tooltip_title_size": 13,
+            "tooltip_price_size": 10,
+            "tooltip_cta_size": 8,
+            "tooltip_bg_color": "#a6a6a6",
+            "tooltip_title_color": "#404446",
+            "tooltip_price_color": "#ffffff",
+            "tooltip_cta_color": "#000000"
+          }
+        },
+        "hotspot_BWRwcb": {
+          "type": "hotspot",
+          "settings": {
+            "product": "shaboo",
+            "product_metafield_key": "custom.lookbook_hotspot_product_2",
+            "dot_x": 0,
+            "dot_y": 0,
+            "dot_x_metafield_key": "custom.hotspot_2_x",
+            "dot_y_metafield_key": "custom.hotspot_2_y",
+            "use_mobile_position": true,
+            "dot_x_mobile": 0,
+            "dot_y_mobile": 0,
+            "dot_x_mobile_metafield_key": "custom.hotspot_2_x_mobile",
+            "dot_y_mobile_metafield_key": "custom.hotspot_2_y_mobile",
+            "tooltip_position": "left",
+            "tooltip_title_size": 13,
+            "tooltip_price_size": 10,
+            "tooltip_cta_size": 8,
+            "tooltip_bg_color": "#a6a6a6",
+            "tooltip_title_color": "#404446",
+            "tooltip_price_color": "#ffffff",
+            "tooltip_cta_color": "#000000"
+          }
+        },
+        "hotspot_ymWxB8": {
+          "type": "hotspot",
+          "settings": {
+            "product": "dinoboo",
+            "product_metafield_key": "custom.lookbook_hotspot_product_3",
+            "dot_x": 0,
+            "dot_y": 0,
+            "dot_x_metafield_key": "custom.hotspot_3_x",
+            "dot_y_metafield_key": "custom.hotspot_3_y",
+            "use_mobile_position": true,
+            "dot_x_mobile": 0,
+            "dot_y_mobile": 0,
+            "dot_x_mobile_metafield_key": "custom.hotspot_3_x_mobile",
+            "dot_y_mobile_metafield_key": "custom.hotspot_3_y_mobile",
+            "tooltip_position": "right",
+            "tooltip_title_size": 13,
+            "tooltip_price_size": 10,
+            "tooltip_cta_size": 8,
+            "tooltip_bg_color": "#a6a6a6",
+            "tooltip_title_color": "#404446",
+            "tooltip_price_color": "#ffffff",
+            "tooltip_cta_color": "#000000"
+          }
+        },
+        "hotspot_MmJbgP": {
+          "type": "hotspot",
+          "settings": {
+            "product": "foxboo",
+            "product_metafield_key": "custom.lookbook_hotspot_product_4",
+            "dot_x": 0,
+            "dot_y": 0,
+            "dot_x_metafield_key": "custom.hotspot_4_x",
+            "dot_y_metafield_key": "custom.hotspot_4_y",
+            "use_mobile_position": true,
+            "dot_x_mobile": 0,
+            "dot_y_mobile": 0,
+            "dot_x_mobile_metafield_key": "custom.hotspot_4_x_mobile",
+            "dot_y_mobile_metafield_key": "custom.hotspot_4_y_mobile",
+            "tooltip_position": "bottom",
+            "tooltip_title_size": 13,
+            "tooltip_price_size": 10,
+            "tooltip_cta_size": 8,
+            "tooltip_bg_color": "#a6a6a6",
+            "tooltip_title_color": "#404446",
+            "tooltip_price_color": "#f9f9f9",
+            "tooltip_cta_color": "#000000"
+          }
+        }
+      },
+      "block_order": [
+        "lookbook_image_KrQhEx",
+        "hotspot_DEkPQ4",
+        "hotspot_BWRwcb",
+        "hotspot_ymWxB8",
+        "hotspot_MmJbgP"
+      ],
+      "name": "Clickable Lookbook",
+      "settings": {
+        "background_color": "#ffffff",
+        "use_product_metafield_images": true,
+        "lookbook_image_metafield": "custom.lookbook_image",
+        "lookbook_image_mobile_metafield": "custom.lookbook_image_mobile",
+        "image_width": 1609,
+        "image_height": 624,
+        "border_radius": 12,
+        "hotspot_color": "#000000",
+        "hotspot_size": 28,
+        "hotspot_size_mobile": 24,
+        "padding_top": 0,
+        "padding_bottom": 80
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "heading": "Description"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "share"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "enable_desktop_square_media": false,
+        "desktop_square_media_size": 600,
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "product_title_size": 40,
+        "product_title_size_mobile": 30,
+        "product_title_weight": "700",
+        "product_price_size": 24,
+        "product_price_size_mobile": 22,
+        "product_price_weight": "700",
+        "product_body_size": 16,
+        "product_body_size_mobile": 16,
+        "product_body_weight": "400",
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "product_glass_card_emPGMm",
+    "17672968382ad3b9cf",
+    "center_product_carousel_a7WNBt",
+    "section_clickable_lookbook_YR9hQz",
+    "main",
+    "related-products"
+  ]
+}

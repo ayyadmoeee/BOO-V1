@@ -1,0 +1,911 @@
+{% doc %}
+  @prompt
+    Create a **3D curved product carousel section** for a Shopify store.
+    
+    Purpose
+    This section will display **featured products as image cards in a curved 3D layout**. When a user clicks on a card, they should be taken directly to that product's page.
+    
+    Layout
+    
+    * Display **5 product cards arranged in a curved arc** (semi-circle style).
+    * The **center card is the largest and faces forward**.
+    * Cards to the left and right are **tilted using 3D transforms** to create depth.
+    * Outer cards are **smaller and more rotated**.
+    * The layout should feel like a **3D rotating carousel**.
+    
+    Card Content
+    Each card should contain:
+    
+    * Product image (full card background)
+    * Product title
+    * Product price
+    * Optional small “View Product” button
+    * Entire card should be **clickable and link to the product page**
+    
+    Card Style
+    
+    * Rounded corners (24–30px radius)
+    * Smooth soft shadow
+    * Background image fills entire card
+    * Bottom gradient overlay for text readability
+    * Modern minimal design
+    
+    3D Effect
+    Use CSS transforms and perspective:
+    
+    Center card
+    scale(1)
+    rotateY(0deg)
+    
+    Left card
+    scale(0.9)
+    rotateY(20deg)
+    
+    Right card
+    scale(0.9)
+    rotateY(-20deg)
+    
+    Outer cards
+    scale(0.8)
+    rotateY(35deg) / rotateY(-35deg)
+    
+    Use `perspective: 1000px` on the container for realistic depth.
+    
+    Interaction
+    
+    * Clicking arrows or swiping should rotate the carousel.
+    * The next product moves into the center position.
+    * Smooth animation (300–500ms).
+    * Center card always becomes the largest.
+    
+    Functionality
+    
+    * Each card should dynamically pull **product data from Shopify**:
+    
+      * product.featured_image
+      * product.title
+      * product.price
+      * product.url
+    * The entire card should link to the product page.
+    
+    Shopify Requirements
+    
+    * Build as a **Shopify Online Store 2.0 section**
+    * Compatible with **Dawn theme**
+    * Use **Liquid + HTML + CSS + JavaScript**
+    * Store owner must be able to **select products in the section settings**
+    
+    Section Settings
+    
+    * Select up to **10 products**
+    * Carousel automatically rotates through them
+    * Option to enable/disable autoplay
+    
+    Responsiveness
+    
+    Desktop
+    Show full curved 3D layout.
+    
+    Tablet
+    Show 3 cards with center focus.
+    
+    Mobile
+    Switch to horizontal swipe carousel with scaling center card.
+    
+    Performance
+    
+    * Lazy load images
+    * Use GPU accelerated transforms
+    * Avoid heavy libraries
+    
+    Goal
+    A **modern Apple-style 3D product carousel** where the center product is highlighted and users can easily click any card to go to the product page.
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-carousel-3d-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+    overflow: hidden;
+  }
+
+  .ai-carousel-3d-container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-carousel-3d-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .ai-carousel-3d-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  .ai-carousel-3d-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.subheading_color }};
+    margin: 0;
+  }
+
+  .ai-carousel-3d-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    perspective: {{ block.settings.perspective }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-carousel-3d-track-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ai-carousel-3d-card-{{ ai_gen_id }} {
+    position: absolute;
+    width: {{ block.settings.card_width }}px;
+    height: {{ block.settings.card_height }}px;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    display: block;
+  }
+
+  .ai-carousel-3d-card-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-carousel-3d-card-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-carousel-3d-card-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-carousel-3d-card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 24px;
+    background: linear-gradient(to top, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}), transparent);
+    color: {{ block.settings.card_text_color }};
+  }
+
+  .ai-carousel-3d-card-title-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+
+  .ai-carousel-3d-card-price-{{ ai_gen_id }} {
+    font-size: 18px;
+    margin: 0 0 12px;
+    font-weight: 500;
+  }
+
+  .ai-carousel-3d-card-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-carousel-3d-card-{{ ai_gen_id }}:hover .ai-carousel-3d-card-button-{{ ai_gen_id }} {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-carousel-3d-controls-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .ai-carousel-3d-controls-{{ ai_gen_id }}.left {
+    left: 20px;
+  }
+
+  .ai-carousel-3d-controls-{{ ai_gen_id }}.right {
+    right: 20px;
+  }
+
+  .ai-carousel-3d-arrow-{{ ai_gen_id }} {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: {{ block.settings.arrow_background }};
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-carousel-3d-arrow-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.arrow_hover_background }};
+    transform: scale(1.1);
+  }
+
+  .ai-carousel-3d-arrow-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+    stroke: {{ block.settings.arrow_color }};
+  }
+
+  .ai-carousel-3d-dots-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .ai-carousel-3d-dot-{{ ai_gen_id }} {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: {{ block.settings.dot_color }};
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+  }
+
+  .ai-carousel-3d-dot-{{ ai_gen_id }}.active {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-carousel-3d-wrapper-{{ ai_gen_id }} {
+      height: 500px;
+    }
+
+    .ai-carousel-3d-card-{{ ai_gen_id }} {
+      width: {{ block.settings.card_width | times: 0.8 }}px;
+      height: {{ block.settings.card_height | times: 0.8 }}px;
+    }
+
+    .ai-carousel-3d-controls-{{ ai_gen_id }}.left {
+      left: 10px;
+    }
+
+    .ai-carousel-3d-controls-{{ ai_gen_id }}.right {
+      right: 10px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-carousel-3d-wrapper-{{ ai_gen_id }} {
+      height: 450px;
+      perspective: 800px;
+    }
+
+    .ai-carousel-3d-card-{{ ai_gen_id }} {
+      width: {{ block.settings.card_width | times: 0.7 }}px;
+      height: {{ block.settings.card_height | times: 0.7 }}px;
+    }
+
+    .ai-carousel-3d-card-overlay-{{ ai_gen_id }} {
+      padding: 20px 16px;
+    }
+
+    .ai-carousel-3d-card-title-{{ ai_gen_id }} {
+      font-size: 16px;
+    }
+
+    .ai-carousel-3d-card-price-{{ ai_gen_id }} {
+      font-size: 15px;
+    }
+
+    .ai-carousel-3d-card-button-{{ ai_gen_id }} {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+
+    .ai-carousel-3d-arrow-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+    }
+
+    .ai-carousel-3d-arrow-{{ ai_gen_id }} svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ai-carousel-3d-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+    }
+
+    .ai-carousel-3d-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+<product-carousel-3d-{{ ai_gen_id }} class="ai-carousel-3d-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-carousel-3d-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank or block.settings.subheading != blank %}
+      <div class="ai-carousel-3d-header-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="ai-carousel-3d-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+        {% endif %}
+        {% if block.settings.subheading != blank %}
+          <p class="ai-carousel-3d-subtitle-{{ ai_gen_id }}">{{ block.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-carousel-3d-wrapper-{{ ai_gen_id }}">
+      <div class="ai-carousel-3d-track-{{ ai_gen_id }}">
+        {% liquid
+          assign products_array = ''
+          for i in (1..10)
+            assign product_key = 'product_' | append: i
+            assign product = block.settings[product_key]
+            if product != blank
+              if products_array != ''
+                assign products_array = products_array | append: ',' | append: product.id
+              else
+                assign products_array = product.id
+              endif
+            endif
+          endfor
+        %}
+
+        {% for i in (1..10) %}
+          {% assign product_key = 'product_' | append: i %}
+          {% assign product = block.settings[product_key] %}
+          {% if product != blank %}
+            <a
+              href="{{ product.url }}"
+              class="ai-carousel-3d-card-{{ ai_gen_id }}"
+              data-index="{{ forloop.index0 }}"
+            >
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="ai-carousel-3d-card-image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="800"
+                  height="800"
+                >
+              {% else %}
+                <div class="ai-carousel-3d-card-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+              <div class="ai-carousel-3d-card-overlay-{{ ai_gen_id }}">
+                <h3 class="ai-carousel-3d-card-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+                <div class="ai-carousel-3d-card-price-{{ ai_gen_id }}">{{ product.price | money }}</div>
+                {% if block.settings.show_button %}
+                  <span class="ai-carousel-3d-card-button-{{ ai_gen_id }}">{{ block.settings.button_text }}</span>
+                {% endif %}
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="ai-carousel-3d-controls-{{ ai_gen_id }} left">
+        <button class="ai-carousel-3d-arrow-{{ ai_gen_id }}" aria-label="Previous product">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="ai-carousel-3d-controls-{{ ai_gen_id }} right">
+        <button class="ai-carousel-3d-arrow-{{ ai_gen_id }}" aria-label="Next product">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="ai-carousel-3d-dots-{{ ai_gen_id }}"></div>
+  </div>
+</product-carousel-3d-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductCarousel3D{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.cards = [];
+        this.totalCards = 0;
+        this.autoplayInterval = null;
+        this.isTransitioning = false;
+      }
+
+      connectedCallback() {
+        this.cards = Array.from(this.querySelectorAll('.ai-carousel-3d-card-{{ ai_gen_id }}'));
+        this.totalCards = this.cards.length;
+
+        if (this.totalCards === 0) return;
+
+        this.track = this.querySelector('.ai-carousel-3d-track-{{ ai_gen_id }}');
+        this.prevButton = this.querySelector('.ai-carousel-3d-controls-{{ ai_gen_id }}.left button');
+        this.nextButton = this.querySelector('.ai-carousel-3d-controls-{{ ai_gen_id }}.right button');
+        this.dotsContainer = this.querySelector('.ai-carousel-3d-dots-{{ ai_gen_id }}');
+
+        this.createDots();
+        this.updateCarousel();
+        this.setupEventListeners();
+
+        {% if block.settings.enable_autoplay %}
+          this.startAutoplay();
+        {% endif %}
+      }
+
+      createDots() {
+        this.cards.forEach((card, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'ai-carousel-3d-dot-{{ ai_gen_id }}';
+          dot.setAttribute('aria-label', `Go to product ${index + 1}`);
+          if (index === 0) dot.classList.add('active');
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.dotsContainer.appendChild(dot);
+        });
+        this.dots = Array.from(this.dotsContainer.querySelectorAll('.ai-carousel-3d-dot-{{ ai_gen_id }}'));
+      }
+
+      setupEventListeners() {
+        this.prevButton.addEventListener('click', () => this.prev());
+        this.nextButton.addEventListener('click', () => this.next());
+
+        this.addEventListener('mouseenter', () => this.stopAutoplay());
+        this.addEventListener('mouseleave', () => {
+          {% if block.settings.enable_autoplay %}
+            this.startAutoplay();
+          {% endif %}
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        this.track.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        this.track.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          if (touchStartX - touchEndX > 50) {
+            this.next();
+          } else if (touchEndX - touchStartX > 50) {
+            this.prev();
+          }
+        });
+      }
+
+      updateCarousel() {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
+        this.cards.forEach((card, index) => {
+          const offset = index - this.currentIndex;
+          const absOffset = Math.abs(offset);
+
+          let scale = 1;
+          let rotateY = 0;
+          let translateX = 0;
+          let translateZ = 0;
+          let opacity = 1;
+
+          if (offset === 0) {
+            scale = 1;
+            rotateY = 0;
+            translateX = 0;
+            translateZ = 100;
+            opacity = 1;
+          } else if (absOffset === 1) {
+            scale = 0.85;
+            rotateY = offset > 0 ? -25 : 25;
+            translateX = offset * 280;
+            translateZ = -50;
+            opacity = 0.9;
+          } else if (absOffset === 2) {
+            scale = 0.7;
+            rotateY = offset > 0 ? -35 : 35;
+            translateX = offset * 450;
+            translateZ = -150;
+            opacity = 0.6;
+          } else {
+            scale = 0.5;
+            rotateY = offset > 0 ? -45 : 45;
+            translateX = offset * 600;
+            translateZ = -250;
+            opacity = 0;
+          }
+
+          card.style.transform = `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+          card.style.opacity = opacity;
+          card.style.zIndex = 100 - absOffset;
+          card.style.pointerEvents = offset === 0 ? 'auto' : 'none';
+        });
+
+        this.dots.forEach((dot, index) => {
+          if (index === this.currentIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+
+        setTimeout(() => {
+          this.isTransitioning = false;
+        }, 500);
+      }
+
+      next() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex + 1) % this.totalCards;
+        this.updateCarousel();
+      }
+
+      prev() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
+        this.updateCarousel();
+      }
+
+      goToSlide(index) {
+        if (this.isTransitioning || index === this.currentIndex) return;
+        this.currentIndex = index;
+        this.updateCarousel();
+      }
+
+      startAutoplay() {
+        this.stopAutoplay();
+        this.autoplayInterval = setInterval(() => {
+          this.next();
+        }, {{ block.settings.autoplay_speed }} * 1000);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.autoplayInterval = null;
+        }
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+      }
+    }
+
+    customElements.define('product-carousel-3d-{{ ai_gen_id }}', ProductCarousel3D{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "3D product carousel",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover our latest collection"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "product",
+      "id": "product_7",
+      "label": "Product 7"
+    },
+    {
+      "type": "product",
+      "id": "product_8",
+      "label": "Product 8"
+    },
+    {
+      "type": "product",
+      "id": "product_9",
+      "label": "Product 9"
+    },
+    {
+      "type": "product",
+      "id": "product_10",
+      "label": "Product 10"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width",
+      "default": 350
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 300,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "label": "Card height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Overlay opacity",
+      "default": 0.8
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "View Product"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "header",
+      "content": "3D effect"
+    },
+    {
+      "type": "range",
+      "id": "perspective",
+      "min": 500,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "label": "Perspective",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Arrow background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_background",
+      "label": "Arrow hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D product carousel"
+    }
+  ]
+}
+{% endschema %}

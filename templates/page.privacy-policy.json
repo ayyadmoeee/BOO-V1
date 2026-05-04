@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "177323473649959e7e": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_492fb24_dc77jP": {
+          "type": "ai_gen_block_492fb24",
+          "settings": {
+            "section_title": "Privacy Policy",
+            "section_subtitle": "Last Updated 2026",
+            "section_icon": "‎ ‎ ‎ ‎ ‎🛡️",
+            "background_type": "gradient",
+            "background_color": "#ffffff",
+            "gradient_color_1": "#000000",
+            "gradient_color_2": "#dadada",
+            "gradient_angle": 360,
+            "enable_parallax": true,
+            "overlay_color": "#fafafa",
+            "overlay_opacity": 30,
+            "content_width": "wide",
+            "text_alignment": "left",
+            "section_padding_top": 200,
+            "section_padding_bottom": 80,
+            "card_spacing": 35,
+            "glass_background": "#ffffff1a",
+            "glass_blur": 30,
+            "glass_border_color": "#ffffff33",
+            "glass_border_hover_color": "#ffffff66",
+            "glass_border_thickness": 1,
+            "card_border_radius": 20,
+            "card_padding": 50,
+            "hover_lift": 8,
+            "shadow_x": 0,
+            "shadow_y": 10,
+            "shadow_blur": 30,
+            "shadow_color": "#0000004d",
+            "heading_font": "inter_n4",
+            "heading_size": 32,
+            "heading_line_height": 1.2,
+            "heading_color": "#ffffff",
+            "heading_hover_color": "#e0e0e0",
+            "body_font": "inter_n4",
+            "subtitle_size": 16,
+            "subtitle_color": "#cccccc",
+            "body_size": 16,
+            "body_line_height": 1.8,
+            "body_color": "#e0e0e0",
+            "link_color": "#60a5fa",
+            "link_hover_color": "#93c5fd",
+            "icon_size": 40,
+            "show_divider": true,
+            "divider_color": "#ffffff33",
+            "divider_spacing": 20,
+            "show_back_to_top": true,
+            "back_to_top_bg": "#ffffff1a",
+            "back_to_top_border": "#ffffff4d",
+            "back_to_top_icon_color": "#ffffff",
+            "show_progress_bar": true,
+            "progress_bar_color": "#60a5fa",
+            "content_icon_1": "",
+            "content_title_1": "",
+            "content_subtitle_1": "",
+            "content_text_1": "<h1>BOO Privacy Notice</h1><p>At BOO, we take your privacy very seriously. This privacy notice explains how we collect, use, share, and protect your personal information in connection with our business activities. This privacy notice applies to you if you:</p><ul><li>have purchased any of our baby or toddler costumes from our website or online store</li><li>use our website or any related online services</li><li>have signed up to receive marketing emails from us</li><li>have entered any of our promotions/competitions or giveaways</li><li>interact with us on social media</li><li>have attended any BOO promotional events or activities</li><li>are a supplier of ours or another organization that we deal with</li><li>are an influencer or content creator that we collaborate with</li><li>are a model we engage to showcase our products</li><li>are a photographer, designer, or creative partner who provides us with paid content</li><li>are one of our shareholders or business partners</li><li>are a member of the public who contacts us or anyone else who is affected by our activities to the extent not covered by another of our privacy notices</li></ul><h1>Collection of Personal Information</h1><p>We may collect the following types of personal information:</p><ul><li>Contact information, such as your name, email address, postal address, and phone number</li><li>Payment information, such as your credit card number or other payment details processed through our payment providers</li><li>Purchase history and order information related to our baby and toddler costumes</li><li>Information about your interests and preferences related to our products and services</li><li>Demographic information, such as your general location</li><li>Social media handles and other online identifiers when you interact with BOO online</li><li>Website usage data and information collected through cookies and similar technologies</li></ul><h1>Use of Personal Information</h1><p>We may use your personal information for the following purposes:</p><ul><li>To fulfill your orders and deliver BOO products to you</li><li>To send you marketing communications, such as newsletters, promotions, and product updates</li><li>To administer our promotions, competitions, and giveaways</li><li>To organize and manage our promotional campaigns and collaborations</li><li>To respond to your inquiries and provide customer support</li><li>To improve our products, website, and overall customer experience</li><li>To comply with legal obligations</li></ul><h1>Sharing of Personal Information</h1><p>We may share your personal information with the following types of third parties:</p><ul><li>Service providers, such as payment processors, delivery and shipping companies, website hosting providers, and marketing agencies</li><li>Business partners, such as collaborators, influencers, or partners involved in promotions or campaigns</li><li>Legal and regulatory authorities, such as law enforcement agencies or government bodies when required by law</li></ul><h1>Protection of Personal Information</h1><p>We take appropriate technical and organizational measures to protect your personal information from unauthorized access, use, or disclosure. We also require our third-party service providers to implement similar measures.</p><h1>Your Rights</h1><p>You have the right to:</p><ul><li>Access your personal information</li><li>Correct your personal information</li><li>Delete your personal information</li><li>Object to the processing of your personal information</li><li>Restrict the processing of your personal information</li><li>Data portability</li><li>Withdraw your consent</li></ul><p>To exercise your rights, please contact us using the contact details provided below.</p><h1>Changes to this Privacy Notice</h1><p>We may update this privacy notice from time to time to reflect changes in our practices or legal obligations. We will notify you of any material changes by posting the updated privacy notice on our website and, if required by law, obtaining your consent.</p><h1>Contact Us</h1><p>If you have any questions or concerns about this privacy notice, please contact us at <a href=\"mailto:customerservice.info@winnerforce.com\">M&T202666@gmail.com</a></p>",
+            "content_icon_2": "",
+            "content_title_2": "",
+            "content_subtitle_2": "",
+            "content_text_2": "",
+            "content_icon_3": "",
+            "content_title_3": "",
+            "content_subtitle_3": "",
+            "content_text_3": "",
+            "content_icon_4": "",
+            "content_title_4": "",
+            "content_subtitle_4": "",
+            "content_text_4": "",
+            "content_icon_5": "",
+            "content_title_5": "",
+            "content_subtitle_5": "",
+            "content_text_5": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_492fb24_dc77jP"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "177323473649959e7e"
+  ]
+}

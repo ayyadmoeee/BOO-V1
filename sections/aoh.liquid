@@ -1,0 +1,914 @@
+{% comment %}
+  SECTION: Product glass card (with optional fallback product)
+  File: sections/aoh.liquid
+{% endcomment %}
+
+{% assign section_id = section.id | replace: '_', '' | downcase %}
+<style>
+  .ai-product-glass-{{ section_id }}{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+  }
+
+  .ai-product-glass-{{ section_id }}__bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .ai-product-glass-{{ section_id }}__bg img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .ai-product-glass-{{ section_id }}__bgPlaceholder{
+    width:100%;
+    height:100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .ai-product-glass-{{ section_id }}__bgPlaceholder svg{
+    width:100%;
+    height:100%;
+    opacity:.12;
+  }
+
+  .ai-product-glass-{{ section_id }}__container{
+    position:relative;
+    z-index:1;
+    max-width: {{ section.settings.container_width }}px;
+    margin:0 auto;
+    padding: {{ section.settings.section_padding }}px 20px;
+  }
+
+  .ai-product-glass-{{ section_id }}__grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ section.settings.column_gap }}px;
+    align-items: center;
+  }
+
+  .ai-product-glass-{{ section_id }}__gallery{
+    width:100%;
+  }
+
+  .ai-product-glass-{{ section_id }}__carousel{
+    position:relative;
+    overflow:hidden;
+    border-radius: {{ section.settings.image_border_radius }}px;
+    aspect-ratio: 1;
+  }
+  .ai-product-glass-{{ section_id }}__track{
+    display:flex;
+    height:100%;
+    will-change:transform;
+    transition: transform .4s ease;
+  }
+  .ai-product-glass-{{ section_id }}__slide{
+    min-width:100%;
+    height:100%;
+  }
+  .ai-product-glass-{{ section_id }}__slide img,
+  .ai-product-glass-{{ section_id }}__slide video,
+  .ai-product-glass-{{ section_id }}__slide iframe,
+  .ai-product-glass-{{ section_id }}__slide model-viewer{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .ai-product-glass-{{ section_id }}__navBtn{
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    width:48px;
+    height:48px;
+    border-radius:999px;
+    border:0;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+    background: rgba(255,255,255,.9);
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .ai-product-glass-{{ section_id }}__navBtn:hover{
+    background: rgba(255,255,255,1);
+    transform: translateY(-50%) scale(1.06);
+  }
+  .ai-product-glass-{{ section_id }}__navBtn svg{ width:24px; height:24px; }
+  .ai-product-glass-{{ section_id }}__navPrev{ left: 14px; }
+  .ai-product-glass-{{ section_id }}__navNext{ right: 14px; }
+
+  .ai-product-glass-{{ section_id }}__dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:14px;
+  }
+  .ai-product-glass-{{ section_id }}__dot{
+    width:10px;
+    height:10px;
+    border-radius:999px;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    background: rgba(255,255,255,.35);
+    transition: all .25s ease;
+  }
+  .ai-product-glass-{{ section_id }}__dot.is-active{
+    width:24px;
+    border-radius: 6px;
+    background: rgba(255,255,255,1);
+  }
+
+  .ai-product-glass-{{ section_id }}__thumbs{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-top:12px;
+  }
+  .ai-product-glass-{{ section_id }}__thumb{
+    width:64px;
+    height:64px;
+    border-radius:10px;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.08);
+    cursor:pointer;
+    padding:0;
+    opacity:.85;
+    transition: transform .2s ease, opacity .2s ease, border-color .2s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .ai-product-glass-{{ section_id }}__thumb:hover{ transform: translateY(-2px); opacity:1; }
+  .ai-product-glass-{{ section_id }}__thumb.is-active{ opacity:1; border-color: rgba(255,255,255,.9); }
+  .ai-product-glass-{{ section_id }}__thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ai-product-glass-{{ section_id }}__thumbTag{
+    font-size:12px;
+    color:#fff;
+    opacity:.9;
+  }
+
+  .ai-product-glass-{{ section_id }}__card{
+    background: rgba(
+      {{ section.settings.glass_bg_color | color_extract: 'red' }},
+      {{ section.settings.glass_bg_color | color_extract: 'green' }},
+      {{ section.settings.glass_bg_color | color_extract: 'blue' }},
+      {{ section.settings.glass_opacity }}
+    );
+    backdrop-filter: blur({{ section.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ section.settings.glass_blur }}px);
+    border: {{ section.settings.glass_border_width }}px solid rgba(255,255,255,{{ section.settings.glass_border_opacity }});
+    border-radius: {{ section.settings.glass_border_radius }}px;
+    padding: {{ section.settings.card_padding }}px;
+    box-shadow: 0 10px 34px rgba(0,0,0,.12);
+  }
+
+  .ai-product-glass-{{ section_id }}__title{
+    margin:0 0 {{ section.settings.element_spacing }}px;
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 650;
+    line-height:1.15;
+    color: {{ section.settings.text_color }};
+  }
+
+  .ai-product-glass-{{ section_id }}__price{
+    margin: 0 0 {{ section.settings.element_spacing }}px;
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.price_size }}px;
+    font-weight: 700;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+  }
+  .ai-product-glass-{{ section_id }}__compare{
+    margin-left:0;
+    opacity:.6;
+    text-decoration: line-through;
+    font-size: {{ section.settings.price_size | times: 0.85 }}px;
+    font-weight: 600;
+  }
+  .ai-product-glass-{{ section_id }}__saleBadge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding: 4px 10px;
+    border-radius:999px;
+    background: rgba(255, 82, 82, 0.18);
+    border: 1px solid rgba(255, 82, 82, 0.45);
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.price_size | times: 0.52 }}px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    line-height:1;
+    text-transform: uppercase;
+  }
+
+  .ai-product-glass-{{ section_id }}__form{
+    display:flex;
+    flex-direction:column;
+    gap: {{ section.settings.element_spacing }}px;
+  }
+
+  .ai-product-glass-{{ section_id }}__label{
+    font-size:14px;
+    font-weight:650;
+    color: {{ section.settings.text_color }};
+    margin-bottom:8px;
+    display:block;
+  }
+
+  .ai-product-glass-{{ section_id }}__select{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,{{ section.settings.glass_border_opacity }});
+    background: rgba(255,255,255,.10);
+    color: {{ section.settings.text_color }};
+    cursor:pointer;
+  }
+
+  .ai-product-glass-{{ section_id }}__qtyRow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .ai-product-glass-{{ section_id }}__qtyBtn{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,{{ section.settings.glass_border_opacity }});
+    background: rgba(255,255,255,.10);
+    color: {{ section.settings.text_color }};
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .ai-product-glass-{{ section_id }}__qtyBtn:hover{ background: rgba(255,255,255,.18); }
+  .ai-product-glass-{{ section_id }}__qtyInput{
+    width:70px;
+    height:40px;
+    text-align:center;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,{{ section.settings.glass_border_opacity }});
+    background: rgba(255,255,255,.10);
+    color: {{ section.settings.text_color }};
+    font-size:16px;
+  }
+
+  .ai-product-glass-{{ section_id }}__cta{
+    width:100%;
+    padding:16px 26px;
+    border:0;
+    border-radius: {{ section.settings.button_border_radius }}px;
+    cursor:pointer;
+    background: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    font-weight: 750;
+    font-size:16px;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .ai-product-glass-{{ section_id }}__cta:hover{
+    background: {{ section.settings.button_hover_bg_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0,0,0,.22);
+  }
+  .ai-product-glass-{{ section_id }}__cta:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:none;
+  }
+
+  .ai-product-glass-{{ section_id }}__desc{
+    margin-top: {{ section.settings.element_spacing }}px;
+    padding-top: {{ section.settings.element_spacing }}px;
+    border-top: 1px solid rgba(255,255,255,{{ section.settings.glass_border_opacity }});
+    font-size:14px;
+    line-height:1.6;
+    color: {{ section.settings.text_color }};
+  }
+  .ai-product-glass-{{ section_id }}__desc p{ margin:0 0 12px; }
+  .ai-product-glass-{{ section_id }}__desc p:last-child{ margin-bottom:0; }
+
+  @media (max-width: 749px){
+    .ai-product-glass-{{ section_id }}__grid{
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .ai-product-glass-{{ section_id }}__container{
+      padding: {{ section.settings.section_padding | times: 0.65 }}px 16px;
+    }
+    .ai-product-glass-{{ section_id }}__title{
+      font-size: {{ section.settings.title_size | times: 0.85 }}px;
+    }
+    .ai-product-glass-{{ section_id }}__price{
+      font-size: {{ section.settings.price_size | times: 0.9 }}px;
+    }
+    .ai-product-glass-{{ section_id }}__card{
+      padding: {{ section.settings.card_padding | times: 0.75 }}px;
+    }
+    .ai-product-glass-{{ section_id }}__navBtn{
+      width:36px;
+      height:36px;
+    }
+    .ai-product-glass-{{ section_id }}__navBtn svg{ width:18px; height:18px; }
+    .ai-product-glass-{{ section_id }}__thumb{
+      width:56px;
+      height:56px;
+    }
+  }
+</style>
+{% assign display_product = product %}
+{% if display_product == blank %}
+  {% assign display_product = section.settings.fallback_product %}
+{% endif %}
+{% assign initial_variant = display_product.selected_or_first_available_variant %}
+{% assign initial_on_sale = false %}
+{% if initial_variant.compare_at_price and initial_variant.compare_at_price > initial_variant.price %}
+  {% assign initial_on_sale = true %}
+{% endif %}
+
+<product-glass-{{ section_id }} class="ai-product-glass-{{ section_id }}" data-section-id="{{ section_id }}">
+  <div class="ai-product-glass-{{ section_id }}__bg" aria-hidden="true">
+    {% if section.settings.background_image %}
+      <img
+        src="{{ section.settings.background_image | image_url: width: 2400 }}"
+        alt="{{ section.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ section.settings.background_image.width }}"
+        height="{{ section.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-product-glass-{{ section_id }}__bgPlaceholder">
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-product-glass-{{ section_id }}__container">
+    {% if display_product %}
+      <div class="ai-product-glass-{{ section_id }}__grid">
+        <div class="ai-product-glass-{{ section_id }}__gallery">
+          <div class="ai-product-glass-{{ section_id }}__carousel">
+            <div class="ai-product-glass-{{ section_id }}__track">
+              {% assign slide_count = 0 %}
+
+              {% for media in display_product.media limit: 10 %}
+                {% assign slide_count = slide_count | plus: 1 %}
+                <div class="ai-product-glass-{{ section_id }}__slide" data-media-index="{{ forloop.index0 }}">
+                  {% case media.media_type %}
+                    {% when 'image' %}
+                      <img
+                        src="{{ media | image_url: width: 1400 }}"
+                        alt="{{ media.alt | escape }}"
+                        loading="lazy"
+                        width="{{ media.width }}"
+                        height="{{ media.height }}"
+                      >
+                    {% when 'video' %}
+                      {{ media | video_tag: controls: true, playsinline: true }}
+                    {% when 'external_video' %}
+                      {{ media | external_video_tag }}
+                    {% else %}
+                      {% if media.preview_image %}
+                        <img
+                          src="{{ media.preview_image | image_url: width: 1400 }}"
+                          alt="{{ media.alt | escape }}"
+                          loading="lazy"
+                          width="{{ media.preview_image.width }}"
+                          height="{{ media.preview_image.height }}"
+                        >
+                      {% endif %}
+                  {% endcase %}
+                </div>
+              {% endfor %}
+
+              {% if slide_count == 0 %}
+                <div class="ai-product-glass-{{ section_id }}__slide">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            <button
+              type="button"
+              class="ai-product-glass-{{ section_id }}__navBtn ai-product-glass-{{ section_id }}__navPrev"
+              aria-label="Previous"
+              data-dir="prev"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="ai-product-glass-{{ section_id }}__navBtn ai-product-glass-{{ section_id }}__navNext"
+              aria-label="Next"
+              data-dir="next"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="ai-product-glass-{{ section_id }}__dots" data-dots></div>
+          <div class="ai-product-glass-{{ section_id }}__thumbs" data-thumbs></div>
+        </div>
+
+        <div class="ai-product-glass-{{ section_id }}__card">
+          <h1 class="ai-product-glass-{{ section_id }}__title">{{ display_product.title }}</h1>
+
+          <div class="ai-product-glass-{{ section_id }}__price">
+            <span data-price>{{ initial_variant.price | money }}</span>
+            <span class="ai-product-glass-{{ section_id }}__saleBadge" data-sale-badge{% unless initial_on_sale %} style="display:none;"{% endunless %}>
+              {{ 'products.product.on_sale' | t }}
+            </span>
+            {% if initial_on_sale %}
+              <span class="ai-product-glass-{{ section_id }}__compare" data-compare>
+                {{- initial_variant.compare_at_price | money -}}
+              </span>
+            {% else %}
+              <span class="ai-product-glass-{{ section_id }}__compare" data-compare style="display:none;"></span>
+            {% endif %}
+          </div>
+
+          {% form 'product', display_product, class: 'ai-product-glass-' | append: section_id | append: '__form', id: 'product-form-' | append: section_id %}
+            {% if display_product.has_only_default_variant == false %}
+              <div>
+                {% for option in display_product.options_with_values %}
+                  <label
+                    class="ai-product-glass-{{ section_id }}__label"
+                    for="opt-{{ section_id }}-{{ option.position }}"
+                  >
+                    {{- option.name -}}
+                  </label>
+                  <select
+                    id="opt-{{ section_id }}-{{ option.position }}"
+                    class="ai-product-glass-{{ section_id }}__select"
+                    name="options[{{ option.name | escape }}]"
+                    data-option-position="{{ option.position }}"
+                  >
+                    {% for value in option.values %}
+                      <option
+                        value="{{ value | escape }}"
+                        {% if option.selected_value == value %}
+                          selected
+                        {% endif %}
+                      >
+                        {{ value }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <div>
+              <label class="ai-product-glass-{{ section_id }}__label" for="qty-{{ section_id }}">Quantity</label>
+              <div class="ai-product-glass-{{ section_id }}__qtyRow">
+                <button
+                  type="button"
+                  class="ai-product-glass-{{ section_id }}__qtyBtn"
+                  data-qty="dec"
+                  aria-label="Decrease"
+                >
+                  −
+                </button>
+                <input
+                  id="qty-{{ section_id }}"
+                  class="ai-product-glass-{{ section_id }}__qtyInput"
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  inputmode="numeric"
+                >
+                <button
+                  type="button"
+                  class="ai-product-glass-{{ section_id }}__qtyBtn"
+                  data-qty="inc"
+                  aria-label="Increase"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <input
+              type="hidden"
+              name="id"
+              value="{{ display_product.selected_or_first_available_variant.id }}"
+              data-variant-id
+            >
+
+            <button
+              type="submit"
+              class="ai-product-glass-{{ section_id }}__cta"
+              {% unless display_product.selected_or_first_available_variant.available %}
+                disabled
+              {% endunless %}
+              data-submit
+            >
+              {% if display_product.selected_or_first_available_variant.available %}
+                {{ section.settings.button_text }}
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          {% endform %}
+
+          {% if display_product.description != blank %}
+            <div class="ai-product-glass-{{ section_id }}__desc">
+              {{ display_product.description }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="ai-product-glass-{{ section_id }}__card" style="max-width:720px;margin:0 auto;">
+        <h2 class="ai-product-glass-{{ section_id }}__title" style="margin-bottom:12px;">No product selected</h2>
+        <div class="ai-product-glass-{{ section_id }}__desc" style="border-top:0;padding-top:0;margin-top:0;">
+          <p>Pick a fallback product in the section settings, or place this section on a product page.</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</product-glass-{{ section_id }}>
+<script>
+  (function () {
+    const root = document.querySelector('product-glass-{{ section_id }}');
+    if (!root) return;
+
+    const productData = {% if display_product %}{{ display_product | json }}{% else %}null{% endif %};
+
+    const track = root.querySelector('.ai-product-glass-{{ section_id }}__track');
+    const slides = track ? Array.from(track.children) : [];
+    const prevBtn = root.querySelector('[data-dir="prev"]');
+    const nextBtn = root.querySelector('[data-dir="next"]');
+    const dotsWrap = root.querySelector('[data-dots]');
+    const thumbsWrap = root.querySelector('[data-thumbs]');
+
+    const form = root.querySelector('#product-form-{{ section_id }}');
+    const submitBtn = root.querySelector('[data-submit]');
+    const variantIdInput = root.querySelector('[data-variant-id]');
+    const priceEl = root.querySelector('[data-price]');
+    const saleBadgeEl = root.querySelector('[data-sale-badge]');
+    const compareEl = root.querySelector('[data-compare]');
+    const qtyInput = root.querySelector('#qty-{{ section_id }}');
+
+    const optionSelects = root.querySelectorAll('select[data-option-position]');
+
+    let index = 0;
+
+    function money(cents) {
+      const amount = (cents || 0) / 100;
+      return new Intl.NumberFormat('{{ localization.language.iso_code }}', {
+        style: 'currency',
+        currency: '{{ cart.currency.iso_code }}'
+      }).format(amount);
+    }
+
+    function setSlide(i) {
+      if (!track || slides.length <= 1) return;
+      index = (i + slides.length) % slides.length;
+      track.style.transform = `translateX(${-index * 100}%)`;
+
+      if (dotsWrap) {
+        dotsWrap.querySelectorAll('button').forEach((b, bi) => b.classList.toggle('is-active', bi === index));
+      }
+      if (thumbsWrap) {
+        thumbsWrap.querySelectorAll('button').forEach((b, bi) => b.classList.toggle('is-active', bi === index));
+      }
+    }
+
+    function buildDotsThumbs() {
+      if (!track || slides.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        if (dotsWrap) dotsWrap.style.display = 'none';
+        if (thumbsWrap) thumbsWrap.style.display = 'none';
+        return;
+      }
+
+      if (dotsWrap) {
+        dotsWrap.innerHTML = '';
+        slides.forEach((_, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'ai-product-glass-{{ section_id }}__dot' + (i === 0 ? ' is-active' : '');
+          b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          b.addEventListener('click', () => setSlide(i));
+          dotsWrap.appendChild(b);
+        });
+      }
+
+      if (thumbsWrap) {
+        thumbsWrap.innerHTML = '';
+        slides.forEach((s, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'ai-product-glass-{{ section_id }}__thumb' + (i === 0 ? ' is-active' : '');
+          b.setAttribute('aria-label', 'Open media ' + (i + 1));
+
+          const img = s.querySelector('img');
+          const video = s.querySelector('video');
+          if (img) {
+            const t = document.createElement('img');
+            t.src = img.currentSrc || img.src;
+            t.alt = img.alt || ('Thumb ' + (i + 1));
+            t.loading = 'lazy';
+            b.appendChild(t);
+          } else if (video) {
+            const tag = document.createElement('div');
+            tag.className = 'ai-product-glass-{{ section_id }}__thumbTag';
+            tag.textContent = 'VIDEO';
+            b.appendChild(tag);
+          } else {
+            const tag = document.createElement('div');
+            tag.className = 'ai-product-glass-{{ section_id }}__thumbTag';
+            tag.textContent = 'MEDIA';
+            b.appendChild(tag);
+          }
+
+          b.addEventListener('click', () => setSlide(i));
+          thumbsWrap.appendChild(b);
+        });
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', () => setSlide(index - 1));
+      if (nextBtn) nextBtn.addEventListener('click', () => setSlide(index + 1));
+
+      let startX = 0, curX = 0, dragging = false;
+      track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        curX = startX;
+        dragging = true;
+      }, { passive: true });
+
+      track.addEventListener('touchmove', (e) => {
+        if (!dragging) return;
+        curX = e.touches[0].clientX;
+      }, { passive: true });
+
+      track.addEventListener('touchend', () => {
+        if (!dragging) return;
+        dragging = false;
+        const diff = startX - curX;
+        if (Math.abs(diff) > 50) setSlide(diff > 0 ? index + 1 : index - 1);
+      });
+    }
+
+    function getVariantFromSelectedOptions() {
+      if (!productData || !productData.variants) return null;
+      const opts = Array.from(optionSelects).map(s => s.value);
+      return productData.variants.find(v => opts.every((o, i) => v.options[i] === o)) || null;
+    }
+
+    function applyVariant(v) {
+      if (!v) return;
+
+      if (variantIdInput) variantIdInput.value = v.id;
+
+      if (priceEl) priceEl.textContent = money(v.price);
+
+      const isOnSale = !!(v.compare_at_price && v.compare_at_price > v.price);
+
+      if (saleBadgeEl) {
+        saleBadgeEl.style.display = isOnSale ? 'inline-flex' : 'none';
+      }
+
+      if (compareEl) {
+        if (isOnSale) {
+          compareEl.textContent = money(v.compare_at_price);
+          compareEl.style.display = 'inline';
+        } else {
+          compareEl.style.display = 'none';
+        }
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = !v.available;
+        submitBtn.textContent = v.available ? '{{ section.settings.button_text }}' : 'Sold Out';
+      }
+    }
+
+    function bindOptions() {
+      if (!optionSelects.length) return;
+      optionSelects.forEach(s => s.addEventListener('change', () => applyVariant(getVariantFromSelectedOptions())));
+    }
+
+    function bindQty() {
+      if (!qtyInput) return;
+      root.querySelectorAll('[data-qty]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const v = parseInt(qtyInput.value, 10) || 1;
+          qtyInput.value = btn.dataset.qty === 'inc' ? v + 1 : Math.max(1, v - 1);
+        });
+      });
+      qtyInput.addEventListener('change', () => {
+        const v = parseInt(qtyInput.value, 10) || 1;
+        qtyInput.value = Math.max(1, v);
+      });
+    }
+
+    function bindSubmit() {
+      if (!form) return;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        fetch('/cart/add.js', { method: 'POST', body: fd })
+          .then(r => r.json())
+          .then(() => { window.location.href = '/cart'; })
+          .catch(() => {});
+      });
+    }
+
+    buildDotsThumbs();
+    bindQty();
+    bindOptions();
+    bindSubmit();
+
+    const initialVariant = productData && productData.variants ? productData.variants.find(v => v.id == (variantIdInput && variantIdInput.value)) : null;
+    applyVariant(initialVariant || getVariantFromSelectedOptions());
+  })();
+</script>
+{% schema %}
+{
+  "name": "AOH",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Product" },
+    { "type": "product", "id": "fallback_product", "label": "Fallback product (for non-product pages)" },
+
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 60
+    },
+
+    { "type": "header", "content": "Gallery" },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 12
+    },
+
+    { "type": "header", "content": "Glass card" },
+    { "type": "color", "id": "glass_bg_color", "label": "Glass color", "default": "#ffffff" },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Glass opacity",
+      "default": 0.2
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Blur",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "glass_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "glass_border_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Border opacity",
+      "default": 0.3
+    },
+    {
+      "type": "range",
+      "id": "glass_border_radius",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Card radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 20,
+      "max": 70,
+      "step": 5,
+      "unit": "px",
+      "label": "Card padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "element_spacing",
+      "min": 10,
+      "max": 46,
+      "step": 2,
+      "unit": "px",
+      "label": "Element spacing",
+      "default": 22
+    },
+
+    { "type": "header", "content": "Typography" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 16,
+      "max": 44,
+      "step": 2,
+      "unit": "px",
+      "label": "Price size",
+      "default": 24
+    },
+
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Add to Cart" },
+    { "type": "color", "id": "button_bg_color", "label": "Button background", "default": "#000000" },
+    { "type": "color", "id": "button_hover_bg_color", "label": "Button hover background", "default": "#333333" },
+    { "type": "color", "id": "button_text_color", "label": "Button text color", "default": "#ffffff" },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button radius",
+      "default": 10
+    }
+  ],
+  "presets": [{ "name": "AOH" }]
+}
+{% endschema %}

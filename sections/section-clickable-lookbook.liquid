@@ -1,0 +1,976 @@
+{%- liquid
+  assign section_id = section.id
+  assign current_product = product
+  assign border_radius = section.settings.border_radius
+  assign hotspot_color = section.settings.hotspot_color
+  assign hotspot_size = section.settings.hotspot_size
+  assign hotspot_size_mobile = section.settings.hotspot_size_mobile | default: 44
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign image_width = section.settings.image_width | default: 1129
+  assign image_height = section.settings.image_height
+  assign background_color = section.settings.background_color
+  assign image_blocks = section.blocks | where: 'type', 'lookbook_image'
+  assign hotspot_blocks = section.blocks | where: 'type', 'hotspot'
+-%}
+
+{%- style -%}
+  .clickable-lookbook-{{ section_id }} {
+    padding-top: {{ padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.5 | round: 0 }}px;
+    background-color: {{ background_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .clickable-lookbook-{{ section_id }} {
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+    }
+  }
+
+  .clickable-lookbook-{{ section_id }}__container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* ========================================
+     SINGLE IMAGE LAYOUT
+     ======================================== */
+  .clickable-lookbook-{{ section_id }}__image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: {{ border_radius }}px;
+    overflow: hidden;
+    background: #f5f5f5;
+    {% if image_height > 0 %}
+      height: {{ image_height }}px;
+    {% endif %}
+  }
+
+  .clickable-lookbook-{{ section_id }}__image {
+    width: 100%;
+    {% if image_height > 0 %}
+      height: {{ image_height }}px;
+      object-fit: cover;
+    {% else %}
+      height: auto;
+      object-fit: cover;
+    {% endif %}
+    display: block;
+  }
+
+  {% if image_height > 0 %}
+    /* Cap the lookbook image height on small laptop screens */
+    @media screen and (min-width: 750px) and (max-width: 1280px) {
+      .clickable-lookbook-{{ section_id }}__image-wrapper,
+      .clickable-lookbook-{{ section_id }}__image {
+        height: min({{ image_height }}px, 65vh) !important;
+      }
+    }
+  {% endif %}
+
+  /* ========================================
+     HOTSPOT / DOT STYLING - GLASSMORPHISM EFFECT
+     ======================================== */
+  .clickable-lookbook-{{ section_id }}__hotspot {
+    position: absolute;
+    width: {{ hotspot_size }}px;
+    height: {{ hotspot_size }}px;
+    border-radius: 50%;
+    /* Glassmorphism effect */
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.3s ease,
+                background 0.3s ease,
+                border-color 0.3s ease;
+    z-index: 10;
+    min-width: {{ hotspot_size }}px;
+    min-height: {{ hotspot_size }}px;
+    touch-action: manipulation;
+    text-decoration: none;
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: {{ hotspot_color }};
+    opacity: 0.4;
+    z-index: -1;
+    filter: blur(8px);
+  }
+
+  /* Plus symbol in the center */
+  .clickable-lookbook-{{ section_id }}__hotspot-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: {{ hotspot_size | times: 0.4 | round }}px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1;
+    z-index: 2;
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot:hover .clickable-lookbook-{{ section_id }}__hotspot-icon {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot:hover::after {
+    opacity: 0.6;
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot:active {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot:focus {
+    outline: 2px solid {{ hotspot_color }};
+    outline-offset: 2px;
+  }
+
+  .clickable-lookbook-{{ section_id }}__hotspot::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    opacity: 0.5;
+    animation: pulse-{{ section_id }} 2s infinite;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  @keyframes pulse-{{ section_id }} {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* ========================================
+     ENHANCED TOOLTIP - Shows product info preview
+     ======================================== */
+  /* Overflow fix: Added max-width and multi-line wrap to prevent text overflow */
+  .clickable-lookbook-{{ section_id }}__tooltip {
+    position: absolute;
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    white-space: normal;
+    text-align: center;
+    max-width: 220px;
+    min-width: 100px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 20;
+    box-sizing: border-box;
+    line-height: 1.4;
+  }
+
+  /* Tooltip position: TOP */
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="top"] {
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="top"]::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--tooltip-bg, #000000);
+  }
+
+  /* Tooltip position: BOTTOM */
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="bottom"] {
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="bottom"]::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--tooltip-bg, #000000);
+  }
+
+  /* Tooltip position: LEFT */
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="left"] {
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="left"]::after {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: var(--tooltip-bg, #000000);
+  }
+
+  /* Tooltip position: RIGHT */
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="right"] {
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .clickable-lookbook-{{ section_id }}__tooltip[data-position="right"]::after {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: var(--tooltip-bg, #000000);
+  }
+
+  .clickable-lookbook-{{ section_id }}__tooltip-title {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .clickable-lookbook-{{ section_id }}__tooltip-price {
+    display: block;
+    opacity: 0.9;
+    margin-bottom: 0.25rem;
+  }
+
+  .clickable-lookbook-{{ section_id }}__tooltip-cta {
+    display: block;
+    opacity: 0.8;
+    margin-top: 0.375rem;
+    font-style: italic;
+  }
+
+  /* Desktop: Show tooltip on hover */
+  @media (hover: hover) {
+    .clickable-lookbook-{{ section_id }}__hotspot:hover .clickable-lookbook-{{ section_id }}__tooltip {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* ========================================
+     MOBILE RESPONSIVE
+     ======================================== */
+  @media screen and (max-width: 768px) {
+    .clickable-lookbook-{{ section_id }} {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    .clickable-lookbook-{{ section_id }}__container {
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .clickable-lookbook-{{ section_id }}__image-wrapper {
+      border-radius: {{ border_radius | times: 0.7 | round: 0 }}px;
+    }
+
+    .clickable-lookbook-{{ section_id }}__hotspot {
+      left: var(--dot-x-mobile, var(--dot-x-desktop)) !important;
+      top: var(--dot-y-mobile, var(--dot-y-desktop)) !important;
+    }
+
+    .clickable-lookbook-{{ section_id }}__hotspot {
+      width: {{ hotspot_size_mobile }}px;
+      height: {{ hotspot_size_mobile }}px;
+      min-width: {{ hotspot_size_mobile }}px;
+      min-height: {{ hotspot_size_mobile }}px;
+      border-width: 2px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .clickable-lookbook-{{ section_id }}__hotspot-icon {
+      font-size: {{ hotspot_size_mobile | times: 0.4 | round }}px;
+    }
+
+    .clickable-lookbook-{{ section_id }}__hotspot::before {
+      inset: -6px;
+      animation: none;
+    }
+
+    .clickable-lookbook-{{ section_id }}__hotspot:hover {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Mobile tooltip: Slightly smaller font and increased max-width for better readability */
+    .clickable-lookbook-{{ section_id }}__tooltip {
+      font-size: 0.8125rem;
+      max-width: 200px;
+      padding: 0.625rem 0.875rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="clickable-lookbook-{{ section_id }}" data-section-id="{{ section.id }}">
+  <div class="clickable-lookbook-{{ section_id }}__container">
+    {%- comment -%} 
+      SINGLE IMAGE LAYOUT: One main image with multiple clickable hotspots
+      Navigation: Hotspot links directly to product.url
+    {%- endcomment -%}
+    {%- assign first_image_block = image_blocks.first -%}
+    {%- assign main_image = first_image_block.settings.image -%}
+    {%- assign main_image_mobile = first_image_block.settings.image_mobile -%}
+
+    {%- assign use_product_metafield_images = true -%}
+    {%- assign lookbook_settings_json = section.settings | json -%}
+    {%- if lookbook_settings_json contains '"use_product_metafield_images":false' -%}
+      {%- assign use_product_metafield_images = false -%}
+    {%- endif -%}
+
+    {%- if current_product != blank and use_product_metafield_images -%}
+      {%- assign desktop_image_metafield = section.settings.lookbook_image_metafield | strip -%}
+      {%- assign mobile_image_metafield = section.settings.lookbook_image_mobile_metafield | strip -%}
+
+      {%- if desktop_image_metafield != blank and desktop_image_metafield contains '.' -%}
+        {%- assign desktop_parts = desktop_image_metafield | split: '.' -%}
+        {%- assign desktop_ns = desktop_parts.first -%}
+        {%- assign desktop_key_parts = desktop_parts | slice: 1, desktop_parts.size -%}
+        {%- assign desktop_key = desktop_key_parts | join: '.' -%}
+        {%- assign desktop_image_metafield_ref = current_product.metafields[desktop_ns][desktop_key] -%}
+        {%- if desktop_image_metafield_ref != blank and desktop_image_metafield_ref.value != blank -%}
+          {%- assign main_image = desktop_image_metafield_ref.value -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if mobile_image_metafield != blank and mobile_image_metafield contains '.' -%}
+        {%- assign mobile_parts = mobile_image_metafield | split: '.' -%}
+        {%- assign mobile_ns = mobile_parts.first -%}
+        {%- assign mobile_key_parts = mobile_parts | slice: 1, mobile_parts.size -%}
+        {%- assign mobile_key = mobile_key_parts | join: '.' -%}
+        {%- assign mobile_image_metafield_ref = current_product.metafields[mobile_ns][mobile_key] -%}
+        {%- if mobile_image_metafield_ref != blank and mobile_image_metafield_ref.value != blank -%}
+          {%- assign main_image_mobile = mobile_image_metafield_ref.value -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+    
+    {%- if main_image != blank -%}
+      <div class="clickable-lookbook-{{ section_id }}__image-wrapper">
+        {%- assign image_class = 'clickable-lookbook-' | append: section_id | append: '__image' -%}
+        {%- assign image_alt = 'Lookbook image' -%}
+        <picture>
+          {%- if main_image_mobile != blank -%}
+            <source
+              media="(max-width: 768px)"
+              srcset="{{ main_image_mobile | image_url: width: image_width }}"
+            >
+          {%- endif -%}
+          {{ main_image | image_url: width: image_width | image_tag: loading: 'lazy', alt: image_alt, class: image_class }}
+        </picture>
+
+        {%- comment -%} Add all hotspots onto the single image {%- endcomment -%}
+        {%- for block in hotspot_blocks -%}
+          {%- assign hotspot_product = blank -%}
+          {%- assign hotspot_product_metafield = block.settings.product_metafield_key | strip -%}
+          {%- if hotspot_product_metafield == blank -%}
+            {%- assign hotspot_index = forloop.index -%}
+            {%- assign hotspot_product_metafield = 'custom.lookbook_hotspot_product_' | append: hotspot_index -%}
+          {%- endif -%}
+
+          {%- if current_product != blank and hotspot_product_metafield != blank and hotspot_product_metafield contains '.' -%}
+            {%- assign hotspot_parts = hotspot_product_metafield | split: '.' -%}
+            {%- assign hotspot_ns = hotspot_parts.first -%}
+            {%- assign hotspot_key_parts = hotspot_parts | slice: 1, hotspot_parts.size -%}
+            {%- assign hotspot_key = hotspot_key_parts | join: '.' -%}
+            {%- assign hotspot_product_metafield_ref = current_product.metafields[hotspot_ns][hotspot_key] -%}
+            {%- if hotspot_product_metafield_ref != blank and hotspot_product_metafield_ref.value != blank -%}
+              {%- assign hotspot_product = hotspot_product_metafield_ref.value -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if hotspot_product == blank and block.settings.product != blank -%}
+            {%- assign hotspot_product = all_products[block.settings.product] -%}
+          {%- endif -%}
+
+          {%- if hotspot_product != blank -%}
+            {%- assign dot_x = block.settings.dot_x | default: 50 -%}
+            {%- assign dot_y = block.settings.dot_y | default: 50 -%}
+            {%- assign use_mobile_position = block.settings.use_mobile_position -%}
+            {%- assign dot_x_mobile = block.settings.dot_x_mobile | default: dot_x -%}
+            {%- assign dot_y_mobile = block.settings.dot_y_mobile | default: dot_y -%}
+
+            {%- comment -%} Resolve desktop X position from metafield {%- endcomment -%}
+            {%- assign pos_x_meta_key = block.settings.dot_x_metafield_key | strip -%}
+            {%- if current_product != blank and pos_x_meta_key != blank and pos_x_meta_key contains '.' -%}
+              {%- assign pos_x_parts = pos_x_meta_key | split: '.' -%}
+              {%- assign pos_x_ns = pos_x_parts.first -%}
+              {%- assign pos_x_key = pos_x_parts | slice: 1, pos_x_parts.size | join: '.' -%}
+              {%- assign pos_x_meta_val = current_product.metafields[pos_x_ns][pos_x_key] -%}
+              {%- if pos_x_meta_val != blank -%}
+                {%- assign dot_x = pos_x_meta_val.value | plus: 0 -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- comment -%} Resolve desktop Y position from metafield {%- endcomment -%}
+            {%- assign pos_y_meta_key = block.settings.dot_y_metafield_key | strip -%}
+            {%- if current_product != blank and pos_y_meta_key != blank and pos_y_meta_key contains '.' -%}
+              {%- assign pos_y_parts = pos_y_meta_key | split: '.' -%}
+              {%- assign pos_y_ns = pos_y_parts.first -%}
+              {%- assign pos_y_key = pos_y_parts | slice: 1, pos_y_parts.size | join: '.' -%}
+              {%- assign pos_y_meta_val = current_product.metafields[pos_y_ns][pos_y_key] -%}
+              {%- if pos_y_meta_val != blank -%}
+                {%- assign dot_y = pos_y_meta_val.value | plus: 0 -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- comment -%} Resolve mobile X position from metafield {%- endcomment -%}
+            {%- assign pos_x_mob_meta_key = block.settings.dot_x_mobile_metafield_key | strip -%}
+            {%- if current_product != blank and pos_x_mob_meta_key != blank and pos_x_mob_meta_key contains '.' -%}
+              {%- assign pos_x_mob_parts = pos_x_mob_meta_key | split: '.' -%}
+              {%- assign pos_x_mob_ns = pos_x_mob_parts.first -%}
+              {%- assign pos_x_mob_key = pos_x_mob_parts | slice: 1, pos_x_mob_parts.size | join: '.' -%}
+              {%- assign pos_x_mob_meta_val = current_product.metafields[pos_x_mob_ns][pos_x_mob_key] -%}
+              {%- if pos_x_mob_meta_val != blank -%}
+                {%- assign dot_x_mobile = pos_x_mob_meta_val.value | plus: 0 -%}
+                {%- assign use_mobile_position = true -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- comment -%} Resolve mobile Y position from metafield {%- endcomment -%}
+            {%- assign pos_y_mob_meta_key = block.settings.dot_y_mobile_metafield_key | strip -%}
+            {%- if current_product != blank and pos_y_mob_meta_key != blank and pos_y_mob_meta_key contains '.' -%}
+              {%- assign pos_y_mob_parts = pos_y_mob_meta_key | split: '.' -%}
+              {%- assign pos_y_mob_ns = pos_y_mob_parts.first -%}
+              {%- assign pos_y_mob_key = pos_y_mob_parts | slice: 1, pos_y_mob_parts.size | join: '.' -%}
+              {%- assign pos_y_mob_meta_val = current_product.metafields[pos_y_mob_ns][pos_y_mob_key] -%}
+              {%- if pos_y_mob_meta_val != blank -%}
+                {%- assign dot_y_mobile = pos_y_mob_meta_val.value | plus: 0 -%}
+                {%- assign use_mobile_position = true -%}
+              {%- endif -%}
+            {%- endif -%}
+            {%- assign tooltip_position = block.settings.tooltip_position | default: 'top' -%}
+            {%- assign tooltip_bg_color = block.settings.tooltip_bg_color | default: '#000000' -%}
+            {%- assign tooltip_title_size = block.settings.tooltip_title_size | default: 14 -%}
+            {%- assign tooltip_price_size = block.settings.tooltip_price_size | default: 13 -%}
+            {%- assign tooltip_cta_size = block.settings.tooltip_cta_size | default: 12 -%}
+            {%- assign tooltip_title_color = block.settings.tooltip_title_color -%}
+            {%- assign tooltip_price_color = block.settings.tooltip_price_color -%}
+            {%- assign tooltip_cta_color = block.settings.tooltip_cta_color -%}
+            
+            <a
+              href="{{ hotspot_product.url }}"
+              class="clickable-lookbook-{{ section_id }}__hotspot"
+              style="--dot-x-desktop: {{ dot_x }}%; --dot-y-desktop: {{ dot_y }}%; {% if use_mobile_position %}--dot-x-mobile: {{ dot_x_mobile }}%; --dot-y-mobile: {{ dot_y_mobile }}%;{% else %}--dot-x-mobile: {{ dot_x }}%; --dot-y-mobile: {{ dot_y }}%;{% endif %} left: var(--dot-x-desktop); top: var(--dot-y-desktop);"
+              aria-label="View {{ hotspot_product.title }}"
+              data-product-id="{{ hotspot_product.id }}"
+              data-product-url="{{ hotspot_product.url }}"
+              data-product-title="{{ hotspot_product.title }}"
+              data-product-price="{{ hotspot_product.price | money }}"
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} Plus symbol icon {%- endcomment -%}
+              <span class="clickable-lookbook-{{ section_id }}__hotspot-icon">+</span>
+              {%- comment -%} Enhanced tooltip with product info preview {%- endcomment -%}
+              <span 
+                class="clickable-lookbook-{{ section_id }}__tooltip"
+                data-position="{{ tooltip_position }}"
+                style="background: {{ tooltip_bg_color }}; --tooltip-bg: {{ tooltip_bg_color }};"
+              >
+                <span 
+                  class="clickable-lookbook-{{ section_id }}__tooltip-title"
+                  style="font-size: {{ tooltip_title_size }}px;{% if tooltip_title_color != blank %} color: {{ tooltip_title_color }};{% endif %}"
+                >{{ hotspot_product.title }}</span>
+                <span 
+                  class="clickable-lookbook-{{ section_id }}__tooltip-price"
+                  style="font-size: {{ tooltip_price_size }}px;{% if tooltip_price_color != blank %} color: {{ tooltip_price_color }}; opacity: 1;{% endif %}"
+                >{{ hotspot_product.price | money }}</span>
+                <span 
+                  class="clickable-lookbook-{{ section_id }}__tooltip-cta"
+                  style="font-size: {{ tooltip_cta_size }}px;{% if tooltip_cta_color != blank %} color: {{ tooltip_cta_color }}; opacity: 1;{% endif %}"
+                >View product</span>
+              </span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- comment -%} Placeholder when no image {%- endcomment -%}
+      <div class="clickable-lookbook-{{ section_id }}__image-wrapper" style="{% if image_height > 0 %}height: {{ image_height }}px;{% else %}aspect-ratio: 16/9;{% endif %} display: flex; align-items: center; justify-content: center; background: #f5f5f5; color: #999; font-size: 0.875rem;">
+        Add image
+      </div>
+    {%- endif -%}
+    {%- comment -%} Inline rendering removed: No product card below section {%- endcomment -%}
+  </div>
+</section>
+
+<script>
+  (function() {
+    const section = document.querySelector('.clickable-lookbook-{{ section_id }}');
+    if (!section) return;
+
+    const hotspots = section.querySelectorAll('.clickable-lookbook-{{ section_id }}__hotspot');
+    const isMobile = window.innerWidth <= 768;
+
+    // Mobile: First tap shows tooltip, second tap navigates
+    if (isMobile) {
+      hotspots.forEach(function(hotspot) {
+        let tapCount = 0;
+        let tapTimer;
+
+        hotspot.addEventListener('click', function(e) {
+          const tooltip = hotspot.querySelector('.clickable-lookbook-{{ section_id }}__tooltip');
+          if (!tooltip) return;
+
+          tapCount++;
+
+          if (tapCount === 1) {
+            // First tap: Show tooltip preview
+            e.preventDefault();
+            tooltip.style.opacity = '1';
+            tooltip.style.pointerEvents = 'auto';
+
+            // Reset tap count after delay
+            tapTimer = setTimeout(function() {
+              tapCount = 0;
+              tooltip.style.opacity = '0';
+              tooltip.style.pointerEvents = 'none';
+            }, 2000);
+          } else {
+            // Second tap: Navigate to product
+            clearTimeout(tapTimer);
+            tapCount = 0;
+            // Allow default navigation
+            window.location.href = hotspot.href;
+          }
+        });
+
+        // Clicking tooltip also navigates
+        const tooltip = hotspot.querySelector('.clickable-lookbook-{{ section_id }}__tooltip');
+        if (tooltip) {
+          tooltip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.location.href = hotspot.href;
+          });
+        }
+
+        // Close tooltip on tap outside
+        document.addEventListener('click', function(e) {
+          if (!hotspot.contains(e.target)) {
+            const tooltip = hotspot.querySelector('.clickable-lookbook-{{ section_id }}__tooltip');
+            if (tooltip) {
+              tooltip.style.opacity = '0';
+              tooltip.style.pointerEvents = 'none';
+            }
+            tapCount = 0;
+          }
+        });
+      });
+    } else {
+      // Desktop: Hover shows tooltip, click navigates directly
+      // No preventDefault() - navigation works normally
+      hotspots.forEach(function(hotspot) {
+        // Tooltip shows on hover (CSS handles this)
+        // Click navigates directly - no JS interference
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Clickable Lookbook",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff",
+      "info": "Background color of the full lookbook section."
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_product_metafield_images",
+      "label": "Use current product metafield images",
+      "default": true,
+      "info": "If enabled, this section first tries product metafields for images, then falls back to the section image block."
+    },
+    {
+      "type": "text",
+      "id": "lookbook_image_metafield",
+      "label": "Desktop image metafield key",
+      "default": "custom.lookbook_image",
+      "info": "Format: namespace.key"
+    },
+    {
+      "type": "text",
+      "id": "lookbook_image_mobile_metafield",
+      "label": "Mobile image metafield key",
+      "default": "custom.lookbook_image_mobile",
+      "info": "Format: namespace.key"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 409,
+      "max": 1609,
+      "step": 16,
+      "unit": "px",
+      "label": "Image Width",
+      "default": 1129,
+      "info": "Maximum width of the main image"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "min": 0,
+      "max": 1600,
+      "step": 16,
+      "unit": "px",
+      "label": "Image Height",
+      "default": 496,
+      "info": "Fixed height for the image (0 = auto, maintains aspect ratio)"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border Radius",
+      "default": 12,
+      "info": "Corner radius of the main lookbook image container."
+    },
+    {
+      "type": "header",
+      "content": "Hotspot Settings"
+    },
+    {
+      "type": "color",
+      "id": "hotspot_color",
+      "label": "Hotspot Color",
+      "default": "#000000",
+      "info": "Accent glow color used behind hotspot dots."
+    },
+    {
+      "type": "range",
+      "id": "hotspot_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Hotspot Size (Desktop)",
+      "default": 32,
+      "info": "Size of the clickable hotspot dot on desktop."
+    },
+    {
+      "type": "range",
+      "id": "hotspot_size_mobile",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Hotspot Size (Mobile)",
+      "default": 44,
+      "info": "Size of the clickable hotspot dot on mobile screens."
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80,
+      "info": "Top spacing above the lookbook section."
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80,
+      "info": "Bottom spacing below the lookbook section."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lookbook_image",
+      "name": "Main Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Main image for the lookbook"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image",
+          "info": "Optional: use a different image on mobile"
+        }
+      ]
+    },
+    {
+      "type": "hotspot",
+      "name": "Hotspot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Product linked when this hotspot is tapped/clicked."
+        },
+        {
+          "type": "text",
+          "id": "product_metafield_key",
+          "label": "Product metafield key",
+          "default": "custom.lookbook_hotspot_product_1",
+          "info": "Optional. Format namespace.key. If set and available on the current product, this hotspot uses that product reference."
+        },
+        {
+          "type": "range",
+          "id": "dot_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Dot X Position",
+          "default": 50,
+          "info": "Horizontal position of the dot on the image (fallback if no metafield is set)"
+        },
+        {
+          "type": "range",
+          "id": "dot_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Dot Y Position",
+          "default": 50,
+          "info": "Vertical position of the dot on the image (fallback if no metafield is set)"
+        },
+        {
+          "type": "header",
+          "content": "Position Metafields (Desktop)"
+        },
+        {
+          "type": "text",
+          "id": "dot_x_metafield_key",
+          "label": "Desktop X metafield key",
+          "info": "Format: namespace.key — e.g. custom.hotspot_1_x. Overrides the slider above when set on the current product."
+        },
+        {
+          "type": "text",
+          "id": "dot_y_metafield_key",
+          "label": "Desktop Y metafield key",
+          "info": "Format: namespace.key — e.g. custom.hotspot_1_y. Overrides the slider above when set on the current product."
+        },
+        {
+          "type": "header",
+          "content": "Mobile Hotspot Position"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_mobile_position",
+          "label": "Use different mobile position",
+          "default": false,
+          "info": "Enable separate X/Y coordinates for mobile screens."
+        },
+        {
+          "type": "range",
+          "id": "dot_x_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Mobile Dot X Position",
+          "default": 50,
+          "info": "Horizontal hotspot position on mobile (fallback if no metafield is set)"
+        },
+        {
+          "type": "range",
+          "id": "dot_y_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Mobile Dot Y Position",
+          "default": 50,
+          "info": "Vertical hotspot position on mobile (fallback if no metafield is set)"
+        },
+        {
+          "type": "text",
+          "id": "dot_x_mobile_metafield_key",
+          "label": "Mobile X metafield key",
+          "info": "Format: namespace.key — e.g. custom.hotspot_1_x_mobile. Auto-enables mobile positioning when set."
+        },
+        {
+          "type": "text",
+          "id": "dot_y_mobile_metafield_key",
+          "label": "Mobile Y metafield key",
+          "info": "Format: namespace.key — e.g. custom.hotspot_1_y_mobile. Auto-enables mobile positioning when set."
+        },
+        {
+          "type": "header",
+          "content": "Tooltip Settings"
+        },
+        {
+          "type": "select",
+          "id": "tooltip_position",
+          "label": "Tooltip Position",
+          "options": [
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "top",
+          "info": "Choose where the tooltip appears relative to the hotspot"
+        },
+        {
+          "type": "range",
+          "id": "tooltip_title_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Tooltip Title Size",
+          "default": 14,
+          "info": "Font size for product title in tooltip"
+        },
+        {
+          "type": "range",
+          "id": "tooltip_price_size",
+          "min": 10,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Tooltip Price Size",
+          "default": 13,
+          "info": "Font size for product price in tooltip"
+        },
+        {
+          "type": "range",
+          "id": "tooltip_cta_size",
+          "min": 8,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Tooltip CTA Size",
+          "default": 12,
+          "info": "Font size for 'View product' text in tooltip"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_bg_color",
+          "label": "Tooltip Background Color",
+          "default": "#000000",
+          "info": "Background color for the tooltip box"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_title_color",
+          "label": "Tooltip Title Color",
+          "info": "Leave empty to use default white"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_price_color",
+          "label": "Tooltip Price Color",
+          "info": "Leave empty to use default white"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_cta_color",
+          "label": "Tooltip CTA Color",
+          "info": "Leave empty to use default white"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Clickable Lookbook",
+      "blocks": [
+        {
+          "type": "lookbook_image"
+        },
+        {
+          "type": "hotspot"
+        },
+        {
+          "type": "hotspot"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

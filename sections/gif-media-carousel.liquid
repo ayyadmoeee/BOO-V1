@@ -1,0 +1,594 @@
+{{ 'gif-media-carousel.css' | asset_url | stylesheet_tag }}
+{{ 'gif-media-carousel.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign section_id = section.id
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign alignment = section.settings.alignment
+  assign layout = section.settings.layout
+  assign slides_per_view_desktop = section.settings.slides_per_view_desktop | default: 6
+  assign slides_per_view_tablet = section.settings.slides_per_view_tablet | default: 3
+  assign slides_per_view_mobile = section.settings.slides_per_view_mobile | default: 1.3
+  assign gap = section.settings.gap | default: 18
+  assign card_radius = section.settings.card_radius | default: 18
+  assign media_height_desktop = section.settings.media_height_desktop | default: 420
+  assign media_height_mobile = section.settings.media_height_mobile | default: 340
+  assign show_arrows = section.settings.show_arrows
+  assign show_dots = section.settings.show_dots
+  assign autoplay = section.settings.autoplay
+  assign autoplay_seconds = section.settings.autoplay_seconds | default: 5
+  assign product_bar_enabled = section.settings.product_bar_enabled
+  assign product_bar_action = section.settings.product_bar_action | default: 'link'
+  assign overlay_button_mode = section.settings.overlay_button_mode | default: 'off'
+  assign product_bar_bg_color = section.settings.product_bar_bg_color
+  assign product_bar_text_color = section.settings.product_bar_text_color
+  assign loop_enabled = section.settings.loop_enabled
+  assign item_blocks = section.blocks | where: 'type', 'item'
+-%}
+
+{%- style -%}
+  #GifMediaCarousel-{{ section_id }} {
+    --gmc-gap: {{ gap }}px;
+    --gmc-card-radius: {{ card_radius }}px;
+    --gmc-media-height-desktop: {{ media_height_desktop }}px;
+    --gmc-media-height-mobile: {{ media_height_mobile }}px;
+    --gmc-slides-desktop: {{ slides_per_view_desktop }};
+    --gmc-slides-tablet: {{ slides_per_view_tablet }};
+    --gmc-slides-mobile: {{ slides_per_view_mobile }};
+    --gmc-autoplay-delay: {{ autoplay_seconds }}s;
+    {%- if product_bar_bg_color != blank -%}
+      --gmc-productbar-bg: {{ product_bar_bg_color }};
+    {%- endif -%}
+    {%- if product_bar_text_color != blank -%}
+      --gmc-productbar-text: {{ product_bar_text_color }};
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<section id="GifMediaCarousel-{{ section_id }}" class="gmc-section" data-section-id="{{ section_id }}" data-autoplay="{{ autoplay }}" data-autoplay-delay="{{ autoplay_seconds }}" data-loop="{{ loop_enabled }}">
+  <div class="gmc-container{% if layout == 'full-width' %} gmc-container--full-width{% endif %}">
+    {%- if heading != blank or subheading != blank -%}
+      <div class="gmc-header gmc-header--{{ alignment }}">
+        {%- if heading != blank -%}
+          <h2 class="gmc-heading">{{ heading }}</h2>
+        {%- endif -%}
+        {%- if subheading != blank -%}
+          <p class="gmc-subheading">{{ subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if item_blocks.size > 0 -%}
+      <div class="gmc-carousel-wrapper">
+        {%- if show_arrows -%}
+          <button type="button" class="gmc-arrow gmc-arrow--prev" aria-label="{{ 'general.accessibility.previous' | t | default: 'Previous' }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="gmc-arrow gmc-arrow--next" aria-label="{{ 'general.accessibility.next' | t | default: 'Next' }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {%- endif -%}
+
+        <div class="gmc-track" data-track>
+          {%- for block in item_blocks -%}
+            {%- assign product = block.settings.product -%}
+            {%- if product != blank -%}
+              <div class="gmc-slide" {{ block.shopify_attributes }} data-slide-index="{{ forloop.index0 }}">
+                <div class="gmc-slide-inner">
+                  {%- comment -%} Media Card {%- endcomment -%}
+                  <div class="gmc-media">
+                    {%- if block.settings.badge_text != blank -%}
+                      <div class="gmc-badge">{{ block.settings.badge_text }}</div>
+                    {%- endif -%}
+                    
+                    {%- liquid
+                      assign media_source = block.settings.media_source | default: 'product_featured'
+                      assign focal_position = block.settings.focal_position | default: 'center'
+                      assign object_position = 'center'
+                      if focal_position == 'top'
+                        assign object_position = 'top center'
+                      elsif focal_position == 'bottom'
+                        assign object_position = 'bottom center'
+                      endif
+                    -%}
+
+                    {%- if media_source == 'external_gif_url' and block.settings.external_gif_url != blank -%}
+                      {%- comment -%} External GIF URL - render directly to preserve animation {%- endcomment -%}
+                      <img
+                        src="{{ block.settings.external_gif_url }}"
+                        alt="{{ block.settings.alt_text | default: product.title | escape }}"
+                        class="gmc-media-image"
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}loading="lazy"{% endunless %}
+                      >
+                    {%- elsif media_source == 'custom_image_or_gif' and block.settings.custom_media != blank -%}
+                      {%- comment -%} Custom image/GIF - use image_url WITHOUT format parameter to preserve GIF animation {%- endcomment -%}
+                      <img
+                        src="{{ block.settings.custom_media | image_url: width: 1200 }}"
+                        alt="{{ block.settings.alt_text | default: product.title | escape }}"
+                        class="gmc-media-image"
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}loading="lazy"{% endunless %}
+                      >
+                    {%- elsif product.featured_media != blank -%}
+                      {%- comment -%} Product featured media {%- endcomment -%}
+                      <img
+                        src="{{ product.featured_media.preview_image | image_url: width: 1200 }}"
+                        alt="{{ block.settings.alt_text | default: product.featured_media.alt | default: product.title | escape }}"
+                        class="gmc-media-image"
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}loading="lazy"{% endunless %}
+                      >
+                    {%- else -%}
+                      {%- comment -%} Placeholder {%- endcomment -%}
+                      <div class="gmc-media-placeholder">
+                        {{ 'product-1' | placeholder_svg_tag: 'gmc-placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+
+                    {%- comment -%} Overlay Button (bottom-right of media) {%- endcomment -%}
+                    {%- if overlay_button_mode != 'off' -%}
+                      <div class="gmc-overlay-button-wrapper">
+                        {%- if overlay_button_mode == 'next' -%}
+                          <button type="button" class="gmc-overlay-button gmc-overlay-button--next" aria-label="{{ 'general.accessibility.next' | t | default: 'Next' }}">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </button>
+                        {%- elsif overlay_button_mode == 'link' -%}
+                          <a href="{{ product.url }}" class="gmc-overlay-button gmc-overlay-button--link" aria-label="{{ product.title | escape }}">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        {%- elsif overlay_button_mode == 'quick_add' -%}
+                          {%- assign variant = product.selected_or_first_available_variant -%}
+                          {%- if variant.available -%}
+                            <button
+                              type="button"
+                              class="gmc-overlay-button gmc-overlay-button--quick-add"
+                              data-variant-id="{{ variant.id }}"
+                              data-product-id="{{ product.id }}"
+                              aria-label="{{ 'products.product.add_to_cart' | t | default: 'Add to cart' }}"
+                            >
+                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                              </svg>
+                            </button>
+                          {%- endif -%}
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- comment -%} Product Bar {%- endcomment -%}
+                  {%- if product_bar_enabled -%}
+                    <div class="gmc-productbar">
+                      {%- if product.featured_image != blank -%}
+                        <div class="gmc-productbar-thumb">
+                          <img
+                            src="{{ product.featured_image | image_url: width: 100 }}"
+                            alt="{{ product.title | escape }}"
+                            loading="lazy"
+                            width="50"
+                            height="50"
+                          >
+                        </div>
+                      {%- endif -%}
+                      
+                      <div class="gmc-productbar-content">
+                        <h3 class="gmc-productbar-title">
+                          <a href="{{ product.url }}" class="gmc-productbar-title-link">{{ product.title }}</a>
+                        </h3>
+                        <div class="gmc-productbar-price">
+                          {%- if product.compare_at_price > product.price -%}
+                            <span class="gmc-price-compare">{{ product.compare_at_price | money }}</span>
+                          {%- endif -%}
+                          <span class="gmc-price-current">{{ product.price | money }}</span>
+                        </div>
+                      </div>
+
+                      <div class="gmc-productbar-action">
+                        {%- if product_bar_action == 'quick_add' -%}
+                          {%- assign variant = product.selected_or_first_available_variant -%}
+                          {%- if variant.available -%}
+                            <button
+                              type="button"
+                              class="gmc-quick-add-btn"
+                              data-variant-id="{{ variant.id }}"
+                              data-product-id="{{ product.id }}"
+                              aria-label="{{ 'products.product.add_to_cart' | t | default: 'Add to cart' }}"
+                            >
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                              </svg>
+                            </button>
+                          {%- else -%}
+                            <span class="gmc-sold-out">{{ 'products.product.sold_out' | t | default: 'Sold out' }}</span>
+                          {%- endif -%}
+                        {%- else -%}
+                          <a href="{{ product.url }}" class="gmc-product-link" aria-label="{{ product.title | escape }}">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6 3L10 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if show_dots and item_blocks.size > 1 -%}
+          <div class="gmc-dots" data-dots>
+            {%- for block in item_blocks -%}
+              {%- if block.settings.product != blank -%}
+                <button
+                  type="button"
+                  class="gmc-dot{% if forloop.first %} gmc-dot--active{% endif %}"
+                  data-dot-index="{{ forloop.index0 }}"
+                  aria-label="{{ 'general.accessibility.go_to_slide' | t | default: 'Go to slide' }} {{ forloop.index }}"
+                ></button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="gmc-empty">
+        <p>{{ 'sections.collection_template.empty' | t | default: 'Add products to this carousel' }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GIF Media Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Slides per view (Desktop)",
+      "default": 6,
+      "info": "Number of slides visible on desktop screens"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Slides per view (Tablet)",
+      "default": 3,
+      "info": "Number of slides visible on tablet screens"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Slides per view (Mobile)",
+      "default": 1,
+      "info": "For partial peek (1.3), set to 1 and adjust via CSS. Default shows 1 full slide."
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between slides",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "media_height_desktop",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Media height (Desktop)",
+      "default": 420
+    },
+    {
+      "type": "range",
+      "id": "media_height_mobile",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Media height (Mobile)",
+      "default": 340
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show pagination dots",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_seconds",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay delay",
+      "default": 5,
+      "info": "Time between slides when autoplay is enabled"
+    },
+    {
+      "type": "header",
+      "content": "Media Overlay"
+    },
+    {
+      "type": "select",
+      "id": "overlay_button_mode",
+      "label": "Overlay button mode",
+      "options": [
+        {
+          "value": "off",
+          "label": "Off"
+        },
+        {
+          "value": "next",
+          "label": "Next slide"
+        },
+        {
+          "value": "link",
+          "label": "Link to product"
+        },
+        {
+          "value": "quick_add",
+          "label": "Quick add to cart"
+        }
+      ],
+      "default": "off",
+      "info": "Circular button overlay at bottom-right of media card"
+    },
+    {
+      "type": "header",
+      "content": "Product Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_bar_enabled",
+      "label": "Show product information bar",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "product_bar_bg_color",
+      "label": "Product bar background color",
+      "info": "Leave blank to use theme default"
+    },
+    {
+      "type": "color",
+      "id": "product_bar_text_color",
+      "label": "Product bar text color",
+      "info": "Leave blank to use theme default"
+    },
+    {
+      "type": "select",
+      "id": "product_bar_action",
+      "label": "Product bar action",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link to product page"
+        },
+        {
+          "value": "quick_add",
+          "label": "Quick add to cart"
+        }
+      ],
+      "default": "link",
+      "info": "Action when clicking the product bar button"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop_enabled",
+      "label": "Enable infinite loop",
+      "default": true,
+      "info": "Carousel loops continuously (no start/end)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Product Item",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Select a product to display in the carousel"
+        },
+        {
+          "type": "select",
+          "id": "media_source",
+          "label": "Media source",
+          "options": [
+            {
+              "value": "product_featured",
+              "label": "Product featured image"
+            },
+            {
+              "value": "custom_image_or_gif",
+              "label": "Custom image or GIF"
+            },
+            {
+              "value": "external_gif_url",
+              "label": "External GIF URL"
+            }
+          ],
+          "default": "product_featured",
+          "info": "IMPORTANT: To upload a GIF, select 'Custom image or GIF' and upload your GIF file. GIFs will animate automatically (no format conversion)."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_media",
+          "label": "Custom image or GIF",
+          "info": "Upload an image or GIF. GIFs will preserve their animation when uploaded via Shopify."
+        },
+        {
+          "type": "url",
+          "id": "external_gif_url",
+          "label": "External GIF URL",
+          "info": "Enter a direct URL to a GIF file (e.g., https://example.com/animation.gif). GIFs will animate automatically."
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "info": "Description for accessibility (optional)"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "Optional badge text to display on the media card"
+        },
+        {
+          "type": "select",
+          "id": "focal_position",
+          "label": "Image focal point",
+          "options": [
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center",
+          "info": "Position of the focal point for image cropping"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GIF Media Carousel",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

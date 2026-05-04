@@ -1,0 +1,805 @@
+{%- liquid
+  assign section_id = section.id
+  assign heading = section.settings.heading | default: 'Best Sellers on Sale'
+  assign heading_tag = section.settings.heading_tag | default: 'h2'
+  assign button_label = section.settings.button_label | default: 'SHOP NOW'
+  assign button_link = section.settings.button_link | default: '#'
+  assign badge_text = section.settings.badge_text | default: 'Best Seller'
+  assign badge_tag = section.settings.badge_tag | default: 'Best Seller'
+  assign section_bg = section.settings.section_bg | default: '#ffffff'
+  assign card_bg = section.settings.card_bg | default: '#f3f3f3'
+  assign button_bg = section.settings.button_bg | default: '#b7aca4'
+  assign button_text = section.settings.button_text | default: '#ffffff'
+  assign badge_bg = section.settings.badge_bg | default: '#d8d0c8'
+  assign badge_text_color = section.settings.badge_text_color | default: '#4b4b4b'
+  assign heading_color = section.settings.heading_color
+  assign top_cta_1_label = section.settings.top_cta_1_label | default: 'SHOP BEST SELLERS'
+  assign top_cta_2_label = section.settings.top_cta_2_label | default: 'SHOP ALL AW25'
+  assign top_cta_bg = section.settings.top_cta_bg | default: button_bg
+  assign top_cta_text = section.settings.top_cta_text | default: button_text
+  assign card_aspect_ratio = section.settings.card_aspect_ratio | default: '4 / 5'
+  assign image_max_width = section.settings.image_max_width | default: 900
+  assign hide_on_mobile = section.settings.hide_on_mobile
+
+  comment
+    Extract age range values from button labels for filter matching
+    Pattern: "Age 0.5-4" -> "0.5-4", "AGE 5-7" -> "5-7"
+  endcomment
+  assign age_range_1 = 'all'
+  if top_cta_1_label != blank
+    assign age_range_1 = top_cta_1_label | replace: 'Age ', '' | replace: 'AGE ', '' | replace: 'age ', '' | strip | downcase
+  endif
+  assign age_range_2 = 'all'
+  if top_cta_2_label != blank
+    assign age_range_2 = top_cta_2_label | replace: 'Age ', '' | replace: 'AGE ', '' | replace: 'age ', '' | strip | downcase
+  endif
+-%}
+
+<section
+  class="best-sellers-on-sale best-sellers-on-sale--{{ section_id }}{% if hide_on_mobile %} best-sellers-on-sale--hide-mobile{% endif %}"
+  data-section-id="{{ section_id }}"
+  style="background-color: {{ section_bg }};"
+>
+  <div class="page-width">
+    {%- comment -%} Age Filter Buttons - matches SCG pattern {%- endcomment -%}
+    <div class="best-sellers-on-sale__top-ctas" role="tablist" aria-label="Product filter tabs">
+      <button type="button" class="best-sellers-on-sale__top-cta is-active" data-filter="all" role="tab" aria-selected="true">ALL</button>
+      {%- if top_cta_1_label != blank -%}
+        <button type="button" class="best-sellers-on-sale__top-cta" data-filter="{{ age_range_1 }}" role="tab" aria-selected="false">{{ top_cta_1_label }}</button>
+      {%- endif -%}
+      {%- if top_cta_2_label != blank -%}
+        <button type="button" class="best-sellers-on-sale__top-cta" data-filter="{{ age_range_2 }}" role="tab" aria-selected="false">{{ top_cta_2_label }}</button>
+      {%- endif -%}
+    </div>
+
+    <div class="best-sellers-on-sale__header">
+      {%- if heading != blank -%}
+        <{{ heading_tag }} class="best-sellers-on-sale__heading"{% if heading_color != blank %} style="color: {{ heading_color }};"{% endif %}>{{ heading }}</{{ heading_tag }}>
+      {%- endif -%}
+      {%- if button_label != blank -%}
+        <a href="{{ button_link }}" class="best-sellers-on-sale__button">
+          {{ button_label }} →
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Product Grid - rendered from section blocks (not collection) {%- endcomment -%}
+    {%- assign blocks_with_products = section.blocks | where: 'type', 'product_card' -%}
+    {%- if blocks_with_products.size > 0 -%}
+      <div class="best-sellers-on-sale__grid" id="best-sellers-grid-{{ section_id }}">
+        {%- for block in blocks_with_products -%}
+          {%- assign product = block.settings.product -%}
+          {%- if product != blank -%}
+            {%- liquid
+              comment
+                Sale detection - check if product has compare_at_price > price
+              endcomment
+              assign is_on_sale = false
+              if product.compare_at_price_max > product.price
+                assign is_on_sale = true
+              endif
+
+              comment
+                Badge tag detection - check if product has the specified badge tag
+              endcomment
+              assign has_badge_tag = false
+              if badge_tag == blank
+                assign has_badge_tag = true
+              else
+                assign badge_tag_lower = badge_tag | downcase
+                for tag in product.tags
+                  assign tag_lower = tag | downcase
+                  if tag_lower == badge_tag_lower
+                    assign has_badge_tag = true
+                    break
+                  endif
+                endfor
+              endif
+
+              assign show_badge = false
+              if has_badge_tag and badge_text != blank
+                assign show_badge = true
+              endif
+
+              comment
+                Image selection: custom image from block, or product featured image
+              endcomment
+              assign product_image = block.settings.custom_image
+              if product_image == blank
+                assign product_image = product.featured_image
+              endif
+              if product_image == blank
+                assign product_image = product.images.first
+              endif
+
+              comment
+                Age range comes directly from block settings (not from product tags)
+                Supports multiple age ranges separated by commas or spaces (e.g., "0.5-4,5-7")
+              endcomment
+              assign product_age_range = block.settings.age_range | default: 'all' | downcase | strip
+            -%}
+            <div 
+              class="best-sellers-on-sale__card" 
+              data-sale="{{ is_on_sale }}" 
+              data-badge="{{ has_badge_tag }}" 
+              data-age-range="{{ product_age_range }}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if show_badge -%}
+                <div class="best-sellers-on-sale__badge" style="background-color: {{ badge_bg }}; color: {{ badge_text_color }};">
+                  {{ badge_text }}
+                </div>
+              {%- endif -%}
+
+              {%- assign first_variant = product.selected_or_first_available_variant -%}
+
+              <div class="best-sellers-on-sale__media">
+                {%- if product_image != blank -%}
+                  {%- assign image_width_2x = image_max_width | times: 2 -%}
+                  {%- assign image_1x_url = product_image | image_url: width: image_max_width -%}
+                  {%- assign image_2x_url = product_image | image_url: width: image_width_2x -%}
+
+                  <a href="{{ product.url }}" class="best-sellers-on-sale__image-link" aria-label="{{ product.title | escape }}">
+                    <img
+                      src="{{ image_1x_url }}"
+                      srcset="{{ image_1x_url }} 1x, {{ image_2x_url }} 2x"
+                      alt="{{ product_image.alt | default: product.title | escape }}"
+                      loading="lazy"
+                      class="best-sellers-on-sale__image"
+                    >
+                  </a>
+                {%- else -%}
+                  <div class="best-sellers-on-sale__placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'best-sellers-on-sale__placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+
+                <!-- Hover / Tap overlay -->
+                <div class="best-sellers-on-sale__overlay" aria-hidden="true">
+                  <div class="best-sellers-on-sale__overlay-content">
+                    <div class="best-sellers-on-sale__overlay-title">{{ product.title }}</div>
+
+                    <div class="best-sellers-on-sale__overlay-price">
+                      {%- if first_variant.compare_at_price and first_variant.compare_at_price > first_variant.price -%}
+                        <span class="best-sellers-on-sale__price--sale">{{ first_variant.price | money }}</span>
+                        <span class="best-sellers-on-sale__price--compare">{{ first_variant.compare_at_price | money }}</span>
+                      {%- else -%}
+                        <span class="best-sellers-on-sale__price">{{ first_variant.price | money }}</span>
+                      {%- endif -%}
+                    </div>
+
+                    {%- if first_variant.available -%}
+                      <a
+                        href="{{ product.url }}"
+                        class="best-sellers-on-sale__atc"
+                        aria-label="View {{ product.title | escape }}"
+                      >
+                        View
+                      </a>
+                    {%- else -%}
+                      <div class="best-sellers-on-sale__atc best-sellers-on-sale__atc--sold-out">
+                        Sold out
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="best-sellers-on-sale__empty" id="best-sellers-empty-{{ section_id }}" style="display: none;">
+        <p>{{ 'sections.best_sellers_on_sale.no_products' | t | default: 'No products found.' }}</p>
+      </div>
+    {%- else -%}
+      <div class="best-sellers-on-sale__empty">
+        <p>{{ 'sections.best_sellers_on_sale.no_products' | t | default: 'No products found.' }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .best-sellers-on-sale--{{ section_id }} {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .best-sellers-on-sale__header {
+    margin-bottom: 40px;
+  }
+
+  .best-sellers-on-sale__heading {
+    font-family: var(--font-heading-family);
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 1.3;
+    margin: 0 0 16px 0;
+    text-align: left;
+  }
+
+  .best-sellers-on-sale__button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: {{ button_bg }};
+    color: {{ button_text }};
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .best-sellers-on-sale__button:hover {
+    opacity: 0.8;
+  }
+
+  .best-sellers-on-sale__top-ctas {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 6px 0 22px;
+    flex-wrap: wrap;
+  }
+
+  .best-sellers-on-sale__top-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: {{ top_cta_bg }};
+    color: {{ top_cta_text }};
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    border-radius: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .best-sellers-on-sale__top-cta:hover {
+    opacity: 0.8;
+  }
+
+  .best-sellers-on-sale__top-cta.is-active {
+    opacity: 1;
+    outline: 2px solid {{ top_cta_text }};
+    outline-offset: 2px;
+  }
+
+  .best-sellers-on-sale__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+    width: 100%;
+  }
+
+  .best-sellers-on-sale__card {
+    position: relative;
+    background-color: {{ card_bg }};
+    border-radius: 2px;
+    padding: 0;              /* remove inner padding to eliminate white space */
+    overflow: hidden;         /* crop image to card */
+    display: block;           /* no flex centering */
+    width: 100%;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+
+  {%- comment -%} Filtered out cards are blurred and faded via JS {%- endcomment -%}
+  .best-sellers-on-sale__card.best-sellers-on-sale__card--filtered-out {
+    opacity: 0.25;
+    filter: blur(4px);
+    pointer-events: none;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+
+  .best-sellers-on-sale__badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    z-index: 3;               /* ensure above overlay */
+  }
+
+  .best-sellers-on-sale__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: {{ section.settings.card_aspect_ratio | default: '4 / 5' }};
+    overflow: hidden;
+  }
+
+  .best-sellers-on-sale__image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+
+  .best-sellers-on-sale__image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;        /* consistent cover across all breakpoints */
+    object-position: center;
+    transform: scale(1);
+    transition: transform 0.35s ease;
+  }
+
+  .best-sellers-on-sale__card:hover .best-sellers-on-sale__image {
+    transform: scale(1.03);
+  }
+
+  .best-sellers-on-sale__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: stretch;
+    padding: 18px;
+    background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0.15), rgba(0,0,0,0));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+  }
+
+  .best-sellers-on-sale__overlay-content {
+    width: 100%;
+    color: #fff;
+    display: grid;
+    gap: 10px;
+  }
+
+  .best-sellers-on-sale__overlay-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+    text-transform: none;
+  }
+
+  .best-sellers-on-sale__overlay-price {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 13px;
+  }
+
+  .best-sellers-on-sale__price--sale {
+    font-weight: 700;
+  }
+
+  .best-sellers-on-sale__price--compare {
+    opacity: 0.7;
+    text-decoration: line-through;
+    font-size: 12px;
+  }
+
+  .best-sellers-on-sale__atc {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    border-radius: 6px;
+    background: {{ button_bg }};
+    color: {{ button_text }};
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .best-sellers-on-sale__atc:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .best-sellers-on-sale__atc--sold-out {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    pointer-events: none;
+  }
+
+  .best-sellers-on-sale__card:hover .best-sellers-on-sale__overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .best-sellers-on-sale__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .best-sellers-on-sale__placeholder-svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .best-sellers-on-sale__empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+  }
+
+  @media (min-width: 990px) {
+    .best-sellers-on-sale__card {
+      background-color: {{ section_bg }};  /* match section background on desktop to hide grey sides */
+    }
+
+    .best-sellers-on-sale__card:hover {
+      background-color: {{ section_bg }};  /* maintain section background on hover */
+    }
+  }
+
+  @media (min-width: 750px) and (max-width: 989px) {
+    .best-sellers-on-sale__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .best-sellers-on-sale--{{ section_id }} {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    .best-sellers-on-sale__header {
+      margin-bottom: 24px;
+    }
+
+    .best-sellers-on-sale__heading {
+      font-size: 20px;
+    }
+
+    .best-sellers-on-sale__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .best-sellers-on-sale__overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .best-sellers-on-sale__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  {%- if hide_on_mobile -%}
+  @media (max-width: 749px) {
+    .best-sellers-on-sale--hide-mobile {
+      display: none !important;
+    }
+  }
+  {%- endif -%}
+</style>
+
+<script>
+  (function() {
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector('[data-section-id="' + sectionId + '"]');
+    if (!section) return;
+
+    const grid = section.querySelector('#best-sellers-grid-' + sectionId);
+    const emptyState = section.querySelector('#best-sellers-empty-' + sectionId);
+    const filterButtons = section.querySelectorAll('.best-sellers-on-sale__top-cta[data-filter]');
+    const cards = grid ? grid.querySelectorAll('.best-sellers-on-sale__card') : [];
+
+    if (!grid || filterButtons.length === 0) return;
+
+    let currentFilter = null;
+
+    {%- comment -%} Filter function - matches SCG pattern exactly {%- endcomment -%}
+    function filterByAge(ageRange) {
+      currentFilter = ageRange;
+      let visibleCount = 0;
+      const normalizedFilter = ageRange ? ageRange.toLowerCase().trim() : 'all';
+
+      {%- comment -%} Update button active states {%- endcomment -%}
+      filterButtons.forEach(function(btn) {
+        const btnFilter = btn.getAttribute('data-filter') ? btn.getAttribute('data-filter').toLowerCase().trim() : 'all';
+        if (btnFilter === normalizedFilter) {
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-selected', 'true');
+        } else {
+          btn.classList.remove('is-active');
+          btn.setAttribute('aria-selected', 'false');
+        }
+      });
+
+      {%- comment -%} Filter cards by age range (supports multiple age ranges per product) {%- endcomment -%}
+      cards.forEach(function(card) {
+        const cardAgeRangeStr = (card.getAttribute('data-age-range') || 'all').toLowerCase().trim();
+        let shouldShow = false;
+
+        if (normalizedFilter === 'all') {
+          shouldShow = true;
+        } else {
+          {%- comment -%} Split by comma or space to support multiple age ranges {%- endcomment -%}
+          const cardAgeRanges = cardAgeRangeStr.split(/[,\s]+/).map(function(r) {
+            return r.trim();
+          }).filter(function(r) {
+            return r.length > 0;
+          });
+
+          {%- comment -%} Show if filter matches any age range OR if card has "all" (always visible) {%- endcomment -%}
+          if (cardAgeRanges.indexOf('all') !== -1) {
+            shouldShow = true;
+          } else {
+            shouldShow = cardAgeRanges.indexOf(normalizedFilter) !== -1;
+          }
+        }
+
+        if (shouldShow) {
+          card.classList.remove('best-sellers-on-sale__card--filtered-out');
+          visibleCount++;
+        } else {
+          card.classList.add('best-sellers-on-sale__card--filtered-out');
+        }
+      });
+
+      {%- comment -%} Show/hide empty state {%- endcomment -%}
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.style.display = 'block';
+          if (grid) grid.style.display = 'none';
+        } else {
+          emptyState.style.display = 'none';
+          if (grid) grid.style.display = 'grid';
+        }
+      }
+    }
+
+    {%- comment -%} Reset filter function - shows all products {%- endcomment -%}
+    function resetFilter() {
+      currentFilter = null;
+      filterButtons.forEach(function(btn) {
+        btn.classList.remove('is-active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      filterByAge('all');
+    }
+
+    {%- comment -%} Add click handlers - matches SCG pattern: clicking same button resets to ALL {%- endcomment -%}
+    filterButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const filterType = this.getAttribute('data-filter');
+        const normalizedFilter = filterType ? filterType.toLowerCase().trim() : 'all';
+        
+        {%- comment -%} If clicking the same active filter, reset to ALL {%- endcomment -%}
+        if (currentFilter && currentFilter.toLowerCase().trim() === normalizedFilter) {
+          resetFilter();
+        } else {
+          filterByAge(filterType);
+        }
+      });
+    });
+
+    {%- comment -%} Initialize: show all products {%- endcomment -%}
+    filterByAge('all');
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Best Sellers on Sale",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best Sellers on Sale"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "info": "Leave blank to use default text color"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Top CTA Buttons"
+    },
+    {
+      "type": "text",
+      "id": "top_cta_1_label",
+      "label": "Top CTA 1 Label",
+      "default": "SHOP BEST SELLERS",
+      "info": "Filter tab for products with badge tag"
+    },
+    {
+      "type": "text",
+      "id": "top_cta_2_label",
+      "label": "Top CTA 2 Label",
+      "default": "SHOP ALL AW25",
+      "info": "Filter tab for products on sale"
+    },
+    {
+      "type": "color",
+      "id": "top_cta_bg",
+      "label": "Top CTA Background",
+      "default": "#b7aca4"
+    },
+    {
+      "type": "color",
+      "id": "top_cta_text",
+      "label": "Top CTA Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Badge Settings"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "Best Seller"
+    },
+    {
+      "type": "text",
+      "id": "badge_tag",
+      "label": "Badge Tag",
+      "default": "Best Seller",
+      "info": "Show badge only if product has this tag (case-insensitive). Leave blank to always show badge."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card Background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#b7aca4"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge Background",
+      "default": "#d8d0c8"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#4b4b4b"
+    },
+    {
+      "type": "header",
+      "content": "Card Dimensions"
+    },
+    {
+      "type": "text",
+      "id": "card_aspect_ratio",
+      "label": "Card Aspect Ratio",
+      "default": "4 / 5",
+      "info": "Card width to height ratio (e.g., '4 / 5' for portrait, '1 / 1' for square, '16 / 9' for landscape). Cards will maintain this ratio on all screen sizes and zoom levels."
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Image Max Width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900,
+      "info": "Maximum image width for performance optimization"
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Don't show on mobile",
+      "default": false,
+      "info": "Hide this section on mobile devices (screens 749px and below)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image",
+          "info": "Optional: Override product featured image"
+        },
+        {
+          "type": "text",
+          "id": "age_range",
+          "label": "Age Range",
+          "default": "all",
+          "info": "Enter one or more age range values separated by commas or spaces (e.g., '0.5-4', '5-7', '0.5-4,5-7', or 'all'). This must match the age range set on filter buttons. Products can belong to multiple age ranges."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Best Sellers on Sale"
+    }
+  ]
+}
+{% endschema %}

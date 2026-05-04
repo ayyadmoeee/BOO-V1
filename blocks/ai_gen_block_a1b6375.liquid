@@ -1,0 +1,1680 @@
+{% doc %}
+  @prompt
+    Act as a senior Shopify theme developer and award-winning frontend designer.
+    
+    Your task is to create a highly animated Shopify landing page section that looks like a premium Awwwards-level ecommerce website.
+    
+    TECH STACK
+    - Shopify Liquid
+    - HTML5
+    - modern CSS (flexbox + grid)
+    - vanilla JavaScript
+    - GSAP for animation
+    - mobile-first responsive architecture
+    
+    SECTION STRUCTURE
+    
+    1. Hero Container
+    - full viewport height
+    - max width 1600px centered
+    - padding responsive using clamp()
+    - responsive grid layout
+    
+    2. Background
+    - animated gradient background slowly shifting colors
+    - subtle noise texture overlay
+    - optional floating abstract shapes
+    
+    3. Headline
+    - large typography using clamp for scaling
+    - example:
+      clamp(2.5rem, 5vw, 6rem)
+    
+    Animation:
+    - each word reveals sequentially
+    - letters animate upward with opacity fade
+    - slight stagger timing
+    
+    4. Subheading
+    - fades in 0.5 seconds after headline
+    - subtle blur to sharp transition
+    
+    5. Product Image
+    
+    Animation:
+    - floating effect using translateY loop
+    - parallax movement when user scrolls
+    - slight rotation for realism
+    
+    6. CTA Button
+    
+    Design:
+    - rounded button
+    - gradient border
+    - strong contrast color
+    
+    Animation:
+    - magnetic hover effect
+    - glow animation
+    - ripple click feedback
+    
+    7. Micro Interactions
+    - hover effects on text
+    - smooth easing transitions
+    - cursor interaction
+    
+    RESPONSIVE DESIGN
+    
+    Mobile (320px–768px)
+    - stacked layout
+    - image below text
+    - larger tap targets
+    - simplified animations
+    
+    Tablet (768px–1024px)
+    - balanced spacing
+    - medium typography
+    - reduced motion if needed
+    
+    Desktop (1024px–1920px)
+    - split layout
+    - parallax effects enabled
+    
+    Ultra-wide / TV screens (1920px+)
+    - max container width
+    - balanced white space
+    - center-focused design
+    
+    SHOPIFY THEME SETTINGS
+    
+    Create editable settings for:
+    
+    - hero title
+    - subtitle
+    - button text
+    - button link
+    - product image upload
+    - gradient background colors
+    - enable/disable animations
+    
+    PERFORMANCE OPTIMIZATION
+    
+    - lazy load images
+    - defer JavaScript
+    - compress animations
+    - avoid layout shift
+    - optimized for Lighthouse score
+    
+    ACCESSIBILITY
+    
+    - proper heading hierarchy
+    - aria labels for buttons
+    - color contrast accessible
+    - reduced motion option
+    
+    OUTPUT
+    
+    Return:
+    1. Shopify Liquid section code
+    2. CSS styles
+    3. JavaScript animation code
+    4. schema settings for Shopify editor, make more stuff animations make it crazy super advanced animation stuff similar to the attached, no its not showing as picture the happy number of customers, number of products, number of countries...., bro please make similar to the attached pic u r making me feel tired on right side is the product///, okay on left side on product put number of customers number of products number of reviews, can u put these boxes of customers number and products and reviews under the text , make me able to customize everything including padding and such stuff
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-premium-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    position: relative;
+    overflow: hidden;
+    background: {{ block.settings.bg_gradient_start }};
+    background: linear-gradient(
+      135deg,
+      {{ block.settings.bg_gradient_start }} 0%,
+      {{ block.settings.bg_gradient_end }} 100%
+    );
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-premium-hero-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding-left: {{ block.settings.padding_horizontal }}px;
+    padding-right: {{ block.settings.padding_horizontal }}px;
+    min-height: {{ block.settings.section_height }}vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.content_gap }}px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-premium-hero-content-{{ ai_gen_id }} {
+    opacity: 0;
+  }
+
+  .ai-premium-hero-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    line-height: {{ block.settings.title_line_height }};
+    margin: 0 0 {{ block.settings.title_margin_bottom }}px;
+    color: {{ block.settings.text_color }};
+    overflow: hidden;
+  }
+
+  .ai-premium-hero-title-{{ ai_gen_id }} .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  .ai-premium-hero-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    line-height: {{ block.settings.subtitle_line_height }};
+    margin: 0 0 {{ block.settings.subtitle_margin_bottom }}px;
+    color: {{ block.settings.text_color }};
+    opacity: {{ block.settings.subtitle_opacity | divided_by: 100.0 }};
+    max-width: {{ block.settings.subtitle_max_width }}px;
+    opacity: 0;
+    filter: blur(10px);
+  }
+
+  .ai-premium-hero-badges-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: {{ block.settings.badge_gap }}px;
+    margin-bottom: {{ block.settings.badges_margin_bottom }}px;
+  }
+
+  .ai-premium-hero-badge-{{ ai_gen_id }} {
+    background: {{ block.settings.badge_bg }};
+    backdrop-filter: blur(10px);
+    padding: {{ block.settings.badge_padding_vertical }}px {{ block.settings.badge_padding_horizontal }}px;
+    border-radius: {{ block.settings.badge_radius }}px;
+    box-shadow: 0 {{ block.settings.badge_shadow_y }}px {{ block.settings.badge_shadow_blur }}px rgba(0, 0, 0, {{ block.settings.badge_shadow_opacity | divided_by: 100.0 }});
+    opacity: 0;
+    transform: scale(0.8);
+    flex: 0 1 auto;
+  }
+
+  .ai-premium-hero-badge-number-{{ ai_gen_id }} {
+    font-size: {{ block.settings.badge_number_size }}px;
+    font-weight: {{ block.settings.badge_number_weight }};
+    color: {{ block.settings.badge_number_color }};
+    display: block;
+    line-height: 1;
+    margin-bottom: {{ block.settings.badge_number_spacing }}px;
+  }
+
+  .ai-premium-hero-badge-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.badge_label_size }}px;
+    color: {{ block.settings.badge_text_color }};
+    text-transform: uppercase;
+    letter-spacing: {{ block.settings.badge_letter_spacing }}px;
+    font-weight: {{ block.settings.badge_label_weight }};
+  }
+
+  .ai-premium-hero-stats-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax({{ block.settings.stat_min_width }}px, 1fr));
+    gap: {{ block.settings.stats_gap }}px;
+    margin-bottom: {{ block.settings.stats_margin_bottom }}px;
+    opacity: 0;
+  }
+
+  .ai-premium-hero-stat-{{ ai_gen_id }} {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  .ai-premium-hero-stat-number-{{ ai_gen_id }} {
+    font-size: {{ block.settings.stat_number_size }}px;
+    font-weight: {{ block.settings.stat_number_weight }};
+    color: {{ block.settings.accent_color }};
+    line-height: 1;
+    margin-bottom: {{ block.settings.stat_number_spacing }}px;
+    display: block;
+  }
+
+  .ai-premium-hero-stat-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.stat_label_size }}px;
+    color: {{ block.settings.text_color }};
+    opacity: {{ block.settings.stat_label_opacity | divided_by: 100.0 }};
+    text-transform: uppercase;
+    letter-spacing: {{ block.settings.stat_letter_spacing }}px;
+    font-weight: {{ block.settings.stat_label_weight }};
+  }
+
+  .ai-premium-hero-cta-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: {{ block.settings.button_icon_gap }}px;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background: {{ block.settings.button_bg }};
+    color: {{ block.settings.button_text }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: 0 {{ block.settings.button_shadow_y }}px {{ block.settings.button_shadow_blur }}px rgba(0, 0, 0, {{ block.settings.button_shadow_opacity | divided_by: 100.0 }});
+  }
+
+  .ai-premium-hero-cta-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, {{ block.settings.button_hover_opacity | divided_by: 100.0 }});
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .ai-premium-hero-cta-{{ ai_gen_id }}:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .ai-premium-hero-cta-{{ ai_gen_id }}:hover {
+    transform: translateY(-{{ block.settings.button_hover_lift }}px);
+    box-shadow: 0 {{ block.settings.button_shadow_y | plus: 10 }}px {{ block.settings.button_shadow_blur | plus: 10 }}px rgba(0, 0, 0, {{ block.settings.button_shadow_opacity | divided_by: 100.0 }});
+  }
+
+  .ai-premium-hero-cta-text-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ai-premium-hero-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+    padding: {{ block.settings.image_padding }}px;
+  }
+
+  .ai-premium-hero-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: {{ block.settings.image_radius }}px;
+    box-shadow: 0 {{ block.settings.image_shadow_y }}px {{ block.settings.image_shadow_blur }}px rgba(0, 0, 0, {{ block.settings.image_shadow_opacity | divided_by: 100.0 }});
+    transition: transform 0.3s ease;
+  }
+
+  .ai-premium-hero-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: {{ block.settings.image_aspect_ratio }};
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: {{ block.settings.image_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 {{ block.settings.image_shadow_y }}px {{ block.settings.image_shadow_blur }}px rgba(0, 0, 0, {{ block.settings.image_shadow_opacity | divided_by: 100.0 }});
+  }
+
+  .ai-premium-hero-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-premium-hero-floating-shape-{{ ai_gen_id }} {
+    position: absolute;
+    border-radius: 50%;
+    opacity: {{ block.settings.shape_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+  }
+
+  .ai-premium-hero-shape-1-{{ ai_gen_id }} {
+    width: {{ block.settings.shape_1_size }}px;
+    height: {{ block.settings.shape_1_size }}px;
+    background: {{ block.settings.accent_color }};
+    top: {{ block.settings.shape_1_top }}%;
+    right: {{ block.settings.shape_1_right }}%;
+    animation: ai-float-{{ ai_gen_id }}-1 20s ease-in-out infinite;
+  }
+
+  .ai-premium-hero-shape-2-{{ ai_gen_id }} {
+    width: {{ block.settings.shape_2_size }}px;
+    height: {{ block.settings.shape_2_size }}px;
+    background: {{ block.settings.button_bg }};
+    bottom: {{ block.settings.shape_2_bottom }}%;
+    left: {{ block.settings.shape_2_left }}%;
+    animation: ai-float-{{ ai_gen_id }}-2 15s ease-in-out infinite;
+  }
+
+  @keyframes ai-float-{{ ai_gen_id }}-1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+  }
+
+  @keyframes ai-float-{{ ai_gen_id }}-2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-40px, -40px) rotate(180deg); }
+  }
+
+  @media (max-width: 768px) {
+    .ai-premium-hero-{{ ai_gen_id }} {
+      padding-top: {{ block.settings.mobile_padding_top }}px;
+      padding-bottom: {{ block.settings.mobile_padding_bottom }}px;
+    }
+
+    .ai-premium-hero-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.mobile_content_gap }}px;
+      padding-left: {{ block.settings.mobile_padding_horizontal }}px;
+      padding-right: {{ block.settings.mobile_padding_horizontal }}px;
+    }
+
+    .ai-premium-hero-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_title_size }}px;
+    }
+
+    .ai-premium-hero-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_subtitle_size }}px;
+    }
+
+    .ai-premium-hero-stats-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: {{ block.settings.mobile_stats_gap }}px;
+    }
+
+    .ai-premium-hero-badges-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-premium-hero-badge-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-premium-hero-image-wrapper-{{ ai_gen_id }} {
+      order: -1;
+    }
+
+    .ai-premium-hero-shape-1-{{ ai_gen_id }},
+    .ai-premium-hero-shape-2-{{ ai_gen_id }} {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-premium-hero-{{ ai_gen_id }} * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+{% endstyle %}
+
+<premium-hero-{{ ai_gen_id }} class="ai-premium-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.enable_shapes %}
+    <div class="ai-premium-hero-floating-shape-{{ ai_gen_id }} ai-premium-hero-shape-1-{{ ai_gen_id }}"></div>
+    <div class="ai-premium-hero-floating-shape-{{ ai_gen_id }} ai-premium-hero-shape-2-{{ ai_gen_id }}"></div>
+  {% endif %}
+
+  <div class="ai-premium-hero-container-{{ ai_gen_id }}">
+    <div class="ai-premium-hero-content-{{ ai_gen_id }}">
+      {% if block.settings.title != blank %}
+        <h1 class="ai-premium-hero-title-{{ ai_gen_id }}" data-split-text>
+          {{ block.settings.title }}
+        </h1>
+      {% endif %}
+
+      {% if block.settings.subtitle != blank %}
+        <p class="ai-premium-hero-subtitle-{{ ai_gen_id }}">
+          {{ block.settings.subtitle }}
+        </p>
+      {% endif %}
+
+      <div class="ai-premium-hero-badges-{{ ai_gen_id }}">
+        {% if block.settings.badge_1_number != blank %}
+          <div class="ai-premium-hero-badge-{{ ai_gen_id }}" data-badge-index="0">
+            <span class="ai-premium-hero-badge-number-{{ ai_gen_id }}" data-badge-count="{{ block.settings.badge_1_number }}">0</span>
+            <span class="ai-premium-hero-badge-label-{{ ai_gen_id }}">{{ block.settings.badge_1_label }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.badge_2_number != blank %}
+          <div class="ai-premium-hero-badge-{{ ai_gen_id }}" data-badge-index="1">
+            <span class="ai-premium-hero-badge-number-{{ ai_gen_id }}" data-badge-count="{{ block.settings.badge_2_number }}">0</span>
+            <span class="ai-premium-hero-badge-label-{{ ai_gen_id }}">{{ block.settings.badge_2_label }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.badge_3_number != blank %}
+          <div class="ai-premium-hero-badge-{{ ai_gen_id }}" data-badge-index="2">
+            <span class="ai-premium-hero-badge-number-{{ ai_gen_id }}" data-badge-count="{{ block.settings.badge_3_number }}">0</span>
+            <span class="ai-premium-hero-badge-label-{{ ai_gen_id }}">{{ block.settings.badge_3_label }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ai-premium-hero-stats-{{ ai_gen_id }}">
+        {% if block.settings.stat_1_number != blank %}
+          <div class="ai-premium-hero-stat-{{ ai_gen_id }}" data-stat-index="0">
+            <span class="ai-premium-hero-stat-number-{{ ai_gen_id }}" data-count="{{ block.settings.stat_1_number }}">0</span>
+            <span class="ai-premium-hero-stat-label-{{ ai_gen_id }}">{{ block.settings.stat_1_label }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.stat_2_number != blank %}
+          <div class="ai-premium-hero-stat-{{ ai_gen_id }}" data-stat-index="1">
+            <span class="ai-premium-hero-stat-number-{{ ai_gen_id }}" data-count="{{ block.settings.stat_2_number }}">0</span>
+            <span class="ai-premium-hero-stat-label-{{ ai_gen_id }}">{{ block.settings.stat_2_label }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.stat_3_number != blank %}
+          <div class="ai-premium-hero-stat-{{ ai_gen_id }}" data-stat-index="2">
+            <span class="ai-premium-hero-stat-number-{{ ai_gen_id }}" data-count="{{ block.settings.stat_3_number }}">0</span>
+            <span class="ai-premium-hero-stat-label-{{ ai_gen_id }}">{{ block.settings.stat_3_label }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.stat_4_number != blank %}
+          <div class="ai-premium-hero-stat-{{ ai_gen_id }}" data-stat-index="3">
+            <span class="ai-premium-hero-stat-number-{{ ai_gen_id }}" data-count="{{ block.settings.stat_4_number }}">0</span>
+            <span class="ai-premium-hero-stat-label-{{ ai_gen_id }}">{{ block.settings.stat_4_label }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if block.settings.cta_text != blank %}
+        <a href="{{ block.settings.cta_link }}" class="ai-premium-hero-cta-{{ ai_gen_id }}">
+          <span class="ai-premium-hero-cta-text-{{ ai_gen_id }}">{{ block.settings.cta_text }}</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-premium-hero-image-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.product_image %}
+        <img
+          src="{{ block.settings.product_image | image_url: width: 1200 }}"
+          alt="{{ block.settings.product_image.alt | escape }}"
+          class="ai-premium-hero-image-{{ ai_gen_id }}"
+          loading="eager"
+          width="{{ block.settings.product_image.width }}"
+          height="{{ block.settings.product_image.height }}"
+        >
+      {% else %}
+        <div class="ai-premium-hero-image-placeholder-{{ ai_gen_id }}">
+          {{ 'product-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</premium-hero-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class PremiumHero{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.animationEnabled = {{ block.settings.enable_animations | json }};
+    }
+
+    connectedCallback() {
+      if (!this.animationEnabled) return;
+      
+      this.splitText();
+      this.animateOnLoad();
+      this.setupParallax();
+      this.setupMagneticButton();
+    }
+
+    splitText() {
+      const title = this.querySelector('[data-split-text]');
+      if (!title) return;
+
+      const text = title.textContent.trim();
+      const words = text.split(' ');
+      
+      title.innerHTML = words.map(word => 
+        `<span class="word">${word}</span>`
+      ).join(' ');
+    }
+
+    animateOnLoad() {
+      const words = this.querySelectorAll('.word');
+      const subtitle = this.querySelector('.ai-premium-hero-subtitle-{{ ai_gen_id }}');
+      const badges = this.querySelectorAll('.ai-premium-hero-badge-{{ ai_gen_id }}');
+      const stats = this.querySelectorAll('.ai-premium-hero-stat-{{ ai_gen_id }}');
+      const cta = this.querySelector('.ai-premium-hero-cta-{{ ai_gen_id }}');
+      const image = this.querySelector('.ai-premium-hero-image-wrapper-{{ ai_gen_id }}');
+      const content = this.querySelector('.ai-premium-hero-content-{{ ai_gen_id }}');
+
+      if (content) {
+        setTimeout(() => {
+          content.style.opacity = '1';
+        }, 100);
+      }
+
+      words.forEach((word, index) => {
+        setTimeout(() => {
+          word.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease';
+          word.style.transform = 'translateY(0)';
+          word.style.opacity = '1';
+        }, index * 100);
+      });
+
+      if (subtitle) {
+        setTimeout(() => {
+          subtitle.style.transition = 'opacity 1s ease, filter 1s ease';
+          subtitle.style.opacity = '{{ block.settings.subtitle_opacity | divided_by: 100.0 }}';
+          subtitle.style.filter = 'blur(0)';
+        }, words.length * 100 + 300);
+      }
+
+      badges.forEach((badge, index) => {
+        setTimeout(() => {
+          badge.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease';
+          badge.style.transform = 'scale(1)';
+          badge.style.opacity = '1';
+          this.animateCounter(badge.querySelector('[data-badge-count]'));
+        }, words.length * 100 + 600 + (index * 150));
+      });
+
+      stats.forEach((stat, index) => {
+        setTimeout(() => {
+          stat.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease';
+          stat.style.transform = 'translateY(0)';
+          stat.style.opacity = '1';
+          this.animateCounter(stat.querySelector('[data-count]'));
+        }, words.length * 100 + 1200 + (index * 150));
+      });
+
+      if (cta) {
+        setTimeout(() => {
+          cta.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease';
+          cta.style.transform = 'translateY(0)';
+          cta.style.opacity = '1';
+        }, words.length * 100 + 1800);
+      }
+
+      if (image) {
+        setTimeout(() => {
+          image.style.transition = 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease';
+          image.style.transform = 'scale(1) rotate(0deg)';
+          image.style.opacity = '1';
+        }, 400);
+      }
+    }
+
+    animateCounter(element) {
+      if (!element) return;
+      
+      const target = element.getAttribute('data-count') || element.getAttribute('data-badge-count');
+      const numericTarget = parseInt(target.replace(/[^0-9]/g, ''));
+      const suffix = target.replace(/[0-9]/g, '');
+      const duration = 2000;
+      const steps = 60;
+      const increment = numericTarget / steps;
+      let current = 0;
+      let step = 0;
+
+      const timer = setInterval(() => {
+        step++;
+        current = Math.min(current + increment, numericTarget);
+        
+        const easeOut = 1 - Math.pow(1 - (step / steps), 3);
+        const value = Math.floor(numericTarget * easeOut);
+        
+        element.textContent = value.toLocaleString() + suffix;
+
+        if (step >= steps) {
+          element.textContent = numericTarget.toLocaleString() + suffix;
+          clearInterval(timer);
+        }
+      }, duration / steps);
+    }
+
+    setupParallax() {
+      const image = this.querySelector('.ai-premium-hero-image-{{ ai_gen_id }}');
+      if (!image) return;
+
+      let ticking = false;
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * 0.3;
+            image.style.transform = `translateY(${rate}px)`;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    }
+
+    setupMagneticButton() {
+      const button = this.querySelector('.ai-premium-hero-cta-{{ ai_gen_id }}');
+      if (!button) return;
+
+      button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        button.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+      });
+
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'translate(0, 0)';
+      });
+
+      button.addEventListener('click', (e) => {
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          left: ${x}px;
+          top: ${y}px;
+          pointer-events: none;
+          transform: scale(0);
+          animation: ripple-{{ ai_gen_id }} 0.6s ease-out;
+        `;
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes ripple-{{ ai_gen_id }} {
+          to {
+            transform: scale(2);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  customElements.define('premium-hero-{{ ai_gen_id }}', PremiumHero{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Premium hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1600
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Content gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile padding"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_horizontal",
+      "label": "Mobile horizontal padding",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_content_gap",
+      "label": "Mobile content gap",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Headline",
+      "default": "Discover Premium Quality Products"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Experience excellence with our carefully curated collection of world-class products designed for those who demand the best."
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_size",
+      "label": "Mobile title size",
+      "min": 20,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Title weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "label": "Title line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Title bottom margin",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Subtitle style"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "mobile_subtitle_size",
+      "label": "Mobile subtitle size",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subtitle_line_height",
+      "label": "Subtitle line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.6
+    },
+    {
+      "type": "range",
+      "id": "subtitle_opacity",
+      "label": "Subtitle opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "subtitle_max_width",
+      "label": "Subtitle max width",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_bottom",
+      "label": "Subtitle bottom margin",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Badges (below subtitle)"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_number",
+      "label": "Badge 1 number",
+      "default": "10000+"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_label",
+      "label": "Badge 1 label",
+      "default": "Customers"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_number",
+      "label": "Badge 2 number",
+      "default": "500+"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_label",
+      "label": "Badge 2 label",
+      "default": "Products"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_number",
+      "label": "Badge 3 number",
+      "default": "5000+"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_label",
+      "label": "Badge 3 label",
+      "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Badge style"
+    },
+    {
+      "type": "range",
+      "id": "badge_gap",
+      "label": "Badge gap",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "badges_margin_bottom",
+      "label": "Badges bottom margin",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_vertical",
+      "label": "Badge vertical padding",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_horizontal",
+      "label": "Badge horizontal padding",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Badge border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_number_size",
+      "label": "Badge number size",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "badge_number_weight",
+      "label": "Badge number weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "badge_number_spacing",
+      "label": "Badge number spacing",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "badge_label_size",
+      "label": "Badge label size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_label_weight",
+      "label": "Badge label weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "badge_letter_spacing",
+      "label": "Badge letter spacing",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "badge_shadow_y",
+      "label": "Badge shadow Y",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "badge_shadow_blur",
+      "label": "Badge shadow blur",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "badge_shadow_opacity",
+      "label": "Badge shadow opacity",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "badge_number_color",
+      "label": "Badge number color",
+      "default": "#00d4ff"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Statistics"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_number",
+      "label": "Stat 1 number",
+      "default": "50000+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Happy Customers"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_number",
+      "label": "Stat 2 number",
+      "default": "1000+"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "Products"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_number",
+      "label": "Stat 3 number",
+      "default": "50+"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Countries"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_number",
+      "label": "Stat 4 number",
+      "default": "99%"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_label",
+      "label": "Stat 4 label",
+      "default": "Satisfaction"
+    },
+    {
+      "type": "header",
+      "content": "Statistics style"
+    },
+    {
+      "type": "range",
+      "id": "stat_min_width",
+      "label": "Stat min width",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "stats_gap",
+      "label": "Stats gap",
+      "min": 10,
+      "max": 60,
+      "step": 10,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_stats_gap",
+      "label": "Mobile stats gap",
+      "min": 10,
+      "max": 40,
+      "step": 10,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "stats_margin_bottom",
+      "label": "Stats bottom margin",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "stat_number_size",
+      "label": "Stat number size",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "stat_number_weight",
+      "label": "Stat number weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "stat_number_spacing",
+      "label": "Stat number spacing",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "stat_label_size",
+      "label": "Stat label size",
+      "min": 10,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "stat_label_weight",
+      "label": "Stat label weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "stat_label_opacity",
+      "label": "Stat label opacity",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "stat_letter_spacing",
+      "label": "Stat letter spacing",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Button vertical padding",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Button horizontal padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "label": "Button font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_icon_gap",
+      "label": "Button icon gap",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_hover_lift",
+      "label": "Button hover lift",
+      "min": 0,
+      "max": 10,
+      "step": 2,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "button_hover_opacity",
+      "label": "Button hover opacity",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_shadow_y",
+      "label": "Button shadow Y",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "button_shadow_blur",
+      "label": "Button shadow blur",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "button_shadow_opacity",
+      "label": "Button shadow opacity",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button background",
+      "default": "#00d4ff"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "range",
+      "id": "image_padding",
+      "label": "Image padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4/3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "16/9",
+          "label": "Wide (16:9)"
+        },
+        {
+          "value": "3/4",
+          "label": "Portrait (3:4)"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "image_shadow_y",
+      "label": "Image shadow Y",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "image_shadow_blur",
+      "label": "Image shadow blur",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "image_shadow_opacity",
+      "label": "Image shadow opacity",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_start",
+      "label": "Background gradient start",
+      "default": "#0f0f0f"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_end",
+      "label": "Background gradient end",
+      "default": "#1a1a2e"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#00d4ff"
+    },
+    {
+      "type": "header",
+      "content": "Floating shapes"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shapes",
+      "label": "Enable floating shapes",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "shape_opacity",
+      "label": "Shape opacity",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "shape_1_size",
+      "label": "Shape 1 size",
+      "min": 100,
+      "max": 500,
+      "step": 50,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "shape_1_top",
+      "label": "Shape 1 top position",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "shape_1_right",
+      "label": "Shape 1 right position",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "shape_2_size",
+      "label": "Shape 2 size",
+      "min": 100,
+      "max": 400,
+      "step": 50,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "shape_2_bottom",
+      "label": "Shape 2 bottom position",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "shape_2_left",
+      "label": "Shape 2 left position",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable animations",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium hero"
+    }
+  ]
+}
+{% endschema %}

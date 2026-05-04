@@ -1,0 +1,877 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-totals.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  {%- assign summary_text_font = section.settings.summary_text_font -%}
+  {%- assign summary_bg_value = section.settings.summary_background_custom | strip -%}
+  {%- assign summary_text_color_value = section.settings.summary_text_color | default: '#f5f7ff' -%}
+  {%- if summary_bg_value == blank -%}
+    {%- assign summary_bg_value = section.settings.summary_background -%}
+  {%- else -%}
+    {%- assign summary_bg_value = summary_bg_value | replace: 'background:', '' | replace: ';', '' | strip -%}
+  {%- endif -%}
+  {{ summary_text_font | font_face: font_display: 'swap' }}
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Force all cart footer text to black, except buttons */
+  #main-cart-footer,
+  #main-cart-footer *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .cart__footer,
+  .cart__footer *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .cart__blocks,
+  .cart__blocks *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .totals,
+  .totals *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .cart__note,
+  .cart__note *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .tax-note,
+  .tax-note *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+  .cart__ctas,
+  .cart__ctas *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button) {
+    color: {{ summary_text_color_value }} !important;
+  }
+
+  /* Keep discounted line red everywhere */
+  #main-cart-footer .cart-summary-line--after-discount .cart-summary-line__value,
+  #main-cart-footer .cart-summary-line.cart-summary-line--after-discount .cart-summary-line__value {
+    color: #ff5a6b !important;
+  }
+
+  /* Keep button text white */
+  .button,
+  button,
+  .cart__checkout-button,
+  .cart__update-button,
+  .button *,
+  button *,
+  .cart__checkout-button *,
+  .cart__update-button * {
+    color: #ffffff !important;
+  }
+
+  @media screen and (min-width: 990px) {
+    #MainContent > .shopify-section:last-of-type {
+      margin-top: 0;
+    }
+
+    #MainContent .cart-footer-shell {
+      margin-top: var(--cart-align-offset, 98px) !important;
+      width: 100% !important;
+      max-width: none !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    #main-cart-footer {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    #main-cart-footer .page-width {
+      max-width: none;
+    }
+
+    /* Summary card: dark glass */
+    #main-cart-footer .cart__footer {
+      position: relative;
+      top: 0;
+      background: {{ summary_bg_value }};
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(16px) saturate(145%);
+      -webkit-backdrop-filter: blur(16px) saturate(145%);
+      border-radius: {{ section.settings.summary_radius }}px;
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-family: {{ summary_text_font.family }}, {{ summary_text_font.fallback_families }};
+      font-style: {{ summary_text_font.style }};
+      font-weight: {{ summary_text_font.weight }};
+    }
+
+    #main-cart-footer .cart-summary-inner {
+      width: 290px;
+      min-height: 317px;
+      padding: 18px 40px 40px;
+      box-sizing: content-box;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #main-cart-footer .section-{{ section.id }}-padding {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    #main-cart-footer .cart__footer > * {
+      width: auto;
+      max-width: none;
+    }
+
+    #main-cart-footer .cart__footer > * + * {
+      margin-left: 0;
+    }
+
+    #main-cart-footer .cart__note {
+      display: none !important;
+    }
+
+    #main-cart-footer .cart__blocks { width: 100%; }
+
+    #main-cart-footer .cart__blocks .js-contents:first-child {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #main-cart-footer .cart-summary-lines {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    #main-cart-footer .cart-summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: calc(1.3rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+      color: rgba(245, 247, 255, 0.88);
+    }
+
+    #main-cart-footer .cart-summary-line__label {
+      opacity: 0.95;
+    }
+
+    #main-cart-footer .cart-summary-line__value {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    #main-cart-footer .cart-summary-line--after-discount .cart-summary-line__value {
+      color: #ff5a6b !important;
+      font-weight: 700;
+    }
+
+    #main-cart-footer .cart-summary-line--original.is-discounted .cart-summary-line__value {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(245, 247, 255, 0.75);
+      opacity: 0.8;
+    }
+
+    #main-cart-footer .cart-summary-line--total {
+      margin-top: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    #main-cart-footer .cart-summary-line--total .cart-summary-line__label {
+      font-size: calc(1.7rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+      font-weight: 700;
+      color: #f5f7ff;
+    }
+
+    #main-cart-footer .cart-summary-line--total .cart-summary-line__value {
+      font-size: calc(2rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+      font-weight: 700;
+      color: #f5f7ff;
+      letter-spacing: -0.02em;
+    }
+
+    /* Checkout: full width glass button */
+    #main-cart-footer .cart__checkout-button {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      border-radius: {{ section.settings.checkout_button_radius | default: 14 }}px;
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: 1.5rem;
+      transition: background-color 0.2s ease;
+      transform: none !important;
+    }
+
+    #main-cart-footer .cart__checkout-button:hover {
+      background: {{ section.settings.checkout_button_hover_color | default: 'rgba(255, 255, 255, 0.2)' }};
+      transform: none !important;
+    }
+
+    #main-cart-footer .cart__checkout-button:focus,
+    #main-cart-footer .cart__checkout-button:active {
+      transform: none !important;
+    }
+
+    #main-cart-footer .cart__checkout-button::before,
+    #main-cart-footer .cart__checkout-button::after {
+      display: none !important;
+    }
+
+    #main-cart-footer .cart-payment-methods {
+      margin-top: 8px;
+      padding: 16px 20px;
+      border-radius: 24px;
+      background: {{ summary_bg_value }};
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(16px) saturate(145%);
+      -webkit-backdrop-filter: blur(16px) saturate(145%);
+    }
+
+    #main-cart-footer .cart__footer,
+    #main-cart-footer .cart__footer *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+    #main-cart-footer .cart-payment-methods,
+    #main-cart-footer .cart-payment-methods * {
+      color: {{ summary_text_color_value }};
+    }
+
+    /* Subtext: smaller, muted grey */
+    #main-cart-footer .tax-note {
+      color: {{ summary_text_color_value }};
+      font-size: calc(1.2rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+      line-height: 1.4;
+    }
+  }
+
+  /* Summary title at top */
+  #main-cart-footer .cart-summary__title {
+    font-size: calc(1.9rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: {{ summary_text_color_value }};
+    letter-spacing: -0.02em;
+  }
+
+  /* Coupon row */
+  #main-cart-footer .cart-summary__coupon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    color: {{ summary_text_color_value }};
+    font-size: calc(1.4rem * {{ section.settings.summary_text_scale | divided_by: 100.0 }});
+    cursor: pointer;
+    transition: color 0.2s ease;
+    background: transparent;
+    border: 0;
+    width: 100%;
+    text-align: left;
+  }
+
+  #main-cart-footer .cart-summary__coupon:hover {
+    color: {{ summary_text_color_value }};
+  }
+
+  #main-cart-footer .cart-summary__coupon-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  #main-cart-footer .cart-summary__coupon-panel {
+    display: none;
+    gap: 8px;
+    align-items: center;
+    margin-top: -4px;
+    margin-bottom: 4px;
+  }
+
+  #main-cart-footer .cart-summary__coupon-panel.is-open {
+    display: flex;
+  }
+
+  #main-cart-footer .cart-summary__coupon-input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    padding: 0 12px;
+    font-size: 1.2rem;
+  }
+
+  #main-cart-footer .cart-summary__coupon-apply {
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 0 12px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Payment methods: small pill badges, subtle border */
+  .cart-payment-methods__title {
+    margin: 0 0 10px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: {{ summary_text_color_value }};
+    text-align: center;
+  }
+
+  .cart-payment-methods__list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cart-payment-methods__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: {{ summary_text_color_value }};
+    letter-spacing: 0.02em;
+    gap: 8px;
+  }
+
+  .cart-payment-methods__icon {
+    width: {{ section.settings.payment_icon_size | default: 22 }}px;
+    height: {{ section.settings.payment_icon_size | default: 22 }}px;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media screen and (max-width: 989px) {
+    #main-cart-footer .cart__footer {
+      background: {{ summary_bg_value }} !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2) !important;
+      backdrop-filter: blur(14px) saturate(140%) !important;
+      -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+      border-radius: {{ section.settings.summary_radius }}px !important;
+      padding: 0 !important;
+    }
+
+    #main-cart-footer .cart-summary-inner {
+      width: 100%;
+      min-height: 0;
+      padding: 18px 20px 20px;
+      box-sizing: border-box;
+      gap: 14px;
+    }
+
+    #main-cart-footer .cart-summary__title,
+    #main-cart-footer .cart-summary__coupon,
+    #main-cart-footer .cart-payment-methods__title {
+      color: {{ summary_text_color_value }} !important;
+    }
+
+    #main-cart-footer .cart-summary__coupon-input,
+    #main-cart-footer .cart-summary__coupon-apply {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      color: #ffffff !important;
+      border-radius: 10px !important;
+    }
+
+    #main-cart-footer .cart-payment-methods {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: {{ summary_bg_value }} !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2) !important;
+      backdrop-filter: blur(14px) saturate(140%) !important;
+      -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+      border-radius: 20px !important;
+    }
+
+    #main-cart-footer .cart-payment-methods__badge {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      border-radius: 999px !important;
+      color: {{ summary_text_color_value }} !important;
+    }
+
+    #main-cart-footer .cart__footer,
+    #main-cart-footer .cart__footer *:not(.button):not(button):not(.cart__checkout-button):not(.cart__update-button),
+    #main-cart-footer .cart-payment-methods,
+    #main-cart-footer .cart-payment-methods * {
+      color: {{ summary_text_color_value }} !important;
+    }
+
+    #main-cart-footer .cart__checkout-button {
+      min-height: 48px;
+      padding: 14px 20px;
+    }
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1365px), screen and (min-width: 768px) and (max-height: 767px) {
+    #main-cart-footer .cart__footer {
+      border-radius: calc({{ section.settings.summary_radius }}px - 4px);
+    }
+
+    #main-cart-footer .cart-summary-inner {
+      width: min(100%, 340px);
+      min-height: 0;
+      padding: 16px 18px 18px;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
+    #main-cart-footer .cart-summary-lines {
+      gap: 10px;
+    }
+
+    #main-cart-footer .cart-payment-methods {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="gradient color-{{ section.settings.color_scheme }}{% if cart == empty %} is-empty{% endif %}"
+  id="main-cart-footer"
+  data-id="{{ section.id }}"
+>
+  <div class="page-width cart-footer-shell">
+    <div class="cart__footer isolate section-{{ section.id }}-padding">
+      <div class="cart-summary-inner">
+        <h2 class="cart-summary__title">{{ section.settings.summary_title_text }}</h2>
+        <button class="cart-summary__coupon" type="button" data-coupon-toggle>
+          <svg class="cart-summary__coupon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="6" x="5" y="4" rx="1"/><path d="M9 10h6"/><rect width="14" height="6" x="5" y="14" rx="1"/><path d="M9 20h6"/></svg>
+          <span>Use a coupon</span>
+        </button>
+        <form class="cart-summary__coupon-panel" data-coupon-form>
+          <input class="cart-summary__coupon-input" type="text" name="coupon" placeholder="Enter coupon code" autocomplete="off">
+          <button class="cart-summary__coupon-apply" type="submit">Apply</button>
+        </form>
+        {%- if settings.show_cart_note -%}
+          <cart-note class="cart__note field">
+            <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+            <textarea
+              class="text-area field__input"
+              name="note"
+              form="cart"
+              id="Cart-note"
+              placeholder="{{ 'sections.cart.note' | t }}"
+            >{{ cart.note }}</textarea>
+          </cart-note>
+        {%- endif -%}
+
+        <div class="cart__blocks">
+        {% for block in section.blocks %}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'subtotal' -%}
+              <div class="js-contents" {{ block.shopify_attributes }}>
+                {%- liquid
+                  assign original_total_price = cart.original_total_price | default: cart.items_subtotal_price
+                  assign discounted_total_price = cart.total_price
+                  assign has_discount = false
+                  if original_total_price > discounted_total_price
+                    assign has_discount = true
+                  endif
+                  assign delivery_label = section.settings.delivery_price_label | default: '$5.00'
+                  assign delivery_numeric = delivery_label | remove: '$' | remove: 'USD' | remove: 'usd' | remove: ',' | strip | plus: 0
+                  assign delivery_cents = delivery_numeric | times: 100 | round
+                  assign free_delivery_min = settings.free_delivery_min | default: 0 | times: 100
+                  assign delivery_display = delivery_label
+                  assign delivery_applied_cents = delivery_cents
+                  if free_delivery_min > 0 and cart.total_price >= free_delivery_min
+                    assign delivery_display = 'Free'
+                    assign delivery_applied_cents = 0
+                  elsif delivery_cents > 0
+                    assign delivery_display = delivery_cents | money
+                  endif
+                  assign final_total_with_delivery = cart.total_price | plus: delivery_applied_cents
+                -%}
+                <div>
+                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                      {%- for discount in cart.cart_level_discount_applications -%}
+                        <li class="discounts__discount discounts__discount--position">
+                          {{- 'icon-discount.svg' | inline_asset_content -}}
+                          {{ discount.title | escape }}
+                          (-{{ discount.total_allocated_amount | money }})
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                <div class="cart-summary-lines">
+                  <div class="cart-summary-line">
+                    <span class="cart-summary-line__label">{{ cart.item_count }} item{% if cart.item_count != 1 %}s{% endif %}</span>
+                    <span class="cart-summary-line__value">{{ cart.items_subtotal_price | money }}</span>
+                  </div>
+                  <div class="cart-summary-line cart-summary-line--original{% if has_discount %} is-discounted{% endif %}">
+                    <span class="cart-summary-line__label">{{ section.settings.original_price_text }}</span>
+                    <span class="cart-summary-line__value">{{ original_total_price | money }}</span>
+                  </div>
+                  {%- if section.settings.show_after_discount_line -%}
+                    <div class="cart-summary-line cart-summary-line--after-discount">
+                      <span class="cart-summary-line__label">{{ section.settings.after_discount_text }}</span>
+                      <span class="cart-summary-line__value" style="color:#ff5a6b !important;">{{ discounted_total_price | money }}</span>
+                    </div>
+                  {%- endif -%}
+                  <div class="cart-summary-line">
+                    <span class="cart-summary-line__label">{{ section.settings.delivery_text }}</span>
+                    <span class="cart-summary-line__value">{{ delivery_display }}</span>
+                  </div>
+                  <div class="cart-summary-line cart-summary-line--total">
+                    <span class="cart-summary-line__label">{{ section.settings.total_text }}</span>
+                    <span class="cart-summary-line__value">{{ final_total_with_delivery | money }}</span>
+                  </div>
+                </div>
+
+                {%- assign cart_shipping_link = settings.cart_shipping_link | default: shop.shipping_policy.url -%}
+                <small class="tax-note caption-large rte">
+                  {%- if cart.duties_included and cart.taxes_included -%}
+                    {%- if cart_shipping_link == blank -%}
+                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
+                        | t: link: cart_shipping_link
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
+                    {%- if cart_shipping_link == blank -%}
+                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
+                        | t: link: cart_shipping_link
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
+                    {%- if cart_shipping_link == blank -%}
+                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                        | t: link: cart_shipping_link
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
+                    {%- if cart_shipping_link == blank -%}
+                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                        | t: link: cart_shipping_link
+                      }}
+                    {%- endif -%}
+                  {%- endif -%}
+                </small>
+              </div>
+            {%- else -%}
+              <div class="cart__ctas" {{ block.shopify_attributes }}>
+                <button
+                  type="submit"
+                  id="checkout"
+                  class="cart__checkout-button button"
+                  name="checkout"
+                  {% if cart == empty %}
+                    disabled
+                  {% endif %}
+                  form="cart"
+                >
+                  {{ 'sections.cart.checkout' | t }}
+                </button>
+              </div>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        {% endfor %}
+
+          <div id="cart-errors"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-payment-methods">
+      <h3 class="cart-payment-methods__title">Supported Payment Methods</h3>
+      <div class="cart-payment-methods__list" role="list" aria-label="Supported payment methods">
+        <span class="cart-payment-methods__badge" role="listitem">
+          {%- if section.settings.payment_method_1_icon != blank -%}
+            {{ section.settings.payment_method_1_icon | image_url: width: section.settings.payment_icon_size | image_tag: class: 'cart-payment-methods__icon', loading: 'lazy', alt: section.settings.payment_method_1_label }}
+          {%- else -%}
+            {{ section.settings.payment_method_1_label | default: 'COD' }}
+          {%- endif -%}
+        </span>
+        <span class="cart-payment-methods__badge" role="listitem">
+          {%- if section.settings.payment_method_2_icon != blank -%}
+            {{ section.settings.payment_method_2_icon | image_url: width: section.settings.payment_icon_size | image_tag: class: 'cart-payment-methods__icon', loading: 'lazy', alt: section.settings.payment_method_2_label }}
+          {%- else -%}
+            {{ section.settings.payment_method_2_label | default: 'WHISH' }}
+          {%- endif -%}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var root = document.getElementById('main-cart-footer');
+    if (!root) return;
+
+    var toggle = root.querySelector('[data-coupon-toggle]');
+    var form = root.querySelector('[data-coupon-form]');
+    if (!toggle || !form) return;
+
+    toggle.addEventListener('click', function() {
+      form.classList.toggle('is-open');
+      if (form.classList.contains('is-open')) {
+        var input = form.querySelector('input[name="coupon"]');
+        if (input) input.focus();
+      }
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var input = form.querySelector('input[name="coupon"]');
+      var code = input ? input.value.trim() : '';
+      if (!code) return;
+      window.location.href = '/discount/' + encodeURIComponent(code) + '?redirect=/cart';
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Summary Card Style"
+    },
+    {
+      "type": "color_background",
+      "id": "summary_background",
+      "label": "Summary background (color or gradient)",
+      "default": "rgba(18, 22, 30, 0.58)"
+    },
+    {
+      "type": "text",
+      "id": "summary_background_custom",
+      "label": "Custom summary background CSS value (optional)",
+      "info": "Use only the value, e.g. linear-gradient(135deg, #6A11CB 0%, #FF5ACD 100%)"
+    },
+    {
+      "type": "range",
+      "id": "summary_radius",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Summary radius",
+      "default": 24
+    },
+    {
+      "type": "font_picker",
+      "id": "summary_text_font",
+      "label": "Summary text font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "summary_text_scale",
+      "min": 70,
+      "max": 140,
+      "step": 5,
+      "unit": "%",
+      "label": "Summary text size",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "summary_text_color",
+      "label": "Summary text color",
+      "default": "#f5f7ff"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },    
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Summary Lines"
+    },
+    {
+      "type": "text",
+      "id": "summary_title_text",
+      "label": "Summary Title",
+      "default": "Summary"
+    },
+    {
+      "type": "text",
+      "id": "original_price_text",
+      "label": "Original Price Label",
+      "default": "Original Price"
+    },
+    {
+      "type": "text",
+      "id": "after_discount_text",
+      "label": "After Discount Label",
+      "default": "After discount price"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_after_discount_line",
+      "label": "Show After Discount Line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "delivery_text",
+      "label": "Delivery Label",
+      "default": "Delivery"
+    },
+    {
+      "type": "text",
+      "id": "total_text",
+      "label": "Total Label",
+      "default": "Total"
+    },
+    {
+      "type": "text",
+      "id": "delivery_price_label",
+      "label": "Delivery Price Label",
+      "default": "$5.00"
+    },
+    {
+      "type": "header",
+      "content": "Checkout Button"
+    },
+    {
+      "type": "color",
+      "id": "checkout_button_hover_color",
+      "label": "Checkout Hover Color",
+      "default": "#3b4759"
+    },
+    {
+      "type": "range",
+      "id": "checkout_button_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Checkout Border Radius",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Payment Methods"
+    },
+    {
+      "type": "text",
+      "id": "payment_method_1_label",
+      "label": "Payment Method 1 Label",
+      "default": "COD"
+    },
+    {
+      "type": "image_picker",
+      "id": "payment_method_1_icon",
+      "label": "Payment Method 1 Icon"
+    },
+    {
+      "type": "text",
+      "id": "payment_method_2_label",
+      "label": "Payment Method 2 Label",
+      "default": "WHISH"
+    },
+    {
+      "type": "range",
+      "id": "payment_icon_size",
+      "min": 14,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Payment Icon Size",
+      "default": 22
+    },
+    {
+      "type": "image_picker",
+      "id": "payment_method_2_icon",
+      "label": "Payment Method 2 Icon"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,96 @@
+/* ============================================================
+   Contact Form — Fully Adaptive (fluid across all screen sizes)
+   ============================================================ */
+
+.contact img {
+  max-width: 100%;
+}
+
+.contact .form__message {
+  align-items: flex-start;
+}
+
+.contact .icon-success {
+  margin-top: 0.2rem;
+}
+
+/* ── Container: fluid, consistent across all laptop widths ── */
+/*
+   Overrides page-width--narrow's fixed 726px cap and the
+   awkward 9rem padding at 750–989px so the form width scales
+   smoothly with the viewport instead of snapping.
+   clamp(32rem, 55vw, 68rem) → ~560px on 1024px, ~660px on 1200px,
+   capped at 680px so it never feels too wide on large monitors.
+*/
+.contact {
+  width: clamp(32rem, 55vw, 68rem) !important;
+  max-width: 100% !important;
+  padding-left: clamp(1.6rem, 3vw, 4rem) !important;
+  padding-right: clamp(1.6rem, 3vw, 4rem) !important;
+  box-sizing: border-box;
+}
+
+/* ── Heading ─────────────────────────────────────────────── */
+.contact .title {
+  font-size: clamp(2rem, 3.5vw, 3.6rem);
+  line-height: 1.2;
+  margin-bottom: clamp(2rem, 3vw, 3.2rem);
+}
+
+/* ── Fields spacing ──────────────────────────────────────── */
+.contact .field {
+  margin-bottom: clamp(1.2rem, 1.6vw, 2rem);
+}
+
+/* ── Name + Email 2-col grid (all non-mobile sizes) ─────── */
+@media screen and (min-width: 600px) {
+  .contact__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: clamp(1.2rem, 2vw, 2.4rem);
+  }
+}
+
+/* ── Field inputs & textarea ─────────────────────────────── */
+.contact .field__input,
+.contact .text-area {
+  width: 100%;
+  min-height: clamp(4.4rem, 5vw, 5.4rem);
+  padding: clamp(1rem, 1.2vw, 1.6rem) clamp(1.2rem, 1.5vw, 2rem);
+  font-size: clamp(1.4rem, 1.4vw, 1.6rem);
+  border-radius: 0.6rem;
+  box-sizing: border-box;
+}
+
+/* ── Textarea height — fluid, not fixed rows ─────────────── */
+.contact .text-area {
+  height: clamp(16rem, 20vw, 28rem);
+  resize: vertical;
+}
+
+/* ── Field labels ────────────────────────────────────────── */
+.contact .field__label {
+  font-size: clamp(1.2rem, 1.2vw, 1.4rem);
+}
+
+/* ── Submit button ───────────────────────────────────────── */
+.contact__button {
+  margin-top: clamp(2rem, 3vw, 4rem);
+}
+
+/* Full width on small screens for easy tap */
+@media screen and (max-width: 599px) {
+  .contact__button .button {
+    width: 100%;
+    justify-content: center;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+    font-size: 1.6rem;
+  }
+}
+
+/* ── Error / status messages ─────────────────────────────── */
+.contact .form-status-list {
+  font-size: clamp(1.2rem, 1.4vw, 1.4rem);
+  margin-bottom: clamp(1.2rem, 1.6vw, 2rem);
+}

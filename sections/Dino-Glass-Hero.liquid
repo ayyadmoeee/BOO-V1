@@ -1,0 +1,154 @@
+{% assign id = section.id | replace: '_','' | downcase %}
+
+{% style %}
+.dgh-{{ id }}{
+  position:relative;
+  width:100%;
+  min-height:{{ section.settings.section_height }}px;
+  overflow:hidden;
+  border-radius:{{ section.settings.section_radius }}px;
+}
+.dgh-{{ id }}__bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+.dgh-{{ id }}__bg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.dgh-{{ id }}__overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(8,40,20,.25),
+    rgba(8,40,20,.85)
+  );
+}
+.dgh-{{ id }}__inner{
+  position:relative;
+  z-index:2;
+  padding:{{ section.settings.section_padding }}px;
+  display:flex;
+  justify-content:center;
+}
+.dgh-{{ id }}__grid{
+  width:100%;
+  max-width:{{ section.settings.max_width }}px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:{{ section.settings.gap }}px;
+}
+.dgh-{{ id }}__card{
+  position:relative;
+  background: {{ section.settings.glass_color | color_modify:'alpha', section.settings.glass_opacity | divided_by:100.0 }};
+  backdrop-filter: blur({{ section.settings.blur }}px);
+  -webkit-backdrop-filter: blur({{ section.settings.blur }}px);
+  border-radius:{{ section.settings.card_radius }}px;
+  padding:{{ section.settings.card_padding }}px;
+  color:{{ section.settings.text_color }};
+  display:flex;
+  align-items:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+.dgh-{{ id }}__card--top{
+  grid-column:1 / -1;
+  height:{{ section.settings.top_card_height }}px;
+}
+.dgh-{{ id }}__card--left,
+.dgh-{{ id }}__card--right{
+  height:{{ section.settings.bottom_card_height }}px;
+}
+.dgh-{{ id }}__content h2{
+  margin:0 0 10px;
+  font-size:{{ section.settings.heading_size }}px;
+  font-weight:800;
+}
+.dgh-{{ id }}__content p{
+  margin:0;
+  font-size:{{ section.settings.text_size }}px;
+  line-height:1.6;
+}
+@media(max-width:900px){
+  .dgh-{{ id }}__grid{ grid-template-columns:1fr; }
+}
+{% endstyle %}
+
+<section class="dgh-{{ id }}">
+  <div class="dgh-{{ id }}__bg">
+    {% if section.settings.background_image %}
+      <img src="{{ section.settings.background_image | image_url: width:2400 }}" loading="lazy">
+    {% endif %}
+    <div class="dgh-{{ id }}__overlay"></div>
+  </div>
+
+  <div class="dgh-{{ id }}__inner">
+    <div class="dgh-{{ id }}__grid">
+
+      <div class="dgh-{{ id }}__card dgh-{{ id }}__card--top">
+        <div class="dgh-{{ id }}__content">
+          <h2>{{ section.settings.top_heading }}</h2>
+          {{ section.settings.top_text }}
+        </div>
+      </div>
+
+      <div class="dgh-{{ id }}__card dgh-{{ id }}__card--left">
+        <div class="dgh-{{ id }}__content">
+          <h2>{{ section.settings.left_heading }}</h2>
+          {{ section.settings.left_text }}
+        </div>
+      </div>
+
+      <div class="dgh-{{ id }}__card dgh-{{ id }}__card--right">
+        <div class="dgh-{{ id }}__content">
+          <h2>{{ section.settings.right_heading }}</h2>
+          {{ section.settings.right_text }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Dino Glass Hero",
+  "settings": [
+    { "type":"image_picker","id":"background_image","label":"Background image" },
+
+    { "type":"range","id":"section_height","label":"Section height","min":400,"max":1200,"step":40,"unit":"px","default":800 },
+    { "type":"range","id":"section_padding","label":"Section padding","min":0,"max":80,"step":4,"unit":"px","default":28 },
+
+    { "type":"range","id":"max_width","label":"Content width","min":600,"max":1600,"step":40,"unit":"px","default":1200 },
+    { "type":"range","id":"gap","label":"Gap","min":8,"max":60,"step":4,"unit":"px","default":24 },
+
+    { "type":"range","id":"blur","label":"Glass blur","min":0,"max":30,"step":1,"unit":"px","default":18 },
+    { "type":"range","id":"glass_opacity","label":"Glass opacity","min":5,"max":90,"step":5,"unit":"%","default":20 },
+    { "type":"color","id":"glass_color","label":"Glass color","default":"#0c3a1e" },
+
+    { "type":"range","id":"card_radius","label":"Card radius","min":0,"max":40,"step":2,"unit":"px","default":24 },
+    { "type":"range","id":"card_padding","label":"Card padding","min":16,"max":80,"step":4,"unit":"px","default":36 },
+
+    { "type":"range","id":"top_card_height","label":"Top card height","min":240,"max":800,"step":40,"unit":"px","default":400 },
+    { "type":"range","id":"bottom_card_height","label":"Bottom cards height","min":240,"max":800,"step":40,"unit":"px","default":360 },
+
+    { "type":"color","id":"text_color","label":"Text color","default":"#ffffff" },
+    { "type":"range","id":"heading_size","label":"Heading size","min":18,"max":64,"step":2,"unit":"px","default":36 },
+    { "type":"range","id":"text_size","label":"Text size","min":12,"max":28,"step":1,"unit":"px","default":16 },
+
+    { "type":"text","id":"top_heading","label":"Top heading","default":"As wild as a child" },
+    { "type":"richtext","id":"top_text","label":"Top text","default":"<p>Do you do everything they say NO to?</p>" },
+
+    { "type":"text","id":"left_heading","label":"Left heading","default":"Warning!" },
+    { "type":"richtext","id":"left_text","label":"Left text","default":"<p>Incredibly Naughty</p>" },
+
+    { "type":"text","id":"right_heading","label":"Right heading","default":"Cool • Cute • Dangerous" },
+    { "type":"richtext","id":"right_text","label":"Right text","default":"<p>Stay wild at your own risk</p>" }
+  ],
+  "presets":[
+    { "name":"Dino Glass Hero" }
+  ]
+}
+{% endschema %}

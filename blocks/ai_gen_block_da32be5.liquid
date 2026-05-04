@@ -1,0 +1,587 @@
+{% doc %}
+  @prompt
+    Create a Shop All section with exactly 5 product tiles in a single horizontal row that never wraps on any screen size (mobile, tablet, desktop). Requirements:
+    
+    LAYOUT:
+    - Always display 5 tiles in ONE ROW (no wrapping, no stacking, no multi-row)
+    - Force 5-column grid layout at all breakpoints (0px to 1025px+)
+    - Tiles shrink proportionally on smaller screens while maintaining aspect ratio
+    - Consistent height across all 5 tiles
+    - Equal spacing between tiles
+    
+    TILE SPECIFICATIONS:
+    - Each tile is clickable and links to its product
+    - Display product image/video/GIF
+    - Maintain fixed aspect ratio so tiles look identical across devices
+    - Smooth hover effects (scale, overlay, or fade as appropriate)
+    
+    RESPONSIVE BEHAVIOR:
+    - Mobile (0-767px): 5 tiles in single row, shrink to fit
+    - Tablet (768-1024px): 5 tiles in single row, shrink to fit  
+    - Desktop (1025px+): 5 tiles in single row, full size
+    - Use CSS grid or flexbox with no-wrap to prevent stacking
+    - Preserve proportions and spacing at all screen widths
+    
+    EDITOR CONTROLS:
+    - Allow selecting exactly 5 products from theme editor
+    - Option to adjust tile spacing/gap
+    - Option to adjust section padding
+    - Maintain single-row constraint regardless of settings, Shopify “Shop All” Page – 5 Product Tiles (Pixel-Accurate) – Build Spec
+    Goal
+    
+    Recreate exactly what is shown in my reference video for the Shop All page, which contains ONLY 5 products (5 custom items/sections). The design must be pixel-accurate at 100% browser zoom and match the layout, sizing, spacing, hover effects, and behavior shown in the video.
+    
+    1) Layout Requirements (ALL screen sizes)
+    
+    This layout must stay identical for:
+    
+    Mobile: 0px – 767px
+    
+    Tablet: 768px – 1024px
+    
+    Desktop: 1025px+
+    
+    ✅ All 5 products must ALWAYS appear in ONE SINGLE ROW
+    ✅ No wrapping. No stacking. No multi-row layouts.
+    ❌ Not allowed: 2 + 2 + 1, 3 + 2, or any other wrap behavior.
+    
+    Implementation requirement:
+    
+    Force a 5-column layout at all breakpoints.
+    
+    The row must remain a single line; if screen is small, tiles must shrink to fit while preserving proportions.
+    
+    Use a fixed aspect ratio / consistent height so the tiles look identical to the video across devices.
+    
+    2) Tile Count
+    
+    Exactly 5 tiles (no more, no less).
+    
+    Each tile links to its corresponding product.
+    
+    Each tile shows the same visuals (image/video/GIF behavior) as the video.
+    
+    3) Exact Measurements (from reference video @ 100% zoom)
+    
+    The developer must match these values as closely as possible and adjust only if necessary to match the video perfectly:
+    
+    Tile size (each box)
+    
+    Width: ~316–318px
+    
+    Height: ~673px
+    
+    Shape: Tall card (portrait)
+    
+    Spacing
+    
+    Gap between tiles: ~32px
+    
+    Outer page margins: large “gallery style” breathing space (left and right margins visually wide)
+    
+    Top padding: large spacing above the row (the row does not start near the top)
+    
+    Corner radius + shadow
+    
+    Border radius: ~18–22px
+    
+    Shadow: soft and subtle, not harsh (matches video)
+    
+    Important: The final spacing must match the video visually, even if the developer needs to slightly fine-tune these values after implementing.
+    
+    4) Hover Effects (Must match video exactly)
+    
+    When hovering a tile (desktop behavior):
+    
+    Hovered tile stays sharp
+    
+    All other tiles blur + fade
+    
+    Blur mus
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-shop-all-wrapper-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.top_padding }}px {{ block.settings.side_margin }}px {{ block.settings.bottom_padding }}px;
+    box-sizing: border-box;
+  }
+
+  .ai-shop-all-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.tile_gap }}px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .ai-shop-all-tile-{{ ai_gen_id }} {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: {{ block.settings.tile_height }}px;
+    overflow: hidden;
+    border-radius: {{ block.settings.border_radius }}px;
+    text-decoration: none;
+    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y }}px {{ block.settings.shadow_blur }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity }});
+    transition: filter 0.4s ease, opacity 0.4s ease, transform 0.3s ease;
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  .ai-shop-all-row-{{ ai_gen_id }}:hover .ai-shop-all-tile-{{ ai_gen_id }} {
+    filter: blur({{ block.settings.blur_amount }}px);
+    opacity: {{ block.settings.fade_opacity }};
+  }
+
+  .ai-shop-all-row-{{ ai_gen_id }} .ai-shop-all-tile-{{ ai_gen_id }}:hover {
+    filter: blur(0px);
+    opacity: 1;
+    transform: scale({{ block.settings.hover_scale }});
+    z-index: 10;
+  }
+
+  .ai-shop-all-tile-media-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.2;
+  }
+
+  .ai-shop-all-tile-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+    padding: 24px 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .ai-shop-all-tile-{{ ai_gen_id }}:hover .ai-shop-all-tile-overlay-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .ai-shop-all-tile-title-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-shop-all-tile-price-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: {{ block.settings.price_size }}px;
+    margin: 0;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-shop-all-wrapper-{{ ai_gen_id }} {
+      padding: {{ block.settings.top_padding | times: 0.7 }}px {{ block.settings.side_margin | times: 0.6 }}px {{ block.settings.bottom_padding | times: 0.7 }}px;
+    }
+
+    .ai-shop-all-row-{{ ai_gen_id }} {
+      gap: {{ block.settings.tile_gap | times: 0.6 }}px;
+    }
+
+    .ai-shop-all-tile-{{ ai_gen_id }} {
+      height: {{ block.settings.tile_height | times: 0.7 }}px;
+      border-radius: {{ block.settings.border_radius | times: 0.8 }}px;
+    }
+
+    .ai-shop-all-tile-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.85 }}px;
+    }
+
+    .ai-shop-all-tile-price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.price_size | times: 0.85 }}px;
+    }
+
+    .ai-shop-all-tile-overlay-{{ ai_gen_id }} {
+      padding: 16px 14px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-shop-all-wrapper-{{ ai_gen_id }} {
+      padding: {{ block.settings.top_padding | times: 0.5 }}px {{ block.settings.side_margin | times: 0.4 }}px {{ block.settings.bottom_padding | times: 0.5 }}px;
+    }
+
+    .ai-shop-all-row-{{ ai_gen_id }} {
+      gap: {{ block.settings.tile_gap | times: 0.4 }}px;
+    }
+
+    .ai-shop-all-tile-{{ ai_gen_id }} {
+      height: {{ block.settings.tile_height | times: 0.5 }}px;
+      border-radius: {{ block.settings.border_radius | times: 0.6 }}px;
+    }
+
+    .ai-shop-all-tile-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-shop-all-tile-price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.price_size | times: 0.7 }}px;
+    }
+
+    .ai-shop-all-tile-overlay-{{ ai_gen_id }} {
+      padding: 12px 10px;
+    }
+
+    .ai-shop-all-row-{{ ai_gen_id }}:hover .ai-shop-all-tile-{{ ai_gen_id }} {
+      filter: none;
+      opacity: 1;
+    }
+
+    .ai-shop-all-row-{{ ai_gen_id }} .ai-shop-all-tile-{{ ai_gen_id }}:hover {
+      transform: none;
+    }
+  }
+{% endstyle %}
+
+<shop-all-gallery-{{ ai_gen_id }}
+  class="ai-shop-all-wrapper-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-shop-all-row-{{ ai_gen_id }}">
+    {% for i in (1..5) %}
+      {% liquid
+        assign product_key = 'product_' | append: i
+        assign product = block.settings[product_key]
+      %}
+
+      {% if product != blank %}
+        <a
+          href="{{ product.url }}"
+          class="ai-shop-all-tile-{{ ai_gen_id }}"
+          aria-label="{{ product.title | escape }}"
+        >
+          {% if product.featured_media %}
+            {% if product.featured_media.media_type == 'video' %}
+              <video
+                class="ai-shop-all-tile-media-{{ ai_gen_id }}"
+                autoplay
+                loop
+                muted
+                playsinline
+                preload="metadata"
+              >
+                {% for source in product.featured_media.sources %}
+                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                {% endfor %}
+              </video>
+            {% elsif product.featured_media.media_type == 'external_video' %}
+              <div class="ai-shop-all-tile-media-{{ ai_gen_id }}">
+                {{ product.featured_media | external_video_tag }}
+              </div>
+            {% else %}
+              <img
+                src="{{ product.featured_media | image_url: width: 800 }}"
+                alt="{{ product.featured_media.alt | escape }}"
+                class="ai-shop-all-tile-media-{{ ai_gen_id }}"
+                loading="lazy"
+                width="800"
+                height="1700"
+              >
+            {% endif %}
+          {% else %}
+            <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+
+          {% if block.settings.show_overlay %}
+            <div class="ai-shop-all-tile-overlay-{{ ai_gen_id }}">
+              <h3 class="ai-shop-all-tile-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <p class="ai-shop-all-tile-price-{{ ai_gen_id }}">{{ product.price | money }}</p>
+            </div>
+          {% endif %}
+        </a>
+      {% else %}
+        <div class="ai-shop-all-tile-{{ ai_gen_id }}">
+          <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+            {{ 'product-1' | placeholder_svg_tag }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</shop-all-gallery-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ShopAllGallery{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.initializeVideos();
+      }
+
+      initializeVideos() {
+        const videos = this.querySelectorAll('video');
+        
+        videos.forEach(video => {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                video.play().catch(() => {});
+              } else {
+                video.pause();
+              }
+            });
+          }, { threshold: 0.25 });
+
+          observer.observe(video);
+
+          video.addEventListener('loadedmetadata', () => {
+            video.play().catch(() => {});
+          });
+        });
+      }
+    }
+
+    customElements.define('shop-all-gallery-{{ ai_gen_id }}', ShopAllGallery{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop all gallery",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "header",
+      "content": "Tile dimensions"
+    },
+    {
+      "type": "range",
+      "id": "tile_height",
+      "min": 400,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "label": "Tile height",
+      "default": 670
+    },
+    {
+      "type": "range",
+      "id": "tile_gap",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between tiles",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "side_margin",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Side margins",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Tile style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "shadow_x",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow horizontal",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "shadow_y",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow vertical",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Shadow blur",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Shadow opacity",
+      "default": 0.1
+    },
+    {
+      "type": "header",
+      "content": "Hover effects"
+    },
+    {
+      "type": "range",
+      "id": "blur_amount",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Blur amount",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "fade_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Fade opacity",
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "min": 1,
+      "max": 1.2,
+      "step": 0.1,
+      "label": "Hover scale",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Product info overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show product info on hover",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop all gallery"
+    }
+  ]
+}
+{% endschema %}

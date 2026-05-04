@@ -1,0 +1,263 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "hero_header_pYVnwb": {
+      "type": "hero-header",
+      "name": "Hero Header",
+      "settings": {
+        "logo": "shopify://shop_images/LOGO_-_White_w_shadow.png",
+        "show_on_homepage": false,
+        "menu": "main-menu",
+        "text_color": "#ffffff",
+        "menu_pill_padding_y": 4,
+        "menu_pill_padding_x": 10,
+        "menu_pill_border_radius": 100,
+        "menu_pill_min_height": 44,
+        "menu_pill_bg_color": "#000000",
+        "menu_pill_bg_opacity": 35,
+        "menu_pill_border_width": 1,
+        "menu_pill_border_color": "#ffffff",
+        "menu_pill_border_opacity": 10,
+        "menu_item_gap": 20,
+        "menu_item_gap_tablet": 16,
+        "menu_item_font_size": 15,
+        "menu_item_font_size_tablet": 14,
+        "menu_item_font_weight": 500,
+        "menu_item_padding_y": 5,
+        "menu_item_padding_x": 10,
+        "menu_item_padding_left": 10,
+        "menu_item_padding_right": 10,
+        "menu_item_border_radius": 100,
+        "menu_item_bg_color": "#ffffff",
+        "menu_item_bg_opacity": 0,
+        "menu_item_border_width": 0,
+        "menu_item_border_color": "#ffffff",
+        "menu_item_border_opacity": 20,
+        "menu_item_active_bg_color": "#ffffff",
+        "menu_item_active_bg_opacity": 16,
+        "menu_item_hover_opacity": 70,
+        "transparent_header": true,
+        "background_color": "#dadada",
+        "border_color": "#000000"
+      }
+    },
+    "hero_slideshow_header_TxDMyf": {
+      "type": "hero-slideshow-header",
+      "blocks": {
+        "slide_jF8PyN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/DinoBoo.jpg",
+            "title": "",
+            "subtitle": "",
+            "text_position": "center",
+            "title_color": "#ffffff",
+            "subtitle_color": "#ffffff",
+            "button_text": "Shop Now",
+            "button_link": "",
+            "button_position": "center"
+          }
+        },
+        "slide_6QADXU": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/FoxBoo.jpg",
+            "mobile_image": "shopify://shop_images/FoxBoo_4eb36f17-6125-4cad-b047-b2900503393c.jpg",
+            "title": "",
+            "subtitle": "",
+            "text_position": "custom",
+            "title_color": "#ffffff",
+            "subtitle_color": "#ffffff",
+            "button_text": "",
+            "button_link": "shopify://collections/all",
+            "button_position": "custom"
+          }
+        },
+        "slide_ETHy6N": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BunBoo.jpg",
+            "mobile_image": "shopify://shop_images/BunBoo_829e8bd0-a2e1-4ae9-978b-dd77f1c78193.jpg",
+            "title": "",
+            "subtitle": "",
+            "text_position": "center-left",
+            "title_color": "#ffffff",
+            "subtitle_color": "#ffffff",
+            "button_text": "Shop Now",
+            "button_link": "",
+            "button_position": "center"
+          }
+        },
+        "slide_7MJUwU": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Shaboo.jpg",
+            "mobile_image": "shopify://shop_images/Shaboo_7bc63e05-919f-48ff-b914-b850030d4909.jpg",
+            "title": "",
+            "subtitle": "",
+            "text_position": "center",
+            "title_color": "#ffffff",
+            "subtitle_color": "#ffffff",
+            "button_text": "Shop Now",
+            "button_link": "",
+            "button_position": "center"
+          }
+        },
+        "slide_9WGLJC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/GriBoo.jpg",
+            "mobile_image": "shopify://shop_images/Griboo_22aead4f-c3b7-4e98-98a6-2657b515cef7.jpg",
+            "title": "",
+            "subtitle": "",
+            "text_position": "center",
+            "title_color": "#ffffff",
+            "subtitle_color": "#ffffff",
+            "button_text": "Shop Now",
+            "button_link": "",
+            "button_position": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_jF8PyN",
+        "slide_6QADXU",
+        "slide_ETHy6N",
+        "slide_7MJUwU",
+        "slide_9WGLJC"
+      ],
+      "name": "Hero Slideshow Header",
+      "settings": {
+        "logo": "shopify://shop_images/LOGO_-_White.png",
+        "menu": "main-menu",
+        "text_color": "#ffffff",
+        "section_bottom_padding": 66,
+        "menu_pill_padding_y": 6,
+        "menu_pill_padding_x": 10,
+        "menu_pill_border_radius": 30,
+        "menu_pill_min_height": 44,
+        "menu_pill_bg_color": "#000000",
+        "menu_pill_bg_opacity": 35,
+        "menu_pill_border_width": 1,
+        "menu_pill_border_color": "#ffffff",
+        "menu_pill_border_opacity": 10,
+        "menu_item_gap": 28,
+        "menu_item_gap_tablet": 16,
+        "menu_item_font_size": 15,
+        "menu_item_font_size_tablet": 14,
+        "menu_item_font_weight": 500,
+        "menu_item_padding_y": 5,
+        "menu_item_padding_x": 10,
+        "menu_item_border_radius": 20,
+        "menu_item_bg_color": "#ffffff",
+        "menu_item_bg_opacity": 0,
+        "menu_item_border_width": 0,
+        "menu_item_border_color": "#ffffff",
+        "menu_item_border_opacity": 20,
+        "menu_item_active_bg_color": "#ffffff",
+        "menu_item_active_bg_opacity": 25,
+        "menu_item_hover_opacity": 70,
+        "button_bg_color": "#f5f5f7",
+        "button_text_color": "#ffffff",
+        "button_primary_bg": "",
+        "button_primary_text": "",
+        "button_primary_border": "",
+        "button_show_border": false,
+        "button_border_width": 1,
+        "button_font_family": "inherit",
+        "hero_text_font_family": "inherit",
+        "shared_title": "Unleash Your Child's Imagination",
+        "shared_subtitle": "Cozy animal onesies for endless adventures",
+        "show_content_on_mobile": false,
+        "shared_button_text": "Shop Now",
+        "shared_button_link": "shopify://collections/all",
+        "combo_position": "mid-left",
+        "combo_content_layout": "button-bottom-text",
+        "combo_button_alignment": "left",
+        "shared_title_color": "#ffffff",
+        "shared_subtitle_color": "#ffffff",
+        "shared_text_position": "custom",
+        "shared_text_align": "left",
+        "shared_text_horizontal": 27,
+        "shared_text_vertical": 48,
+        "shared_text_horizontal_tablet": 50,
+        "shared_text_vertical_tablet": 50,
+        "shared_text_horizontal_mobile": 50,
+        "shared_text_vertical_mobile": 50,
+        "shared_button_position": "custom",
+        "shared_button_horizontal": 18,
+        "shared_button_vertical": 69,
+        "shared_button_horizontal_tablet": 50,
+        "shared_button_vertical_tablet": 50,
+        "shared_button_horizontal_mobile": 50,
+        "shared_button_vertical_mobile": 50,
+        "button_vertical_offset": 16,
+        "button_radius": 40,
+        "button_width": 168,
+        "button_height": 56,
+        "button_glassy": true,
+        "slide_height": "adapt_image",
+        "image_fit_desktop": "contain",
+        "image_fit_mobile": "contain",
+        "media_background_color": "#000000",
+        "image_focus_x_desktop": 50,
+        "image_focus_y_desktop": 50,
+        "image_focus_x_mobile": 50,
+        "image_focus_y_mobile": 50,
+        "custom_height_desktop": 0,
+        "custom_height_tablet": 0,
+        "custom_height_mobile": 0,
+        "autoplay_enabled": true,
+        "autoplay_speed": 3000
+      }
+    },
+    "header": {
+      "type": "header",
+      "disabled": true,
+      "custom_css": [
+        ".header-wrapper,.header,.section-header {background: transparent !important; border: 0 !important;}",
+        ".header__inline-menu {background: rgba(10, 30, 15, 0.55); backdrop-filter: blur(18px); border-radius: 999px; padding: 6px 12px; border: 1px solid rgba(255, 255, 255, 0.12);}",
+        ".header__menu-item {padding: 8px 14px; border-radius: 999px;}",
+        ".header__menu-item--active,.header__menu-item:hover {background: rgba(255, 255, 255, 0.15);}",
+        ".header__heading,.header__icons {background: transparent !important;}"
+      ],
+      "settings": {
+        "autoplay_enabled": true,
+        "autoplay_speed": 3000,
+        "slide_height": "large",
+        "slideshow_text_color": "#ffffff",
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#000000",
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "mega",
+        "sticky_header_type": "none",
+        "show_line_separator": false,
+        "color_scheme": "scheme-4",
+        "menu_color_scheme": "scheme-97a670a1-3a6e-4c2c-b7cd-1956809b9ee4",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "enable_customer_avatar": false,
+        "margin_bottom": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "hero_header_pYVnwb",
+    "hero_slideshow_header_TxDMyf",
+    "header"
+  ]
+}

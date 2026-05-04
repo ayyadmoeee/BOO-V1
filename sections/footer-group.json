@@ -1,0 +1,128 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "link_list_7aBcJT": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "ooter-policies-custom",
+            "lb_mobile_custom_menu": false
+          }
+        },
+        "payment_option_iEACre": {
+          "type": "payment_option",
+          "settings": {
+            "payment_label": "Visa",
+            "payment_icon": "shopify://shop_images/whishpay.CgBAaM5Z.svg",
+            "payment_link": ""
+          }
+        },
+        "link_list_dPjAmJ": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer",
+            "lb_mobile_custom_menu": false
+          }
+        },
+        "link_list_Ei9YxH": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "mobile-custom-menu",
+            "lb_mobile_custom_menu": true
+          }
+        },
+        "brand_information_k6hiT9": {
+          "type": "brand_information",
+          "settings": {
+            "show_social": true
+          }
+        }
+      },
+      "block_order": [
+        "link_list_7aBcJT",
+        "payment_option_iEACre",
+        "link_list_dPjAmJ",
+        "link_list_Ei9YxH",
+        "brand_information_k6hiT9"
+      ],
+      "settings": {
+        "color_scheme": "scheme-97a670a1-3a6e-4c2c-b7cd-1956809b9ee4",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "lb_brand_title": "BOO",
+        "lb_brand_image": "shopify://shop_images/lo._go_copy.png",
+        "lb_brand_image_max_width": 120,
+        "lb_brand_description": "<p>Contemporary culture, elevated essentials, and timeless pieces built with intention.</p>",
+        "lb_company_title": "BRAND",
+        "lb_policies_title": "SHOP",
+        "lb_policies_custom_menu": "",
+        "lb_newsletter_placeholder": "Your email",
+        "lb_newsletter_button_label": "SUBSCRIBE",
+        "lb_fallback_about_label": "About Us",
+        "lb_fallback_about_url": "",
+        "lb_fallback_contact_label": "Contacts",
+        "lb_fallback_contact_url": "",
+        "lb_copyright_text": "Copyright © [year], [shop_name]. All rights resereved.",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "lb_social_whatsapp_link": "https://wa.me/96176717279",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "lb_payment_padding_x": 0,
+        "lb_payment_padding_y": 0,
+        "show_policy": true,
+        "lb_glassy_background": true,
+        "lb_use_background_image": true,
+        "lb_use_gradient_background": false,
+        "lb_background_gradient_css": "linear-gradient(\n  135deg,\n  rgba(0, 0, 0, 0.55) 0%,\n  rgba(0, 0, 0, 0.25) 100%\n)",
+        "lb_background_color": "rgba(0,0,0,0)",
+        "lb_text_color": "#ffffff",
+        "lb_background_opacity": 100,
+        "lb_background_gradient": "#",
+        "lb_glass_opacity": 35,
+        "lb_glass_blur": 12,
+        "lb_glass_border_color": "#000000",
+        "lb_glass_border_opacity": 20,
+        "lb_font_heading": "muli_n4",
+        "lb_font_body": "jost_n4",
+        "lb_font_button": "libre_franklin_n4",
+        "lb_brand_title_size": 56,
+        "lb_brand_title_weight": 700,
+        "lb_brand_copy_size": 14,
+        "lb_brand_copy_weight": 400,
+        "lb_column_title_size": 12,
+        "lb_column_title_weight": 600,
+        "lb_link_size": 14,
+        "lb_link_weight": 400,
+        "lb_newsletter_input_size": 14,
+        "lb_newsletter_input_weight": 400,
+        "lb_newsletter_button_size": 11,
+        "lb_newsletter_button_weight": 600,
+        "lb_bottom_text_size": 12,
+        "lb_bottom_text_weight": 400,
+        "margin_top": 40,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

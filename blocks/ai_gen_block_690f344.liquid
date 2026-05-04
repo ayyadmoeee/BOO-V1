@@ -1,0 +1,416 @@
+{% doc %}
+  @prompt
+    Create a Shop All section with exactly 5 product tiles in a single horizontal row that never wraps on any screen size. Requirements:
+    
+    LAYOUT:
+    - Always 5 tiles in ONE ROW (no wrapping, no stacking at any breakpoint)
+    - Force 5-column grid at 0px-767px (mobile), 768px-1024px (tablet), 1025px+ (desktop)
+    - Tiles shrink proportionally on smaller screens while maintaining aspect ratio
+    - Consistent height across all 5 tiles with equal spacing
+    
+    PRODUCT NAME LABEL (ALWAYS VISIBLE):
+    - Product name displayed vertically (rotated 90 degrees) on bottom-right corner of EACH tile
+    - White text, readable, positioned at bottom-right edge
+    - Always visible (not just on hover)
+    - Use transform: rotate(90deg) for vertical orientation
+    - Label should be elegant and match premium aesthetic
+    
+    HOVER EFFECTS (CRITICAL):
+    - On hover (desktop): hovered tile stays sharp and clear
+    - All OTHER tiles blur + fade (reduce opacity)
+    - Blur intensity controlled per tile via theme editor settings
+    - Opacity reduction creates faded look on non-hovered tiles
+    - Smooth CSS transitions (0.3s ease) - not abrupt
+    - Hover effects only on desktop (no blur on mobile/tablet)
+    
+    CUSTOM IMAGE CONTROL (CRITICAL):
+    - Each tile links to a product BUT uses a custom image selected in theme editor
+    - Allow selecting custom image for each of the 5 tiles independently
+    - Image picker for each tile in theme editor settings
+    - Product link and custom image are separate controls
+    - Support for regular images, videos, or GIFs
+    
+    TILE SPECIFICATIONS:
+    - Each tile clickable, links to selected product
+    - Display custom selected image (not default product image)
+    - Fixed aspect ratio maintained across devices
+    - Individual blur percentage control for each tile (0-100%)
+    
+    RESPONSIVE (STRICT - NO WRAPPING):
+    - Mobile (0-767px): 5 tiles single row, reduce width/gap to fit
+    - Tablet (768-1024px): 5 tiles single row, reduce width/gap to fit
+    - Desktop (1025px+): 5 tiles single row, full size
+    - Use display: grid with grid-template-columns: repeat(5, 1fr)
+    - Preserve aspect ratio and visual consistency at all widths
+    
+    EDITOR CONTROLS (5 BLOCKS - ONE PER TILE):
+    - Product picker (for link and product name)
+    - Custom image picker (override product image)
+    - Blur intensity slider (0-100% for hover effect on other tiles)
+    - Tile gap/spacing control
+    - Section padding control
+    - Transition speed control, i want the same size of the above or previous boxes the u created and to have same features on mobile and web and tablet....
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-shop-all-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-shop-all-container-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .ai-shop-all-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.tile_gap }}px;
+    width: 100%;
+  }
+
+  .ai-shop-all-tile-{{ ai_gen_id }} {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    transition: filter {{ block.settings.transition_speed }}s ease, opacity {{ block.settings.transition_speed }}s ease;
+    text-decoration: none;
+  }
+
+  .ai-shop-all-tile-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-shop-all-tile-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-shop-all-product-name-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transform: rotate(90deg);
+    transform-origin: bottom right;
+    white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ai-shop-all-grid-{{ ai_gen_id }}:hover .ai-shop-all-tile-{{ ai_gen_id }} {
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  {% for i in (1..5) %}
+    {% assign blur_key = 'tile_' | append: i | append: '_blur' %}
+    {% assign blur_value = block.settings[blur_key] %}
+    
+    .ai-shop-all-grid-{{ ai_gen_id }}:has(.ai-shop-all-tile-{{ ai_gen_id }}:nth-child({{ i }}):hover) .ai-shop-all-tile-{{ ai_gen_id }}:not(:nth-child({{ i }})) {
+      filter: blur({{ blur_value | divided_by: 10.0 }}px);
+      opacity: 0.6;
+    }
+  {% endfor %}
+
+  @media (max-width: 767px) {
+    .ai-shop-all-grid-{{ ai_gen_id }} {
+      gap: {{ block.settings.tile_gap | times: 0.5 }}px;
+    }
+
+    .ai-shop-all-product-name-{{ ai_gen_id }} {
+      font-size: 11px;
+      bottom: 8px;
+      right: 8px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .ai-shop-all-grid-{{ ai_gen_id }} {
+      gap: {{ block.settings.tile_gap | times: 0.7 }}px;
+    }
+
+    .ai-shop-all-product-name-{{ ai_gen_id }} {
+      font-size: 12px;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
+{% endstyle %}
+
+<shop-all-tiles-{{ ai_gen_id }} class="ai-shop-all-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-shop-all-container-{{ ai_gen_id }}">
+    <div class="ai-shop-all-grid-{{ ai_gen_id }}">
+      {% for i in (1..5) %}
+        {% liquid
+          assign product_key = 'tile_' | append: i | append: '_product'
+          assign image_key = 'tile_' | append: i | append: '_image'
+          assign product = block.settings[product_key]
+          assign custom_image = block.settings[image_key]
+        %}
+
+        {% if product %}
+          <a href="{{ product.url }}" class="ai-shop-all-tile-{{ ai_gen_id }}">
+            {% if custom_image %}
+              <img
+                src="{{ custom_image | image_url: width: 800 }}"
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% elsif product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+            <span class="ai-shop-all-product-name-{{ ai_gen_id }}">{{ product.title }}</span>
+          </a>
+        {% else %}
+          <div class="ai-shop-all-tile-{{ ai_gen_id }}">
+            {% if custom_image %}
+              <img
+                src="{{ custom_image | image_url: width: 800 }}"
+                alt="Product tile {{ i }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+                class="ai-shop-all-tile-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-shop-all-tile-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</shop-all-tiles-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ShopAllTiles{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.tiles = this.querySelectorAll('.ai-shop-all-tile-{{ ai_gen_id }}');
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        this.tiles.forEach((tile, index) => {
+          if (tile.tagName === 'A') {
+            tile.setAttribute('aria-label', `View product ${index + 1}`);
+          }
+        });
+      }
+    }
+
+    customElements.define('shop-all-tiles-{{ ai_gen_id }}', ShopAllTiles{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop all tiles",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "tile_gap",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Tile gap",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "unit": "s",
+      "label": "Transition speed",
+      "default": 0.3
+    },
+    {
+      "type": "header",
+      "content": "Tile 1"
+    },
+    {
+      "type": "product",
+      "id": "tile_1_product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_1_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "range",
+      "id": "tile_1_blur",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Blur intensity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Tile 2"
+    },
+    {
+      "type": "product",
+      "id": "tile_2_product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_2_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "range",
+      "id": "tile_2_blur",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Blur intensity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Tile 3"
+    },
+    {
+      "type": "product",
+      "id": "tile_3_product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_3_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "range",
+      "id": "tile_3_blur",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Blur intensity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Tile 4"
+    },
+    {
+      "type": "product",
+      "id": "tile_4_product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_4_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "range",
+      "id": "tile_4_blur",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Blur intensity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Tile 5"
+    },
+    {
+      "type": "product",
+      "id": "tile_5_product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_5_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "range",
+      "id": "tile_5_blur",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Blur intensity",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop all tiles"
+    }
+  ]
+}
+{% endschema %}

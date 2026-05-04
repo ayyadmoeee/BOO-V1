@@ -1,0 +1,114 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "blocks_JLqKTD": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9df6e6e_DJRFNi": {
+          "type": "ai_gen_block_9df6e6e",
+          "settings": {
+            "section_height": 90,
+            "desktop_width_percent": 100,
+            "background_type": "gradient",
+            "background_color": "#000000",
+            "gradient_color_1": "#d2d2d2",
+            "gradient_color_2": "#000000",
+            "gradient_angle": 135,
+            "background_size": "cover",
+            "background_position": "center",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "character_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png",
+            "character_width": 55,
+            "character_width_mobile": 100,
+            "character_float_animation": true,
+            "character_animation_speed": 5,
+            "scroll_trigger": true,
+            "animation_type": "fade",
+            "text_max_width": 150,
+            "text_box_padding": 20,
+            "text_box_bg_color": "#dfc5c505",
+            "text_box_radius": 12,
+            "text_box_shadow": true,
+            "title_font": "system_ui_n7",
+            "title_font_size": 34,
+            "title_color": "#f7f5f5",
+            "body_font": "inter_n4",
+            "body_font_size": 18,
+            "body_color": "#333333",
+            "body_line_height": 1.5,
+            "body_letter_spacing": 0,
+            "text_1_enabled": false,
+            "text_1_title": "Size Guide",
+            "text_1_body": "",
+            "text_1_position": "top-left",
+            "text_1_offset_x": 10,
+            "text_1_offset_y": 10,
+            "text_1_delay": 0,
+            "text_2_enabled": false,
+            "text_2_title": "",
+            "text_2_body": "",
+            "text_2_position": "top-right",
+            "text_2_offset_x": 10,
+            "text_2_offset_y": 10,
+            "text_2_delay": 300,
+            "text_3_enabled": false,
+            "text_3_title": "",
+            "text_3_body": "",
+            "text_3_position": "center-left",
+            "text_3_offset_x": 10,
+            "text_3_offset_y": 10,
+            "text_3_delay": 600,
+            "text_4_enabled": false,
+            "text_4_title": "",
+            "text_4_body": "",
+            "text_4_position": "center-right",
+            "text_4_offset_x": 10,
+            "text_4_offset_y": 10,
+            "text_4_delay": 900,
+            "text_5_enabled": false,
+            "text_5_title": "",
+            "text_5_body": "",
+            "text_5_position": "bottom-left",
+            "text_5_offset_x": 10,
+            "text_5_offset_y": 10,
+            "text_5_delay": 1200,
+            "text_6_enabled": false,
+            "text_6_title": "",
+            "text_6_body": "",
+            "text_6_position": "bottom-right",
+            "text_6_offset_x": 10,
+            "text_6_offset_y": 10,
+            "text_6_delay": 1500
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9df6e6e_DJRFNi"
+      ],
+      "name": "Animated storytelling",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "blocks_JLqKTD"
+  ]
+}

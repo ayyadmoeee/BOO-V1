@@ -1,0 +1,584 @@
+{{ 'section-hers-labs-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hers-labs-hero.js' | asset_url }}" defer="defer"></script>
+
+{%- comment -%} Preload first image for faster display {%- endcomment -%}
+{%- assign image_blocks = section.blocks | where: 'type', 'sliding_image' -%}
+{%- assign small_screen_controls_block = blank -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'small_screen_controls' -%}
+    {%- assign small_screen_controls_block = block -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if image_blocks.size > 0 and image_blocks.first.settings.image != blank -%}
+  <link rel="preload" as="image" href="{{ image_blocks.first.settings.image | image_url: width: 600 }}" fetchpriority="high">
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .hers-labs-hero {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+    --hlh-section-height-mobile: {% if section.settings.section_height_mobile > 0 %}{{ section.settings.section_height_mobile }}px{% else %}500px{% endif %};
+    --hlh-section-height-desktop: {% if section.settings.section_height_desktop > 0 %}{{ section.settings.section_height_desktop }}px{% else %}600px{% endif %};
+    --hlh-section-min-height: var(--hlh-section-height-mobile);
+    --hlh-characters-max-w: {{ section.settings.characters_max_width_mobile | default: 95 }}%;
+    --hlh-characters-max-w-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.characters_max_width_small | default: 78 }}%{% else %}78%{% endif %};
+    --hlh-character-scale-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.characters_scale_small | default: 68 | divided_by: 100.0 }}{% else %}0.68{% endif %};
+    --hlh-slides-scale-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.sliding_images_scale_small | default: 53 | divided_by: 100.0 }}{% else %}0.53{% endif %};
+    --hlh-slide-width-base: {{ section.settings.sliding_image_width_mobile | default: 320 }}px;
+    --hlh-slide-height-base: {{ section.settings.sliding_image_height_mobile | default: 220 }}px;
+    --hlh-slide-gap-base: {{ section.settings.sliding_image_gap_mobile | default: 24 }}px;
+    --hlh-slide-track-height-base: {{ section.settings.sliding_image_track_height_mobile | default: 280 }}px;
+    --hlh-slide-width-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.sliding_image_width_small | default: 150 }}px{% else %}150px{% endif %};
+    --hlh-slide-height-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.sliding_image_height_small | default: 96 }}px{% else %}96px{% endif %};
+    --hlh-slide-gap-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.sliding_image_gap_small | default: 8 }}px{% else %}8px{% endif %};
+    --hlh-slide-track-height-small: {% if small_screen_controls_block %}{{ small_screen_controls_block.settings.sliding_image_track_height_small | default: 130 }}px{% else %}130px{% endif %};
+    --hlh-slide-width: var(--hlh-slide-width-base);
+    --hlh-slide-height: var(--hlh-slide-height-base);
+    --hlh-slide-gap: var(--hlh-slide-gap-base);
+    --hlh-slide-track-height: var(--hlh-slide-track-height-base);
+    --hlh-character-scale: 1;
+    --hlh-slides-scale: 1;
+    min-height: var(--hlh-section-min-height);
+    box-sizing: border-box;
+  }
+
+  .hers-labs-hero__background {
+    position: relative;
+    width: 100%;
+    min-height: var(--hlh-section-min-height);
+  }
+
+  .hers-labs-hero__background-image-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: {% if section.settings.background_image_height_mobile > 0 %}{{ section.settings.background_image_height_mobile }}px{% else %}100%{% endif %};
+    min-height: 100%;
+    z-index: 0;
+  }
+
+  .hers-labs-hero__background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hers-labs-hero__characters-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    pointer-events: none;
+    width: var(--hlh-characters-max-w);
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    transform: scale(var(--hlh-character-scale));
+    transform-origin: center center;
+  }
+
+  .hers-labs-hero__characters-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  hers-labs-hero {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    .hers-labs-hero {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --hlh-section-min-height: var(--hlh-section-height-desktop);
+      --hlh-characters-max-w: {{ section.settings.characters_max_width_desktop | default: 90 }}%;
+      --hlh-slide-width-base: {{ section.settings.sliding_image_width_desktop | default: 480 }}px;
+      --hlh-slide-height-base: {{ section.settings.sliding_image_height_desktop | default: 320 }}px;
+      --hlh-slide-gap-base: {{ section.settings.sliding_image_gap_desktop | default: 40 }}px;
+      --hlh-slide-track-height-base: {{ section.settings.sliding_image_track_height_desktop | default: 400 }}px;
+      --hlh-slide-width: var(--hlh-slide-width-base);
+      --hlh-slide-height: var(--hlh-slide-height-base);
+      --hlh-slide-gap: var(--hlh-slide-gap-base);
+      --hlh-slide-track-height: var(--hlh-slide-track-height-base);
+    }
+
+    .hers-labs-hero__background {
+      height: 100%;
+    }
+
+    .hers-labs-hero__background-image-wrapper {
+      height: {% if section.settings.background_image_height_desktop > 0 %}{{ section.settings.background_image_height_desktop }}px{% else %}100%{% endif %};
+      min-height: 100%;
+    }
+  }
+
+  .hers-labs-hero__scale {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+{%- endstyle -%}
+
+<section
+  class="hers-labs-hero"
+  data-section-id="{{ section.id }}"
+  data-marquee-speed="{{ section.settings.sliding_image_speed | default: 30 }}"
+>
+  <div class="hers-labs-hero__background">
+    {%- if section.settings.background_image != blank -%}
+      <div class="hers-labs-hero__background-image-wrapper">
+        {{ section.settings.background_image | image_url: width: 1920 | image_tag: loading: 'eager', alt: '', class: 'hers-labs-hero__background-image' }}
+      </div>
+    {%- endif -%}
+    <div class="hers-labs-hero__gradient"></div>
+    <div class="hers-labs-hero__scale">
+      {%- if section.settings.characters_image != blank -%}
+        <div class="hers-labs-hero__characters-wrapper">
+          {{ section.settings.characters_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: section.settings.characters_alt_text | default: 'Character onesies', class: 'hers-labs-hero__characters-image' }}
+        </div>
+      {%- endif -%}
+
+      <div class="hers-labs-hero__sliding-images">
+        <div class="hers-labs-hero__images-track" data-marquee-track>
+          {%- assign image_blocks = section.blocks | where: 'type', 'sliding_image' -%}
+          {%- if image_blocks.size > 0 -%}
+            {%- for i in (1..4) -%}
+              <div class="hers-labs-hero__images-set" data-marquee-set="{{ i }}">
+                {%- for block in image_blocks -%}
+                  {%- if block.settings.image != blank -%}
+                    <div class="hers-labs-hero__image-wrapper" {{ block.shopify_attributes }}>
+                      {%- if forloop.first and i == 1 -%}
+                        {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'eager', fetchpriority: 'high', alt: block.settings.alt_text | default: '', class: 'hers-labs-hero__sliding-image' }}
+                      {%- else -%}
+                        {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'eager', alt: block.settings.alt_text | default: '', class: 'hers-labs-hero__sliding-image' }}
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Placeholder to ensure track exists even when no images {%- endcomment -%}
+            <div class="hers-labs-hero__images-set" data-marquee-set="1" style="min-width: 1px; min-height: 1px;"></div>
+            <div class="hers-labs-hero__images-set" data-marquee-set="2" style="min-width: 1px; min-height: 1px;"></div>
+            <div class="hers-labs-hero__images-set" data-marquee-set="3" style="min-width: 1px; min-height: 1px;"></div>
+            <div class="hers-labs-hero__images-set" data-marquee-set="4" style="min-width: 1px; min-height: 1px;"></div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hers Labs Hero",
+  "tag": "section",
+  "class": "section section--full-width",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Background image for the hero section"
+    },
+    {
+      "type": "range",
+      "id": "background_image_height_desktop",
+      "min": 0,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "label": "Background image height (desktop)",
+      "default": 0,
+      "info": "Set 0 to fill section height."
+    },
+    {
+      "type": "range",
+      "id": "background_image_height_mobile",
+      "min": 0,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Background image height (mobile)",
+      "default": 0,
+      "info": "Set 0 to use desktop value or fill section height."
+    },
+    {
+      "type": "header",
+      "content": "Section Height"
+    },
+    {
+      "type": "range",
+      "id": "section_height_desktop",
+      "min": 0,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Section height (desktop)",
+      "default": 600,
+      "info": "Set 0 to use default height (600px)."
+    },
+    {
+      "type": "range",
+      "id": "section_height_mobile",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "Section height (mobile)",
+      "default": 500,
+      "info": "Set 0 to use default height (500px)."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "info": "Top spacing around the section."
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "info": "Bottom spacing around the section."
+    },
+    {
+      "type": "image_picker",
+      "id": "characters_image",
+      "label": "Characters Image",
+      "info": "Upload a single image containing all character onesies"
+    },
+    {
+      "type": "text",
+      "id": "characters_alt_text",
+      "label": "Characters Image Alt Text",
+      "default": "Character onesies",
+      "info": "Accessibility text for the characters image."
+    },
+    {
+      "type": "range",
+      "id": "characters_max_width_desktop",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Characters max width (desktop)",
+      "default": 90,
+      "info": "Maximum width of the characters image on desktop."
+    },
+    {
+      "type": "range",
+      "id": "characters_max_width_mobile",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Characters max width (mobile)",
+      "default": 95,
+      "info": "Maximum width of the characters image on mobile."
+    },
+    {
+      "type": "header",
+      "content": "Sliding Images",
+      "info": "IMPORTANT: If you don't see blocks below, remove this section and add it again to load 7 empty image blocks. Then scroll down past this header to see the 'Add block' button or existing blocks."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_speed",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Sliding speed",
+      "default": 30,
+      "info": "Marquee movement speed in pixels per second."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_track_height_desktop",
+      "min": 160,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "label": "Track height (desktop)",
+      "default": 400,
+      "info": "Height of the sliding images track on desktop."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_track_height_mobile",
+      "min": 120,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Track height (mobile)",
+      "default": 280,
+      "info": "Height of the sliding images track on mobile."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_width_desktop",
+      "min": 160,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Image width (desktop)",
+      "default": 480,
+      "info": "Width of each sliding image card on desktop."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_height_desktop",
+      "min": 120,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Image height (desktop)",
+      "default": 320,
+      "info": "Height of each sliding image card on desktop."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_width_mobile",
+      "min": 140,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Image width (mobile)",
+      "default": 320,
+      "info": "Width of each sliding image card on mobile."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_height_mobile",
+      "min": 100,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Image height (mobile)",
+      "default": 220,
+      "info": "Height of each sliding image card on mobile."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_gap_desktop",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Image gap (desktop)",
+      "default": 40,
+      "info": "Spacing between image cards on desktop."
+    },
+    {
+      "type": "range",
+      "id": "sliding_image_gap_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Image gap (mobile)",
+      "default": 24,
+      "info": "Spacing between image cards on mobile."
+    }
+  ],
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "sliding_image",
+      "name": "Sliding Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Image card displayed in the marquee."
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text",
+          "info": "Description of the image for accessibility"
+        }
+      ]
+    },
+    {
+      "type": "small_screen_controls",
+      "name": "Small Screen Controls",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "characters_max_width_small",
+          "min": 30,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Characters max width",
+          "default": 78,
+          "info": "Maximum character image width for very small screens."
+        },
+        {
+          "type": "range",
+          "id": "characters_scale_small",
+          "min": 50,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Characters scale",
+          "default": 68,
+          "info": "Overall scale for the character image on very small screens."
+        },
+        {
+          "type": "range",
+          "id": "sliding_images_scale_small",
+          "min": 40,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Sliding images scale",
+          "default": 53,
+          "info": "Overall scale for the marquee cards on very small screens."
+        },
+        {
+          "type": "range",
+          "id": "sliding_image_track_height_small",
+          "min": 80,
+          "max": 320,
+          "step": 4,
+          "unit": "px",
+          "label": "Track height",
+          "default": 132,
+          "info": "Track height for very small screens."
+        },
+        {
+          "type": "range",
+          "id": "sliding_image_width_small",
+          "min": 120,
+          "max": 400,
+          "step": 4,
+          "unit": "px",
+          "label": "Image width",
+          "default": 152,
+          "info": "Card width for very small screens."
+        },
+        {
+          "type": "range",
+          "id": "sliding_image_height_small",
+          "min": 80,
+          "max": 260,
+          "step": 2,
+          "unit": "px",
+          "label": "Image height",
+          "default": 96,
+          "info": "Card height for very small screens."
+        },
+        {
+          "type": "range",
+          "id": "sliding_image_gap_small",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Image gap",
+          "default": 8,
+          "info": "Spacing between cards on very small screens."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hers Labs Hero",
+      "blocks": [
+        {
+          "type": "small_screen_controls",
+          "settings": {}
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        },
+        {
+          "type": "sliding_image",
+          "settings": {
+            "image": null
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1254 @@
+{% doc %}
+  @prompt
+    Create a pixel-perfect split-screen product page layout for Dawn theme with these exact specifications and CRITICAL FIXES:
+    
+    OVERALL LAYOUT (Desktop): Split layout with left product media area and right frosted glass product info panel. Dark green gradient background (darker top, lighter bottom). Huge semi-transparent vertical product name text in background behind all content.
+    
+    HEADER: Dark green header with white brand logo (left), rounded pill navigation container (center-left) containing Home, Shop All, About, Contact Us with Shop All highlighted, and three white icons on right (search, account, cart). Header must be responsive with clean spacing.
+    
+    BACKGROUND PRODUCT NAME (CRITICAL FIX): Massive vertical typography showing product title rotated 90 degrees, positioned on the LEFT SIDE vertically (not center-right). Very light white color with transparency blending into green background. Must be behind all elements (lower z-index) and scale/reposition responsively on smaller screens. The text should be positioned to the left of the media container.
+    
+    LEFT SIDE (Product Media): White rounded square container centered in left half, holding product image with padding. Simple black chevron navigation arrows (left/right) for carousel. Subtle or no shadow. Must remain centered and balanced.
+    
+    RIGHT SIDE (Glass Panel - CRITICAL FIX): Tall rounded rectangle with PROPERLY SIZED dimensions matching the reference design - should be proportionally sized to balance with the left media area, not too wide or too narrow. Frosted glass effect (dark green fill + backdrop blur + subtle border highlight + soft shadow). Large border radius. Contains: 1) Large bold white product title, 2) White price text below, 3) "Size (Age)" label with rounded dropdown (lighter green background, white text, dropdown caret), 4) "Quantity" label with pill-style quantity selector (minus button, number, plus button in rounded green style), 5) Wide black pill "Add to cart" button with white text, 6) Thin horizontal divider, 7) Small white description text below. Consistent left-aligned padding throughout. Panel width should be approximately 40-45% of viewport on desktop.
+    
+    TYPOGRAPHY: Clean modern sans-serif. Large bold title, medium weight labels, comfortable line-height. All panel text white/off-white.
+    
+    RESPONSIVENESS (CRITICAL): Must look premium on Desktop, Tablet, and Mobile. Desktop: preserve split layout with background text on left. Tablet: reduce sizes but keep structure. Mobile: stack cleanly while maintaining background text effect (scaled/repositioned), no overflow, Add to cart button visible and tappable, carousel arrows usable, header functional (hamburger menu if needed). Frosted glass effect with graceful fallback.
+    
+    THEME EDITOR CUSTOMIZATION: Background gradient colors, background product-name text (toggle, opacity, size, position), panel border radius, blur strength, title font size, spacing/padding. Product-name text auto-uses product title.
+    
+    TECHNICAL: Dawn-compatible, clean code, optimized performance, no duplicate containers. Implement as product page section/template. Match exact spacing, colors, shadows, border radius, and layering from reference with the glass panel properly sized and background text positioned on the left side., till now i can not move the varient label which is in the backgorund which is the product nameto wherever i want please make it customizable i move it and size it and color it, Edit the EXISTING “Split product page” section only (do not generate a new section/box). The current result looks like the 2nd attached image, but I need it to be identical to the 1st attached image. Fix these exact issues:
+    
+    Glassmorphism Coverage Must Be ONLY on the Right 30% (Full Height): Right now the glass/blur effect is affecting too much of the page and the layout looks wrong. I need the page split exactly like this: LEFT side = 70% width, normal background (NO glassmorphism, NO blur). RIGHT side = 30% width, a vertical full-height glassmorphism panel (frosted/blurred) that contains the product details. The glass panel must be full height from top to bottom of the visible section (vertically full screen), and it must NOT blur or tint the left 70% area. The split must be clean and fixed: 70/30 at desktop.
+    
+    Right Panel Position + Overlay: The right glass panel must sit on the right edge like the 1st image, with rounded corners and a soft glass border. It should visually overlay the background and slightly overlap into the left side only by its own shadow/blur edge (like the 1st image), but it must not turn the whole page into glass. The panel should feel like a separate glass sheet on the right.
+    
+    Left Side Must Stay Normal (No Glass): The left 70% is a normal section with the background gradient and the product image card. It must remain crisp and not blurred. The left product image box stays on the left, centered within the left 70% area, and arrows remain usable.
+    
+    Background “DinoBoo” Word Placement (Must Match 1st Image): The big background text “DinoBoo” must be placed and aligned like the 1st image: it is behind the content, large, vertical, semi-transparent, and positioned near the split so you see part of the letters behind/near the right panel edge. In the current version, the word position/feel is wrong. Reposition/scale/opacity so it matches the 1st image. Do NOT mirror/flip it. It must read in the correct direction like my original.
+    
+    Keep the Composi, Edit the EXISTING “Split product page” section only (do not generate a new section/box). The current result looks like the 2nd attached image, but I need it to be identical to the 1st attached image. Fix these exact issues:
+    
+    Glassmorphism Coverage Must Be ONLY on the Right 30% (Full Height): Right now the glass/blur effect is affecting too much of the page and the layout looks wrong. I need the page split exactly like this: LEFT side = 70% width, normal background (NO glassmorphism, NO blur). RIGHT side = 30% width, a vertical full-height glassmorphism panel (frosted/blurred) that contains the product details. The glass panel must be full height from top to bottom of the visible section (vertically full screen), and it must NOT blur or tint the left 70% area. The split must be clean and fixed: 70/30 at desktop.
+    
+    Right Panel Position + Overlay: The right glass panel must sit on the right edge like the 1st image, with rounded corners and a soft glass border. It should visually overlay the background and slightly overlap into the left side only by its own shadow/blur edge (like the 1st image), but it must not turn the whole page into glass. The panel should feel like a separate glass sheet on the right.
+    
+    Left Side Must Stay Normal (No Glass): The left 70% is a normal section with the background gradient and the product image card. It must remain crisp and not blurred. The left product image box stays on the left, centered within the left 70% area, and arrows remain usable.
+    
+    Background “DinoBoo” Word Placement (Must Match 1st Image): The big background text “DinoBoo” must be placed and aligned like the 1st image: it is behind the content, large, vertical, semi-transparent, and positioned near the split so you see part of the letters behind/near the right panel edge. In the current version, the word position/feel is wrong. Reposition/scale/opacity so it matches the 1st image. Do NOT mirror/flip it. It must read in the correct direction like my original.
+    
+    Keep the Composi, Edit the EXISTING “Split product page” section only (do not generate a new section/box). The current result looks like the 2nd attached image, but I need it to be identical to the 1st attached image. Fix these exact issues:
+    
+    Glassmorphism Coverage Must Be ONLY on the Right 30% (Full Height): Right now the glass/blur effect is affecting too much of the page and the layout looks wrong. I need the page split exactly like this: LEFT side = 70% width, normal background (NO glassmorphism, NO blur). RIGHT side = 30% width, a vertical full-height glassmorphism panel (frosted/blurred) that contains the product details. The glass panel must be full height from top to bottom of the visible section (vertically full screen), and it must NOT blur or tint the left 70% area. The split must be clean and fixed: 70/30 at desktop.
+    
+    Right Panel Position + Overlay: The right glass panel must sit on the right edge like the 1st image, with rounded corners and a soft glass border. It should visually overlay the background and slightly overlap into the left side only by its own shadow/blur edge (like the 1st image), but it must not turn the whole page into glass. The panel should feel like a separate glass sheet on the right.
+    
+    Left Side Must Stay Normal (No Glass): The left 70% is a normal section with the background gradient and the product image card. It must remain crisp and not blurred. The left product image box stays on the left, centered within the left 70% area, and arrows remain usable.
+    
+    Background “DinoBoo” Word Placement (Must Match 1st Image): The big background text “DinoBoo” must be placed and aligned like the 1st image: it is behind the content, large, vertical, semi-transparent, and positioned near the split so you see part of the letters behind/near the right panel edge. In the current version, the word position/feel is wrong. Reposition/scale/opacity so it matches the 1st image. Do NOT mirror/flip it. It must read in the correct direction like my original.
+    
+    Keep the Composi, do these as well:
+    Keep the Composition Like Image 1 (Spacing & Proportions): The left media card should not be oversized like image 2. The overall spacing must match image 1: left side has more open space, the right panel is slimmer (30%), and the layout feels balanced. Do not increase the glass panel width beyond ~30%. Do not center the panel like image 2.
+    
+    Responsive Rules (Mobile/Tablet/Desktop): Make it responsive and consistent. On desktop: enforce the 70/30 split exactly. On tablet and mobile: keep the same concept (product media + product detail) but ensure it remains clean and usable. If you must stack on mobile, keep the right glass panel style only on the product details area (still glass), and keep the media area normal (not blurred). Never apply glass blur to the entire page.
+    
+    Important: Do NOT create new elements or a new section. Modify the existing section’s CSS/layout only to achieve the exact 1st image result (right 30% glass full-height, left 70% normal, correct DinoBoo background word location).
+    
+    , bro make the glassmorphism full screen and covering the 30% right side of the screen
+    and make me able to control the size of the glassmorphism  box and the blurr and everything please, bro make the glassmorphism full screen and covering the 30% right side of the screen
+    and make me able to control the size of the glassmorphism  box and the blurr and everything please, bro make the glassmorphism full screen and covering the 30% right side of the screen
+    and make me able to control the size of the glassmorphism  box and the blurr and everything please, bro make the glassmorphism full screen and covering the 30% right side of the screen
+    and make me able to control the size of the glassmorphism  box and the blurr and everything please, bro make the glassmorphism full screen and covering the 30% right side of the screen
+    and make me able to control the size of the glassmorphism  box and the blurr and everything please
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-split-product-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(180deg, {{ block.settings.gradient_top }} 0%, {{ block.settings.gradient_bottom }} 100%);
+    overflow-x: hidden;
+  }
+
+  .ai-split-product-header-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 100;
+    background-color: {{ block.settings.header_bg_color }};
+    padding: 16px 40px;
+  }
+
+  .ai-split-product-header-inner-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .ai-split-product-header-left-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .ai-split-product-logo-{{ ai_gen_id }} {
+    height: 32px;
+    width: auto;
+  }
+
+  .ai-split-product-nav-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 8px 16px;
+  }
+
+  .ai-split-product-nav-link-{{ ai_gen_id }} {
+    color: {{ block.settings.header_text_color }};
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-split-product-nav-link-{{ ai_gen_id }}.active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .ai-split-product-header-icons-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .ai-split-product-icon-{{ ai_gen_id }} {
+    color: {{ block.settings.header_text_color }};
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .ai-split-product-bg-text-{{ ai_gen_id }} {
+    position: absolute;
+    {% if block.settings.bg_text_enabled %}
+      display: block;
+    {% else %}
+      display: none;
+    {% endif %}
+    {% if block.settings.bg_text_orientation == 'vertical' %}
+      left: {{ block.settings.bg_text_horizontal }}%;
+      top: {{ block.settings.bg_text_vertical }}%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      transform-origin: center center;
+    {% else %}
+      left: {{ block.settings.bg_text_horizontal }}%;
+      top: {{ block.settings.bg_text_vertical }}%;
+      transform: translate(-50%, -50%);
+    {% endif %}
+    font-size: {{ block.settings.bg_text_size }}px;
+    font-weight: {{ block.settings.bg_text_weight }};
+    color: {{ block.settings.bg_text_color }};
+    opacity: {{ block.settings.bg_text_opacity | divided_by: 100.0 }};
+    white-space: nowrap;
+    z-index: 1;
+    pointer-events: none;
+    letter-spacing: {{ block.settings.bg_text_spacing }}em;
+    text-transform: {{ block.settings.bg_text_transform }};
+  }
+
+  .ai-split-product-container-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: calc(100vh - 80px);
+    z-index: 10;
+  }
+
+  .ai-split-product-left-{{ ai_gen_id }} {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 60px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .ai-split-product-media-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    background-color: {{ block.settings.media_bg_color }};
+    border-radius: {{ block.settings.media_border_radius }}px;
+    padding: 32px;
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-split-product-media-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-split-product-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    z-index: 10;
+  }
+
+  .ai-split-product-arrow-{{ ai_gen_id }}--left {
+    left: -70px;
+  }
+
+  .ai-split-product-arrow-{{ ai_gen_id }}--right {
+    right: -70px;
+  }
+
+  .ai-split-product-arrow-{{ ai_gen_id }} svg {
+    width: 28px;
+    height: 28px;
+    stroke: {{ block.settings.arrow_color }};
+    stroke-width: 2;
+  }
+
+  .ai-split-product-right-{{ ai_gen_id }} {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: {{ block.settings.glass_panel_width }}%;
+    height: 100vh;
+    z-index: 60;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-split-product-glass-panel-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background: {{ block.settings.glass_bg_color }};
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border-left: {{ block.settings.glass_border_thickness }}px solid {{ block.settings.glass_border_color }};
+    border-radius: {{ block.settings.glass_border_radius }}px 0 0 {{ block.settings.glass_border_radius }}px;
+    box-shadow: {{ block.settings.glass_shadow_x }}px {{ block.settings.glass_shadow_y }}px {{ block.settings.glass_shadow_blur }}px {{ block.settings.glass_shadow_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    overflow: hidden;
+    padding: {{ block.settings.glass_panel_padding_vertical }}px {{ block.settings.glass_panel_padding_horizontal }}px;
+  }
+
+  .ai-split-product-info-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.glass_content_max_width }}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .ai-split-product-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 16px 0;
+    line-height: 1.1;
+  }
+
+  .ai-split-product-price-{{ ai_gen_id }} {
+    font-size: 26px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 32px 0;
+    font-weight: 500;
+  }
+
+  .ai-split-product-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 8px 0;
+    font-weight: 500;
+  }
+
+  .ai-split-product-select-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: {{ block.settings.input_bg_color }};
+    color: {{ block.settings.text_color }};
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    margin-bottom: 24px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    cursor: pointer;
+  }
+
+  .ai-split-product-quantity-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ai-split-product-qty-btn-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: {{ block.settings.input_bg_color }};
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: {{ block.settings.text_color }};
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-split-product-qty-input-{{ ai_gen_id }} {
+    width: 60px;
+    height: 40px;
+    background-color: {{ block.settings.input_bg_color }};
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: {{ block.settings.text_color }};
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .ai-split-product-add-to-cart-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-split-product-add-to-cart-{{ ai_gen_id }}:hover {
+    opacity: 0.9;
+  }
+
+  .ai-split-product-divider-{{ ai_gen_id }} {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 24px 0;
+  }
+
+  .ai-split-product-description-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .ai-split-product-left-{{ ai_gen_id }} {
+      padding: 60px 40px;
+    }
+
+    .ai-split-product-media-{{ ai_gen_id }} {
+      max-width: 400px;
+    }
+
+    .ai-split-product-bg-text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.bg_text_size }}px * {{ block.settings.bg_text_tablet_scale | divided_by: 100.0 }});
+    }
+
+    .ai-split-product-arrow-{{ ai_gen_id }}--left {
+      left: -50px;
+    }
+
+    .ai-split-product-arrow-{{ ai_gen_id }}--right {
+      right: -50px;
+    }
+
+    .ai-split-product-right-{{ ai_gen_id }} {
+      width: {{ block.settings.glass_panel_width_tablet }}%;
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.85);
+    }
+  }
+
+  @media screen and (max-width: 990px) {
+    .ai-split-product-container-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-split-product-left-{{ ai_gen_id }} {
+      width: 100%;
+      padding: 40px 20px;
+    }
+
+    .ai-split-product-media-{{ ai_gen_id }} {
+      max-width: 500px;
+    }
+
+    .ai-split-product-right-{{ ai_gen_id }} {
+      width: 100%;
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      height: auto;
+      padding: 0 20px 40px;
+    }
+
+    .ai-split-product-glass-panel-{{ ai_gen_id }} {
+      position: relative;
+      height: auto;
+      border-radius: {{ block.settings.glass_border_radius }}px;
+      border: {{ block.settings.glass_border_thickness }}px solid {{ block.settings.glass_border_color }};
+    }
+
+    .ai-split-product-bg-text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.bg_text_size }}px * {{ block.settings.bg_text_mobile_scale | divided_by: 100.0 }});
+      {% if block.settings.bg_text_mobile_reposition %}
+        left: {{ block.settings.bg_text_mobile_horizontal }}%;
+        top: {{ block.settings.bg_text_mobile_vertical }}%;
+      {% endif %}
+    }
+
+    .ai-split-product-info-{{ ai_gen_id }} {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+      max-width: 100%;
+    }
+
+    .ai-split-product-arrow-{{ ai_gen_id }}--left {
+      left: 10px;
+    }
+
+    .ai-split-product-arrow-{{ ai_gen_id }}--right {
+      right: 10px;
+    }
+
+    .ai-split-product-nav-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-split-product-header-{{ ai_gen_id }} {
+      padding: 12px 20px;
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.75);
+    }
+
+    .ai-split-product-price-{{ ai_gen_id }} {
+      font-size: 22px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-split-product-header-left-{{ ai_gen_id }} {
+      gap: 20px;
+    }
+
+    .ai-split-product-logo-{{ ai_gen_id }} {
+      height: 24px;
+    }
+
+    .ai-split-product-header-icons-{{ ai_gen_id }} {
+      gap: 16px;
+    }
+
+    .ai-split-product-icon-{{ ai_gen_id }} {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ai-split-product-left-{{ ai_gen_id }} {
+      padding: 30px 16px;
+    }
+
+    .ai-split-product-media-wrapper-{{ ai_gen_id }} {
+      padding: 24px;
+    }
+
+    .ai-split-product-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.65);
+    }
+
+    .ai-split-product-price-{{ ai_gen_id }} {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .ai-split-product-glass-panel-{{ ai_gen_id }} {
+      padding: calc({{ block.settings.glass_panel_padding_vertical }}px * 0.7) calc({{ block.settings.glass_panel_padding_horizontal }}px * 0.7);
+    }
+  }
+
+  @supports not (backdrop-filter: blur(10px)) {
+    .ai-split-product-glass-panel-{{ ai_gen_id }} {
+      background: {{ block.settings.glass_bg_color }};
+    }
+  }
+{% endstyle %}
+
+<split-product-{{ ai_gen_id }} class="ai-split-product-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <header class="ai-split-product-header-{{ ai_gen_id }}">
+    <div class="ai-split-product-header-inner-{{ ai_gen_id }}">
+      <div class="ai-split-product-header-left-{{ ai_gen_id }}">
+        {% if block.settings.logo %}
+          <img src="{{ block.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" class="ai-split-product-logo-{{ ai_gen_id }}">
+        {% endif %}
+        <nav class="ai-split-product-nav-{{ ai_gen_id }}">
+          <a href="/" class="ai-split-product-nav-link-{{ ai_gen_id }}">{{ block.settings.nav_link_1 }}</a>
+          <a href="/collections/all" class="ai-split-product-nav-link-{{ ai_gen_id }} active">{{ block.settings.nav_link_2 }}</a>
+          <a href="/pages/about" class="ai-split-product-nav-link-{{ ai_gen_id }}">{{ block.settings.nav_link_3 }}</a>
+          <a href="/pages/contact" class="ai-split-product-nav-link-{{ ai_gen_id }}">{{ block.settings.nav_link_4 }}</a>
+        </nav>
+      </div>
+      <div class="ai-split-product-header-icons-{{ ai_gen_id }}">
+        <svg class="ai-split-product-icon-{{ ai_gen_id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <svg class="ai-split-product-icon-{{ ai_gen_id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <svg class="ai-split-product-icon-{{ ai_gen_id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="ai-split-product-bg-text-{{ ai_gen_id }}">
+    {% if block.settings.bg_text_custom != blank %}
+      {{ block.settings.bg_text_custom }}
+    {% else %}
+      {{ product.title }}
+    {% endif %}
+  </div>
+
+  <div class="ai-split-product-container-{{ ai_gen_id }}">
+    <div class="ai-split-product-left-{{ ai_gen_id }}">
+      <div class="ai-split-product-media-{{ ai_gen_id }}">
+        <button class="ai-split-product-arrow-{{ ai_gen_id }} ai-split-product-arrow-{{ ai_gen_id }}--left" aria-label="Previous image">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <div class="ai-split-product-media-wrapper-{{ ai_gen_id }}">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.featured_image.alt | escape }}" width="800" height="800" loading="eager">
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {% endif %}
+        </div>
+        <button class="ai-split-product-arrow-{{ ai_gen_id }} ai-split-product-arrow-{{ ai_gen_id }}--right" aria-label="Next image">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="ai-split-product-right-{{ ai_gen_id }}">
+      <div class="ai-split-product-glass-panel-{{ ai_gen_id }}">
+        <div class="ai-split-product-info-{{ ai_gen_id }}">
+          <h1 class="ai-split-product-title-{{ ai_gen_id }}">{{ product.title }}</h1>
+          <div class="ai-split-product-price-{{ ai_gen_id }}">{{ product.price | money }}</div>
+
+          {% if product.has_only_default_variant %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          {% else %}
+            <label class="ai-split-product-label-{{ ai_gen_id }}" for="variant-{{ ai_gen_id }}">{{ block.settings.variant_label }}</label>
+            <select class="ai-split-product-select-{{ ai_gen_id }}" id="variant-{{ ai_gen_id }}" name="id">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          {% endif %}
+
+          <label class="ai-split-product-label-{{ ai_gen_id }}">{{ block.settings.quantity_label }}</label>
+          <div class="ai-split-product-quantity-{{ ai_gen_id }}">
+            <button class="ai-split-product-qty-btn-{{ ai_gen_id }}" data-action="decrease" aria-label="Decrease quantity">−</button>
+            <input type="number" class="ai-split-product-qty-input-{{ ai_gen_id }}" name="quantity" value="1" min="1" aria-label="Quantity">
+            <button class="ai-split-product-qty-btn-{{ ai_gen_id }}" data-action="increase" aria-label="Increase quantity">+</button>
+          </div>
+
+          <button class="ai-split-product-add-to-cart-{{ ai_gen_id }}" type="button">{{ block.settings.button_text }}</button>
+
+          <div class="ai-split-product-divider-{{ ai_gen_id }}"></div>
+
+          <div class="ai-split-product-description-{{ ai_gen_id }}">
+            {{ product.description | truncate: 200 }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</split-product-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class SplitProduct{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.currentImageIndex = 0;
+      this.images = [];
+    }
+
+    connectedCallback() {
+      this.setupQuantityButtons();
+      this.setupAddToCart();
+      this.setupImageCarousel();
+    }
+
+    setupQuantityButtons() {
+      const qtyInput = this.querySelector('.ai-split-product-qty-input-{{ ai_gen_id }}');
+      const decreaseBtn = this.querySelector('[data-action="decrease"]');
+      const increaseBtn = this.querySelector('[data-action="increase"]');
+
+      if (decreaseBtn) {
+        decreaseBtn.addEventListener('click', () => {
+          const currentValue = parseInt(qtyInput.value) || 1;
+          if (currentValue > 1) {
+            qtyInput.value = currentValue - 1;
+          }
+        });
+      }
+
+      if (increaseBtn) {
+        increaseBtn.addEventListener('click', () => {
+          const currentValue = parseInt(qtyInput.value) || 1;
+          qtyInput.value = currentValue + 1;
+        });
+      }
+    }
+
+    setupAddToCart() {
+      const addToCartBtn = this.querySelector('.ai-split-product-add-to-cart-{{ ai_gen_id }}');
+      const variantSelect = this.querySelector('.ai-split-product-select-{{ ai_gen_id }}');
+      const qtyInput = this.querySelector('.ai-split-product-qty-input-{{ ai_gen_id }}');
+      const hiddenVariantInput = this.querySelector('input[name="id"]');
+
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => {
+          const variantId = variantSelect ? variantSelect.value : (hiddenVariantInput ? hiddenVariantInput.value : null);
+          const quantity = parseInt(qtyInput.value) || 1;
+
+          if (!variantId) return;
+
+          const formData = {
+            items: [{
+              id: variantId,
+              quantity: quantity
+            }]
+          };
+
+          fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(response => response.json())
+          .then(data => {
+            window.location.href = '/cart';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        });
+      }
+    }
+
+    setupImageCarousel() {
+      const leftArrow = this.querySelector('.ai-split-product-arrow-{{ ai_gen_id }}--left');
+      const rightArrow = this.querySelector('.ai-split-product-arrow-{{ ai_gen_id }}--right');
+      const imageWrapper = this.querySelector('.ai-split-product-media-wrapper-{{ ai_gen_id }}');
+
+      if (typeof product !== 'undefined' && product.media) {
+        this.images = product.media.filter(media => media.media_type === 'image');
+      }
+
+      if (this.images.length <= 1) {
+        if (leftArrow) leftArrow.style.display = 'none';
+        if (rightArrow) rightArrow.style.display = 'none';
+        return;
+      }
+
+      if (leftArrow) {
+        leftArrow.addEventListener('click', () => {
+          this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length;
+          this.updateImage(imageWrapper);
+        });
+      }
+
+      if (rightArrow) {
+        rightArrow.addEventListener('click', () => {
+          this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+          this.updateImage(imageWrapper);
+        });
+      }
+    }
+
+    updateImage(wrapper) {
+      if (!wrapper || !this.images[this.currentImageIndex]) return;
+      
+      const img = wrapper.querySelector('img');
+      if (img) {
+        const newImage = this.images[this.currentImageIndex];
+        img.src = newImage.preview_image.src.replace(/\.(jpg|jpeg|png|gif|webp)/, '_800x.$1');
+        img.alt = newImage.alt || '';
+      }
+    }
+  }
+
+  customElements.define('split-product-{{ ai_gen_id }}', SplitProduct{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Split product page",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "color",
+      "id": "header_bg_color",
+      "label": "Background color",
+      "default": "#0d4c07"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "nav_link_1",
+      "label": "Navigation link 1",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "nav_link_2",
+      "label": "Navigation link 2",
+      "default": "Shop All"
+    },
+    {
+      "type": "text",
+      "id": "nav_link_3",
+      "label": "Navigation link 3",
+      "default": "About"
+    },
+    {
+      "type": "text",
+      "id": "nav_link_4",
+      "label": "Navigation link 4",
+      "default": "Contact Us"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "gradient_top",
+      "label": "Gradient top color",
+      "default": "#0d4c07"
+    },
+    {
+      "type": "color",
+      "id": "gradient_bottom",
+      "label": "Gradient bottom color",
+      "default": "#2d7a24"
+    },
+    {
+      "type": "header",
+      "content": "Background product name"
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_text_enabled",
+      "label": "Show background text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "bg_text_custom",
+      "label": "Custom text"
+    },
+    {
+      "type": "color",
+      "id": "bg_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_size",
+      "label": "Text size",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "bg_text_opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "bg_text_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "bg_text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_spacing",
+      "label": "Letter spacing",
+      "min": -0.1,
+      "max": 0.5,
+      "step": 0.1,
+      "default": -0.1
+    },
+    {
+      "type": "select",
+      "id": "bg_text_orientation",
+      "label": "Orientation",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "header",
+      "content": "Desktop position"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_horizontal",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "range",
+      "id": "bg_text_vertical",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Tablet scaling"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_tablet_scale",
+      "label": "Scale",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "bg_text_mobile_scale",
+      "label": "Scale",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_text_mobile_reposition",
+      "label": "Custom mobile position",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "bg_text_mobile_horizontal",
+      "label": "Mobile horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bg_text_mobile_vertical",
+      "label": "Mobile vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Product media"
+    },
+    {
+      "type": "color",
+      "id": "media_bg_color",
+      "label": "Container background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "media_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Glass panel size"
+    },
+    {
+      "type": "range",
+      "id": "glass_panel_width",
+      "label": "Width (desktop)",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "glass_panel_width_tablet",
+      "label": "Width (tablet)",
+      "min": 30,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "glass_panel_padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "glass_panel_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Glass panel style"
+    },
+    {
+      "type": "color",
+      "id": "glass_bg_color",
+      "label": "Background color",
+      "default": "rgba(13, 76, 7, 0.4)"
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Blur strength",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "glass_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "glass_border_thickness",
+      "label": "Border thickness",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "glass_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.18)"
+    },
+    {
+      "type": "header",
+      "content": "Glass panel shadow"
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_x",
+      "label": "Shadow X offset",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_y",
+      "label": "Shadow Y offset",
+      "min": -20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_blur",
+      "label": "Shadow blur",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "glass_shadow_color",
+      "label": "Shadow color",
+      "default": "rgba(0, 0, 0, 0.25)"
+    },
+    {
+      "type": "header",
+      "content": "Glass panel content"
+    },
+    {
+      "type": "range",
+      "id": "glass_content_max_width",
+      "label": "Content max width",
+      "min": 300,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 420
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Form elements"
+    },
+    {
+      "type": "text",
+      "id": "variant_label",
+      "label": "Variant label",
+      "default": "Size (Age)"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "color",
+      "id": "input_bg_color",
+      "label": "Input background",
+      "default": "rgba(45, 122, 36, 0.5)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split product page"
+    }
+  ]
+}
+{% endschema %}

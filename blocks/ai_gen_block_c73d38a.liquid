@@ -1,0 +1,891 @@
+{% doc %}
+  @prompt
+    Make only the section named "Product glass card 1st dinaboo" responsive for mobile, tablet, and desktop in the Shopify Dawn theme. Do not redesign or modify anything visually. The design must remain 100% identical to the current version on desktop—no changes to layout style, proportions, fonts, font sizes, spacing, padding, gaps, colors, glassmorphism/blur effects, shadows, border radius, animations, transitions, content, wording, arrows, buttons, or element positions.
+    
+    The only goal is responsiveness.
+    
+    Use Shopify Dawn breakpoints exactly as follows:
+    
+    Mobile: 0–749px
+    
+    Tablet / small desktop: 750–989px
+    
+    Desktop: 990px and above
+    
+    Ensure there is no horizontal scrolling at any screen width. Keep the same visual hierarchy and proportions; elements should scale or reflow naturally without changing how the design feels. If the section uses columns or a grid, keep the exact layout on desktop, adapt it compactly on tablet, and stack logically on mobile while keeping all content and styles unchanged.
+    
+    Use fluid sizing only where needed to prevent overflow (percentages, fr units, clamp, max-width: 100%, height: auto). Keep spacing and padding visually consistent by scaling proportionally. Any images or videos must keep their aspect ratio, avoid unexpected cropping, and keep the main subject visible.
+    
+    All responsive changes must be scoped only to this section and must not affect any other sections or theme files. Do not add new features or UI elements—just make the existing section responsive.
+    
+    The final result must look perfect when viewed at common sizes including mobile (320–428px), tablet (768–834px), and desktop (1024–1920px), while remaining visually identical to the current design., Make only the section named "Product glass card 1st dinaboo" responsive for mobile, tablet, and desktop in the Shopify Dawn theme. Do not redesign or modify anything visually. The design must remain 100% identical to the current version on desktop—no changes to layout style, proportions, fonts, font sizes, spacing, padding, gaps, colors, glassmorphism/blur effects, shadows, border radius, animations, transitions, content, wording, arrows, buttons, or element positions.
+    
+    The only goal is responsiveness.
+    
+    Use Shopify Dawn breakpoints exactly as follows:
+    
+    Mobile: 0–749px
+    
+    Tablet / small desktop: 750–989px
+    
+    Desktop: 990px and above
+    
+    Ensure there is no horizontal scrolling at any screen width. Keep the same visual hierarchy and proportions; elements should scale or reflow naturally without changing how the design feels. If the section uses columns or a grid, keep the exact layout on desktop, adapt it compactly on tablet, and stack logically on mobile while keeping all content and styles unchanged.
+    
+    Use fluid sizing only where needed to prevent overflow (percentages, fr units, clamp, max-width: 100%, height: auto). Keep spacing and padding visually consistent by scaling proportionally. Any images or videos must keep their aspect ratio, avoid unexpected cropping, and keep the main subject visible.
+    
+    All responsive changes must be scoped only to this section and must not affect any other sections or theme files. Do not add new features or UI elements—just make the existing section responsive.
+    
+    The final result must look perfect when viewed at common sizes including mobile (320–428px), tablet (768–834px), and desktop (1024–1920px), while remaining visually identical to the current design.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-glass-card-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-product-glass-card-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    position: relative;
+  }
+
+  .ai-product-glass-card-image-column-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    overflow: hidden;
+  }
+
+  .ai-product-glass-card-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-product-glass-card-content-column-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ block.settings.content_padding }}px;
+    background: {{ block.settings.background_color }};
+    {% if block.settings.background_image %}
+      background-image: url('{{ block.settings.background_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+    {% endif %}
+  }
+
+  .ai-product-glass-card-glass-{{ ai_gen_id }} {
+    background: {{ block.settings.glass_background }};
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border-radius: {{ block.settings.glass_border_radius }}px;
+    padding: {{ block.settings.glass_padding }}px;
+    border: {{ block.settings.glass_border_width }}px solid {{ block.settings.glass_border_color }};
+    box-shadow: {{ block.settings.glass_shadow_x }}px {{ block.settings.glass_shadow_y }}px {{ block.settings.glass_shadow_blur }}px {{ block.settings.glass_shadow_color }};
+    max-width: {{ block.settings.glass_max_width }}px;
+    width: 100%;
+  }
+
+  .ai-product-glass-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: {{ block.settings.title_font_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_margin_bottom }}px 0;
+    line-height: 1.2;
+  }
+
+  .ai-product-glass-card-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_font_size }}px;
+    font-weight: {{ block.settings.price_font_weight }};
+    color: {{ block.settings.price_color }};
+    margin: 0 0 {{ block.settings.price_margin_bottom }}px 0;
+  }
+
+  .ai-product-glass-card-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_font_size }}px;
+    color: {{ block.settings.description_color }};
+    margin: 0 0 {{ block.settings.description_margin_bottom }}px 0;
+    line-height: 1.6;
+  }
+
+  .ai-product-glass-card-variants-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.variants_margin_bottom }}px 0;
+  }
+
+  .ai-product-glass-card-variant-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.variant_label_font_size }}px;
+    font-weight: {{ block.settings.variant_label_font_weight }};
+    color: {{ block.settings.variant_label_color }};
+    margin: 0 0 {{ block.settings.variant_label_margin_bottom }}px 0;
+    display: block;
+  }
+
+  .ai-product-glass-card-variant-select-{{ ai_gen_id }} {
+    width: 100%;
+    padding: {{ block.settings.variant_select_padding }}px;
+    font-size: {{ block.settings.variant_select_font_size }}px;
+    border: {{ block.settings.variant_select_border_width }}px solid {{ block.settings.variant_select_border_color }};
+    border-radius: {{ block.settings.variant_select_border_radius }}px;
+    background: {{ block.settings.variant_select_background }};
+    color: {{ block.settings.variant_select_color }};
+    cursor: pointer;
+  }
+
+  .ai-product-glass-card-button-{{ ai_gen_id }} {
+    width: 100%;
+    padding: {{ block.settings.button_padding_y }}px {{ block.settings.button_padding_x }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    color: {{ block.settings.button_text_color }};
+    background: {{ block.settings.button_background }};
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .ai-product-glass-card-button-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_background }};
+    color: {{ block.settings.button_hover_text_color }};
+    border-color: {{ block.settings.button_hover_border_color }};
+  }
+
+  @media screen and (max-width: 989px) and (min-width: 750px) {
+    .ai-product-glass-card-container-{{ ai_gen_id }} {
+      min-height: clamp(60vh, {{ block.settings.section_height }}vh, 80vh);
+    }
+
+    .ai-product-glass-card-image-column-{{ ai_gen_id }} {
+      min-height: clamp(60vh, {{ block.settings.section_height }}vh, 80vh);
+    }
+
+    .ai-product-glass-card-content-column-{{ ai_gen_id }} {
+      padding: clamp(20px, {{ block.settings.content_padding }}px, 40px);
+    }
+
+    .ai-product-glass-card-glass-{{ ai_gen_id }} {
+      padding: clamp(20px, {{ block.settings.glass_padding }}px, 40px);
+      max-width: 100%;
+    }
+
+    .ai-product-glass-card-title-{{ ai_gen_id }} {
+      font-size: clamp(24px, {{ block.settings.title_font_size }}px, 36px);
+      margin-bottom: clamp(12px, {{ block.settings.title_margin_bottom }}px, 20px);
+    }
+
+    .ai-product-glass-card-price-{{ ai_gen_id }} {
+      font-size: clamp(18px, {{ block.settings.price_font_size }}px, 24px);
+      margin-bottom: clamp(12px, {{ block.settings.price_margin_bottom }}px, 20px);
+    }
+
+    .ai-product-glass-card-description-{{ ai_gen_id }} {
+      font-size: clamp(14px, {{ block.settings.description_font_size }}px, 16px);
+      margin-bottom: clamp(16px, {{ block.settings.description_margin_bottom }}px, 24px);
+    }
+
+    .ai-product-glass-card-variants-{{ ai_gen_id }} {
+      margin-bottom: clamp(16px, {{ block.settings.variants_margin_bottom }}px, 24px);
+    }
+
+    .ai-product-glass-card-variant-label-{{ ai_gen_id }} {
+      font-size: clamp(13px, {{ block.settings.variant_label_font_size }}px, 15px);
+      margin-bottom: clamp(6px, {{ block.settings.variant_label_margin_bottom }}px, 10px);
+    }
+
+    .ai-product-glass-card-variant-select-{{ ai_gen_id }} {
+      padding: clamp(10px, {{ block.settings.variant_select_padding }}px, 14px);
+      font-size: clamp(14px, {{ block.settings.variant_select_font_size }}px, 16px);
+    }
+
+    .ai-product-glass-card-button-{{ ai_gen_id }} {
+      padding: clamp(12px, {{ block.settings.button_padding_y }}px, 16px) clamp(20px, {{ block.settings.button_padding_x }}px, 32px);
+      font-size: clamp(14px, {{ block.settings.button_font_size }}px, 16px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-glass-card-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .ai-product-glass-card-image-column-{{ ai_gen_id }} {
+      min-height: 50vh;
+      order: 1;
+    }
+
+    .ai-product-glass-card-content-column-{{ ai_gen_id }} {
+      order: 2;
+      padding: 24px 16px;
+      min-height: auto;
+    }
+
+    .ai-product-glass-card-glass-{{ ai_gen_id }} {
+      padding: 24px;
+      max-width: 100%;
+    }
+
+    .ai-product-glass-card-title-{{ ai_gen_id }} {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .ai-product-glass-card-price-{{ ai_gen_id }} {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .ai-product-glass-card-description-{{ ai_gen_id }} {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .ai-product-glass-card-variants-{{ ai_gen_id }} {
+      margin-bottom: 20px;
+    }
+
+    .ai-product-glass-card-variant-label-{{ ai_gen_id }} {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .ai-product-glass-card-variant-select-{{ ai_gen_id }} {
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .ai-product-glass-card-button-{{ ai_gen_id }} {
+      padding: 14px 24px;
+      font-size: 15px;
+    }
+  }
+{% endstyle %}
+
+<product-glass-card-{{ ai_gen_id }} class="ai-product-glass-card-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-glass-card-container-{{ ai_gen_id }}">
+    <div class="ai-product-glass-card-image-column-{{ ai_gen_id }}">
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: 2000 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          class="ai-product-glass-card-image-{{ ai_gen_id }}"
+          loading="lazy"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+        >
+      {% else %}
+        <div class="ai-product-glass-card-image-placeholder-{{ ai_gen_id }}">
+          {{ 'product-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ai-product-glass-card-content-column-{{ ai_gen_id }}">
+      <div class="ai-product-glass-card-glass-{{ ai_gen_id }}">
+        {% if block.settings.show_title %}
+          <h1 class="ai-product-glass-card-title-{{ ai_gen_id }}">{{ product.title }}</h1>
+        {% endif %}
+
+        {% if block.settings.show_price %}
+          <div class="ai-product-glass-card-price-{{ ai_gen_id }}">
+            {{ product.price | money }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_description and product.description != blank %}
+          <div class="ai-product-glass-card-description-{{ ai_gen_id }}">
+            {{ product.description | strip_html | truncate: 200 }}
+          </div>
+        {% endif %}
+
+        {% if product.has_only_default_variant == false %}
+          <div class="ai-product-glass-card-variants-{{ ai_gen_id }}">
+            <label class="ai-product-glass-card-variant-label-{{ ai_gen_id }}" for="variant-select-{{ ai_gen_id }}">
+              {{ block.settings.variant_label }}
+            </label>
+            <select
+              id="variant-select-{{ ai_gen_id }}"
+              class="ai-product-glass-card-variant-select-{{ ai_gen_id }}"
+              name="id"
+            >
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }} - {{ variant.price | money }}
+                  {% unless variant.available %} (Sold out){% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+
+        <button
+          type="button"
+          class="ai-product-glass-card-button-{{ ai_gen_id }}"
+          data-product-id="{{ product.id }}"
+        >
+          {{ block.settings.button_text }}
+        </button>
+      </div>
+    </div>
+  </div>
+</product-glass-card-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGlassCard{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.button = this.querySelector('.ai-product-glass-card-button-{{ ai_gen_id }}');
+        this.variantSelect = this.querySelector('.ai-product-glass-card-variant-select-{{ ai_gen_id }}');
+      }
+
+      connectedCallback() {
+        if (this.button) {
+          this.button.addEventListener('click', this.handleAddToCart.bind(this));
+        }
+      }
+
+      handleAddToCart() {
+        const variantId = this.variantSelect ? this.variantSelect.value : this.button.dataset.productId;
+        
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = '/cart';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    }
+
+    customElements.define('product-glass-card-{{ ai_gen_id }}', ProductGlassCard{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product glass card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Section height",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Content padding",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "header",
+      "content": "Glass card style"
+    },
+    {
+      "type": "color",
+      "id": "glass_background",
+      "label": "Glass background",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Glass blur",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "glass_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "glass_padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Glass padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "glass_max_width",
+      "min": 300,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Glass max width",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "glass_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "glass_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_x",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow X offset",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_y",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow Y offset",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "glass_shadow_blur",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Shadow blur",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "glass_shadow_color",
+      "label": "Shadow color",
+      "default": "rgba(0, 0, 0, 0.3)"
+    },
+    {
+      "type": "header",
+      "content": "Product title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Font weight",
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Product price"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "price_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Font weight",
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "price_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Product description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "rgba(255, 255, 255, 0.8)"
+    },
+    {
+      "type": "range",
+      "id": "description_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Variant selector"
+    },
+    {
+      "type": "text",
+      "id": "variant_label",
+      "label": "Variant label",
+      "default": "Select variant"
+    },
+    {
+      "type": "range",
+      "id": "variant_label_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Label font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "variant_label_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Label font weight",
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "variant_label_color",
+      "label": "Label color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "variant_label_margin_bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Label margin bottom",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "variants_margin_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Variants margin bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "variant_select_padding",
+      "min": 8,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Select padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "variant_select_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Select font size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "variant_select_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Select border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "variant_select_border_color",
+      "label": "Select border color",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "range",
+      "id": "variant_select_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Select border radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "variant_select_background",
+      "label": "Select background",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "color",
+      "id": "variant_select_color",
+      "label": "Select text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Add to cart button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "label": "Font weight",
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "rgba(255, 255, 255, 0.9)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border_color",
+      "label": "Hover border color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product glass card"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,315 @@
+{%- liquid
+  assign section_id = section.id
+  assign top_image = section.settings.top_image
+  assign bottom_image = section.settings.bottom_image
+  assign top_image_alt = section.settings.top_image_alt | default: ''
+  assign bottom_image_alt = section.settings.bottom_image_alt | default: ''
+  assign full_width = section.settings.full_width
+  assign container_1_text = section.settings.container_1_text
+  assign container_2_text = section.settings.container_2_text
+  assign container_3_text = section.settings.container_3_text
+  assign container_bg = section.settings.container_bg | default: '#ffffff'
+  assign container_text_color = section.settings.container_text_color | default: '#000000'
+  assign container_padding = section.settings.container_padding | default: 30
+  assign container_radius = section.settings.container_radius | default: 12
+-%}
+
+<section class="two-images two-images--{{ section_id }}" data-section-id="{{ section_id }}">
+  <div class="two-images__wrapper{% if full_width %} two-images__wrapper--full{% endif %}">
+    {%- if top_image != blank -%}
+      <div class="two-images__top">
+        <img
+          src="{{ top_image | image_url: width: 1920 }}"
+          srcset="{{ top_image | image_url: width: 1920 }} 1x, {{ top_image | image_url: width: 3840 }} 2x"
+          alt="{{ top_image_alt | escape }}"
+          class="two-images__img two-images__img--top"
+          loading="lazy"
+        >
+      </div>
+    {%- endif -%}
+
+    {%- if bottom_image != blank -%}
+      <div class="two-images__bottom">
+        <img
+          src="{{ bottom_image | image_url: width: 1920 }}"
+          srcset="{{ bottom_image | image_url: width: 1920 }} 1x, {{ bottom_image | image_url: width: 3840 }} 2x"
+          alt="{{ bottom_image_alt | escape }}"
+          class="two-images__img two-images__img--bottom"
+          loading="lazy"
+        >
+        <div class="two-images__overlay">
+          <div class="two-images__containers">
+            {%- if container_1_text != blank -%}
+              <div class="two-images__container two-images__container--1">
+                <div class="two-images__container-content">
+                  {{ container_1_text }}
+                </div>
+              </div>
+            {%- endif -%}
+            
+            <div class="two-images__containers-bottom">
+              {%- if container_2_text != blank -%}
+                <div class="two-images__container two-images__container--2">
+                  <div class="two-images__container-content">
+                    {{ container_2_text }}
+                  </div>
+                </div>
+              {%- endif -%}
+              
+              {%- if container_3_text != blank -%}
+                <div class="two-images__container two-images__container--3">
+                  <div class="two-images__container-content">
+                    {{ container_3_text }}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .two-images--{{ section_id }} {
+    width: 100%;
+  }
+
+  .two-images--{{ section_id }} .two-images__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .two-images--{{ section_id }} .two-images__wrapper--full {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .two-images--{{ section_id }} .two-images__top,
+  .two-images--{{ section_id }} .two-images__bottom {
+    width: 100%;
+    position: relative;
+  }
+
+  .two-images--{{ section_id }} .two-images__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .two-images--{{ section_id }} .two-images__img--top {
+    margin-bottom: 0;
+  }
+
+  .two-images--{{ section_id }} .two-images__img--bottom {
+    margin-top: 0;
+  }
+
+  .two-images--{{ section_id }} .two-images__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ container_padding }}px;
+  }
+
+  .two-images--{{ section_id }} .two-images__containers {
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: {{ container_padding }}px;
+  }
+
+  .two-images--{{ section_id }} .two-images__container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    color: #ffffff;
+    border-radius: {{ container_radius }}px;
+    padding: {{ container_padding }}px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .two-images--{{ section_id }} .two-images__container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    pointer-events: none;
+  }
+
+  .two-images--{{ section_id }} .two-images__container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .two-images--{{ section_id }} .two-images__container--1 {
+    width: 100%;
+  }
+
+  .two-images--{{ section_id }} .two-images__containers-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ container_padding }}px;
+  }
+
+  .two-images--{{ section_id }} .two-images__container-content {
+    font-size: 16px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  @media screen and (max-width: 749px) {
+    .two-images--{{ section_id }} .two-images__wrapper {
+      padding: 0 16px;
+    }
+
+    .two-images--{{ section_id }} .two-images__wrapper--full {
+      padding: 0;
+    }
+
+    .two-images--{{ section_id }} .two-images__overlay {
+      padding: 20px;
+    }
+
+    .two-images--{{ section_id }} .two-images__containers {
+      gap: 20px;
+    }
+
+    .two-images--{{ section_id }} .two-images__containers-bottom {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .two-images--{{ section_id }} .two-images__container {
+      padding: 20px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Two Images",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image",
+      "label": "Top Image"
+    },
+    {
+      "type": "text",
+      "id": "top_image_alt",
+      "label": "Top Image Alt Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_image",
+      "label": "Bottom Image"
+    },
+    {
+      "type": "text",
+      "id": "bottom_image_alt",
+      "label": "Bottom Image Alt Text"
+    },
+    {
+      "type": "header",
+      "content": "Containers (Inside Bottom Image)"
+    },
+    {
+      "type": "richtext",
+      "id": "container_1_text",
+      "label": "Container 1 Text (Top)",
+      "info": "Top container - full width"
+    },
+    {
+      "type": "richtext",
+      "id": "container_2_text",
+      "label": "Container 2 Text (Bottom Left)",
+      "info": "Bottom left container"
+    },
+    {
+      "type": "richtext",
+      "id": "container_3_text",
+      "label": "Container 3 Text (Bottom Right)",
+      "info": "Bottom right container"
+    },
+    {
+      "type": "header",
+      "content": "Container Styling"
+    },
+    {
+      "type": "color",
+      "id": "container_bg",
+      "label": "Container Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "container_text_color",
+      "label": "Container Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "container_padding",
+      "label": "Container Padding",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "container_radius",
+      "label": "Container Border Radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Images"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,1021 @@
+{%- liquid
+  assign sid = section.id | replace: '_', '' | downcase
+  assign heading_tag = section.settings.heading_tag | default: 'h2'
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 700px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .about-glass-{{ sid }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    --about-kicker-color: {{ section.settings.kicker_color }};
+    --about-heading-color: {{ section.settings.heading_color }};
+    --about-body-color: {{ section.settings.body_color }};
+    --about-button-background-color: {{ section.settings.button_background_color }};
+    --about-button-text-color: {{ section.settings.button_text_color }};
+    --about-button-border-color: {{ section.settings.button_border_color }};
+    --about-stat-value-color: {{ section.settings.stat_value_color }};
+    --about-stat-label-color: {{ section.settings.stat_label_color }};
+    --about-value-title-color: {{ section.settings.value_title_color }};
+    --about-value-text-color: {{ section.settings.value_text_color }};
+    --about-icon-background-color: {{ section.settings.icon_background_color | color_modify: 'alpha', section.settings.icon_background_opacity | divided_by: 100.0 }};
+    --about-icon-color: {{ section.settings.icon_color }};
+    --about-media-background-color: {{ section.settings.media_background_color | color_modify: 'alpha', section.settings.media_background_opacity | divided_by: 100.0 }};
+    --about-media-placeholder-text-color: {{ section.settings.media_placeholder_text_color }};
+    --about-media-placeholder-gradient-start: {{ section.settings.media_placeholder_gradient_start_color | color_modify: 'alpha', section.settings.media_placeholder_gradient_start_opacity | divided_by: 100.0 }};
+    --about-media-placeholder-gradient-end: {{ section.settings.media_placeholder_gradient_end_color | color_modify: 'alpha', section.settings.media_placeholder_gradient_end_opacity | divided_by: 100.0 }};
+    background: {% if section.settings.background_gradient != blank %}{{ section.settings.background_gradient }}{% else %}{{ section.settings.background_color }}{% endif %} !important;
+  }
+
+  .about-glass-{{ sid }}__container {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 32px), {{ section.settings.max_width }}px);
+    margin: 0 auto;
+    display: grid;
+    gap: {{ section.settings.cards_gap }}px;
+  }
+
+  .about-glass-{{ sid }}__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: {{ section.settings.hero_gap }}px;
+    align-items: stretch;
+    border-radius: {{ section.settings.corner_radius }}px;
+    border: 1px solid {{ section.settings.glass_border_color | color_modify: 'alpha', section.settings.glass_border_opacity | divided_by: 100.0 }} !important;
+    background: {{ section.settings.glass_color | color_modify: 'alpha', section.settings.glass_opacity | divided_by: 100.0 }} !important;
+    backdrop-filter: blur({{ section.settings.glass_blur }}px) saturate(160%);
+    -webkit-backdrop-filter: blur({{ section.settings.glass_blur }}px) saturate(160%);
+    box-shadow: 0 16px 46px {{ section.settings.shadow_color | color_modify: 'alpha', section.settings.panel_shadow_opacity | divided_by: 100.0 }} !important;
+    padding: {{ section.settings.hero_padding }}px;
+  }
+
+  .about-glass-{{ sid }}__hero--image-right .about-glass-{{ sid }}__media {
+    order: 2;
+  }
+
+  .about-glass-{{ sid }}__hero--image-right .about-glass-{{ sid }}__content {
+    order: 1;
+  }
+
+  .about-glass-{{ sid }}__media {
+    border-radius: calc({{ section.settings.corner_radius }}px - 8px);
+    overflow: hidden;
+    min-height: 320px;
+    background: var(--about-media-background-color) !important;
+  }
+
+  .about-glass-{{ sid }}__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .about-glass-{{ sid }}__media-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--about-media-placeholder-text-color) !important;
+    background: linear-gradient(135deg, var(--about-media-placeholder-gradient-start), var(--about-media-placeholder-gradient-end)) !important;
+  }
+
+  .about-glass-{{ sid }}__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.6rem;
+  }
+
+  .about-glass-{{ sid }}__kicker {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--about-kicker-color) !important;
+  }
+
+  .about-glass-{{ sid }}__heading {
+    margin: 0;
+    font-size: {{ section.settings.heading_size }}px;
+    line-height: 1.1;
+    color: var(--about-heading-color) !important;
+  }
+
+  .about-glass-{{ sid }}__text {
+    margin: 0;
+    font-size: {{ section.settings.body_text_size }}px;
+    line-height: 1.6;
+    color: var(--about-body-color) !important;
+  }
+
+  .about-glass-{{ sid }}__text p {
+    margin: 0 0 1rem;
+  }
+
+  .about-glass-{{ sid }}__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-glass-{{ sid }}__button-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .about-glass-{{ sid }}__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    min-height: 46px;
+    padding: 0 1.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--about-button-border-color) !important;
+    background: var(--about-button-background-color) !important;
+    color: var(--about-button-text-color) !important;
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .about-glass-{{ sid }}__button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+  }
+
+  .about-glass-{{ sid }}__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin-top: 0.2rem;
+  }
+
+  .about-glass-{{ sid }}__stat {
+    border-radius: calc({{ section.settings.corner_radius }}px - 12px);
+    padding: 1rem 1.1rem;
+    border: 1px solid {{ section.settings.glass_border_color | color_modify: 'alpha', section.settings.glass_border_opacity | divided_by: 100.0 }} !important;
+    background: {{ section.settings.glass_color | color_modify: 'alpha', section.settings.card_glass_opacity | divided_by: 100.0 }} !important;
+    backdrop-filter: blur({{ section.settings.glass_blur | at_most: 18 }}px) saturate(150%);
+    -webkit-backdrop-filter: blur({{ section.settings.glass_blur | at_most: 18 }}px) saturate(150%);
+  }
+
+  .about-glass-{{ sid }}__stat-value {
+    display: block;
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.05;
+    font-weight: 800;
+    color: var(--about-stat-value-color) !important;
+  }
+
+  .about-glass-{{ sid }}__stat-label {
+    margin: 0.35rem 0 0;
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--about-stat-label-color) !important;
+  }
+
+  .about-glass-{{ sid }}__values {
+    display: grid;
+    gap: {{ section.settings.cards_gap }}px;
+    grid-template-columns: repeat({{ section.settings.cards_per_row }}, minmax(0, 1fr));
+  }
+
+  .about-glass-{{ sid }}__value-card {
+    border-radius: {{ section.settings.corner_radius }}px;
+    border: 1px solid {{ section.settings.glass_border_color | color_modify: 'alpha', section.settings.glass_border_opacity | divided_by: 100.0 }} !important;
+    background: {{ section.settings.glass_color | color_modify: 'alpha', section.settings.card_glass_opacity | divided_by: 100.0 }} !important;
+    backdrop-filter: blur({{ section.settings.glass_blur }}px) saturate(160%);
+    -webkit-backdrop-filter: blur({{ section.settings.glass_blur }}px) saturate(160%);
+    box-shadow: 0 12px 34px {{ section.settings.shadow_color | color_modify: 'alpha', section.settings.panel_shadow_opacity | divided_by: 100.0 }} !important;
+    padding: {{ section.settings.card_padding }}px;
+  }
+
+  .about-glass-{{ sid }}__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    background: var(--about-icon-background-color) !important;
+    color: var(--about-icon-color) !important;
+  }
+
+  .about-glass-{{ sid }}__icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  .about-glass-{{ sid }}__value-title {
+    margin: 0;
+    font-size: {{ section.settings.card_title_size }}px;
+    line-height: 1.2;
+    color: var(--about-value-title-color) !important;
+  }
+
+  .about-glass-{{ sid }}__value-text {
+    margin: 0.85rem 0 0;
+    font-size: {{ section.settings.card_text_size }}px;
+    line-height: 1.55;
+    color: var(--about-value-text-color) !important;
+  }
+
+  .about-glass-{{ sid }}__value-text p {
+    margin: 0;
+  }
+
+  @media screen and (min-width: 700px) and (max-width: 1300px) {
+    .about-glass-{{ sid }}__container {
+      width: min(calc(100% - 32px), {{ section.settings.max_width | times: 0.85 | round: 0 }}px);
+    }
+
+    .about-glass-{{ sid }}__hero {
+      gap: {{ section.settings.hero_gap | times: 0.765 | round: 0 }}px;
+      border-radius: {{ section.settings.corner_radius | times: 0.765 | round: 0 }}px;
+      padding: {{ section.settings.hero_padding | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__media {
+      min-height: 245px;
+      border-radius: calc({{ section.settings.corner_radius | times: 0.765 | round: 0 }}px - 8px);
+    }
+
+    .about-glass-{{ sid }}__media-placeholder {
+      min-height: 245px;
+      font-size: 1.08rem;
+    }
+
+    .about-glass-{{ sid }}__content {
+      gap: 1.22rem;
+    }
+
+    .about-glass-{{ sid }}__kicker {
+      font-size: 0.92rem;
+    }
+
+    .about-glass-{{ sid }}__heading {
+      font-size: {{ section.settings.heading_size | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__text {
+      font-size: {{ section.settings.body_text_size | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__button {
+      min-height: 35px;
+      padding: 0 1.38rem;
+      font-size: 1.07rem;
+    }
+
+    .about-glass-{{ sid }}__stats {
+      gap: 0.68rem;
+    }
+
+    .about-glass-{{ sid }}__stat {
+      border-radius: calc({{ section.settings.corner_radius | times: 0.765 | round: 0 }}px - 12px);
+      padding: 0.77rem 0.85rem;
+    }
+
+    .about-glass-{{ sid }}__stat-value {
+      font-size: 1.53rem;
+    }
+
+    .about-glass-{{ sid }}__stat-label {
+      margin-top: 0.27rem;
+      font-size: 0.92rem;
+    }
+
+    .about-glass-{{ sid }}__values {
+      gap: {{ section.settings.cards_gap | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__value-card {
+      border-radius: {{ section.settings.corner_radius | times: 0.765 | round: 0 }}px;
+      padding: {{ section.settings.card_padding | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__icon {
+      width: 33px;
+      height: 33px;
+      border-radius: 9px;
+      margin-bottom: 0.92rem;
+    }
+
+    .about-glass-{{ sid }}__icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .about-glass-{{ sid }}__value-title {
+      font-size: {{ section.settings.card_title_size | times: 0.765 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__value-text {
+      margin-top: 0.65rem;
+      font-size: {{ section.settings.card_text_size | times: 0.765 | round: 0 }}px;
+    }
+  }
+
+  @media screen and (max-width: 699px) {
+    .about-glass-{{ sid }}__hero {
+      grid-template-columns: 1fr;
+      padding: {{ section.settings.hero_padding | times: 0.78 | round: 0 }}px;
+      gap: 1.4rem;
+    }
+
+    .about-glass-{{ sid }}__hero--image-right .about-glass-{{ sid }}__media,
+    .about-glass-{{ sid }}__hero--image-right .about-glass-{{ sid }}__content {
+      order: initial;
+    }
+
+    .about-glass-{{ sid }}__heading {
+      font-size: {{ section.settings.heading_size | times: 0.72 | round: 0 }}px;
+    }
+
+    .about-glass-{{ sid }}__stats {
+      grid-template-columns: 1fr;
+    }
+
+    .about-glass-{{ sid }}__values {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}
+
+<section class="about-glass-{{ sid }} section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="about-glass-{{ sid }}__container">
+    <div class="about-glass-{{ sid }}__hero{% if section.settings.image_position == 'right' %} about-glass-{{ sid }}__hero--image-right{% endif %}">
+      <div class="about-glass-{{ sid }}__media">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1600 }}"
+            srcset="
+              {{ section.settings.image | image_url: width: 480 }} 480w,
+              {{ section.settings.image | image_url: width: 720 }} 720w,
+              {{ section.settings.image | image_url: width: 1000 }} 1000w,
+              {{ section.settings.image | image_url: width: 1400 }} 1400w
+            "
+            sizes="(max-width: 699px) calc(100vw - 32px), 42vw"
+            alt="{{ section.settings.image.alt | escape }}"
+            loading="lazy"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
+          >
+        {%- else -%}
+          <div class="about-glass-{{ sid }}__media-placeholder">About Us</div>
+        {%- endif -%}
+      </div>
+
+      <div class="about-glass-{{ sid }}__content">
+        {%- if section.settings.kicker != blank -%}
+          <p class="about-glass-{{ sid }}__kicker">{{ section.settings.kicker }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <{{ heading_tag }} class="about-glass-{{ sid }}__heading">{{ section.settings.heading }}</{{ heading_tag }}>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="about-glass-{{ sid }}__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <div class="about-glass-{{ sid }}__button-wrap">
+            <a
+              {% if section.settings.button_link == blank %}
+                role="link" aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.button_link }}"
+              {% endif %}
+              class="about-glass-{{ sid }}__button"
+            >
+              {{ section.settings.button_label | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.stat_1_value != blank or section.settings.stat_2_value != blank or section.settings.stat_3_value != blank -%}
+          <div class="about-glass-{{ sid }}__stats">
+            {%- if section.settings.stat_1_value != blank -%}
+              <div class="about-glass-{{ sid }}__stat">
+                <span class="about-glass-{{ sid }}__stat-value">{{ section.settings.stat_1_value }}</span>
+                {%- if section.settings.stat_1_label != blank -%}
+                  <p class="about-glass-{{ sid }}__stat-label">{{ section.settings.stat_1_label }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.stat_2_value != blank -%}
+              <div class="about-glass-{{ sid }}__stat">
+                <span class="about-glass-{{ sid }}__stat-value">{{ section.settings.stat_2_value }}</span>
+                {%- if section.settings.stat_2_label != blank -%}
+                  <p class="about-glass-{{ sid }}__stat-label">{{ section.settings.stat_2_label }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.stat_3_value != blank -%}
+              <div class="about-glass-{{ sid }}__stat">
+                <span class="about-glass-{{ sid }}__stat-value">{{ section.settings.stat_3_value }}</span>
+                {%- if section.settings.stat_3_label != blank -%}
+                  <p class="about-glass-{{ sid }}__stat-label">{{ section.settings.stat_3_label }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="about-glass-{{ sid }}__values">
+        {%- for block in section.blocks -%}
+          <article class="about-glass-{{ sid }}__value-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon_svg != blank -%}
+              <div class="about-glass-{{ sid }}__icon">{{ block.settings.icon_svg }}</div>
+            {%- endif -%}
+
+            {%- if block.settings.title != blank -%}
+              <h3 class="about-glass-{{ sid }}__value-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.text != blank -%}
+              <div class="about-glass-{{ sid }}__value-text rte">{{ block.settings.text }}</div>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Us Glass",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "About us"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We build products with clarity and purpose."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share your story, your mission, and what makes your brand different. Keep it honest, clear, and human.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Stats"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 value",
+      "default": "50K+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "happy customers"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 value",
+      "default": "4.9/5"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "average rating"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 value",
+      "default": "24/7"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "support"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Section max width",
+      "min": 900,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "hero_padding",
+      "label": "Hero panel padding",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "hero_gap",
+      "label": "Hero columns gap",
+      "min": 8,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "cards_gap",
+      "label": "Cards gap",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "cards_per_row",
+      "label": "Cards per row (desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card padding",
+      "min": 14,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 24,
+      "max": 84,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "body_text_size",
+      "label": "Body text size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 16,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "label": "Card text size",
+      "min": 13,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Color controls"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker color",
+      "default": "#4f4f4f"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body text color",
+      "default": "#2c2c2c"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button border color",
+      "default": "#262626"
+    },
+    {
+      "type": "color",
+      "id": "stat_value_color",
+      "label": "Stat value color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "stat_label_color",
+      "label": "Stat label color",
+      "default": "#505050"
+    },
+    {
+      "type": "color",
+      "id": "value_title_color",
+      "label": "Value title color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "value_text_color",
+      "label": "Value text color",
+      "default": "#2f2f2f"
+    },
+    {
+      "type": "color",
+      "id": "icon_background_color",
+      "label": "Icon background color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "icon_background_opacity",
+      "label": "Icon background opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "media_background_color",
+      "label": "Image panel background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "media_background_opacity",
+      "label": "Image panel background opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "media_placeholder_text_color",
+      "label": "Placeholder text color",
+      "default": "#5a6470"
+    },
+    {
+      "type": "color",
+      "id": "media_placeholder_gradient_start_color",
+      "label": "Placeholder gradient start color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "media_placeholder_gradient_start_opacity",
+      "label": "Placeholder gradient start opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 26
+    },
+    {
+      "type": "color",
+      "id": "media_placeholder_gradient_end_color",
+      "label": "Placeholder gradient end color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "media_placeholder_gradient_end_opacity",
+      "label": "Placeholder gradient end opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Glassy style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "default": "#f4f6f8"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Section background gradient"
+    },
+    {
+      "type": "color",
+      "id": "glass_color",
+      "label": "Glass base color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Hero glass opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_glass_opacity",
+      "label": "Card glass opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "glass_border_color",
+      "label": "Glass border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "glass_border_opacity",
+      "label": "Glass border opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "panel_shadow_opacity",
+      "label": "Panel shadow opacity",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Panel shadow color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value_card",
+      "name": "Value card",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon_svg",
+          "label": "Icon (SVG/HTML)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Our mission"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Short description of this value.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us Glass",
+      "blocks": [
+        {
+          "type": "value_card",
+          "settings": {
+            "title": "Design first",
+            "text": "<p>We obsess over details to keep every interaction clean and intentional.</p>"
+          }
+        },
+        {
+          "type": "value_card",
+          "settings": {
+            "title": "Built with care",
+            "text": "<p>From material choices to support, quality stays at the center.</p>"
+          }
+        },
+        {
+          "type": "value_card",
+          "settings": {
+            "title": "Always improving",
+            "text": "<p>We listen to customers and continuously refine what we deliver.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

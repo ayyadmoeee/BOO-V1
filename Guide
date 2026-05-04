@@ -1,0 +1,314 @@
+# Shopify Section Usage Guide
+
+This guide explains how to edit the following sections in Shopify Theme Editor:
+
+1. Split Hero & Features
+2. Hero Slideshow Header
+3. Hers Labs Hero
+4. Shop Color Grid
+5. Product Glass Card
+6. Center Product Carousel
+7. Clickable Lookbook
+8. Hex Prism Carousel
+9. Footer
+
+All settings listed here are currently functional.
+
+---
+
+## 1) Split Hero & Features
+Section file: `sections/split-hero-features.liquid`
+
+### What this section is for
+A top hero area (background/image/text/buttons), followed by a feature grid, with optional disclaimer content.
+
+### Main editable components in Shopify
+- `Heading` (`top_heading`): Main hero heading. Use `|` to split lines.
+- `Heading Size` / `Heading Weight`: Typography of hero heading.
+- `Primary Button Text/URL`, `Secondary Button Text/URL`: Hero CTAs.
+- `Button Location`, `Button Vertical Position`, `Button Vertical Offset`: CTA placement.
+- Button styles: radius, size (desktop/mobile), glassy toggles, color and hover color settings.
+- `Top Background Type` + `Top Background Image` or `Top Background Gradient`.
+- `Top Logo`: Optional text/SVG HTML logo area.
+- `Center Image`, `Center Image Height`, Y offsets desktop/mobile.
+- Center text group: above/overlap text, size, weight, color, vertical offsets.
+- Bottom area colors/gradients and bottom padding.
+- Mobile feature scaling controls (`mobile_*` settings).
+- `Features Layout`, `Features Container Width`, `Section Border Radius`, `Enable full width layout`.
+- Disclaimer controls: HTML + read more/read less labels + collapsed height.
+
+### Block components
+Block type: `Feature Box`
+- Image/icon, title, descriptions.
+- Optional per-feature button + style/colors.
+- Typography (title/description size and weight).
+- Image placement and sizing controls.
+- Middle-layout text controls.
+- Box width/height and color overrides.
+- Animation type/speed/easing/delay.
+
+### Usage notes
+- Add exactly the number of `Feature Box` blocks you need; then choose matching `Features Layout`.
+- Use mobile scaling settings for small laptop/mobile consistency.
+- If disclaimer text is long, keep a short `Read More Label`.
+
+---
+
+## 2) Hero Slideshow Header
+Section file: `sections/hero-slideshow-header.liquid`
+
+### What this section is for
+Sticky header + full hero slideshow with shared text and shared CTA.
+
+### Main editable components in Shopify
+- Header: `Logo`, `Menu`, `Text Color`.
+- Button defaults and primary button color overrides.
+- Button border and typography settings.
+- Shared content for all slides:
+  - `Shared Title`, `Shared Subtitle`
+  - `Shared Button Text`, `Shared Button Link`
+  - `Shared Title Color`, `Shared Subtitle Color`
+  - `Title & Subtitle Position`
+  - `Title & Subtitle Alignment` (`left/center/right/justify`)
+  - Custom X/Y controls for text and button positions.
+- Button sizing and shape: vertical offset, radius, width/height, glassy style.
+- Slideshow behavior: `Slide Height`, autoplay enable/speed.
+
+### Block components
+Block type: `Slide`
+- `Image (Desktop)`, `Image (Mobile)`.
+- Per-slide text/button fields exist as fallback seeds if shared fields are empty.
+
+### Usage notes
+- Prefer shared title/subtitle/button for consistent messaging.
+- Use `Shared ... Position` + alignment together for final layout.
+- Use mobile image for better crop/composition on small screens.
+
+---
+
+## 3) Hers Labs Hero
+Section file: `sections/hers-labs-hero.liquid`
+
+### What this section is for
+Large branded hero with background, character image, and marquee-style sliding cards.
+
+### Main editable components in Shopify
+- Background image + desktop/mobile background heights.
+- Section height desktop/mobile.
+- Section padding top/bottom.
+- Characters image, alt text, max width desktop/mobile.
+- Sliding image speed.
+- Sliding track/image size and gaps desktop/mobile.
+
+### Block components
+Block type: `Sliding Image`
+- Image + alt text.
+
+Block type: `Small Screen Controls`
+- Extra scaling/size controls for very small screens:
+  - character max width/scale
+  - sliding scale/track height/width/height/gap
+
+### Usage notes
+- Keep at least several `Sliding Image` blocks for smooth marquee continuity.
+- Use `Small Screen Controls` to tune compact laptop and narrow mobile behavior.
+
+---
+
+## 4) Shop Color Grid
+Section file: `sections/shop-color-grid.liquid`
+
+### What this section is for
+Interactive product grid with age filtering and optional quick-add popup.
+
+### Main editable components in Shopify
+- Visibility: `Hide on mobile`.
+- Typography: global font and multiple weight controls.
+- Heading: text and color.
+- Age filter: title, button colors/radius, reset icon.
+- Filter button 1/2/3 labels + ranges.
+- Quick add popup: enable, title, icon size, size guide labels/image.
+- Layout/colors: section background, section padding/margins.
+- Heading area padding and age filter margins.
+- Mobile carousel paddings.
+- Grid wrapper paddings.
+- Grid controls: vertical align, top offset, max width, gap, columns.
+- Tile visuals: aspect ratios, mobile height fallback, tile bg, image fit, base zoom, hover zoom, radius, overlay opacity.
+
+### Block components
+Block type: `Product tile`
+- Product
+- Optional custom image
+- Hover text color
+- `Age Range(s)` mapping
+
+### Usage notes
+- Make sure filter ranges match tile `Age Range(s)` values exactly.
+- Keep quick-add enabled only if variant selection UX is desired.
+
+---
+
+## 5) Product Glass Card
+Section file: `sections/product-glass-card.liquid`
+
+### What this section is for
+Feature-rich product section with gallery and glassmorphism details panel.
+
+### Main editable components in Shopify
+- Section background color/gradient, min height, container/padding.
+- Middle split-word visual controls (text, size, opacity, blur, clipping, shifts).
+- Gallery controls: image sizes, radius, arrows.
+- Glass card controls: bg color/gradient, border radius, opacity/blur, border style, mobile blur/opacity factors.
+- Typography and text sizing (title, price, minimal price).
+- CTA text and button text color.
+- Payment icons (COD, Whish).
+- Product title behavior (`append_color_option`).
+- Size guide controls (image, heading, heading style, spacing, alignment).
+- Fit area label and selected size toggle.
+- Accordion fallback headings and accordion typography/height.
+
+### Block components
+Block type: `Dropdown / Accordion`
+- Heading
+- Content source type
+- Optional custom HTML content
+
+Block type: `Payment method`
+- Label
+- Icon
+
+### Usage notes
+- If metafields exist for product-specific styling, they can override some section defaults.
+- Keep accordion content concise for better mobile readability.
+
+---
+
+## 6) Center Product Carousel
+Section file: `sections/center-product-carousel.liquid`
+
+### What this section is for
+Centered horizontal product carousel with customizable cards and media sources.
+
+### Main editable components in Shopify
+- Heading/subheading + alignment and heading style.
+- Card layout: gap, radius, width.
+- Product metadata visibility: vendor and swatches toggles.
+- Card content panel styling (bg/text/border/padding/margin).
+- Navigation controls: arrows (style/size/colors), dots.
+- Autoplay toggle and speed.
+- Bottom spacing.
+
+### Block components
+Block type: `Product`
+- Product
+- Optional badge text
+- Media source selector
+- Optional custom media/GIF/video inputs
+- Optional placeholder image for remote GIF flows
+- Alt text
+- Focal position
+
+### Usage notes
+- For best performance, avoid heavy remote GIFs on many cards simultaneously.
+- Keep autoplay moderate when showing detailed product info.
+
+---
+
+## 7) Clickable Lookbook
+Section file: `sections/section-clickable-lookbook.liquid`
+
+### What this section is for
+Single hero image with clickable hotspots linking to products.
+
+### Main editable components in Shopify
+- Section background color.
+- Main image dimensions and border radius.
+- Hotspot color and desktop size.
+- Section top/bottom padding.
+
+### Block components
+Block type: `Main Image`
+- Desktop image
+- Optional mobile image
+
+Block type: `Hotspot`
+- Linked product
+- Desktop X/Y position
+- Optional separate mobile X/Y position
+- Tooltip controls: position, title/price/CTA sizes, bg/text colors
+
+### Usage notes
+- On mobile: first tap reveals tooltip, second tap navigates.
+- Keep hotspots away from image edges to avoid tooltip clipping.
+
+---
+
+## 8) Hex Prism Carousel
+Section file: `sections/hex-prism-carousel.liquid`
+
+### What this section is for
+3D prism-style rotating carousel with optional age filter and quick add.
+
+### Main editable components in Shopify
+- 3D geometry: perspective/radius desktop/mobile.
+- Card sizing: width/height desktop/mobile and optional aspect ratio.
+- Card spacing and corner radius.
+- Section title text/style and spacing.
+- Side face opacity controls.
+- Image max width and section background.
+- Desktop visibility toggle and section paddings.
+- Age filter controls (title styles, values, scale, spacing, reset icon).
+- Carousel box scale and card name typography.
+- Quick add + size guide controls.
+
+### Block components
+Block type: `Card`
+- Name
+- Ages
+- Image
+- Link
+- Optional product for quick add
+- Gradient start/end
+
+### Usage notes
+- Keep `age_filter_values` synchronized with each card `ages` value.
+- Use moderate perspective/radius to avoid overlap on smaller screens.
+
+---
+
+## 9) Footer
+Section file: `sections/footer.liquid`
+
+### What this section is for
+Global footer with brand/company/policies/newsletter/social/payment/localization and visual styling.
+
+### Main editable components in Shopify
+- Color scheme and newsletter enable/heading.
+- Brand/company/policies/newsletter labels and fallback links.
+- Policies custom menu.
+- Copyright text (supports placeholders like `[year]`, `[shop_name]`).
+- Social controls (including WhatsApp link).
+- Country/language selectors.
+- Payment display toggle and payment paddings.
+- Policy links toggle.
+- Background style group:
+  - glassy background
+  - bg image
+  - gradient toggle/css
+  - bg color/text color
+  - opacity/blur/border settings
+- Typography group:
+  - heading/body/button fonts
+  - title/link/newsletter/bottom text sizes and weights
+- Spacing:
+  - section margin top
+  - padding top/bottom
+
+### Footer block components
+- `Link list`: heading + menu + optional mobile custom menu usage.
+- `Brand information`: social visibility toggle.
+- `Text`: heading + rich text content.
+- `Image`: image + width + alignment.
+- `Payment option`: label + icon + link.
+- `@app`: app embed block (if used by installed apps).
+

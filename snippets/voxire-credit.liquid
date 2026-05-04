@@ -1,0 +1,75 @@
+<div class="vx-credit" id="vx-credit-wrap">
+  <div class="vx-credit__popup" id="vx-popup" aria-hidden="true">
+    <div class="vx-credit__popup-head">
+      <img src="https://voxire.com/assets/images/Voxire-logo-enblm-m.png" alt="Voxire" class="vx-credit__popup-logo" />
+      <span class="vx-credit__popup-sub">Digital agency · Beirut, Lebanon</span>
+    </div>
+    <div class="vx-credit__popup-rule"></div>
+    <div class="vx-credit__chips">
+      <span class="vx-chip">Web development</span>
+      <span class="vx-chip">Digital marketing</span>
+      <span class="vx-chip">UI/UX design</span>
+      <span class="vx-chip">Mobile apps</span>
+      <span class="vx-chip">SEO</span>
+    </div>
+    <a href="https://voxire.com/get-a-quote/" target="_blank" rel="noopener noreferrer" class="vx-credit__cta">Get a free quote →</a>
+    <div class="vx-credit__tip"></div>
+  </div>
+  <div class="vx-credit__strip">
+    <img src="https://voxire.com/assets/images/Voxire-logo-enblm-m.png" alt="Voxire" class="vx-credit__logo" id="vx-logo" />
+    <span class="vx-credit__sep">·</span>
+    <span class="vx-credit__text" id="vx-typed-text"></span><span class="vx-cursor" id="vx-cursor"></span>
+    <a href="https://voxire.com" target="_blank" rel="noopener noreferrer" class="vx-credit__link">Voxire <span class="vx-arrow" id="vx-arrow">→</span></a>
+    <div class="vx-glow" id="vx-glow"></div>
+  </div>
+</div>
+
+<style>
+.vx-credit { position: relative; }
+.vx-credit__strip { background: #0c0c11; border-top: 1px solid rgba(99,198,189,0.18); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 24px; position: relative; overflow: hidden; transition: border-color 0.3s; cursor: default; }
+.vx-credit:hover .vx-credit__strip { border-color: rgba(99,198,189,0.45); }
+.vx-credit__logo { height: 15px; width: auto; opacity: 0.7; transition: opacity 0.25s; }
+.vx-credit:hover .vx-credit__logo { opacity: 1; }
+.vx-credit__sep { color: rgba(99,198,189,0.3); font-size: 11px; }
+.vx-credit__text { font-size: 11.5px; color: rgba(255,255,255,0.4); white-space: nowrap; transition: color 0.25s; font-family: inherit; }
+.vx-credit:hover .vx-credit__text { color: rgba(255,255,255,0.65); }
+.vx-cursor { display: inline-block; width: 1.5px; height: 11px; background: #63C6BD; margin-left: 1px; vertical-align: middle; animation: vx-blink 0.85s step-end infinite; }
+.vx-cursor.done { animation: none; opacity: 0; }
+@keyframes vx-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.vx-credit__link { color: #63C6BD; text-decoration: none; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; transition: gap 0.2s; font-family: inherit; }
+.vx-credit:hover .vx-credit__link { gap: 6px; }
+.vx-arrow { display: inline-block; transition: transform 0.2s; }
+.vx-credit:hover .vx-arrow { transform: translateX(3px); }
+.vx-glow { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1px; background: linear-gradient(90deg, transparent, #63c6bd 40%, #519ad1 60%, transparent); transition: width 0.5s ease; }
+.vx-credit:hover .vx-glow { width: 70%; }
+.vx-credit__popup { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(6px); width: 280px; background: #14141d; border: 0.5px solid rgba(99,198,189,0.3); border-radius: 12px; padding: 14px 16px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 9999; }
+.vx-credit:hover .vx-credit__popup { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+.vx-credit__popup-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.vx-credit__popup-logo { height: 18px; width: auto; }
+.vx-credit__popup-sub { font-size: 10.5px; color: rgba(255,255,255,0.38); font-family: inherit; }
+.vx-credit__popup-rule { height: 0.5px; background: rgba(99,198,189,0.15); margin: 10px 0; }
+.vx-credit__chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+.vx-chip { font-size: 10px; padding: 3px 8px; border-radius: 20px; border: 0.5px solid rgba(99,198,189,0.3); color: #63C6BD; background: rgba(99,198,189,0.06); white-space: nowrap; font-family: inherit; }
+.vx-credit__cta { display: block; width: 100%; padding: 8px; background: linear-gradient(135deg, #63c6bd 0%, #519ad1 50%, #5a4398 100%); color: #fff; font-size: 11.5px; font-weight: 600; text-align: center; text-decoration: none; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
+.vx-credit__tip { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 9px; height: 9px; background: #14141d; border-right: 0.5px solid rgba(99,198,189,0.3); border-bottom: 0.5px solid rgba(99,198,189,0.3); }
+</style>
+
+<script>
+(function() {
+  var phrase = 'Designed & developed by';
+  var el = document.getElementById('vx-typed-text');
+  var cur = document.getElementById('vx-cursor');
+  if (!el) return;
+  var i = 0;
+  function tick() {
+    if (i <= phrase.length) {
+      el.textContent = phrase.slice(0, i);
+      i++;
+      setTimeout(tick, 48 + Math.random() * 22);
+    } else {
+      setTimeout(function() { if(cur) cur.classList.add('done'); }, 500);
+    }
+  }
+  setTimeout(tick, 900);
+})();
+</script>

@@ -1,0 +1,150 @@
+<section class="fb section-{{ section.id }}">
+  <div class="page-width">
+    <div class="fb__grid">
+      {% for block in section.blocks %}
+        <div class="fb__card" style="--bg: {{ block.settings.bg }};">
+          {% if block.settings.image != blank %}
+            <div class="fb__img">
+              {{ block.settings.image | image_url: width: 600 | image_tag }}
+            </div>
+          {% endif %}
+
+          <div class="fb__content">
+            <h3 class="fb__title">{{ block.settings.title }}</h3>
+            <p class="fb__text">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-{{ section.id }}{
+    padding:60px 0;
+  }
+
+  .section-{{ section.id }} .fb__grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:20px;
+  }
+
+  .section-{{ section.id }} .fb__card{
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius:32px;
+  padding:32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#fff;
+  overflow:hidden;
+  min-height:220px;
+  transition: all .35s ease;
+  }
+
+
+  .section-{{ section.id }} .fb__content{
+    max-width:55%;
+  }
+
+  .section-{{ section.id }} .fb__title{
+    font-size:26px;
+    font-weight:600;
+    margin:0 0 10px;
+    line-height:1.2;
+  }
+
+  .section-{{ section.id }} .fb__text{
+    font-size:15px;
+    opacity:.9;
+    line-height:1.5;
+    margin:0;
+  }
+
+  .section-{{ section.id }} .fb__img img{
+    max-width:170px;
+    height:auto;
+    display:block;
+  }
+
+  /* MOBILE */
+  .section-{{ section.id }} .fb__card{
+    grid-column:span 12;
+  }
+
+  /* DESKTOP LAYOUT */
+  @media (min-width: 750px){
+
+    /* TOP BIG CARD */
+    .section-{{ section.id }} .fb__card:nth-child(1){
+      grid-column:span 12;
+      min-height:260px;
+    }
+
+    /* BOTTOM LEFT + RIGHT */
+    .section-{{ section.id }} .fb__card:nth-child(2),
+    .section-{{ section.id }} .fb__card:nth-child(3){
+      grid-column:span 6;
+      min-height:240px;
+    }
+  }
+
+  /* Compact height caps for small laptops and mobile only */
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    .section-{{ section.id }}{
+      padding: clamp(36px, 5vh, 52px) 0;
+    }
+
+    .section-{{ section.id }} .fb__card:nth-child(1){
+      min-height: clamp(200px, 32vh, 260px);
+    }
+
+    .section-{{ section.id }} .fb__card:nth-child(2),
+    .section-{{ section.id }} .fb__card:nth-child(3){
+      min-height: clamp(180px, 28vh, 240px);
+    }
+  }
+
+  @media (max-width: 749px){
+    .section-{{ section.id }}{
+      padding: clamp(28px, 4.5vh, 40px) 0;
+    }
+
+    .section-{{ section.id }} .fb__card{
+      min-height: clamp(160px, 30vh, 220px);
+    }
+
+    .section-{{ section.id }} .fb__img img{
+      max-height: clamp(110px, 22vh, 160px);
+      width: auto;
+      object-fit: cover;
+    }
+  }
+</style>
+
+
+
+{% schema %}
+{
+  "name": "Feature Boxes",
+  "blocks": [
+    {
+      "type": "box",
+      "name": "Box",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Your title" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Your text here" },
+        { "type": "color", "id": "bg", "label": "Background", "default": "#0f2f21" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Feature Boxes", "blocks": [ { "type": "box" }, { "type": "box" }, { "type": "box" } ] }
+  ]
+}
+{% endschema %}

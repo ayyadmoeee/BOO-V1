@@ -1,0 +1,171 @@
+{{ 'section-hers-top-bar.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .hers-top-bar {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .hers-top-bar {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="hers-top-bar color-{{ section.settings.color_scheme }} gradient">
+  <div class="hers-top-bar__container page-width">
+    <div class="hers-top-bar__propositions">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'proposition' -%}
+          <a
+            href="{{ block.settings.link }}"
+            class="hers-top-bar__proposition"
+            {{ block.shopify_attributes }}
+            aria-label="{{ block.settings.text | escape }}"
+          >
+            {%- if block.settings.icon != blank -%}
+              <span class="hers-top-bar__icon">
+                {{ block.settings.icon | image_url: width: 20 | image_tag: loading: 'lazy', alt: '' }}
+              </span>
+            {%- endif -%}
+            <span class="hers-top-bar__text">{{ block.settings.text }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hers Top Bar",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "proposition",
+      "name": "Value Proposition",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Why Hers?"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hers Top Bar",
+      "blocks": [
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Why Hers?"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "100% online"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Personalized to your needs"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Ongoing support"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "US-Sourced ingredients"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Unlimited provider messaging"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Perimenopause care"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Anxiety relief"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Glowing skin"
+          }
+        },
+        {
+          "type": "proposition",
+          "settings": {
+            "text": "Lab testing"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

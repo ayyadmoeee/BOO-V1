@@ -1,0 +1,110 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "blocks_4UPJg6": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_b11bad6_XkKEc6": {
+          "type": "ai_gen_block_b11bad6",
+          "settings": {
+            "section_heading": "Have questions?We’ve got answers",
+            "max_width": 1100,
+            "padding_top": 200,
+            "padding_bottom": 100,
+            "background_color": "#b9b9b9",
+            "background_gradient": "",
+            "background_size": "cover",
+            "background_position": "center",
+            "overlay_opacity": 0,
+            "glass_background": "#ffffff",
+            "glass_transparency": 15,
+            "glass_blur": 10,
+            "glass_border": "#ffffff",
+            "glass_border_opacity": 30,
+            "glass_border_radius": 16,
+            "glass_shadow_opacity": 10,
+            "glass_shadow_y": 4,
+            "glass_shadow_blur": 12,
+            "box_padding_vertical": 20,
+            "box_padding_horizontal": 30,
+            "box_max_width_enabled": false,
+            "box_max_width": 800,
+            "question_spacing": 20,
+            "title_font": "assistant_n6",
+            "title_size": 35,
+            "title_line_height": 1.6,
+            "title_letter_spacing": 0,
+            "title_color": "#000000",
+            "question_font": "assistant_n6",
+            "question_size": 14,
+            "question_line_height": 1.4,
+            "question_letter_spacing": 0,
+            "question_color": "#000000",
+            "answer_font": "assistant_n4",
+            "answer_size": 12,
+            "answer_line_height": 1.6,
+            "answer_letter_spacing": 0,
+            "answer_color": "#0e0e0e",
+            "icon_color": "#000000",
+            "question_1": "How do I choose the right size for my child?",
+            "answer_1": "<p>At My Store, every costume is designed with comfort and freedom of movement for babies and toddlers. To help you pick the perfect fit, we provide a detailed size chart. For a cozy, worry-free fit, check your child’s height and weight against our chart before ordering. If your little one falls between sizes, we recommend sizing up for extra comfort <br/><strong>(Check size guide in footer)</strong></p>",
+            "open_1": true,
+            "question_2": "What is BOO?",
+            "answer_2": "<p>My Store is a trusted online baby and toddler clothing store in Lebanon, specializing in stylish, comfortable, and safe costumes for young children. Our exclusive collection features five adorable character outfits designed to bring joy, comfort, and playful imagination to everyday wear.<br/><br/>Our signature costumes include Dinaboo the Dinosaur, Bunboo the Rabbit, Shaboo the Shark, Draboo the Dragon, and Foxboo the Fox—each thoughtfully crafted using soft, child-friendly fabrics that support comfort, safety, and easy movement for babies and toddlers.<br/><br/>Operating as a 100% e-commerce brand, My Store offers a smooth online shopping experience with fast and reliable delivery across Lebanon. Parents can shop high-quality baby and toddler costumes from the comfort of home, knowing each piece is designed with care, practicality, and style in mind.<br/><br/>With a cute and playful aesthetic and a strong focus on trust and quality, My Store has become a go-to online destination for parents seeking premium baby and toddler costumes in the Lebanese market.<br/></p>",
+            "open_2": false,
+            "question_3": "What are My Store’s shipping and return policies?",
+            "answer_3": "<p>Shopping with My Store is simple and stress-free. We offer fast and reliable delivery across Lebanon, straight to your doorstep. If you’re not completely satisfied with a costume, returns and exchanges are accepted within a specified period—making it easy to get the right size or style.</p>",
+            "open_3": false,
+            "question_4": "Are My Store costumes limited edition? Will they be restocked?",
+            "answer_4": "<p>Yes! Our costumes—Dinaboo the Dinosaur, Bunboo the Rabbit, Shaboo the Shark, Draboo the Dragon, and Foxboo the Fox—are designed in small batches to maintain their exclusive charm. While popular designs may sell out quickly, we do our best to offer seasonal restocks. Check our website regularly to catch your favorite characters before they disappear!</p>",
+            "open_4": false,
+            "question_5": "Can My Store items be gifted?",
+            "answer_5": "<p>Absolutely! Every My Store costume is delivered in our premium packaging, ready to be gifted the moment it arrives. Whether it’s for birthdays, holidays, or just-for-fun surprises, your little one’s favorite character will arrive beautifully presented, bringing joy, comfort, and playful imagination right out of the box.</p>",
+            "open_5": false,
+            "question_6": "What materials are My Store costumes made from?",
+            "answer_6": "<p>Every My Store costume is crafted from soft, child-friendly fabrics that are safe, breathable, and gentle on delicate skin. We prioritize comfort and durability, so your little ones can move, play, and explore with ease. Our high-quality materials ensure each costume stays cozy, fun, and ready for repeat adventures.<br/></p>",
+            "open_6": false,
+            "question_7": "What makes BOO different from other children’s clothing brands?",
+            "answer_7": "<p>BOO was created to honor the quiet beauty of early childhood. Designed exclusively for little ones from 6 months to 7 years, our collections focus on this fleeting stage with intention and care. We believe true luxury is subtle — found in exceptional fabrics, refined silhouettes, and timeless tones that never chase trends. Each piece is thoughtfully crafted to feel soft, enduring, and worthy of being worn again and again.</p>",
+            "open_7": false,
+            "question_8": "What age ranges does BOO serve?",
+            "answer_8": "<p>BOO is devoted exclusively to little ones from 6 months to 7 years — a fleeting season we believe deserves the most care. Our collections are thoughtfully designed for all genders, blending softness, refinement, and timeless simplicity. Every piece is created to move gently with childhood, offering elevated essentials that feel effortless, enduring, and quietly special.<br/></p>",
+            "open_8": false,
+            "question_9": "How should BOO clothing be cared for to last longer?",
+            "answer_9": "<p>BOO garments are made to be worn, loved, and cherished. For the longest-lasting beauty, we recommend washing in cold water and gently hang-drying. These simple steps protect the softness, color, and shape of each piece, ensuring it can be enjoyed season after season. With proper care, BOO pieces become lasting companions through childhood’s most precious moments — and can even be passed down, honoring both the magic of childhood and our commitment to mindful, sustainable practices</p>",
+            "open_9": false,
+            "question_10": "Why do parents choose BOO for family photos and special occasions?",
+            "answer_10": "<p>Parents choose BOO for its timeless, refined pieces that turn everyday moments into lasting memories. Soft textures, gentle silhouettes, and harmonious colors create looks that feel effortless yet elevated, letting each child shine while still coordinating beautifully. Whether for birthdays, holidays, or treasured milestones, BOO garments capture the magic of childhood and the elegance of the moment — heirloom-quality pieces meant to be worn, loved, and remembered.</p>",
+            "open_10": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_b11bad6_XkKEc6"
+      ],
+      "name": "FAQ accordion",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "blocks_4UPJg6"
+  ]
+}

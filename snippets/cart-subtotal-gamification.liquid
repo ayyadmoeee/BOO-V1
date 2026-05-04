@@ -1,0 +1,57 @@
+{% comment %} Free shipping progress header - matches reference structure {% endcomment %}
+{%- liquid
+  assign threshold_cents = settings.free_delivery_min | default: 100 | times: 100
+  assign threshold_number = settings.free_delivery_min | default: 100
+  assign total_cents = cart.total_price
+  assign remainder_cents = threshold_cents | minus: total_cents
+  if remainder_cents < 0
+    assign remainder_cents = 0
+  endif
+
+  assign progress_fraction = 0.0
+  if threshold_cents > 0
+    assign progress_fraction = total_cents | times: 1.0 | divided_by: threshold_cents
+    if progress_fraction > 1.0
+      assign progress_fraction = 1.0
+    endif
+  endif
+
+  assign remainder_money = remainder_cents | money_without_trailing_zeros
+-%}
+
+<div class="cart-subtotal-gamification pb3">
+  {%- if remainder_cents > 0 -%}
+    <p class="cart-subtotal-gamification__message heading-4 inline-richtext">
+      Only <span class="cart-subtotal-gamification__remainder">{{ remainder_money }}</span> until you earn Free Shipping
+    </p>
+  {%- else -%}
+    <p class="cart-subtotal-gamification__message heading-4 inline-richtext">
+      Congratulations, you earned Free Shipping!
+    </p>
+  {%- endif -%}
+
+  <div class="cart-subtotal-gamification__progress">
+    <span class="cart-subtotal-gamification__progress-bar" style="--progress: {{ progress_fraction }};" aria-hidden="true"></span>
+    
+    <div class="cart-subtotal-gamification__goal{% if progress_fraction >= 1.0 %} cart-subtotal-gamification__goal--active{% endif %}">
+      <div class="cart-subtotal-gamification__goal--icon">
+        <div class="cart-subtotal-gamification__goal--image aspect-ratio" style="padding-bottom: 100.0%;">
+          {%- if 'icon-box.svg' -%}
+            <img 
+              src="{{ 'icon-box.svg' | asset_url }}" 
+              width="128" 
+              height="128" 
+              loading="lazy" 
+              class="aspect-ratio--object of-contain"
+              alt=""
+              aria-hidden="true"
+            >
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="cart-subtotal-gamification__goal--text-wrapper">
+        <span class="cart-subtotal-gamification__goal--title f7 lh-title inline-richtext ph1">Spend {{ threshold_number }}$ and enjoy free shipping</span>
+      </div>
+    </div>
+  </div>
+</div>

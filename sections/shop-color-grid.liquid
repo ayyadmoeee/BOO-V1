@@ -1,0 +1,2744 @@
+{% assign sid = section.id | replace: '_', '' | downcase %}
+
+{% if section.settings.section_font %}
+  <style>
+    {{ section.settings.section_font | font_face: font_display: 'swap' }}
+  </style>
+{% endif %}
+
+{%- liquid
+  assign section_padding_top = section.settings.section_padding_top | default: 0
+  assign section_padding_bottom = section.settings.section_padding_bottom | default: 0
+  assign section_padding_left = section.settings.section_padding_left | default: 0
+  assign section_padding_right = section.settings.section_padding_right | default: 0
+  assign section_margin_top = section.settings.section_margin_top | default: 0
+  assign section_margin_bottom = section.settings.section_margin_bottom | default: 0
+  assign heading_padding_top = section.settings.heading_padding_top | default: 0
+  assign heading_padding_bottom = section.settings.heading_padding_bottom | default: 0
+  assign heading_padding_left = section.settings.heading_padding_left | default: 20
+  assign heading_padding_right = section.settings.heading_padding_right | default: 20
+  assign heading_tag = section.settings.heading_tag | default: 'h2'
+  assign age_filter_margin_top = section.settings.age_filter_margin_top | default: 16
+  assign age_filter_margin_bottom = section.settings.age_filter_margin_bottom | default: 0
+  assign filter_btn_bg = section.settings.filter_btn_bg_color | default: '#4a4a4a'
+  assign filter_btn_text = section.settings.filter_btn_text_color | default: '#ffffff'
+  assign filter_btn_active_bg = section.settings.filter_btn_active_bg_color | default: '#2a2a2a'
+  assign filter_btn_radius = section.settings.filter_btn_radius | default: 8
+  assign mobile_carousel_padding_top = section.settings.mobile_carousel_padding_top | default: 20
+  assign mobile_carousel_padding_bottom = section.settings.mobile_carousel_padding_bottom | default: 40
+  assign mobile_carousel_padding_left = section.settings.mobile_carousel_padding_left | default: 0
+  assign mobile_carousel_padding_right = section.settings.mobile_carousel_padding_right | default: 0
+  assign grid_wrap_padding_top = section.settings.grid_wrap_padding_top | default: 0
+  assign grid_wrap_padding_bottom = section.settings.grid_wrap_padding_bottom | default: 0
+  assign grid_wrap_padding_left = section.settings.grid_wrap_padding_left | default: 40
+  assign grid_wrap_padding_right = section.settings.grid_wrap_padding_right | default: 40
+  assign tile_icon_size = section.settings.tile_icon_size | default: 36
+  assign tile_icon_size_2x = tile_icon_size | times: 2
+  assign tile_icon_offset_top = section.settings.tile_icon_offset_top | default: 12
+  assign tile_icon_offset_left = section.settings.tile_icon_offset_left | default: 12
+  assign section_bg_image = section.settings.section_bg_image
+  if section_bg_image != blank
+    assign section_bg_image_url = section_bg_image | image_url: width: 2400
+  endif
+-%}
+
+{% style %}
+/* ===== ANIMATED GAMING STYLE ===== */
+.scg-heading-wrapper {
+  text-align: center;
+  padding: {{ heading_padding_top }}px {{ heading_padding_right }}px {{ heading_padding_bottom }}px {{ heading_padding_left }}px;
+  position: relative;
+  overflow: visible;
+}
+
+.scg-{{ sid }},
+.scg-{{ sid }} * {
+  font-family: {{ section.settings.section_font.family }}, {{ section.settings.section_font.fallback_families }};
+}
+
+.scg-main-heading {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: {{ section.settings.heading_weight | default: 900 }};
+  margin: 0 0 15px 0;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-transform: none;
+  position: relative;
+  font-family: inherit;
+  /* Default gradient - will be overridden if custom color is set */
+  background: linear-gradient(90deg, 
+    #ff3366 0%, 
+    #ff9933 25%, 
+    #33ff66 50%, 
+    #3366ff 75%, 
+    #cc33ff 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite, 
+             text-glow 2s ease-in-out infinite alternate;
+  text-shadow: 0 0 30px rgba(255, 51, 102, 0.3);
+}
+
+/* If custom color is set, disable gradient animation */
+.scg-main-heading[style*="color:"] {
+  animation: none;
+  text-shadow: none;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes text-glow {
+  from { text-shadow: 0 0 30px rgba(255, 51, 102, 0.3), 
+                      0 0 60px rgba(51, 102, 255, 0.2); }
+  to { text-shadow: 0 0 40px rgba(255, 51, 102, 0.5), 
+                    0 0 80px rgba(51, 102, 255, 0.3),
+                    0 0 100px rgba(204, 51, 255, 0.2); }
+}
+
+.scg-main-heading::before,
+.scg-main-heading::after {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
+  opacity: 0.7;
+  animation: sparkle 2s infinite;
+}
+
+.scg-main-heading::before {
+  left: -50px;
+  animation-delay: 0.5s;
+}
+
+.scg-main-heading::after {
+  right: -50px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: translateY(-50%) scale(0.8); }
+  50% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+}
+
+.scg-subheading {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: #111; /* Solid dark color */
+  margin: 0;
+  font-weight: {{ section.settings.subheading_weight | default: 600 }};
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  padding: 10px 25px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(255, 255, 255, 0.5) inset;
+  text-shadow: 0 3px 5px rgba(255, 255, 255, 0.8);
+  animation: pulse-border 3s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(255,255,255,0.3); }
+  50% { border-color: rgba(255, 51, 102, 0.6); }
+}
+
+/* Decorative background elements */
+.scg-heading-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, 
+    rgba(255,51,102,0.1) 0%,
+    rgba(51,102,255,0.05) 40%,
+    transparent 70%);
+  z-index: -1;
+  animation: pulse 6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+.scg-{{ sid }}__wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== AGE FILTER STYLES ===== */
+.scg-age-filter {
+  margin-top: {{ age_filter_margin_top }}px;
+  margin-bottom: {{ age_filter_margin_bottom }}px;
+  text-align: center;
+}
+
+.scg-age-filter__title {
+  font-size: 16px;
+  font-weight: {{ section.settings.filter_title_weight | default: 600 }};
+  color: #4a4a4a;
+  margin: 0 0 16px 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.scg-age-filter__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scg-age-filter__btn {
+  padding: 12px 24px;
+  background: {{ filter_btn_bg }};
+  color: {{ filter_btn_text }};
+  border: none;
+  border-radius: {{ filter_btn_radius }}px;
+  font-size: 14px;
+  font-weight: {{ section.settings.filter_button_weight | default: 500 }};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  text-align: center;
+}
+
+.scg-age-filter__btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.scg-age-filter__btn.scg-age-filter__btn--active {
+  background: {{ filter_btn_active_bg }};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.scg-age-filter__reset {
+  width: 40px;
+  height: 40px;
+  border-radius: {{ filter_btn_radius }}px;
+  background: {{ filter_btn_bg }};
+  color: {{ filter_btn_text }};
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.scg-age-filter__reset:hover {
+  opacity: 0.9;
+  transform: rotate(90deg);
+}
+
+.scg-age-filter__reset svg,
+.scg-age-filter__reset .scg-age-filter__reset-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.scg-age-filter__reset .scg-age-filter__reset-icon-img {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .scg-age-filter__buttons {
+    gap: 10px;
+  }
+  
+  .scg-age-filter__btn {
+    min-width: 120px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .scg-age-filter__reset {
+    width: 36px;
+    height: 36px;
+  }
+}
+/* ===== END AGE FILTER STYLES ===== */
+
+/* ===== AGE FILTER FUNCTIONALITY ===== */
+.scg-{{ sid }}__tile,
+.scg-carousel__slide {
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+/* Filtered items remain visible but inactive */
+.scg-{{ sid }}__tile.scg-filtered-out,
+.scg-carousel__slide.scg-filtered-out {
+  opacity: 0.55;
+  transform: scale(0.985);
+  pointer-events: none;
+}
+
+/* Desktop: filtered tiles stay blurred/dimmed (no scale to avoid cropping with contain) */
+.scg-{{ sid }}__tile.scg-filtered-out .scg-{{ sid }}__media img {
+  filter: blur(var(--scg-blur));
+}
+
+/* Prevent filtered tiles from becoming active */
+.scg-{{ sid }}__tile.scg-filtered-out.scg-is-active {
+  transform: scale(0.985);
+  opacity: 0.55;
+}
+
+.scg-{{ sid }}__tile.scg-filtered-out .scg-{{ sid }}__hover-text {
+  opacity: 0;
+}
+
+.scg-{{ sid }}__wrap.scg-filtering {
+  min-height: auto;
+}
+/* ===== END AGE FILTER FUNCTIONALITY ===== */
+
+/* ===== END GAMING STYLE ===== */
+  #shopify-section-{{ section.id }},
+  #shopify-section-{{ section.id }} *{
+    box-sizing:border-box;
+  }
+  #shopify-section-{{ section.id }}{
+    background: {{ section.settings.section_bg }} !important;
+    {% if section_bg_image_url != blank %}
+    background-image: url('{{ section_bg_image_url }}') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    {% endif %}
+    margin: {{ section_margin_top }}px 0 {{ section_margin_bottom }}px 0 !important;
+    padding: {{ section_padding_top }}px {{ section_padding_right }}px {{ section_padding_bottom }}px {{ section_padding_left }}px !important;
+  }
+  #shopify-section-{{ section.id }} .page-width{
+    max-width:none !important;
+    padding:0 !important;
+  }
+  #shopify-section-{{ section.id }} .gradient,
+  #shopify-section-{{ section.id }} .color-background-1,
+  #shopify-section-{{ section.id }} .color-background-2{
+    background: transparent !important;
+  }
+
+  {% assign ar_desktop_raw = section.settings.tile_aspect_ratio | strip %}
+  {% if ar_desktop_raw == '' or ar_desktop_raw == 'auto' %}
+    {% assign ar_desktop = '3/4' %}
+  {% else %}
+    {% assign ar_desktop = ar_desktop_raw | replace: ':', '/' %}
+  {% endif %}
+
+  /* section: full viewport, extends under header; overflow allowed so header sits on section */
+  .scg-{{ sid }}{
+    width: 100vw;
+    min-height: 100dvh;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    padding-top: var(--header-height, 72px);
+    box-sizing: border-box;
+    background: {{ section.settings.section_bg }};
+    {% if section_bg_image_url != blank %}
+    background-image: url('{{ section_bg_image_url }}');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    {% endif %}
+    --scg-blur: 3px;
+    --scg-grid-align: {{ section.settings.grid_vertical_align | default: 'start' }};
+    --scg-grid-offset-top: {{ section.settings.grid_offset_top | default: 0 }}px;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scg-{{ sid }}__scale-inner {
+    width: 100%;
+    height: auto;
+    flex: 0 0 auto;
+    transform: scale(var(--scg-fit-scale, 1));
+    transform-origin: center center;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* heading + filter: never shrink, always above grid */
+  .scg-{{ sid }} .scg-heading-wrapper {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* grid wrapper: can shrink, never overlap heading */
+  .scg-{{ sid }}__wrap{
+    width:100%;
+    max-width:{{ section.settings.max_width }}px;
+    margin:0 auto;
+    margin-top: var(--scg-grid-offset-top);
+    padding:{{ grid_wrap_padding_top }}px {{ grid_wrap_padding_right }}px {{ grid_wrap_padding_bottom }}px {{ grid_wrap_padding_left }}px;
+    min-height: 0;
+    height: auto;
+    flex: 1 1 auto;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns }}, minmax(0,1fr));
+    gap: {{ section.settings.gap }}px;
+    align-content: var(--scg-grid-align);
+    justify-content: center;
+    grid-auto-rows: min-content;
+  }
+
+  /* allow hover in editor */
+  .scg-{{ sid }}__tile,.scg-{{ sid }}__tile *{pointer-events:auto}
+  .scg-{{ sid }}__tile .shopify-section,
+  .scg-{{ sid }}__tile [data-shopify-editor-section],
+  .scg-{{ sid }}__tile [data-shopify-editor-block],
+  .scg-{{ sid }}__tile .shopify-block,
+  .scg-{{ sid }}__tile .shopify-section__block{pointer-events:none}
+  /* Keep filtered-out tiles truly non-interactive */
+  .scg-{{ sid }}__tile.scg-filtered-out,
+  .scg-{{ sid }}__tile.scg-filtered-out *{
+    pointer-events:none !important;
+    cursor: default;
+  }
+
+  /* tiles: aspect-ratio only */
+  .scg-{{ sid }}__tile{
+    position: relative;
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    aspect-ratio: {{ ar_desktop }};
+    height: auto;
+    align-self: start;
+    border-radius: {{ section.settings.radius }}px;
+    box-shadow: 0 18px 45px rgba(0,0,0,.14);
+    transition: filter .35s ease, opacity .35s ease, transform .35s ease;
+    background: {{ section.settings.tile_bg }};
+  }
+
+  /* media fills tile, contained */
+  .scg-{{ sid }}__media{
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .scg-{{ sid }}__media img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: {{ section.settings.image_fit | default: 'contain' }};
+    object-position: center center;
+    {% if section.settings.image_fit == 'contain' %}
+    transform: scale(1);
+    {% else %}
+    transform: scale({{ section.settings.image_scale | divided_by: 100.0 }});
+    {% endif %}
+    transition: transform .5s ease;
+    background: {{ section.settings.tile_bg }};
+  }
+
+  /* overlay */
+  .scg-{{ sid }}__overlay{
+    position:absolute;inset:0;z-index:1;
+    background:linear-gradient(
+      180deg,
+      rgba(0,0,0,0) 20%,
+      rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }}) 100%
+    );
+    opacity:{{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    transition:opacity .35s ease;
+  }
+
+  /* hover vertical text */
+  .scg-{{ sid }}__hover-text{
+    position:absolute;
+    right:18px;
+    bottom:18px;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-size:22px;
+    font-weight: {{ section.settings.hover_text_weight | default: 900 }};
+    letter-spacing:2px;
+    color:var(--scg-text);
+    opacity:0;
+    transition:opacity .3s ease;
+    z-index:3;
+    pointer-events:none;
+  }
+
+  /* Quick add (+) and popup */
+  .scg-{{ sid }}__quickadd-trigger{
+    position:absolute;
+    bottom:12px;
+    left:12px;
+    z-index:6;
+    width: {{ section.settings.quick_add_circle_size | default: 40 }}px;
+    height: {{ section.settings.quick_add_circle_size | default: 40 }}px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.35);
+    background: rgba(0,0,0,0.35);
+    color:#fff;
+    font-size: {{ section.settings.quick_add_plus_size | default: 26 }}px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    opacity:0;
+    transform: translateY(6px);
+    transition: opacity .2s ease, transform .2s ease, background .2s ease;
+  }
+  .scg-{{ sid }}__tile.scg-is-active .scg-{{ sid }}__quickadd-trigger,
+  .scg-{{ sid }}__tile:hover .scg-{{ sid }}__quickadd-trigger{
+    opacity:1;
+    transform: translateY(0);
+  }
+  .scg-{{ sid }}__quickadd-trigger:hover{
+    background: rgba(0,0,0,0.52);
+  }
+
+  .scg-{{ sid }}__quickadd-panel{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    top:auto;
+    transform: translateY(12px);
+    width:100%;
+    height:auto;
+    max-height:none;
+    overflow:visible;
+    z-index:7;
+    border-radius:16px 16px 0 0;
+    border:1px solid rgba(255,255,255,0.28);
+    background: rgba(12,12,12,0.74);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding:18px 12px;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .scg-{{ sid }}__tile.scg-quickadd-open .scg-{{ sid }}__quickadd-panel{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform: translateY(0);
+  }
+
+  .scg-{{ sid }}__tile--soldout .scg-{{ sid }}__quickadd-trigger,
+  .scg-{{ sid }}__tile--soldout .scg-{{ sid }}__quickadd-panel{
+    display:none !important;
+  }
+  .scg-{{ sid }}__quickadd-title{
+    margin:0 0 14px;
+    font-size:13px;
+    color:#fff;
+    font-weight: {{ section.settings.quick_add_title_weight | default: 700 }};
+    text-align:center;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .scg-{{ sid }}__quickadd-sizes{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:10px;
+    justify-items:center;
+  }
+  .scg-{{ sid }}__quickadd-size{
+    border:1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.12);
+    color:#fff;
+    border-radius:999px;
+    width:{% if section.settings.quick_add_size_button_width > 0 %}{{ section.settings.quick_add_size_button_width }}px{% else %}100%{% endif %};
+    max-width:100%;
+    min-height:34px;
+    padding:6px 10px;
+    font-size:12px;
+    font-weight: {{ section.settings.quick_add_size_weight | default: 600 }};
+    cursor:pointer;
+    transition: background .18s ease, border-color .18s ease;
+  }
+  .scg-{{ sid }}__quickadd-size:hover{
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.45);
+  }
+  .scg-{{ sid }}__quickadd-size[disabled]{
+    opacity:.55;
+    cursor:not-allowed;
+  }
+  .scg-{{ sid }}__quickadd-size--soldout{
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+  .scg-{{ sid }}__quickadd-size-guide{
+    margin-top:14px;
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#fff;
+    text-decoration:underline;
+    font-size:12px;
+    font-weight: {{ section.settings.quick_add_size_guide_link_weight | default: 500 }};
+    cursor:pointer;
+    opacity:.88;
+  }
+
+  .scg-{{ sid }}__size-guide-modal{
+    position:fixed;
+    inset:0;
+    z-index:1200;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .scg-{{ sid }}__size-guide-modal[hidden]{ display:none !important; }
+  .scg-{{ sid }}__size-guide-overlay{
+    position:absolute;
+    inset:0;
+    background: rgba(0,0,0,.55);
+  }
+  .scg-{{ sid }}__size-guide-popup{
+    position:relative;
+    width:752px;
+    height:631px;
+    max-width:calc(100vw - 40px);
+    max-height:calc(100vh - 40px);
+    border-radius:14px;
+    background:#fff;
+    overflow:hidden;
+    z-index:1;
+    box-shadow: 0 24px 70px rgba(0,0,0,.32);
+    display:flex;
+    flex-direction:column;
+  }
+  .scg-{{ sid }}__size-guide-heading{
+    margin:0;
+    padding:18px 52px 14px 20px;
+    color:#121212;
+    font-size:24px;
+    font-weight: {{ section.settings.size_guide_heading_weight | default: 700 }};
+    line-height:1.2;
+    flex:0 0 auto;
+  }
+  .scg-{{ sid }}__size-guide-image-wrap{
+    width:644px;
+    height:483px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f7f7f7;
+    flex:0 0 auto;
+  }
+  .scg-{{ sid }}__size-guide-image-wrap img{
+    width:644px;
+    height:483px;
+    object-fit:contain;
+    display:block;
+  }
+  .scg-{{ sid }}__size-guide-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:8px;
+    background:transparent;
+    color:#111;
+    font-size:26px;
+    line-height:1;
+    cursor:pointer;
+  }
+
+  /* === Smooth hover system (no :has) === */
+  .scg-{{ sid }}__wrap {
+    contain: layout style;
+    overflow: hidden;
+    padding-top: 18px;
+    margin-top: calc(var(--scg-grid-offset-top) - 18px);
+  }
+  /* Allow active tile to lift without clipping the top corners */
+  .scg-{{ sid }}__wrap.scg-is-hovering {
+    overflow: visible;
+  }
+
+  .scg-{{ sid }}__tile {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .scg-{{ sid }}__media {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .scg-{{ sid }}__media img {
+    will-change: transform;
+    {% if section.settings.image_fit == 'contain' %}
+    transform: scale(1) translateZ(0);
+    {% else %}
+    transform: scale({{ section.settings.image_scale | divided_by: 100.0 }}) translateZ(0);
+    {% endif %}
+  }
+
+  /* Active tile hover effects */
+  .scg-{{ sid }}__tile.scg-is-active .scg-{{ sid }}__hover-text{opacity:1}
+  .scg-{{ sid }}__tile.scg-is-active .scg-{{ sid }}__overlay{opacity:{{ section.settings.overlay_hover_opacity | divided_by: 100.0 }}}
+  .scg-{{ sid }}__tile.scg-is-active .scg-{{ sid }}__media img{
+    {% if section.settings.image_fit == 'contain' %}
+    transform: scale(1);
+    {% else %}
+    transform: scale({{ section.settings.image_scale | divided_by: 100.0 }}) scale({{ section.settings.hover_zoom | divided_by: 100.0 }});
+    {% endif %}
+  }
+
+  /* When hovering any tile (JS adds .scg-is-hovering on wrap) */
+  .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile {
+    opacity: 0.55;
+    transform: translateZ(0) scale(0.985);
+  }
+
+  /* Blur ONLY the image layer of non-active tiles (much faster than blurring the whole card) */
+  .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile:not(.scg-is-active) .scg-{{ sid }}__media img {
+    filter: blur(var(--scg-blur));
+  }
+
+  /* Active tile pops */
+  .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile.scg-is-active {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.03) translateZ(0);
+    z-index: 3;
+  }
+
+  /* Show hover text only on active tile */
+  .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile:not(.scg-is-active) .scg-{{ sid }}__hover-text {
+    opacity: 0;
+  }
+  .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile.scg-is-active .scg-{{ sid }}__hover-text {
+    opacity: 1;
+  }
+
+  /* Optional: reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .scg-{{ sid }}__tile,
+    .scg-{{ sid }}__media img {
+      transition: none !important;
+    }
+    .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile:not(.scg-is-active) .scg-{{ sid }}__media img {
+      filter: none !important;
+    }
+  }
+
+  /* Disable blur interaction on touch devices (no hover) */
+  @media (hover: none) {
+    .scg-{{ sid }}__quickadd-trigger,
+    .scg-{{ sid }}__quickadd-panel {
+      display:none !important;
+    }
+    .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile {
+      opacity: 1;
+      transform: none;
+    }
+    .scg-{{ sid }}__wrap.scg-is-hovering .scg-{{ sid }}__tile:not(.scg-is-active) .scg-{{ sid }}__media img {
+      filter: none;
+    }
+  }
+
+    /* ===== MOBILE CAROUSEL - HIDDEN BY DEFAULT ===== */
+.scg-mobile-carousel {
+  display: none; /* Hidden on desktop */
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: {{ mobile_carousel_padding_top }}px {{ mobile_carousel_padding_right }}px {{ mobile_carousel_padding_bottom }}px {{ mobile_carousel_padding_left }}px;
+}
+
+.scg-carousel__container {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  gap: 0;
+  padding: 0;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Better mobile scrolling */
+}
+.scg-carousel__container * {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.scg-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  flex-shrink: 0;
+  will-change: transform; /* Optimize animations */
+}
+
+{% assign ar_mobile_raw = section.settings.tile_aspect_ratio_mobile | strip %}
+{% if ar_mobile_raw == '' or ar_mobile_raw == 'auto' %}
+  {% assign ar_mobile = '' %}
+{% else %}
+  {% assign ar_mobile = ar_mobile_raw | replace: ':', '/' %}
+{% endif %}
+
+.scg-carousel__link {
+  position: relative;
+  display: block;
+  margin: 0 15px;
+  {% if ar_mobile == '' %}
+  height: {{ section.settings.tile_h_mobile }}px;
+  {% else %}
+  width: 100%;
+  aspect-ratio: {{ ar_mobile }};
+  height: auto;
+  {% endif %}
+  text-decoration: none;
+  border-radius: {{ section.settings.radius }}px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  background: {{ section.settings.tile_bg }};
+  overflow: hidden;
+}
+
+.scg-carousel__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.scg-carousel__media img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: {{ section.settings.image_fit | default: 'contain' }} !important;
+  object-position: center center !important;
+  background: {{ section.settings.tile_bg }};
+  transition: transform 0.5s ease;
+}
+
+.scg-carousel__link:hover .scg-carousel__media img {
+  {% if section.settings.image_fit == 'contain' %}
+  transform: scale(1);
+  {% else %}
+  transform: scale(1.05);
+  {% endif %}
+}
+
+.scg-carousel__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 20%,
+    rgba(0,0,0,0.6) 100%
+  );
+}
+
+.scg-carousel__title {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  font-size: 18px;
+  font-weight: {{ section.settings.carousel_title_weight | default: 700 }};
+  color: #fff;
+  z-index: 3;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.scg-{{ sid }}__card-icon {
+  position: absolute;
+  top: {{ tile_icon_offset_top }}px;
+  left: {{ tile_icon_offset_left }}px;
+  width: {{ tile_icon_size }}px;
+  height: {{ tile_icon_size }}px;
+  z-index: 4;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scg-{{ sid }}__card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.scg-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.scg-carousel__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.scg-carousel__dot.active {
+  background: #ff3366;
+  transform: scale(1.2);
+}
+
+  @media (max-width:989px){
+  /* HIDE the desktop grid on mobile */
+  .scg-{{ sid }}__wrap {
+    display: none !important;
+  }
+  
+  /* SHOW the mobile carousel on mobile */
+  .scg-mobile-carousel {
+    display: block !important;
+  }
+
+  /* Fit entire section in viewport on small screens; extends under header */
+  .scg-{{ sid }} {
+    min-height: 100dvh;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding-top: var(--header-height, 72px);
+    box-sizing: border-box;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scg-{{ sid }} .scg-heading-wrapper {
+    flex-shrink: 0;
+    padding: {{ heading_padding_top | divided_by: 2 | at_least: 8 }}px {{ heading_padding_right | times: 3 | divided_by: 5 | at_least: 12 }}px {{ heading_padding_bottom | divided_by: 2 | at_least: 8 }}px {{ heading_padding_left | times: 3 | divided_by: 5 | at_least: 12 }}px;
+  }
+
+  .scg-{{ sid }} .scg-main-heading {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-bottom: 8px;
+  }
+
+  .scg-{{ sid }} .scg-main-heading::before,
+  .scg-{{ sid }} .scg-main-heading::after {
+    font-size: 1.2rem;
+  }
+
+  .scg-{{ sid }} .scg-subheading {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    padding: 6px 16px;
+  }
+
+  .scg-{{ sid }} .scg-age-filter {
+    margin-top: 10px;
+    margin-bottom: 8px;
+  }
+
+  .scg-{{ sid }} .scg-age-filter__title {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .scg-{{ sid }} .scg-age-filter__buttons {
+    gap: 8px;
+  }
+
+  .scg-{{ sid }} .scg-age-filter__btn {
+    min-width: 90px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .scg-{{ sid }} .scg-age-filter__reset {
+    width: 32px;
+    height: 32px;
+  }
+
+  .scg-{{ sid }} .scg-mobile-carousel {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex !important;
+    flex-direction: column;
+    padding: {{ mobile_carousel_padding_top | divided_by: 2 | at_least: 8 }}px {{ mobile_carousel_padding_right }}px {{ mobile_carousel_padding_bottom | divided_by: 2 | at_least: 12 }}px {{ mobile_carousel_padding_left }}px;
+  }
+
+  .scg-{{ sid }} .scg-carousel__container {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    align-items: stretch;
+  }
+
+  .scg-{{ sid }} .scg-carousel__slide {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .scg-{{ sid }} .scg-carousel__link {
+    margin: 0 10px;
+    {% if ar_mobile == '' %}
+    height: 100%;
+    min-height: 160px;
+    {% else %}
+    height: auto;
+    {% endif %}
+  }
+
+  .scg-{{ sid }} .scg-carousel__dots {
+    flex-shrink: 0;
+    margin-top: 12px;
+    padding-bottom: 4px;
+  }
+
+  .scg-{{ sid }} .scg-carousel__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scg-{{ sid }} .scg-carousel__title {
+    font-size: 14px;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+  
+  /* Hover effects disabled on mobile via @media (hover: none) rule above */
+
+  /* Hide entire section on mobile when hide_on_mobile is enabled */
+  {% if section.settings.hide_on_mobile %}
+  #shopify-section-{{ section.id }} {
+    display: none !important;
+  }
+  {% endif %}
+}
+
+  /* Extra small screens: scale down further */
+  @media (max-width: 480px) {
+  .scg-{{ sid }} .scg-main-heading {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+  }
+  .scg-{{ sid }} .scg-age-filter__btn {
+    min-width: 72px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .scg-{{ sid }} .scg-carousel__link {
+    margin: 0 6px;
+  }
+  }
+
+
+{% endstyle %}
+
+<section class="scg-{{ sid }}" id="scg-section-{{ sid }}">
+  <div class="scg-{{ sid }}__scale-inner">
+  <div class="scg-heading-wrapper">
+    <{{ heading_tag }} class="scg-main-heading" style="{% if section.settings.heading_color != blank %}color: {{ section.settings.heading_color }}; background: none; -webkit-background-clip: unset; -webkit-text-fill-color: {{ section.settings.heading_color }}; background-clip: unset;{% endif %}">
+      {{ section.settings.heading_text | default: "Choose Your Character" }}
+    </{{ heading_tag }}>
+    
+    <!-- Age Filter System -->
+    <div class="scg-age-filter">
+      <h3 class="scg-age-filter__title">{{ section.settings.filter_title | default: "Select your Age" }}</h3>
+      <div class="scg-age-filter__buttons">
+        {%- if section.settings.filter_button_1_text != blank -%}
+          <button 
+            type="button" 
+            class="scg-age-filter__btn" 
+            data-age-range="{{ section.settings.filter_button_1_range | default: '0.5-4' }}"
+            aria-label="{{ section.settings.filter_button_1_text }}"
+          >
+            {{ section.settings.filter_button_1_text }}
+          </button>
+        {%- endif -%}
+        {%- if section.settings.filter_button_2_text != blank -%}
+          <button 
+            type="button" 
+            class="scg-age-filter__btn" 
+            data-age-range="{{ section.settings.filter_button_2_range | default: '4-7' }}"
+            aria-label="{{ section.settings.filter_button_2_text }}"
+          >
+            {{ section.settings.filter_button_2_text }}
+          </button>
+        {%- endif -%}
+        {%- if section.settings.filter_button_3_text != blank -%}
+          <button 
+            type="button" 
+            class="scg-age-filter__btn" 
+            data-age-range="{{ section.settings.filter_button_3_range | default: 'all' }}"
+            aria-label="{{ section.settings.filter_button_3_text }}"
+          >
+            {{ section.settings.filter_button_3_text }}
+          </button>
+        {%- endif -%}
+        <button 
+          type="button" 
+          class="scg-age-filter__reset" 
+          aria-label="Reset age filter"
+          title="Reset filter"
+        >
+          {%- if section.settings.reset_icon != blank -%}
+            <img 
+              src="{{ section.settings.reset_icon | image_url: width: 72 }}" 
+              alt="" 
+              width="18" 
+              height="18" 
+              loading="lazy"
+              class="scg-age-filter__reset-icon-img"
+            >
+          {%- else -%}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 3V1M10 3C7.239 3 5 5.239 5 8C5 10.761 7.239 13 10 13C12.761 13 15 10.761 15 8M10 3L12 1M10 3L8 1M15 8V10M15 8H17M15 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          {%- endif -%}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} Mobile View {% endcomment %}
+
+  <!-- ADD THIS NEW MOBILE-ONLY CAROUSEL -->
+<div class="scg-mobile-carousel">
+  <div class="scg-carousel__container">
+    {% for block in section.blocks %}
+      {% assign p = block.settings.product %}
+      {% assign img = block.settings.custom_image %}
+      {% if p %}
+        {%- liquid
+          comment
+            Support multiple age ranges: comma-separated values like "0.5-4,5-7" or "all"
+            Normalize by converting to lowercase and trimming
+          endcomment
+          assign age_ranges_raw = block.settings.age_range | default: 'all'
+          assign age_ranges = age_ranges_raw | downcase | strip
+          assign is_discounted = false
+          for v in p.variants
+            if v.compare_at_price and v.compare_at_price > v.price
+              assign is_discounted = true
+              break
+            endif
+          endfor
+          comment
+            Liquid doesn't support map with strip, so we'll store as-is and let JS handle trimming
+            The data attribute will contain comma-separated values
+          endcomment
+        -%}
+        <div class="scg-carousel__slide" data-age-range="{{ age_ranges }}">
+          {%- assign tile_icon = block.settings.card_icon | default: section.settings.tile_top_left_icon -%}
+          <a
+            href="{{ p.url }}"
+            class="scg-carousel__link"
+            style="--scg-text: {{ block.settings.text_color }};"
+            {{ block.shopify_attributes }}
+          >
+            <div class="scg-carousel__media">
+              {% if img %}
+                <img src="{{ img | image_url: width: 800 }}" loading="lazy" decoding="async" alt="{{ p.title }}">
+              {% elsif p.featured_image %}
+                <img src="{{ p.featured_image | image_url: width: 800 }}" loading="lazy" decoding="async" alt="{{ p.title }}">
+              {% endif %}
+            </div>
+            {%- if tile_icon != blank and is_discounted -%}
+              <span class="scg-{{ sid }}__card-icon" aria-hidden="true">
+                <img
+                  src="{{ tile_icon | image_url: width: tile_icon_size_2x }}"
+                  alt=""
+                  width="{{ tile_icon_size }}"
+                  height="{{ tile_icon_size }}"
+                  loading="lazy"
+                >
+              </span>
+            {%- endif -%}
+            <div class="scg-carousel__overlay"></div>
+            <span class="scg-carousel__title">
+              {% if p.metafields.custom.pgc_middle_text and p.metafields.custom.pgc_middle_text.value != blank %}
+                {{ p.metafields.custom.pgc_middle_text.value }}
+              {% else %}
+                {{ p.title }}
+              {% endif %}
+            </span>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="scg-carousel__dots"></div>
+</div>
+
+  {% comment %} Desktop View {% endcomment %}
+  <div class="scg-{{ sid }}__wrap">
+    {% for block in section.blocks %}
+      {% assign p = block.settings.product %}
+      {% assign img = block.settings.custom_image %}
+      {% if p %}
+        {%- liquid
+          assign has_available_variant = false
+          assign is_discounted = false
+          for v in p.variants
+            if v.available
+              assign has_available_variant = true
+            endif
+            if v.compare_at_price and v.compare_at_price > v.price
+              assign is_discounted = true
+            endif
+            if has_available_variant and is_discounted
+              break
+            endif
+          endfor
+        -%}
+        <a
+          href="{{ p.url }}"
+          class="scg-{{ sid }}__tile{% unless has_available_variant %} scg-{{ sid }}__tile--soldout{% endunless %}"
+          style="--scg-text: {{ block.settings.text_color }};"
+          {%- liquid
+            comment
+              Support multiple age ranges: comma-separated values like "0.5-4,5-7" or "all"
+              Normalize by converting to lowercase and trimming
+            endcomment
+            assign age_ranges_raw = block.settings.age_range | default: 'all'
+            assign age_ranges = age_ranges_raw | downcase | strip
+            comment
+              Liquid doesn't support map with strip, so we'll store as-is and let JS handle trimming
+              The data attribute will contain comma-separated values
+            endcomment
+          -%}
+          data-age-range="{{ age_ranges }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- assign tile_icon = block.settings.card_icon | default: section.settings.tile_top_left_icon -%}
+          <div class="scg-{{ sid }}__media" aria-hidden="true">
+            {% if img %}
+              {{ img | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(min-width: 990px) 20vw, 100vw', loading: 'lazy', decoding: 'async', alt: '' }}
+            {% elsif p.featured_image %}
+              {{ p.featured_image | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(min-width: 990px) 20vw, 100vw', loading: 'lazy', decoding: 'async', alt: '' }}
+            {% endif %}
+          </div>
+
+          {%- if tile_icon != blank and is_discounted -%}
+            <span class="scg-{{ sid }}__card-icon" aria-hidden="true">
+              <img
+                src="{{ tile_icon | image_url: width: tile_icon_size_2x }}"
+                alt=""
+                width="{{ tile_icon_size }}"
+                height="{{ tile_icon_size }}"
+                loading="lazy"
+              >
+            </span>
+          {%- endif -%}
+
+          <div class="scg-{{ sid }}__overlay" aria-hidden="true"></div>
+
+          <span class="scg-{{ sid }}__hover-text">
+            {% if p.metafields.custom.pgc_middle_text and p.metafields.custom.pgc_middle_text.value != blank %}
+              {{ p.metafields.custom.pgc_middle_text.value }}
+            {% else %}
+              {{ p.title }}
+            {% endif %}
+          </span>
+
+          {% if section.settings.enable_tile_quick_add and has_available_variant %}
+            <button
+              type="button"
+              class="scg-{{ sid }}__quickadd-trigger"
+              data-scg-qa-trigger
+              aria-label="Quick add {{ p.title | escape }}"
+            >+</button>
+
+            <div class="scg-{{ sid }}__quickadd-panel" data-scg-qa-panel>
+              <p class="scg-{{ sid }}__quickadd-title">{{ section.settings.quick_add_title | default: 'Choose size' }}</p>
+              <div class="scg-{{ sid }}__quickadd-sizes">
+                {%- for v in p.variants -%}
+                  <button
+                    type="button"
+                    class="scg-{{ sid }}__quickadd-size{% unless v.available %} scg-{{ sid }}__quickadd-size--soldout{% endunless %}"
+                    data-scg-qa-size
+                    data-variant-id="{{ v.id }}"
+                    aria-label="Add {{ p.title | escape }} size {{ v.title | escape }}"
+                    {% unless v.available %}disabled aria-disabled="true"{% endunless %}
+                  >
+                    {{ v.title }}
+                  </button>
+                {%- endfor -%}
+                {%- if p.variants.size == 0 -%}
+                  <button type="button" class="scg-{{ sid }}__quickadd-size" disabled>Sold out</button>
+                {%- endif -%}
+              </div>
+
+              {%- if section.settings.quick_add_size_guide_image != blank -%}
+                <button type="button" class="scg-{{ sid }}__quickadd-size-guide" data-scg-open-size-guide>
+                  {{ section.settings.quick_add_size_guide_link_label | default: 'Open size guide' }}
+                </button>
+              {%- endif -%}
+            </div>
+          {% endif %}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {%- if section.settings.enable_tile_quick_add and section.settings.quick_add_size_guide_image != blank -%}
+    <div class="scg-{{ sid }}__size-guide-modal" data-scg-size-guide-modal hidden>
+      <div class="scg-{{ sid }}__size-guide-overlay" data-scg-size-guide-close></div>
+      <div class="scg-{{ sid }}__size-guide-popup" role="dialog" aria-modal="true" aria-label="Size guide">
+        <button type="button" class="scg-{{ sid }}__size-guide-close" data-scg-size-guide-close aria-label="Close size guide">×</button>
+        <h3 class="scg-{{ sid }}__size-guide-heading">
+          {{ section.settings.quick_add_size_guide_heading | default: 'Size guide' }}
+        </h3>
+        <div class="scg-{{ sid }}__size-guide-image-wrap">
+          <img
+            src="{{ section.settings.quick_add_size_guide_image | image_url: width: 1288 }}"
+            alt="{{ section.settings.quick_add_size_guide_heading | default: 'Size guide' | escape }}"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const carousel = document.querySelector('.scg-mobile-carousel');
+  if (!carousel) return;
+  
+  const isMobile = window.matchMedia('(max-width: 989px)').matches;
+  if (!isMobile) return;
+  
+  const container = carousel.querySelector('.scg-carousel__container');
+  const slides = carousel.querySelectorAll('.scg-carousel__slide');
+  const dotsContainer = carousel.querySelector('.scg-carousel__dots');
+  
+  if (!slides.length || slides.length < 2) return;
+  
+  let currentIndex = 0;
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+  let autoSlideInterval;
+  let isAnimating = false;
+  
+  // Create dots
+  dotsContainer.innerHTML = '';
+  slides.forEach((_, index) => {
+    const dot = document.createElement('div');
+    dot.className = 'scg-carousel__dot';
+    if (index === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToSlide(index));
+    dotsContainer.appendChild(dot);
+  });
+  
+  function updateCarousel(instant = false, targetIndex = null) {
+    if (isAnimating && !instant) return;
+    
+    const slideWidth = slides[0].offsetWidth;
+    const effectiveIndex = targetIndex !== null ? targetIndex : currentIndex;
+    
+    if (!instant) isAnimating = true;
+    
+    container.style.transition = instant ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    container.style.transform = `translateX(-${effectiveIndex * slideWidth}px)`;
+    
+    // Update dots with actual currentIndex (not effectiveIndex for edge cases)
+    dotsContainer.querySelectorAll('.scg-carousel__dot').forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentIndex);
+    });
+    
+    // Reset animation flag
+    if (!instant) {
+      setTimeout(() => {
+        isAnimating = false;
+        
+        // Handle edge jumps AFTER animation completes
+        if (effectiveIndex === -1) {
+          // Special case: showing "clone" of last before first
+          container.style.transition = 'none';
+          container.style.transform = `translateX(-${(slides.length - 1) * slideWidth}px)`;
+          currentIndex = slides.length - 1;
+          updateCarousel(true); // Update dots immediately
+        } else if (effectiveIndex === slides.length) {
+          // Special case: showing "clone" of first after last
+          container.style.transition = 'none';
+          container.style.transform = `translateX(0px)`;
+          currentIndex = 0;
+          updateCarousel(true); // Update dots immediately
+        }
+      }, 500);
+    }
+  }
+  
+  function goToSlide(index, instant = false) {
+    if (isAnimating && !instant) return;
+    
+    currentIndex = index;
+    
+    // Handle infinite edges
+    if (index < 0) {
+      // Going left from first: show "clone" of last at position -1
+      const slideWidth = slides[0].offsetWidth;
+      container.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      container.style.transform = `translateX(${slideWidth}px)`; // Shows last slide to the right
+      currentIndex = slides.length - 1; // Will update after animation
+      updateCarousel(false, -1); // Animate to position -1
+    } else if (index >= slides.length) {
+      // Going right from last: show "clone" of first at position length
+      const slideWidth = slides[0].offsetWidth;
+      container.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      container.style.transform = `translateX(-${(slides.length - 1) * slideWidth}px)`; // Shows first slide to the left
+      currentIndex = 0; // Will update after animation
+      updateCarousel(false, slides.length); // Animate to position length
+    } else {
+      // Normal movement
+      updateCarousel(instant);
+    }
+  }
+  
+  function nextSlide() {
+    goToSlide(currentIndex + 1);
+  }
+  
+  function prevSlide() {
+    goToSlide(currentIndex - 1);
+  }
+  
+  // SWIPE HANDLING - SIMPLIFIED
+  container.addEventListener('touchstart', (e) => {
+    if (isAnimating) return;
+    startX = e.touches[0].clientX;
+    isDragging = true;
+    container.style.transition = 'none';
+    clearInterval(autoSlideInterval);
+  });
+  
+  container.addEventListener('touchmove', (e) => {
+    if (!isDragging || isAnimating) return;
+    e.preventDefault();
+    
+    const x = e.touches[0].clientX;
+    const diff = x - startX;
+    const slideWidth = slides[0].offsetWidth;
+    
+    // Calculate drag position with bounds
+    let dragOffset = (-currentIndex * slideWidth) + diff;
+    
+    // Allow slight overflow for infinite feel (50px)
+    const minDrag = -((slides.length) * slideWidth) + 50;
+    const maxDrag = 50;
+    
+    if (dragOffset > maxDrag) dragOffset = maxDrag;
+    if (dragOffset < minDrag) dragOffset = minDrag;
+    
+    container.style.transform = `translateX(${dragOffset}px)`;
+  });
+  
+  container.addEventListener('touchend', (e) => {
+    if (!isDragging || isAnimating) return;
+    isDragging = false;
+    
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    const slideWidth = slides[0].offsetWidth;
+    const threshold = slideWidth * 0.2; // 20% threshold
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe left = next
+        nextSlide();
+      } else {
+        // Swipe right = previous
+        prevSlide();
+      }
+    } else {
+      // Not enough swipe, snap back
+      updateCarousel();
+    }
+    
+    startAutoSlide();
+  });
+  
+  // Add CSS for smoother edges
+  const style = document.createElement('style');
+  style.textContent = `
+    .scg-carousel__container {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .scg-carousel__container::-webkit-scrollbar {
+      display: none;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  function startAutoSlide() {
+    clearInterval(autoSlideInterval);
+    autoSlideInterval = setInterval(() => {
+      if (!isDragging && !isAnimating) {
+        nextSlide();
+      }
+    }, 5000);
+  }
+  
+  // Pause on hover
+  container.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+  container.addEventListener('mouseleave', startAutoSlide);
+  
+  // Initialize
+  updateCarousel(true);
+  startAutoSlide();
+  
+  // Handle resize
+  window.addEventListener('resize', function() {
+    if (window.matchMedia('(max-width: 989px)').matches) {
+      updateCarousel(true);
+    }
+  });
+
+  // Handle filter updates - filtered slides remain visible but inactive
+  carousel.addEventListener('scg-filter-updated', function() {
+    // If current slide is filtered, move to first non-filtered slide
+    if (slides[currentIndex] && slides[currentIndex].classList.contains('scg-filtered-out')) {
+      const firstVisibleIndex = Array.from(slides).findIndex(slide => !slide.classList.contains('scg-filtered-out'));
+      if (firstVisibleIndex >= 0) {
+        currentIndex = firstVisibleIndex;
+        updateCarousel(true);
+      }
+    }
+    
+    // Dots always represent all slides (filtered items remain visible)
+    // No need to recreate dots - they already represent all slides
+  });
+});
+</script>
+
+<script>
+(function() {
+  const section = document.getElementById('scg-section-{{ sid }}');
+  const scaleInner = section && section.querySelector('.scg-{{ sid }}__scale-inner');
+  if (!section || !scaleInner) return;
+
+  function updateSectionScale() {
+    section.style.setProperty('--scg-fit-scale', '1');
+    section.offsetHeight;
+    var availW = section.clientWidth;
+    var pt = parseFloat(getComputedStyle(section).paddingTop) || 0;
+    var availH = Math.max(0, section.clientHeight - pt);
+    var contentW = scaleInner.scrollWidth;
+    var contentH = scaleInner.scrollHeight;
+    var scale = 1;
+    if (contentW > 0 && contentH > 0) {
+      scale = Math.min(1, availW / contentW, availH / contentH);
+    }
+    section.style.setProperty('--scg-fit-scale', scale);
+  }
+
+  var resizeTimeout;
+  function onResize() {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(updateSectionScale, 80);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateSectionScale);
+  } else {
+    updateSectionScale();
+  }
+  window.addEventListener('resize', onResize);
+})();
+</script>
+
+<script>
+(function() {
+  const wrap = document.querySelector('.scg-{{ sid }}__wrap');
+  if (!wrap) return;
+
+  const tiles = Array.from(wrap.querySelectorAll('.scg-{{ sid }}__tile'));
+  if (!tiles.length) return;
+
+  let raf = null;
+  let hoverTimeout = null;
+  let currentActiveTile = null;
+
+  function setActive(tile) {
+    // Ignore filtered-out tiles
+    if (tile.classList.contains('scg-filtered-out')) {
+      return;
+    }
+
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      wrap.classList.add('scg-is-hovering');
+      tiles.forEach(t => t.classList.toggle('scg-is-active', t === tile));
+      currentActiveTile = tile;
+    });
+  }
+
+  function clearActive() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      wrap.classList.remove('scg-is-hovering');
+      tiles.forEach(t => t.classList.remove('scg-is-active'));
+      currentActiveTile = null;
+    });
+  }
+
+  tiles.forEach(tile => {
+    tile.addEventListener('pointerenter', () => {
+      // Clear any pending timeout
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = null;
+      }
+
+      // Add 60ms hover-intent delay
+      hoverTimeout = setTimeout(() => {
+        setActive(tile);
+      }, 60);
+    }, { passive: true });
+
+    tile.addEventListener('pointerleave', () => {
+      // Clear hover timeout if pointer leaves before delay
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = null;
+      }
+      // leave handled by wrap pointerleave for stability
+    }, { passive: true });
+  });
+
+  wrap.addEventListener('pointerleave', () => {
+    // Clear hover timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      hoverTimeout = null;
+    }
+    clearActive();
+  }, { passive: true });
+
+  // Theme editor safety: rebind on section load
+  document.addEventListener('shopify:section:load', (e) => {
+    // nothing required here unless you want to fully re-init; this is usually enough since section reloads DOM
+  });
+})();
+</script>
+
+<script>
+(function() {
+  const section = document.getElementById('scg-section-{{ sid }}');
+  if (!section) return;
+
+  const wrap = section.querySelector('.scg-{{ sid }}__wrap');
+  if (!wrap) return;
+
+  const modal = section.querySelector('[data-scg-size-guide-modal]');
+  const modalCloseEls = modal ? modal.querySelectorAll('[data-scg-size-guide-close]') : [];
+
+  let openTile = null;
+
+  function closePanel() {
+    if (!openTile) return;
+    openTile.classList.remove('scg-quickadd-open');
+    openTile = null;
+  }
+
+  function openPanel(tile) {
+    if (openTile && openTile !== tile) openTile.classList.remove('scg-quickadd-open');
+    openTile = tile;
+    tile.classList.add('scg-quickadd-open');
+  }
+
+  function addVariant(variantId, buttonEl) {
+    if (!variantId) return;
+    if (buttonEl) buttonEl.disabled = true;
+
+    const formData = new FormData();
+    formData.append('id', variantId);
+    formData.append('quantity', '1');
+
+    formData.append('sections', 'cart-drawer,cart-icon-bubble');
+    formData.append('sections_url', window.location.pathname);
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        Accept: 'application/json'
+      },
+      body: formData
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.status) return;
+
+        // Always force-refresh drawer sections to avoid stale empty state on first add.
+        return fetch('/?sections=cart-drawer,cart-icon-bubble&_=' + Date.now(), { cache: 'no-store' })
+          .then((r) => r.json())
+          .then((data) => {
+            const liveDrawer = document.querySelector('cart-drawer');
+            if (!liveDrawer) return;
+
+            const html = data && data['cart-drawer'];
+            if (html) {
+              const doc = new DOMParser().parseFromString(html, 'text/html');
+              const newDrawer = doc.querySelector('cart-drawer');
+              if (newDrawer) {
+                liveDrawer.innerHTML = newDrawer.innerHTML;
+                liveDrawer.className = newDrawer.className;
+              }
+            }
+
+            const bubbleHtml = data && data['cart-icon-bubble'];
+            if (bubbleHtml) {
+              const bubbleContainer = document.getElementById('cart-icon-bubble');
+              if (bubbleContainer) {
+                const doc = new DOMParser().parseFromString(bubbleHtml, 'text/html');
+                const newBubble = doc.getElementById('cart-icon-bubble');
+                if (newBubble) bubbleContainer.innerHTML = newBubble.innerHTML;
+              }
+            }
+
+            if (typeof liveDrawer.open === 'function') {
+              liveDrawer.open();
+            } else {
+              liveDrawer.classList.add('active');
+              liveDrawer.setAttribute('open', '');
+              document.body.classList.add('overflow-hidden');
+            }
+          });
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (buttonEl) buttonEl.disabled = false;
+      });
+  }
+
+  wrap.querySelectorAll('.scg-{{ sid }}__tile').forEach((tile) => {
+    const trigger = tile.querySelector('[data-scg-qa-trigger]');
+    const panel = tile.querySelector('[data-scg-qa-panel]');
+    if (!trigger || !panel) return;
+
+    ['pointerdown', 'mousedown', 'touchstart'].forEach((evtName) => {
+      trigger.addEventListener(evtName, function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, { passive: false });
+    });
+
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (tile.classList.contains('scg-quickadd-open')) closePanel();
+      else openPanel(tile);
+    });
+
+    panel.querySelectorAll('[data-scg-qa-size]').forEach((sizeBtn) => {
+      sizeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!tile.classList.contains('scg-quickadd-open')) return;
+        addVariant(sizeBtn.getAttribute('data-variant-id'), sizeBtn);
+        closePanel();
+      });
+    });
+
+    const guideBtn = panel.querySelector('[data-scg-open-size-guide]');
+    if (guideBtn) {
+      guideBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!tile.classList.contains('scg-quickadd-open')) return;
+        if (modal) {
+          closePanel();
+          modal.hidden = false;
+        }
+      });
+    }
+
+    tile.addEventListener('click', function(e) {
+      if (e.target.closest('[data-scg-qa-trigger]') || e.target.closest('[data-scg-qa-panel]')) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+
+    tile.addEventListener('pointerleave', function() {
+      if (openTile === tile) closePanel();
+    }, { passive: true });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!section.contains(e.target)) return;
+    const insideQuickAdd = e.target.closest('[data-scg-qa-trigger]') || e.target.closest('[data-scg-qa-panel]');
+    if (!insideQuickAdd) closePanel();
+  });
+
+  if (modal) {
+    const popup = modal.querySelector('.scg-{{ sid }}__size-guide-popup');
+
+    modalCloseEls.forEach((el) => {
+      el.addEventListener('click', function() {
+        modal.hidden = true;
+        closePanel();
+      });
+    });
+
+    modal.addEventListener('click', function(e) {
+      if (!popup) return;
+      if (!popup.contains(e.target)) {
+        modal.hidden = true;
+        closePanel();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.hidden) {
+        modal.hidden = true;
+        closePanel();
+      }
+    });
+  }
+})();
+</script>
+
+<script>
+// Age Filter Functionality
+(function() {
+  const ageFilter = document.querySelector('.scg-age-filter');
+  if (!ageFilter) return;
+
+  const filterButtons = ageFilter.querySelectorAll('.scg-age-filter__btn');
+  const resetButton = ageFilter.querySelector('.scg-age-filter__reset');
+  const desktopTiles = document.querySelectorAll('.scg-{{ sid }}__tile');
+  const mobileSlides = document.querySelectorAll('.scg-carousel__slide');
+  const desktopWrap = document.querySelector('.scg-{{ sid }}__wrap');
+  const mobileCarousel = document.querySelector('.scg-mobile-carousel');
+
+  let currentFilter = null;
+
+  function filterByAge(ageRange) {
+    currentFilter = ageRange;
+    
+    // Update button states
+    filterButtons.forEach(btn => {
+      if (btn.dataset.ageRange === ageRange) {
+        btn.classList.add('scg-age-filter__btn--active');
+      } else {
+        btn.classList.remove('scg-age-filter__btn--active');
+      }
+    });
+
+    // Filter desktop tiles (add/remove scg-filtered-out class)
+    // Support multiple age ranges per tile (comma-separated)
+    desktopTiles.forEach(tile => {
+      const tileAgeRanges = (tile.dataset.ageRange || 'all').toLowerCase().trim();
+      const tileAgeArray = tileAgeRanges.split(',').map(r => r.trim());
+      
+      let shouldShow = false;
+      if (ageRange === 'all') {
+        shouldShow = true;
+      } else if (tileAgeArray.includes('all')) {
+        shouldShow = true; // "all" always shows
+      } else {
+        // Check if any of the tile's age ranges match the filter
+        shouldShow = tileAgeArray.includes(ageRange.toLowerCase().trim());
+      }
+      
+      if (shouldShow) {
+        tile.classList.remove('scg-filtered-out');
+      } else {
+        tile.classList.add('scg-filtered-out');
+      }
+    });
+
+    // Filter mobile carousel slides (add/remove scg-filtered-out class)
+    // Support multiple age ranges per slide (comma-separated)
+    mobileSlides.forEach(slide => {
+      const slideAgeRanges = (slide.dataset.ageRange || 'all').toLowerCase().trim();
+      const slideAgeArray = slideAgeRanges.split(',').map(r => r.trim());
+      
+      let shouldShow = false;
+      if (ageRange === 'all') {
+        shouldShow = true;
+      } else if (slideAgeArray.includes('all')) {
+        shouldShow = true; // "all" always shows
+      } else {
+        // Check if any of the slide's age ranges match the filter
+        shouldShow = slideAgeArray.includes(ageRange.toLowerCase().trim());
+      }
+      
+      if (shouldShow) {
+        slide.classList.remove('scg-filtered-out');
+      } else {
+        slide.classList.add('scg-filtered-out');
+      }
+    });
+
+    // Clear active state if currently active tile becomes filtered
+    const desktopWrap = document.querySelector('.scg-{{ sid }}__wrap');
+    if (desktopWrap) {
+      const activeTile = desktopWrap.querySelector('.scg-{{ sid }}__tile.scg-is-active');
+      if (activeTile && activeTile.classList.contains('scg-filtered-out')) {
+        desktopWrap.classList.remove('scg-is-hovering');
+        activeTile.classList.remove('scg-is-active');
+      }
+    }
+
+    // Update carousel if on mobile
+    if (mobileCarousel && window.matchMedia('(max-width: 989px)').matches) {
+      // Trigger carousel update if needed
+      const carouselUpdateEvent = new Event('scg-filter-updated');
+      mobileCarousel.dispatchEvent(carouselUpdateEvent);
+    }
+  }
+
+  function resetFilter() {
+    currentFilter = null;
+    
+    // Remove active state from all buttons
+    filterButtons.forEach(btn => {
+      btn.classList.remove('scg-age-filter__btn--active');
+    });
+
+    // Show all tiles
+    desktopTiles.forEach(tile => {
+      tile.classList.remove('scg-filtered-out');
+    });
+
+    // Show all mobile slides
+    mobileSlides.forEach(slide => {
+      slide.classList.remove('scg-filtered-out');
+    });
+  }
+
+  // Add click handlers to filter buttons
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ageRange = btn.dataset.ageRange;
+      if (currentFilter === ageRange) {
+        // Clicking same button resets filter
+        resetFilter();
+      } else {
+        filterByAge(ageRange);
+      }
+    });
+  });
+
+  // Add click handler to reset button
+  if (resetButton) {
+    resetButton.addEventListener('click', resetFilter);
+  }
+})();
+</script>
+</section>
+
+{% schema %}
+{
+  "name": "Shop color grid",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mobile Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile",
+      "default": false,
+      "info": "Check to hide this entire section on mobile devices (screens under 990px)"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "font_picker",
+      "id": "section_font",
+      "label": "Section font",
+      "default": "assistant_n4",
+      "info": "Base font used across headings, filters, and quick-add text."
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "Choose Your Character",
+      "info": "Main heading displayed above the grid."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "info": "Choose semantic heading level for SEO and accessibility."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "info": "Leave blank to use animated gradient. Set a color to use solid color instead."
+    },
+    {
+      "type": "header",
+      "content": "Typography Weights"
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "label": "Main heading weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 900,
+      "info": "Font weight for the main heading."
+    },
+    {
+      "type": "range",
+      "id": "subheading_weight",
+      "label": "Subheading weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600,
+      "info": "Font weight for product titles/subtitles."
+    },
+    {
+      "type": "range",
+      "id": "filter_title_weight",
+      "label": "Filter title weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600,
+      "info": "Font weight for the age filter heading."
+    },
+    {
+      "type": "range",
+      "id": "filter_button_weight",
+      "label": "Filter button text weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "info": "Font weight for age filter button labels."
+    },
+    {
+      "type": "range",
+      "id": "hover_text_weight",
+      "label": "Tile hover text weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 900,
+      "info": "Font weight for hover text shown on tiles."
+    },
+    {
+      "type": "range",
+      "id": "carousel_title_weight",
+      "label": "Mobile carousel title weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "info": "Font weight for mobile carousel tile titles."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_title_weight",
+      "label": "Quick add title weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "info": "Font weight for quick-add popup heading."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_size_weight",
+      "label": "Quick add size button weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600,
+      "info": "Font weight for size option buttons."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_size_guide_link_weight",
+      "label": "Quick add size guide link weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "info": "Font weight for the size guide link in quick add."
+    },
+    {
+      "type": "range",
+      "id": "size_guide_heading_weight",
+      "label": "Size guide heading weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "info": "Font weight for the size guide popup heading."
+    },
+    {
+      "type": "header",
+      "content": "Age Filter"
+    },
+    {
+      "type": "text",
+      "id": "filter_title",
+      "label": "Filter Title",
+      "default": "Select your Age",
+      "info": "Label shown above the age filter buttons."
+    },
+    {
+      "type": "color",
+      "id": "filter_btn_bg_color",
+      "label": "Filter buttons background",
+      "default": "#4a4a4a",
+      "info": "Default background color for unselected filter buttons."
+    },
+    {
+      "type": "color",
+      "id": "filter_btn_text_color",
+      "label": "Filter buttons text color",
+      "default": "#ffffff",
+      "info": "Text color for filter button labels."
+    },
+    {
+      "type": "color",
+      "id": "filter_btn_active_bg_color",
+      "label": "Filter buttons active (selected) background",
+      "default": "#2a2a2a",
+      "info": "Background when a filter is selected"
+    },
+    {
+      "type": "range",
+      "id": "filter_btn_radius",
+      "label": "Filter buttons corner radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+      ,
+      "info": "Rounded corner amount for filter buttons."
+    },
+    {
+      "type": "image_picker",
+      "id": "reset_icon",
+      "label": "Custom reset icon",
+      "info": "Optional. Leave empty to use the default reset icon. Recommended size: 36×36px or similar square."
+    },
+    {
+      "type": "header",
+      "content": "Filter Button 1"
+    },
+    {
+      "type": "text",
+      "id": "filter_button_1_text",
+      "label": "Button 1 Text",
+      "default": "0.5 - 4 Years",
+      "info": "Visible label for filter button 1."
+    },
+    {
+      "type": "text",
+      "id": "filter_button_1_range",
+      "label": "Button 1 Age Range",
+      "default": "0.5-4",
+      "info": "Enter the age range value (e.g., '0.5-4', '4-7', 'all'). This must match the age range set on product tiles."
+    },
+    {
+      "type": "header",
+      "content": "Filter Button 2"
+    },
+    {
+      "type": "text",
+      "id": "filter_button_2_text",
+      "label": "Button 2 Text",
+      "default": "4 - 7 Years",
+      "info": "Visible label for filter button 2."
+    },
+    {
+      "type": "text",
+      "id": "filter_button_2_range",
+      "label": "Button 2 Age Range",
+      "default": "4-7",
+      "info": "Enter the age range value (e.g., '0.5-4', '4-7', 'all'). This must match the age range set on product tiles."
+    },
+    {
+      "type": "header",
+      "content": "Filter Button 3 (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "filter_button_3_text",
+      "label": "Button 3 Text",
+      "info": "Leave blank to hide this button"
+    },
+    {
+      "type": "text",
+      "id": "filter_button_3_range",
+      "label": "Button 3 Age Range",
+      "default": "all",
+      "info": "Enter the age range value (e.g., '0.5-4', '4-7', 'all'). This must match the age range set on product tiles."
+    },
+    {
+      "type": "header",
+      "content": "Quick Add Popup"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tile_quick_add",
+      "label": "Enable tile quick add (+)",
+      "default": true,
+      "info": "Shows the plus button on each tile to open size selection."
+    },
+    {
+      "type": "text",
+      "id": "quick_add_title",
+      "label": "Quick add popup title",
+      "default": "Choose size",
+      "info": "Heading text at the top of the quick-add popup."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_circle_size",
+      "label": "Quick add circle size",
+      "min": 24,
+      "max": 88,
+      "step": 2,
+      "default": 40,
+      "unit": "px",
+      "info": "Diameter of the circular quick-add trigger button."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_plus_size",
+      "label": "Quick add + size",
+      "min": 14,
+      "max": 56,
+      "step": 1,
+      "default": 26,
+      "unit": "px",
+      "info": "Size of the plus icon inside the quick-add circle."
+    },
+    {
+      "type": "range",
+      "id": "quick_add_size_button_width",
+      "label": "Quick add size button width",
+      "min": 0,
+      "max": 320,
+      "step": 4,
+      "default": 0,
+      "unit": "px",
+      "info": "Set 0 for full width"
+    },
+    {
+      "type": "text",
+      "id": "quick_add_size_guide_heading",
+      "label": "Size guide popup heading",
+      "default": "Size guide",
+      "info": "Heading shown inside the size guide popup."
+    },
+    {
+      "type": "text",
+      "id": "quick_add_size_guide_link_label",
+      "label": "Size guide link label",
+      "default": "Open size guide",
+      "info": "Text for the link/button that opens the size guide."
+    },
+    {
+      "type": "image_picker",
+      "id": "quick_add_size_guide_image",
+      "label": "Size guide image (752x631 popup)",
+      "info": "Image displayed in the size guide popup."
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff", "info": "Background color for the entire section." },
+    {
+      "type": "image_picker",
+      "id": "section_bg_image",
+      "label": "Section background image",
+      "info": "Optional. If set, this image is used as the Shop All section background."
+    },
+    {
+      "type": "header",
+      "content": "Section Padding & Margin"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Padding Top",
+      "default": 0,
+      "info": "Controls the top padding of the entire section"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Padding Bottom",
+      "default": 0,
+      "info": "Controls the bottom padding of the entire section"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Padding Left",
+      "default": 0,
+      "info": "Controls the left padding of the entire section"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Padding Right",
+      "default": 0,
+      "info": "Controls the right padding of the entire section"
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Margin Top",
+      "default": 0,
+      "info": "Controls the top margin (space above) the entire section"
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Margin Bottom",
+      "default": 0,
+      "info": "Controls the bottom margin (space below) the entire section"
+    },
+    {
+      "type": "header",
+      "content": "Heading Area Padding"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Padding Top",
+      "default": 0,
+      "info": "Controls the top padding around the heading text area"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Padding Bottom",
+      "default": 0,
+      "info": "Controls the bottom padding around the heading text area"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Padding Left",
+      "default": 20,
+      "info": "Controls the left padding around the heading text area"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Padding Right",
+      "default": 20,
+      "info": "Controls the right padding around the heading text area"
+    },
+    {
+      "type": "header",
+      "content": "Age Filter Margin"
+    },
+    {
+      "type": "range",
+      "id": "age_filter_margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Age Filter Margin Top",
+      "default": 16,
+      "info": "Controls the space above the age filter buttons"
+    },
+    {
+      "type": "range",
+      "id": "age_filter_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Age Filter Margin Bottom",
+      "default": 0,
+      "info": "Controls the space below the age filter buttons"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Carousel Padding"
+    },
+    {
+      "type": "range",
+      "id": "mobile_carousel_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Carousel Padding Top",
+      "default": 20,
+      "info": "Controls the top padding of the mobile carousel (visible on mobile devices only)"
+    },
+    {
+      "type": "range",
+      "id": "mobile_carousel_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Carousel Padding Bottom",
+      "default": 40,
+      "info": "Controls the bottom padding of the mobile carousel (visible on mobile devices only)"
+    },
+    {
+      "type": "range",
+      "id": "mobile_carousel_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Carousel Padding Left",
+      "default": 0,
+      "info": "Controls the left padding of the mobile carousel (visible on mobile devices only)"
+    },
+    {
+      "type": "range",
+      "id": "mobile_carousel_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Carousel Padding Right",
+      "default": 0,
+      "info": "Controls the right padding of the mobile carousel (visible on mobile devices only)"
+    },
+    {
+      "type": "header",
+      "content": "Grid Wrap Padding (Product Grid Container)"
+    },
+    {
+      "type": "range",
+      "id": "grid_wrap_padding_top",
+      "min": -100,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Wrap Padding Top",
+      "default": 0,
+      "info": "Controls the top padding inside the grid container (the wrapper that contains all product tiles). Negative values will pull the grid upward."
+    },
+    {
+      "type": "range",
+      "id": "grid_wrap_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Wrap Padding Bottom",
+      "default": 40,
+      "info": "Controls the bottom padding inside the grid container (the wrapper that contains all product tiles)"
+    },
+    {
+      "type": "range",
+      "id": "grid_wrap_padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Wrap Padding Left",
+      "default": 40,
+      "info": "Controls the left padding inside the grid container (the wrapper that contains all product tiles)"
+    },
+    {
+      "type": "range",
+      "id": "grid_wrap_padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid Wrap Padding Right",
+      "default": 40,
+      "info": "Controls the right padding inside the grid container (the wrapper that contains all product tiles)"
+    },
+    {
+      "type": "header",
+      "content": "Grid Settings"
+    },
+    {
+      "type": "select",
+      "id": "grid_vertical_align",
+      "label": "Grid vertical alignment (desktop)",
+      "default": "start",
+      "options": [
+        { "value": "start", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Bottom" }
+      ],
+      "info": "Controls how the grid is vertically aligned within its container"
+    },
+    {
+      "type": "range",
+      "id": "grid_offset_top",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap below filter (desktop)",
+      "default": 0,
+      "info": "Positive = more space, Negative = pull tiles up."
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 900,
+      "max": 2000,
+      "step": 50,
+      "unit": "px",
+      "label": "Max width",
+      "default": 1400,
+      "info": "Maximum width of the desktop product grid container."
+    },
+    { "type": "range", "id": "gap", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Gap", "default": 40, "info": "Space between tiles in the desktop grid." },
+
+    { "type": "range", "id": "columns", "min": 3, "max": 6, "step": 1, "label": "Columns", "default": 5, "info": "Number of columns in the desktop grid." },
+
+    {
+      "type": "text",
+      "id": "tile_aspect_ratio",
+      "label": "Tile aspect ratio (desktop)",
+      "placeholder": "e.g. 16/9, 4:3, 1 (leave blank for auto)",
+      "info": "Type width/height like 16/9 or 4:3. Leave blank to use tile height instead."
+    },
+    {
+      "type": "text",
+      "id": "tile_aspect_ratio_mobile",
+      "label": "Tile aspect ratio (mobile)",
+      "placeholder": "e.g. 16/9, 4:3, 1 (leave blank for auto)",
+      "info": "Optional aspect ratio for mobile tiles."
+    },
+    {
+      "type": "range",
+      "id": "tile_h_mobile",
+      "min": 240,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "label": "Tile height (mobile, when aspect ratio is Auto)",
+      "default": 420,
+      "info": "Fallback tile height on mobile when no mobile aspect ratio is set."
+    },
+
+    {
+      "type": "color",
+      "id": "tile_bg",
+      "label": "Tile background (shows only if image has transparency)",
+      "default": "#ffffff",
+      "info": "Background color behind product images."
+    },
+
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image display mode",
+      "default": "contain",
+      "info": "How product images fit within tiles.",
+      "options": [
+        { "value": "contain", "label": "Contain (safe)" },
+        { "value": "cover", "label": "Cover (cinematic)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "image_scale",
+      "min": 100,
+      "max": 160,
+      "step": 1,
+      "unit": "%",
+      "label": "Zoom (scale)",
+      "default": 100,
+      "info": "Base image scale before hover zoom."
+    },
+    {
+      "type": "range",
+      "id": "hover_zoom",
+      "min": 100,
+      "max": 140,
+      "step": 1,
+      "unit": "%",
+      "label": "Hover zoom",
+      "default": 112,
+      "info": "Extra scale applied to the image on hover."
+    },
+
+    { "type": "range", "id": "radius", "min": 0, "max": 90, "step": 2, "unit": "px", "label": "Radius", "default": 26, "info": "Corner radius of each tile." },
+
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 0,
+      "info": "Base overlay darkness over tile images."
+    },
+    {
+      "type": "range",
+      "id": "overlay_hover_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Overlay hover opacity",
+      "default": 15,
+      "info": "Overlay darkness when hovering a tile."
+    },
+    {
+      "type": "header",
+      "content": "Tile Top-Left Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_top_left_icon",
+      "label": "Icon image",
+      "info": "Optional icon shown in the top-left of each card."
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_size",
+      "min": 12,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_offset_top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon offset top",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_offset_left",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon offset left",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Product tile",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product", "info": "Product used for tile content and quick add data." },
+        { "type": "image_picker", "id": "custom_image", "label": "Custom image", "info": "Optional override image for this tile." },
+        { "type": "image_picker", "id": "card_icon", "label": "Card top-left icon", "info": "Optional unique icon for this card. If empty, section icon is used." },
+        { "type": "color", "id": "text_color", "label": "Hover text color", "default": "#ffffff", "info": "Color of text shown on hover/mobile card." },
+        {
+          "type": "textarea",
+          "id": "age_range",
+          "label": "Age Range(s)",
+          "default": "all",
+          "info": "Enter one or more age ranges separated by commas (e.g., '0.5-4', '5-7', '0.5-4,5-7', or 'all'). Each range must match the age range set on filter buttons. Use 'all' to show for all filters."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [{ "name": "Shop color grid" }]
+}
+{% endschema %}

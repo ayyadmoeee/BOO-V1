@@ -1,0 +1,1101 @@
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% assign display_product = product %}
+{% if display_product == blank %}
+  {% assign display_product = block.settings.fallback_product %}
+{% endif %}
+
+{% style %}
+  .ai-product-display-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    overflow: hidden;
+  }
+
+  .ai-product-display-background-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  .ai-product-display-background-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-display-background-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .ai-product-display-background-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+  }
+
+  .ai-product-display-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 1;
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+  }
+
+  .ai-product-display-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .ai-product-display-carousel-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    position: relative;
+  }
+
+  .ai-product-display-carousel-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    aspect-ratio: 1;
+  }
+
+  .ai-product-display-carousel-track-{{ ai_gen_id }} {
+    display: flex;
+    transition: transform 0.4s ease;
+    height: 100%;
+    will-change: transform;
+  }
+
+  .ai-product-display-carousel-slide-{{ ai_gen_id }} {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .ai-product-display-carousel-slide-{{ ai_gen_id }} img,
+  .ai-product-display-carousel-slide-{{ ai_gen_id }} video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-product-display-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-display-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-product-display-carousel-button-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-product-display-carousel-button-{{ ai_gen_id }}:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .ai-product-display-carousel-button-prev-{{ ai_gen_id }} { left: 16px; }
+  .ai-product-display-carousel-button-next-{{ ai_gen_id }} { right: 16px; }
+
+  .ai-product-display-carousel-button-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-product-display-carousel-dots-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .ai-product-display-carousel-dot-{{ ai_gen_id }} {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .ai-product-display-carousel-dot-{{ ai_gen_id }}.active {
+    background: rgba(255, 255, 255, 1);
+    width: 24px;
+    border-radius: 5px;
+  }
+
+  .ai-product-display-thumbs-{{ ai_gen_id }}{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .ai-product-display-thumb-{{ ai_gen_id }}{
+    width:64px;
+    height:64px;
+    border-radius:10px;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    cursor:pointer;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform .2s ease, border-color .2s ease, opacity .2s ease;
+    opacity: .85;
+  }
+
+  .ai-product-display-thumb-{{ ai_gen_id }}:hover{
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+
+  .ai-product-display-thumb-{{ ai_gen_id }}.active{
+    border-color: rgba(255,255,255,0.9);
+    opacity: 1;
+  }
+
+  .ai-product-display-thumb-{{ ai_gen_id }} img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .ai-product-display-thumb-{{ ai_gen_id }} .is-video{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    color:#fff;
+  }
+
+  .ai-product-display-details-{{ ai_gen_id }} {
+    background: rgba(
+      {{ block.settings.glass_bg_color | color_extract: 'red' }},
+      {{ block.settings.glass_bg_color | color_extract: 'green' }},
+      {{ block.settings.glass_bg_color | color_extract: 'blue' }},
+      {{ block.settings.glass_opacity }}
+    );
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border: {{ block.settings.glass_border_width }}px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity }});
+    border-radius: {{ block.settings.glass_border_radius }}px;
+    padding: {{ block.settings.card_padding }}px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-product-display-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 {{ block.settings.element_spacing }}px;
+    line-height: 1.2;
+  }
+
+  .ai-product-display-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+    margin-bottom: {{ block.settings.element_spacing }}px;
+  }
+
+  .ai-product-display-price-compare-{{ ai_gen_id }} {
+    text-decoration: line-through;
+    opacity: 0.6;
+    margin-left: 8px;
+    font-size: {{ block.settings.price_size | times: 0.85 }}px;
+  }
+
+  .ai-product-display-form-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.element_spacing }}px;
+  }
+
+  .ai-product-display-variants-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.element_spacing }}px;
+  }
+
+  .ai-product-display-variant-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 8px;
+  }
+
+  .ai-product-display-variant-select-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity }});
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .ai-product-display-quantity-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-product-display-quantity-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 600;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-product-display-quantity-controls-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ai-product-display-quantity-button-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity }});
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: {{ block.settings.text_color }};
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+
+  .ai-product-display-quantity-button-{{ ai_gen_id }}:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .ai-product-display-quantity-input-{{ ai_gen_id }} {
+    width: 60px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity }});
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: {{ block.settings.text_color }};
+    font-size: 16px;
+  }
+
+  .ai-product-display-add-to-cart-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 16px 32px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ai-product-display-add-to-cart-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-product-display-add-to-cart-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .ai-product-display-description-{{ ai_gen_id }} {
+    font-size: 14px;
+    line-height: 1.6;
+    color: {{ block.settings.text_color }};
+    margin-top: {{ block.settings.element_spacing }}px;
+    padding-top: {{ block.settings.element_spacing }}px;
+    border-top: 1px solid rgba(255, 255, 255, {{ block.settings.glass_border_opacity }});
+  }
+
+  .ai-product-display-description-{{ ai_gen_id }} p { margin: 0 0 12px; }
+  .ai-product-display-description-{{ ai_gen_id }} p:last-child { margin-bottom: 0; }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-display-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .ai-product-display-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.6 }}px 16px;
+    }
+
+    .ai-product-display-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-product-display-price-{{ ai_gen_id }} {
+      font-size: {{ block.settings.price_size | times: 0.85 }}px;
+    }
+
+    .ai-product-display-details-{{ ai_gen_id }} {
+      padding: {{ block.settings.card_padding | times: 0.7 }}px;
+    }
+
+    .ai-product-display-carousel-button-{{ ai_gen_id }} {
+      width: 36px;
+      height: 36px;
+    }
+
+    .ai-product-display-carousel-button-{{ ai_gen_id }} svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ai-product-display-carousel-button-prev-{{ ai_gen_id }} { left: 8px; }
+    .ai-product-display-carousel-button-next-{{ ai_gen_id }} { right: 8px; }
+
+    .ai-product-display-thumb-{{ ai_gen_id }}{
+      width:56px;
+      height:56px;
+    }
+  }
+{% endstyle %}
+
+<product-display-{{ ai_gen_id }} class="ai-product-display-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-display-background-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-product-display-background-placeholder-{{ ai_gen_id }}">
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-product-display-container-{{ ai_gen_id }}">
+    <div class="ai-product-display-grid-{{ ai_gen_id }}">
+      <div class="ai-product-display-carousel-wrapper-{{ ai_gen_id }}">
+        <div class="ai-product-display-carousel-{{ ai_gen_id }}">
+          <div class="ai-product-display-carousel-track-{{ ai_gen_id }}">
+            {% assign has_media = false %}
+
+            {% if block.settings.media_1_type == 'image' and block.settings.media_1_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_1_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_1_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_1_image.width }}"
+                  height="{{ block.settings.media_1_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_1_type == 'video' and block.settings.media_1_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_1_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_2_type == 'image' and block.settings.media_2_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_2_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_2_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_2_image.width }}"
+                  height="{{ block.settings.media_2_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_2_type == 'video' and block.settings.media_2_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_2_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_3_type == 'image' and block.settings.media_3_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_3_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_3_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_3_image.width }}"
+                  height="{{ block.settings.media_3_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_3_type == 'video' and block.settings.media_3_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_3_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_4_type == 'image' and block.settings.media_4_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_4_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_4_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_4_image.width }}"
+                  height="{{ block.settings.media_4_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_4_type == 'video' and block.settings.media_4_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_4_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_5_type == 'image' and block.settings.media_5_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_5_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_5_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_5_image.width }}"
+                  height="{{ block.settings.media_5_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_5_type == 'video' and block.settings.media_5_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_5_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_6_type == 'image' and block.settings.media_6_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_6_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_6_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_6_image.width }}"
+                  height="{{ block.settings.media_6_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_6_type == 'video' and block.settings.media_6_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_6_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_7_type == 'image' and block.settings.media_7_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_7_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_7_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_7_image.width }}"
+                  height="{{ block.settings.media_7_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_7_type == 'video' and block.settings.media_7_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_7_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_8_type == 'image' and block.settings.media_8_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_8_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_8_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_8_image.width }}"
+                  height="{{ block.settings.media_8_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_8_type == 'video' and block.settings.media_8_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_8_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_9_type == 'image' and block.settings.media_9_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_9_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_9_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_9_image.width }}"
+                  height="{{ block.settings.media_9_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_9_type == 'video' and block.settings.media_9_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_9_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% if block.settings.media_10_type == 'image' and block.settings.media_10_image %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ block.settings.media_10_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.media_10_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.media_10_image.width }}"
+                  height="{{ block.settings.media_10_image.height }}"
+                >
+              </div>
+            {% elsif block.settings.media_10_type == 'video' and block.settings.media_10_video %}
+              {% assign has_media = true %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <video controls playsinline>
+                  <source src="{{ block.settings.media_10_video }}" type="video/mp4">
+                </video>
+              </div>
+            {% endif %}
+
+            {% unless has_media %}
+              <div class="ai-product-display-carousel-slide-{{ ai_gen_id }}">
+                <div class="ai-product-display-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              </div>
+            {% endunless %}
+          </div>
+
+          <button
+            type="button"
+            class="ai-product-display-carousel-button-{{ ai_gen_id }} ai-product-display-carousel-button-prev-{{ ai_gen_id }}"
+            aria-label="Previous slide"
+            data-direction="prev"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            class="ai-product-display-carousel-button-{{ ai_gen_id }} ai-product-display-carousel-button-next-{{ ai_gen_id }}"
+            aria-label="Next slide"
+            data-direction="next"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="ai-product-display-carousel-dots-{{ ai_gen_id }}"></div>
+        <div class="ai-product-display-thumbs-{{ ai_gen_id }}"></div>
+      </div>
+
+      <div class="ai-product-display-details-{{ ai_gen_id }}">
+        <h1 class="ai-product-display-title-{{ ai_gen_id }}">
+          {{ display_product.title | default: 'Product Title' }}
+        </h1>
+
+        <div class="ai-product-display-price-{{ ai_gen_id }}">
+          <span class="ai-product-display-price-current-{{ ai_gen_id }}">
+            {% if display_product %}
+              {{ display_product.selected_or_first_available_variant.price | money }}
+            {% else %}
+              {{ 0 | money }}
+            {% endif %}
+          </span>
+          {% if display_product and display_product.selected_or_first_available_variant.compare_at_price > display_product.selected_or_first_available_variant.price %}
+            <span class="ai-product-display-price-compare-{{ ai_gen_id }}">
+              {{ display_product.selected_or_first_available_variant.compare_at_price | money }}
+            </span>
+          {% endif %}
+        </div>
+
+        {% if display_product %}
+          {% form 'product', display_product, class: 'ai-product-display-form-{{ ai_gen_id }}', id: 'product-form-{{ ai_gen_id }}' %}
+            {% if display_product.variants.size > 1 %}
+              <div class="ai-product-display-variants-{{ ai_gen_id }}">
+                {% for option in display_product.options_with_values %}
+                  <div class="ai-product-display-variant-option-{{ ai_gen_id }}">
+                    <label class="ai-product-display-variant-label-{{ ai_gen_id }}" for="option-{{ option.position }}-{{ ai_gen_id }}">
+                      {{ option.name }}
+                    </label>
+                    <select
+                      id="option-{{ option.position }}-{{ ai_gen_id }}"
+                      name="options[{{ option.name | escape }}]"
+                      class="ai-product-display-variant-select-{{ ai_gen_id }}"
+                      data-option-position="{{ option.position }}"
+                    >
+                      {% for value in option.values %}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>
+                          {{ value }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <div class="ai-product-display-quantity-{{ ai_gen_id }}">
+              <label class="ai-product-display-quantity-label-{{ ai_gen_id }}" for="quantity-{{ ai_gen_id }}">
+                Quantity
+              </label>
+              <div class="ai-product-display-quantity-controls-{{ ai_gen_id }}">
+                <button type="button" class="ai-product-display-quantity-button-{{ ai_gen_id }}" data-action="decrease" aria-label="Decrease quantity">−</button>
+                <input type="number" id="quantity-{{ ai_gen_id }}" name="quantity" value="1" min="1" class="ai-product-display-quantity-input-{{ ai_gen_id }}" aria-label="Quantity">
+                <button type="button" class="ai-product-display-quantity-button-{{ ai_gen_id }}" data-action="increase" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+
+            <input type="hidden" name="id" value="{{ display_product.selected_or_first_available_variant.id }}">
+
+            <button
+              type="submit"
+              class="ai-product-display-add-to-cart-{{ ai_gen_id }}"
+              {% unless display_product.selected_or_first_available_variant.available %}disabled{% endunless %}
+            >
+              {% if display_product.selected_or_first_available_variant.available %}
+                {{ block.settings.button_text }}
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          {% endform %}
+
+          {% if display_product.description != blank %}
+            <div class="ai-product-display-description-{{ ai_gen_id }}">
+              {{ display_product.description }}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="ai-product-display-description-{{ ai_gen_id }}">
+            <p>Select a product in the block settings (fallback product) or place this on a product page.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</product-display-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductDisplay{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.form = this.querySelector('#product-form-{{ ai_gen_id }}');
+        this.quantityInput = this.querySelector('#quantity-{{ ai_gen_id }}');
+        this.quantityButtons = this.querySelectorAll('.ai-product-display-quantity-button-{{ ai_gen_id }}');
+        this.variantSelects = this.querySelectorAll('.ai-product-display-variant-select-{{ ai_gen_id }}');
+        this.submitButton = this.querySelector('.ai-product-display-add-to-cart-{{ ai_gen_id }}');
+
+        this.carouselTrack = this.querySelector('.ai-product-display-carousel-track-{{ ai_gen_id }}');
+        this.carouselButtons = this.querySelectorAll('.ai-product-display-carousel-button-{{ ai_gen_id }}');
+        this.dotsContainer = this.querySelector('.ai-product-display-carousel-dots-{{ ai_gen_id }}');
+        this.thumbsContainer = this.querySelector('.ai-product-display-thumbs-{{ ai_gen_id }}');
+
+        this.slides = this.carouselTrack ? Array.from(this.carouselTrack.children) : [];
+        this.currentSlide = 0;
+
+        this.setupQuantityControls();
+        this.setupVariantSelection();
+        this.setupFormSubmit();
+        this.setupCarousel();
+      }
+
+      setupCarousel() {
+        if (!this.carouselTrack) return;
+
+        const slideCount = this.slides.length;
+
+        if (slideCount <= 1) {
+          this.carouselButtons.forEach(btn => btn.style.display = 'none');
+          if (this.dotsContainer) this.dotsContainer.style.display = 'none';
+          if (this.thumbsContainer) this.thumbsContainer.style.display = 'none';
+          return;
+        }
+
+        this.createDots();
+        this.createThumbs();
+        this.updateCarousel();
+
+        this.carouselButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const direction = button.dataset.direction;
+            if (direction === 'next') this.currentSlide = (this.currentSlide + 1) % slideCount;
+            else this.currentSlide = (this.currentSlide - 1 + slideCount) % slideCount;
+            this.updateCarousel();
+          });
+        });
+
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        this.carouselTrack.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          currentX = startX;
+          isDragging = true;
+        }, { passive: true });
+
+        this.carouselTrack.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        }, { passive: true });
+
+        this.carouselTrack.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          const diff = startX - currentX;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) this.currentSlide = (this.currentSlide + 1) % slideCount;
+            else this.currentSlide = (this.currentSlide - 1 + slideCount) % slideCount;
+            this.updateCarousel();
+          }
+        });
+      }
+
+      createDots() {
+        if (!this.dotsContainer) return;
+        this.dotsContainer.innerHTML = '';
+
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'ai-product-display-carousel-dot-{{ ai_gen_id }}' + (index === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+          dot.addEventListener('click', () => {
+            this.currentSlide = index;
+            this.updateCarousel();
+          });
+          this.dotsContainer.appendChild(dot);
+        });
+      }
+
+      createThumbs() {
+        if (!this.thumbsContainer) return;
+        this.thumbsContainer.innerHTML = '';
+
+        this.slides.forEach((slide, index) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'ai-product-display-thumb-{{ ai_gen_id }}' + (index === 0 ? ' active' : '');
+          btn.setAttribute('aria-label', 'Open media ' + (index + 1));
+
+          const img = slide.querySelector('img');
+          const video = slide.querySelector('video');
+
+          if (img) {
+            const t = document.createElement('img');
+            t.src = img.currentSrc || img.src;
+            t.alt = img.alt || ('Thumb ' + (index + 1));
+            t.loading = 'lazy';
+            btn.appendChild(t);
+          } else if (video) {
+            const tag = document.createElement('div');
+            tag.className = 'is-video';
+            tag.textContent = 'VIDEO';
+            btn.appendChild(tag);
+          } else {
+            const tag = document.createElement('div');
+            tag.className = 'is-video';
+            tag.textContent = 'MEDIA';
+            btn.appendChild(tag);
+          }
+
+          btn.addEventListener('click', () => {
+            this.currentSlide = index;
+            this.updateCarousel();
+          });
+
+          this.thumbsContainer.appendChild(btn);
+        });
+      }
+
+      updateCarousel() {
+        const offset = -this.currentSlide * 100;
+        this.carouselTrack.style.transform = `translateX(${offset}%)`;
+
+        const dots = this.dotsContainer ? this.dotsContainer.querySelectorAll('.ai-product-display-carousel-dot-{{ ai_gen_id }}') : [];
+        dots.forEach((dot, index) => {
+          if (index === this.currentSlide) dot.classList.add('active');
+          else dot.classList.remove('active');
+        });
+
+        const thumbs = this.thumbsContainer ? this.thumbsContainer.querySelectorAll('.ai-product-display-thumb-{{ ai_gen_id }}') : [];
+        thumbs.forEach((t, i) => {
+          if (i === this.currentSlide) t.classList.add('active');
+          else t.classList.remove('active');
+        });
+      }
+
+      setupQuantityControls() {
+        if (!this.quantityInput) return;
+
+        this.quantityButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const action = button.dataset.action;
+            let currentValue = parseInt(this.quantityInput.value, 10) || 1;
+
+            if (action === 'increase') this.quantityInput.value = currentValue + 1;
+            if (action === 'decrease') this.quantityInput.value = Math.max(1, currentValue - 1);
+          });
+        });
+
+        this.quantityInput.addEventListener('change', () => {
+          let value = parseInt(this.quantityInput.value, 10) || 1;
+          if (value < 1) value = 1;
+          this.quantityInput.value = value;
+        });
+      }
+
+      setupVariantSelection() {
+        if (!this.variantSelects.length) return;
+        this.variantSelects.forEach(select => {
+          select.addEventListener('change', () => this.updateVariant());
+        });
+      }
+
+      updateVariant() {
+        const selectedOptions = Array.from(this.variantSelects).map(select => select.value);
+        const variant = this.getVariantFromOptions(selectedOptions);
+        if (!variant || !this.form) return;
+
+        this.form.querySelector('input[name="id"]').value = variant.id;
+        this.updatePrice(variant);
+        this.updateAvailability(variant);
+      }
+
+      getVariantFromOptions(options) {
+        const productData = window.productData{{ ai_gen_id }};
+        if (!productData) return null;
+
+        return productData.variants.find(variant => {
+          return options.every((option, index) => variant.options[index] === option);
+        });
+      }
+
+      updatePrice(variant) {
+        const priceElement = this.querySelector('.ai-product-display-price-current-{{ ai_gen_id }}');
+        const compareElement = this.querySelector('.ai-product-display-price-compare-{{ ai_gen_id }}');
+
+        if (priceElement) priceElement.textContent = this.formatMoney(variant.price);
+
+        if (compareElement) {
+          if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+            compareElement.textContent = this.formatMoney(variant.compare_at_price);
+            compareElement.style.display = 'inline';
+          } else {
+            compareElement.style.display = 'none';
+          }
+        }
+      }
+
+      updateAvailability(variant) {
+        if (!this.submitButton) return;
+        if (variant.available) {
+          this.submitButton.disabled = false;
+          this.submitButton.textContent = '{{ block.settings.button_text }}';
+        } else {
+          this.submitButton.disabled = true;
+          this.submitButton.textContent = 'Sold Out';
+        }
+      }
+
+      formatMoney(cents) {
+        const amount = (cents || 0) / 100;
+        return new Intl.NumberFormat('{{ localization.language.iso_code }}', {
+          style: 'currency',
+          currency: '{{ cart.currency.iso_code }}'
+        }).format(amount);
+      }
+
+      setupFormSubmit() {
+        if (!this.form) return;
+
+        this.form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const formData = new FormData(this.form);
+
+          fetch('/cart/add.js', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(() => { window.location.href = '/cart'; })
+            .catch(() => {});
+        });
+      }
+    }
+
+    customElements.define('product-display-{{ ai_gen_id }}', ProductDisplay{{ ai_gen_id }});
+
+    {% if display_product %}
+      window.productData{{ ai_gen_id }} = {{ display_product | json }};
+    {% endif %}
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product glass card",
+  "tag": null,
+  "settings": [
+    { "type": "header", "content": "Product" },
+    { "type": "product", "id": "fallback_product", "label": "Product to display (for non-product pages)" },
+
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+
+    { "type": "range", "id": "container_width", "min": 800, "max": 1400, "step": 50, "unit": "px", "label": "Container width", "default": 1200 },
+    { "type": "range", "id": "section_padding", "min": 20, "max": 100, "step": 10, "unit": "px", "label": "Section padding", "default": 60 },
+
+    { "type": "header", "content": "Media 1" },
+    { "type": "select", "id": "media_1_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_1_image", "label": "Image" },
+    { "type": "url", "id": "media_1_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 2" },
+    { "type": "select", "id": "media_2_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_2_image", "label": "Image" },
+    { "type": "url", "id": "media_2_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 3" },
+    { "type": "select", "id": "media_3_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_3_image", "label": "Image" },
+    { "type": "url", "id": "media_3_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 4" },
+    { "type": "select", "id": "media_4_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_4_image", "label": "Image" },
+    { "type": "url", "id": "media_4_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 5" },
+    { "type": "select", "id": "media_5_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_5_image", "label": "Image" },
+    { "type": "url", "id": "media_5_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 6" },
+    { "type": "select", "id": "media_6_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_6_image", "label": "Image" },
+    { "type": "url", "id": "media_6_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 7" },
+    { "type": "select", "id": "media_7_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_7_image", "label": "Image" },
+    { "type": "url", "id": "media_7_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 8" },
+    { "type": "select", "id": "media_8_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_8_image", "label": "Image" },
+    { "type": "url", "id": "media_8_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 9" },
+    { "type": "select", "id": "media_9_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_9_image", "label": "Image" },
+    { "type": "url", "id": "media_9_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Media 10" },
+    { "type": "select", "id": "media_10_type", "label": "Media type", "options": [ { "value": "image", "label": "Image" }, { "value": "video", "label": "Video" } ], "default": "image" },
+    { "type": "image_picker", "id": "media_10_image", "label": "Image" },
+    { "type": "url", "id": "media_10_video", "label": "Video URL", "info": "Upload video to Files and paste URL here" },
+
+    { "type": "header", "content": "Carousel style" },
+    { "type": "range", "id": "image_border_radius", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Border radius", "default": 12 },
+
+    { "type": "header", "content": "Glassmorphism card" },
+    { "type": "color", "id": "glass_bg_color", "label": "Background color", "default": "#ffffff" },
+    { "type": "range", "id": "glass_opacity", "min": 0, "max": 1, "step": 0.1, "label": "Background opacity", "default": 0.2 },
+    { "type": "range", "id": "glass_blur", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Blur amount", "default": 10 },
+    { "type": "range", "id": "glass_border_width", "min": 0, "max": 4, "step": 1, "unit": "px", "label": "Border width", "default": 1 },
+    { "type": "range", "id": "glass_border_opacity", "min": 0, "max": 1, "step": 0.1, "label": "Border opacity", "default": 0.3 },
+    { "type": "range", "id": "glass_border_radius", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Border radius", "default": 16 },
+    { "type": "range", "id": "card_padding", "min": 20, "max": 60, "step": 4, "unit": "px", "label": "Card padding", "default": 40 },
+    { "type": "range", "id": "element_spacing", "min": 12, "max": 48, "step": 4, "unit": "px", "label": "Element spacing", "default": 24 },
+
+    { "type": "header", "content": "Text styling" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" },
+    { "type": "range", "id": "title_size", "min": 20, "max": 50, "step": 2, "unit": "px", "label": "Title size", "default": 32 },
+    { "type": "range", "id": "price_size", "min": 16, "max": 40, "step": 2, "unit": "px", "label": "Price size", "default": 24 },
+
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Add to Cart" },
+    { "type": "color", "id": "button_bg_color", "label": "Button background", "default": "#000000" },
+    { "type": "color", "id": "button_hover_bg_color", "label": "Button hover background", "default": "#333333" },
+    { "type": "color", "id": "button_text_color", "label": "Button text color", "default": "#ffffff" },
+    { "type": "range", "id": "button_border_radius", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Button border radius", "default": 8 },
+
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 }
+  ],
+  "presets": [
+    { "name": "Product glass card" }
+  ]
+}
+{% endschema %}

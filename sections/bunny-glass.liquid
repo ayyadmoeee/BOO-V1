@@ -1,0 +1,484 @@
+{% comment %}
+  Hero + 2 Glass Cards (like screenshot)
+  - Background image (cover) with position controls
+  - Optional foreground cutout (separate X/Y + scale)
+  - Big title + button
+  - 2 glass cards (centered vertically via wrap)
+  - Controls: global cards offset + left/right offsets X/Y separately (desktop + mobile)
+{% endcomment %}
+
+{% assign id = section.id | replace: '_','' | downcase %}
+
+{% style %}
+  .gm2n-{{ id }}{
+    position:relative;
+    width:100%;
+    min-height:{{ section.settings.min_height }}px;
+    overflow:hidden;
+    border-radius:{{ section.settings.section_radius }}px;
+    background: {{ section.settings.bg_fallback }};
+  }
+
+  .gm2n-{{ id }}__bg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position: {{ section.settings.bg_pos_x }}% {{ section.settings.bg_pos_y }}%;
+    z-index:0;
+    transform: scale({{ section.settings.bg_zoom | divided_by: 100.0 }});
+  }
+
+  .gm2n-{{ id }}__overlay{
+    position:absolute; inset:0;
+    z-index:1;
+    background: rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }});
+    pointer-events:none;
+  }
+
+  .gm2n-{{ id }}__wrap{
+    position:relative;
+    z-index:4;
+    min-height:{{ section.settings.min_height }}px;
+    padding:{{ section.settings.outer_padding }}px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .gm2n-{{ id }}__top{
+    position:absolute;
+    left:50%;
+    top:{{ section.settings.title_y }}%;
+    transform: translate(-50%, -50%);
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    width: min(1200px, 92%);
+    pointer-events:auto;
+  }
+
+  .gm2n-{{ id }}__title{
+    margin:0;
+    color: {{ section.settings.heading_color }};
+    font-size: clamp({{ section.settings.heading_size_min }}px, {{ section.settings.heading_size_vw }}vw, {{ section.settings.heading_size_max }}px);
+    font-weight:800;
+    letter-spacing: {{ section.settings.heading_letter_spacing | times: 0.01 }}em;
+    line-height:1;
+    text-shadow: 0 10px 40px rgba(0,0,0,.28);
+    user-select:none;
+  }
+
+  .gm2n-{{ id }}__title--split{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: clamp(26px, 9vw, 220px);
+    white-space:nowrap;
+  }
+
+  .gm2n-{{ id }}__btn{
+    margin-top:{{ section.settings.button_mt }}px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding: 10px 18px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.92);
+    color:#111;
+    font-weight:700;
+    font-size:13px;
+    text-decoration:none;
+    box-shadow: 0 16px 40px rgba(0,0,0,.18);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .gm2n-{{ id }}__btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 22px 55px rgba(0,0,0,.22);
+    background: rgba(255,255,255,1);
+  }
+
+  .gm2n-{{ id }}__fg{
+    position:absolute;
+    left:{{ section.settings.fg_x }}%;
+    top:{{ section.settings.fg_y }}%;
+    transform: translate(-50%, -50%) scale({{ section.settings.fg_scale | divided_by: 100.0 }});
+    width: min({{ section.settings.fg_width }}px, 92%);
+    height:auto;
+    object-fit:contain;
+    z-index:10;
+    opacity: {{ section.settings.fg_opacity | divided_by: 100.0 }};
+    pointer-events:none;
+    filter: drop-shadow(0 24px 40px rgba(0,0,0,.28));
+  }
+
+
+  .gm2n-{{ id }}__bottom{
+    width:100%;
+    max-width:{{ section.settings.max_width }}px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:{{ section.settings.gap }}px;
+    align-items:end;
+    transform: translate({{ section.settings.cards_offset_x }}px, {{ section.settings.cards_offset_y }}px);
+  }
+
+  .gm2n-{{ id }}__card{
+    position:relative;
+    overflow:hidden;
+    background: {{ section.settings.glass_color | color_modify: 'alpha', section.settings.glass_opacity | divided_by: 100.0 }};
+    border: {{ section.settings.border_thickness }}px solid {{ section.settings.border_color | color_modify: 'alpha', section.settings.border_opacity | divided_by: 100.0 }};
+    border-radius:{{ section.settings.card_radius }}px;
+    backdrop-filter: blur({{ section.settings.blur }}px) saturate(160%);
+    -webkit-backdrop-filter: blur({{ section.settings.blur }}px) saturate(160%);
+    box-shadow: 0 18px 50px rgba(0,0,0,.22);
+  }
+
+  .gm2n-{{ id }}__card--left{
+    min-height:{{ section.settings.left_card_height }}px;
+    transform: translate({{ section.settings.left_card_offset_x }}px, {{ section.settings.left_card_offset_y }}px);
+  }
+  .gm2n-{{ id }}__card--right{
+    min-height:{{ section.settings.right_card_height }}px;
+    transform: translate({{ section.settings.right_card_offset_x }}px, {{ section.settings.right_card_offset_y }}px);
+  }
+
+  .gm2n-{{ id }}__inner{
+    position:relative;
+    z-index:2;
+    padding:{{ section.settings.card_padding }}px;
+  }
+
+  .gm2n-{{ id }}__img{
+    position:absolute;
+    height:auto;
+    object-fit:contain;
+    pointer-events:none;
+    z-index:1;
+    filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
+  }
+
+  .gm2n-{{ id }}__img--left{
+    left:{{ section.settings.left_img_x }}%;
+    top:{{ section.settings.left_img_y }}%;
+    width:{{ section.settings.left_img_w }}%;
+    transform: translate(-50%, -50%) rotate({{ section.settings.left_img_r }}deg) scale({{ section.settings.left_img_scale | divided_by: 100.0 }});
+    opacity:{{ section.settings.left_img_o | divided_by: 100.0 }};
+  }
+
+  .gm2n-{{ id }}__img--right{
+    left:{{ section.settings.right_img_x }}%;
+    top:{{ section.settings.right_img_y }}%;
+    width:{{ section.settings.right_img_w }}%;
+    transform: translate(-50%, -50%) rotate({{ section.settings.right_img_r }}deg) scale({{ section.settings.right_img_scale | divided_by: 100.0 }});
+    opacity:{{ section.settings.right_img_o | divided_by: 100.0 }};
+  }
+
+  .gm2n-{{ id }}__content{
+    position:relative;
+    z-index:2;
+    text-align:{{ section.settings.text_alignment }};
+  }
+
+  .gm2n-{{ id }}__h{
+    margin:0 0 10px 0;
+    color:{{ section.settings.text_color }};
+    font-size:{{ section.settings.heading2_size }}px;
+    font-weight:800;
+    line-height:1.15;
+  }
+
+  .gm2n-{{ id }}__t{
+    color:{{ section.settings.text_color }};
+    font-size:{{ section.settings.text_size }}px;
+    line-height:1.6;
+    opacity: {{ section.settings.text_opacity | divided_by: 100.0 }};
+  }
+  .gm2n-{{ id }}__t p{ margin:0; }
+
+  @media (min-width: 750px){
+    .gm2n-{{ id }}__bottom{
+      grid-template-columns: {{ section.settings.left_col_fr }}fr {{ section.settings.right_col_fr }}fr;
+    }
+  }
+
+  @media (max-width: 749px){
+    .gm2n-{{ id }}{
+      min-height:{{ section.settings.min_height_mobile }}px;
+      border-radius:{{ section.settings.section_radius_mobile }}px;
+    }
+
+    .gm2n-{{ id }}__wrap{
+      min-height:{{ section.settings.min_height_mobile }}px;
+      padding:{{ section.settings.outer_padding_mobile }}px;
+    }
+
+    .gm2n-{{ id }}__top{
+      top:{{ section.settings.title_y_mobile }}%;
+      width:94%;
+    }
+
+    .gm2n-{{ id }}__fg{
+      left:{{ section.settings.fg_x_mobile }}%;
+      top:{{ section.settings.fg_y_mobile }}%;
+      width: min({{ section.settings.fg_width_mobile }}px, 92%);
+      transform: translate(-50%, -50%) scale({{ section.settings.fg_scale_mobile | divided_by: 100.0 }});
+    }
+
+    .gm2n-{{ id }}__bottom{
+      grid-template-columns: 1fr;
+      transform: translate({{ section.settings.cards_offset_x_mobile }}px, {{ section.settings.cards_offset_y_mobile }}px);
+    }
+
+    .gm2n-{{ id }}__card--left{
+      min-height:{{ section.settings.left_card_height_mobile }}px;
+      transform: translate({{ section.settings.left_card_offset_x_mobile }}px, {{ section.settings.left_card_offset_y_mobile }}px);
+    }
+    .gm2n-{{ id }}__card--right{
+      min-height:{{ section.settings.right_card_height_mobile }}px;
+      transform: translate({{ section.settings.right_card_offset_x_mobile }}px, {{ section.settings.right_card_offset_y_mobile }}px);
+    }
+
+    .gm2n-{{ id }}__inner{
+      padding:{{ section.settings.card_padding | times: 0.85 }}px;
+    }
+  }
+{% endstyle %}
+
+<section class="gm2n-{{ id }}">
+  {% if section.settings.background_image != blank %}
+    <img
+      class="gm2n-{{ id }}__bg"
+      src="{{ section.settings.background_image | image_url: width: 2400 }}"
+      alt="{{ section.settings.background_image.alt | escape }}"
+      loading="lazy"
+      width="{{ section.settings.background_image.width }}"
+      height="{{ section.settings.background_image.height }}"
+    >
+  {% endif %}
+
+  <div class="gm2n-{{ id }}__overlay" aria-hidden="true"></div>
+
+  <div class="gm2n-{{ id }}__top">
+    {% if section.settings.title_left != blank or section.settings.title_right != blank %}
+      <h1 class="gm2n-{{ id }}__title gm2n-{{ id }}__title--split">
+        <span>{{ section.settings.title_left }}</span>
+        <span>{{ section.settings.title_right }}</span>
+      </h1>
+    {% else %}
+      {% if section.settings.big_title != blank %}
+        <h1 class="gm2n-{{ id }}__title">{{ section.settings.big_title }}</h1>
+      {% endif %}
+    {% endif %}
+
+    {% if section.settings.button_text != blank %}
+      {% if section.settings.button_link != blank %}
+        <a class="gm2n-{{ id }}__btn" href="{{ section.settings.button_link }}">{{ section.settings.button_text }}</a>
+      {% else %}
+        <span class="gm2n-{{ id }}__btn">{{ section.settings.button_text }}</span>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {% if section.settings.foreground_image != blank %}
+    <img
+      class="gm2n-{{ id }}__fg"
+      src="{{ section.settings.foreground_image | image_url: width: 2400 }}"
+      alt=""
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="gm2n-{{ id }}__wrap">
+    <div class="gm2n-{{ id }}__bottom">
+
+      <div class="gm2n-{{ id }}__card gm2n-{{ id }}__card--left">
+        {% if section.settings.left_image != blank %}
+          <img class="gm2n-{{ id }}__img gm2n-{{ id }}__img--left"
+            src="{{ section.settings.left_image | image_url: width: 1600 }}"
+            alt=""
+            loading="lazy">
+        {% endif %}
+        <div class="gm2n-{{ id }}__inner">
+          {% unless section.settings.hide_card_text %}
+            <div class="gm2n-{{ id }}__content">
+              {% if section.settings.left_heading != blank %}
+                <h2 class="gm2n-{{ id }}__h">{{ section.settings.left_heading }}</h2>
+              {% endif %}
+              {% if section.settings.left_text != blank %}
+                <div class="gm2n-{{ id }}__t">{{ section.settings.left_text }}</div>
+              {% endif %}
+            </div>
+          {% endunless %}
+        </div>
+      </div>
+
+      <div class="gm2n-{{ id }}__card gm2n-{{ id }}__card--right">
+        {% if section.settings.right_image != blank %}
+          <img class="gm2n-{{ id }}__img gm2n-{{ id }}__img--right"
+            src="{{ section.settings.right_image | image_url: width: 1600 }}"
+            alt=""
+            loading="lazy">
+        {% endif %}
+        <div class="gm2n-{{ id }}__inner">
+          {% unless section.settings.hide_card_text %}
+            <div class="gm2n-{{ id }}__content">
+              {% if section.settings.right_heading != blank %}
+                <h2 class="gm2n-{{ id }}__h">{{ section.settings.right_heading }}</h2>
+              {% endif %}
+              {% if section.settings.right_text != blank %}
+                <div class="gm2n-{{ id }}__t">{{ section.settings.right_text }}</div>
+              {% endif %}
+            </div>
+          {% endunless %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero + 2 glass (new)",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "image_picker", "id": "foreground_image", "label": "Foreground image (cutout PNG)" },
+
+    { "type": "color", "id": "bg_fallback", "label": "Background fallback", "default": "#2b0a5a" },
+    { "type": "range", "id": "bg_pos_x", "label": "Background position X", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "bg_pos_y", "label": "Background position Y", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 15 },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 0 },
+    { "type": "range", "id": "bg_zoom", "label": "Background zoom", "min": 100, "max": 160, "step": 1, "unit": "%", "default": 100 },
+
+    { "type": "header", "content": "Section layout" },
+    { "type": "range", "id": "min_height", "label": "Section min height (desktop)", "min": 1000, "max": 3000, "step": 20, "unit": "px", "default": 1000 },
+    { "type": "range", "id": "min_height_mobile", "label": "Section min height (mobile)", "min": 420, "max": 1100, "step": 20, "unit": "px", "default": 780 },
+    { "type": "range", "id": "outer_padding", "label": "Outer padding (desktop)", "min": 0, "max": 90, "step": 2, "unit": "px", "default": 34 },
+    { "type": "range", "id": "outer_padding_mobile", "label": "Outer padding (mobile)", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 18 },
+    { "type": "range", "id": "section_radius", "label": "Section radius (desktop)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 26 },
+    { "type": "range", "id": "section_radius_mobile", "label": "Section radius (mobile)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 18 },
+
+    { "type": "header", "content": "Title + button" },
+    { "type": "range", "id": "title_y", "label": "Title position Y (desktop)", "min": 0, "max": 70, "step": 1, "unit": "%", "default": 22 },
+    { "type": "range", "id": "title_y_mobile", "label": "Title position Y (mobile)", "min": 0, "max": 70, "step": 1, "unit": "%", "default": 18 },
+
+    { "type": "text", "id": "big_title", "label": "Big title text (fallback)", "default": "GriBoo" },
+    { "type": "text", "id": "title_left", "label": "Title left", "default": "Gri" },
+    { "type": "text", "id": "title_right", "label": "Title right", "default": "Boo" },
+
+    { "type": "color", "id": "heading_color", "label": "Title color", "default": "#ffffff" },
+    { "type": "range", "id": "heading_size_min", "label": "Title size min", "min": 30, "max": 160, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "heading_size_vw", "label": "Title size vw", "min": 4, "max": 18, "step": 1, "unit": "vw", "default": 10 },
+    { "type": "range", "id": "heading_size_max", "label": "Title size max", "min": 100, "max": 300, "step": 2, "unit": "px", "default": 190 },
+    { "type": "range", "id": "heading_letter_spacing", "label": "Title letter spacing", "min": -10, "max": 20, "step": 1, "unit": "em", "default": 0 },
+
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Start Trouble" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "range", "id": "button_mt", "label": "Button spacing top", "min": 0, "max": 60, "step": 1, "unit": "px", "default": 12 },
+
+    { "type": "header", "content": "Foreground (optional)" },
+    { "type": "range", "id": "fg_opacity", "label": "Foreground opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "fg_width", "label": "Foreground width (px)", "min": 120, "max": 1600, "step": 20, "unit": "px", "default": 520 },
+    { "type": "range", "id": "fg_x", "label": "Foreground position X (%)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 78 },
+    { "type": "range", "id": "fg_y", "label": "Foreground position Y (%)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 82 },
+    { "type": "range", "id": "fg_scale", "label": "Foreground scale (desktop)", "min": 30, "max": 220, "step": 5, "unit": "%", "default": 100 },
+
+    { "type": "range", "id": "fg_width_mobile", "label": "Foreground width mobile (px)", "min": 120, "max": 1200, "step": 20, "unit": "px", "default": 420 },
+    { "type": "range", "id": "fg_x_mobile", "label": "Foreground X mobile (%)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "fg_y_mobile", "label": "Foreground Y mobile (%)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 86 },
+    { "type": "range", "id": "fg_scale_mobile", "label": "Foreground scale (mobile)", "min": 30, "max": 220, "step": 5, "unit": "%", "default": 100 },
+
+    { "type": "header", "content": "Bottom cards layout" },
+    { "type": "range", "id": "max_width", "label": "Cards max width", "min": 520, "max": 1900, "step": 20, "unit": "px", "default": 1200 },
+    { "type": "range", "id": "gap", "label": "Cards gap", "min": 0, "max": 120, "step": 2, "unit": "px", "default": 22 },
+
+    { "type": "header", "content": "Cards group offset" },
+    { "type": "range", "id": "cards_offset_x", "label": "Cards offset X (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "cards_offset_y", "label": "Cards offset Y (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "cards_offset_x_mobile", "label": "Cards offset X (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "cards_offset_y_mobile", "label": "Cards offset Y (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Left/Right width ratio (desktop)" },
+    { "type": "range", "id": "left_col_fr", "label": "Left column (fr)", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "right_col_fr", "label": "Right column (fr)", "min": 1, "max": 8, "step": 1, "default": 5 },
+
+    { "type": "header", "content": "Glass style" },
+    { "type": "range", "id": "blur", "label": "Glass blur", "min": 0, "max": 30, "step": 1, "unit": "px", "default": 18 },
+    { "type": "color", "id": "glass_color", "label": "Glass color", "default": "#000000" },
+    { "type": "range", "id": "glass_opacity", "label": "Glass opacity", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 18 },
+    { "type": "color", "id": "border_color", "label": "Border color", "default": "#FFFFFF" },
+    { "type": "range", "id": "border_opacity", "label": "Border opacity", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 0 },
+    { "type": "range", "id": "border_thickness", "label": "Border thickness", "min": 0, "max": 4, "step": 1, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Card box" },
+    { "type": "range", "id": "card_radius", "label": "Card radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 26 },
+    { "type": "range", "id": "card_padding", "label": "Card padding", "min": 0, "max": 88, "step": 4, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Card heights" },
+    { "type": "range", "id": "left_card_height", "label": "Left card height (desktop)", "min": 140, "max": 900, "step": 20, "unit": "px", "default": 420 },
+    { "type": "range", "id": "right_card_height", "label": "Right card height (desktop)", "min": 140, "max": 900, "step": 20, "unit": "px", "default": 280 },
+    { "type": "range", "id": "left_card_height_mobile", "label": "Left card height (mobile)", "min": 140, "max": 900, "step": 20, "unit": "px", "default": 320 },
+    { "type": "range", "id": "right_card_height_mobile", "label": "Right card height (mobile)", "min": 140, "max": 900, "step": 20, "unit": "px", "default": 260 },
+
+    { "type": "header", "content": "Left/Right card offsets (desktop)" },
+    { "type": "range", "id": "left_card_offset_x", "label": "Left card X (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "left_card_offset_y", "label": "Left card Y (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "right_card_offset_x", "label": "Right card X (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "right_card_offset_y", "label": "Right card Y (desktop)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Left/Right card offsets (mobile)" },
+    { "type": "range", "id": "left_card_offset_x_mobile", "label": "Left card X (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "left_card_offset_y_mobile", "label": "Left card Y (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "right_card_offset_x_mobile", "label": "Right card X (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "right_card_offset_y_mobile", "label": "Right card Y (mobile)", "min": -400, "max": 400, "step": 10, "unit": "px", "default": 0 },
+
+    { "type": "header", "content": "Card text" },
+    { "type": "checkbox", "id": "hide_card_text", "label": "Hide card text", "default": true },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#FFFFFF" },
+    { "type": "range", "id": "text_opacity", "label": "Text opacity", "min": 40, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "heading2_size", "label": "Card heading size", "min": 14, "max": 60, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "text_size", "label": "Card text size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 16 },
+
+    { "type": "header", "content": "Left card image" },
+    { "type": "image_picker", "id": "left_image", "label": "Left card image" },
+    { "type": "range", "id": "left_img_x", "label": "Left image X", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "left_img_y", "label": "Left image Y", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 60 },
+    { "type": "range", "id": "left_img_w", "label": "Left image width (%)", "min": 100, "max": 220, "step": 2, "unit": "%", "default": 100 },
+    { "type": "range", "id": "left_img_scale", "label": "Left image scale", "min": 50, "max": 200, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "left_img_o", "label": "Left image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "left_img_r", "label": "Left image rotate", "min": -30, "max": 30, "step": 1, "unit": "deg", "default": 0 },
+    { "type": "text", "id": "left_heading", "label": "Left heading", "default": "Left" },
+    { "type": "richtext", "id": "left_text", "label": "Left text", "default": "<p></p>" },
+
+    { "type": "header", "content": "Right card image" },
+    { "type": "image_picker", "id": "right_image", "label": "Right card image" },
+    { "type": "range", "id": "right_img_x", "label": "Right image X", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "right_img_y", "label": "Right image Y", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 60 },
+    { "type": "range", "id": "right_img_w", "label": "Right image width (%)", "min": 100, "max": 220, "step": 2, "unit": "%", "default": 100 },
+    { "type": "range", "id": "right_img_scale", "label": "Right image scale", "min": 50, "max": 200, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "right_img_o", "label": "Right image opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "right_img_r", "label": "Right image rotate", "min": -30, "max": 30, "step": 1, "unit": "deg", "default": 0 },
+    { "type": "text", "id": "right_heading", "label": "Right heading", "default": "Right" },
+    { "type": "richtext", "id": "right_text", "label": "Right text", "default": "<p></p>" }
+  ],
+  "presets": [
+    { "name": "bunny " }
+  ]
+}
+{% endschema %}

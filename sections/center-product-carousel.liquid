@@ -1,0 +1,3133 @@
+{%- liquid
+  assign section_id = section.id
+  assign heading = section.settings.heading
+  assign heading_tag = section.settings.heading_tag | default: 'h2'
+  assign subheading = section.settings.subheading
+  assign alignment = section.settings.alignment
+  assign heading_size = section.settings.heading_size | default: 24
+  assign heading_color = section.settings.heading_color
+  assign card_radius = section.settings.card_radius | default: 18
+  assign card_bottom_radius = section.settings.card_bottom_radius | default: 18
+  assign card_width = section.settings.card_width
+  assign gap = section.settings.gap | default: 20
+  assign show_arrows = section.settings.show_arrows
+  assign show_dots = section.settings.show_dots
+  assign autoplay = section.settings.autoplay
+  assign autoplay_seconds = section.settings.autoplay_seconds | default: 5
+  assign show_vendor = section.settings.show_vendor
+  assign show_color_swatches = section.settings.show_color_swatches
+  assign card_content_bg_color = section.settings.card_content_bg_color
+  assign card_title_color = section.settings.card_title_color
+  assign card_normal_price_color = section.settings.card_normal_price_color
+  assign card_discounted_price_color = section.settings.card_discounted_price_color
+  assign card_caret_color = section.settings.card_caret_color
+  assign card_badge_bg_color = section.settings.card_badge_bg_color
+  assign card_badge_text_color = section.settings.card_badge_text_color
+  assign card_content_border_color = section.settings.card_content_border_color
+  assign card_content_border_width = section.settings.card_content_border_width | default: 0
+  assign card_content_border_radius = section.settings.card_content_border_radius | default: 0
+  assign card_content_padding = section.settings.card_content_padding | default: 24
+  assign card_content_margin = section.settings.card_content_margin | default: 0
+  assign mobile_info_text_size = section.settings.mobile_info_text_size | default: 15
+  assign mobile_info_price_size = section.settings.mobile_info_price_size | default: 18
+  assign bottom_padding = section.settings.bottom_padding | default: 0
+  assign bottom_margin = section.settings.bottom_margin | default: 0
+  assign arrow_size = section.settings.arrow_size | default: 44
+  assign arrow_radius = section.settings.arrow_radius | default: 22
+  assign arrow_bg_color = section.settings.arrow_bg_color
+  assign arrow_icon_color = section.settings.arrow_icon_color
+  assign arrow_border_color = section.settings.arrow_border_color
+  assign arrow_style = section.settings.arrow_style | default: 'solid'
+  assign item_blocks = section.blocks | where: 'type', 'product'
+-%}
+
+<section
+  id="CenterProductCarousel-{{ section_id }}"
+  class="cpc-section cpc-section--{{ section_id }}"
+  data-section-id="{{ section_id }}"
+  data-arrow-style="{{ arrow_style }}"
+  data-autoplay="{{ autoplay }}"
+  data-autoplay-delay="{{ autoplay_seconds }}"
+  data-loop="true"
+  style="--cpc-gap: {{ gap }}px; --cpc-card-radius: {{ card_radius }}px; --cpc-card-bottom-radius: {{ card_bottom_radius }}px;{% if card_width != blank %} --cpc-card-width: {{ card_width }}px;{% endif %} --cpc-autoplay-delay: {{ autoplay_seconds }}s; --cpc-heading-size: {{ heading_size }}px; --cpc-mobile-info-text-size: {{ mobile_info_text_size }}px; --cpc-mobile-info-price-size: {{ mobile_info_price_size }}px;{% if heading_color != blank %} --cpc-heading-color: {{ heading_color }};{% endif %}{% if card_content_bg_color != blank %} --cpc-card-content-bg: {{ card_content_bg_color }};{% endif %}{% if card_title_color != blank %} --cpc-card-title-color: {{ card_title_color }};{% endif %}{% if card_normal_price_color != blank %} --cpc-card-normal-price-color: {{ card_normal_price_color }};{% endif %}{% if card_discounted_price_color != blank %} --cpc-card-discounted-price-color: {{ card_discounted_price_color }};{% endif %}{% if card_caret_color != blank %} --cpc-card-caret-color: {{ card_caret_color }};{% endif %}{% if card_badge_bg_color != blank %} --cpc-card-badge-bg-color: {{ card_badge_bg_color }};{% endif %}{% if card_badge_text_color != blank %} --cpc-card-badge-text-color: {{ card_badge_text_color }};{% endif %}{% if card_content_border_color != blank %} --cpc-card-content-border-color: {{ card_content_border_color }};{% endif %}{% if arrow_bg_color != blank %} --cpc-arrow-bg: {{ arrow_bg_color }};{% endif %}{% if arrow_icon_color != blank %} --cpc-arrow-icon: {{ arrow_icon_color }};{% endif %}{% if arrow_border_color != blank %} --cpc-arrow-border: {{ arrow_border_color }};{% endif %} --cpc-arrow-size: {{ arrow_size }}px; --cpc-arrow-radius: {{ arrow_radius }}px; --cpc-card-content-border-width: {{ card_content_border_width }}px; --cpc-card-content-border-radius: {{ card_content_border_radius }}px; --cpc-card-content-padding: {{ card_content_padding }}px; --cpc-card-content-margin: {{ card_content_margin }}px; --cpc-bottom-padding: {{ bottom_padding }}px; --cpc-bottom-margin: {{ bottom_margin }}px;"
+>
+  <div class="cpc-container">
+    {%- if heading != blank or subheading != blank -%}
+      <div class="cpc-header cpc-header--{{ alignment }}">
+        {%- if heading != blank -%}
+          <{{ heading_tag }} class="cpc-heading">{{ heading }}</{{ heading_tag }}>
+        {%- endif -%}
+        {%- if subheading != blank -%}
+          <p class="cpc-subheading">{{ subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if item_blocks.size > 0 -%}
+      <div class="cpc-carousel-wrapper">
+        <div class="cpc-viewport" data-viewport>
+          <div class="cpc-track" data-track>
+            {%- for block in item_blocks -%}
+              {%- assign product = block.settings.product -%}
+              {%- if product != blank -%}
+                <div class="cpc-slide{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }} data-slide-index="{{ forloop.index0 }}">
+                <div class="cpc-card">
+                  <div class="cpc-media-tile">
+                    {%- liquid
+                      assign media_source = block.settings.media_source | default: 'product_featured'
+                      assign focal_position = block.settings.focal_position | default: 'center'
+                      assign object_position = 'center'
+                      if focal_position == 'top'
+                        assign object_position = 'top center'
+                      elsif focal_position == 'bottom'
+                        assign object_position = 'bottom center'
+                      endif
+                    -%}
+
+                    {%- if block.settings.badge_text != blank -%}
+                      <div class="cpc-badge">{{ block.settings.badge_text }}</div>
+                    {%- endif -%}
+
+                    {%- if media_source == 'custom_video' and block.settings.custom_video != blank -%}
+                      {%- liquid
+                        assign custom_video_poster_url = block.settings.custom_video.preview_image | image_url: width: 1200
+                        if custom_video_poster_url == blank and product.featured_media != blank
+                          assign custom_video_poster_url = product.featured_media | image_url: width: 1200
+                        endif
+                      -%}
+                      <video
+                        class="cpc-card-video"
+                        data-video-id="{{ block.settings.custom_video.id }}"
+                        muted
+                        playsinline
+                        preload="metadata"
+                        {% if custom_video_poster_url != blank %}
+                          poster="{{ custom_video_poster_url }}"
+                        {% endif %}
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}data-lazy-video="true"{% endunless %}
+                      >
+                        {%- for source in block.settings.custom_video.sources -%}
+                          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                        {%- endfor -%}
+                      </video>
+                    {%- elsif media_source == 'external_gif_url' and block.settings.external_gif_url != blank -%}
+                      {%- liquid
+                        assign placeholder_url = block.settings.placeholder_image | image_url: width: 1200
+                        if placeholder_url == blank and product.featured_media != blank
+                          assign placeholder_url = product.featured_media | image_url: width: 1200
+                        endif
+                        if placeholder_url == blank
+                          assign placeholder_url = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+                        endif
+                      -%}
+                      <img
+                        draggable="false"
+                        data-gif-url="{{ block.settings.external_gif_url }}"
+                        data-placeholder-url="{{ placeholder_url }}"
+                        {% if forloop.first %}src="{{ block.settings.external_gif_url }}"{% else %}src="{{ placeholder_url }}"{% endif %}
+                        alt="{{ block.settings.alt_text | default: product.title | escape }}"
+                        class="cpc-card-image cpc-gif-image"
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}loading="lazy"{% endunless %}
+                      >
+                    {%- elsif media_source == 'custom_image_or_gif' and block.settings.custom_media != blank -%}
+                      {%- liquid
+                        assign media_url = block.settings.custom_media | image_url: width: 1200
+                        assign is_gif = false
+                        if block.settings.custom_media.alt contains '.gif' or media_url contains '.gif'
+                          assign is_gif = true
+                        endif
+                      -%}
+                      {%- if is_gif -%}
+                        {%- liquid
+                          assign placeholder_url = block.settings.placeholder_image | image_url: width: 1200
+                          if placeholder_url == blank and product.featured_media != blank
+                            assign placeholder_url = product.featured_media | image_url: width: 1200
+                          endif
+                          if placeholder_url == blank
+                            assign placeholder_url = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+                          endif
+                        -%}
+                        <img
+                          draggable="false"
+                          data-gif-url="{{ media_url }}"
+                          data-placeholder-url="{{ placeholder_url }}"
+                          {% if forloop.first %}src="{{ media_url }}"{% else %}src="{{ placeholder_url }}"{% endif %}
+                          alt="{{ block.settings.alt_text | default: product.title | escape }}"
+                          class="cpc-card-image cpc-gif-image"
+                          style="object-position: {{ object_position }};"
+                          {% unless forloop.first %}loading="lazy"{% endunless %}
+                        >
+                      {%- else -%}
+                        <img
+                          draggable="false"
+                          src="{{ media_url }}"
+                          alt="{{ block.settings.alt_text | default: product.title | escape }}"
+                          class="cpc-card-image"
+                          style="object-position: {{ object_position }};"
+                          {% unless forloop.first %}loading="lazy"{% endunless %}
+                        >
+                      {%- endif -%}
+                    {%- elsif product.featured_media != blank -%}
+                      <img
+                        draggable="false"
+                        src="{{ product.featured_media | image_url: width: 1200 }}"
+                        srcset="{{ product.featured_media | image_url: width: 300 }} 300w,
+                                {{ product.featured_media | image_url: width: 600 }} 600w,
+                                {{ product.featured_media | image_url: width: 900 }} 900w,
+                                {{ product.featured_media | image_url: width: 1200 }} 1200w"
+                        sizes="(max-width: 749px) 85vw, (max-width: 989px) 50vw, 400px"
+                        alt="{{ block.settings.alt_text | default: product.featured_media.alt | default: product.title | escape }}"
+                        class="cpc-card-image"
+                        style="object-position: {{ object_position }};"
+                        {% unless forloop.first %}loading="lazy"{% endunless %}
+                        width="{{ product.featured_media.width }}"
+                        height="{{ product.featured_media.height }}"
+                      >
+                    {%- else -%}
+                      <div class="cpc-card-placeholder">
+                        {{ 'product-1' | placeholder_svg_tag: 'cpc-placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <a href="{{ product.url }}" class="cpc-info-card" draggable="false">
+                    <div class="cpc-info-thumb">
+                      {%- if product.featured_media != blank -%}
+                        <img
+                          draggable="false"
+                          src="{{ product.featured_media | image_url: width: 120 }}"
+                          alt="{{ product.featured_media.alt | default: product.title | escape }}"
+                          class="cpc-info-thumb-image"
+                          {% unless forloop.first %}loading="lazy"{% endunless %}
+                          width="120"
+                          height="120"
+                        >
+                      {%- else -%}
+                        <div class="cpc-info-thumb-placeholder">
+                          {{ 'product-1' | placeholder_svg_tag: 'cpc-info-thumb-placeholder-svg' }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    
+                    <div class="cpc-info-text">
+                      <h3 class="cpc-info-title">{{ product.title | escape }}</h3>
+                      {%- assign variant = product.selected_or_first_available_variant -%}
+                      {%- assign is_discounted = false -%}
+                      {%- if variant.compare_at_price > variant.price -%}
+                        {%- assign is_discounted = true -%}
+                      {%- endif -%}
+                      <div class="cpc-info-price{% if is_discounted %} cpc-info-price--on-sale{% endif %}">
+                        {%- if is_discounted -%}
+                          <span class="cpc-price-compare">{{ variant.compare_at_price | money }}</span>
+                        {%- endif -%}
+                        <span class="cpc-price-current">{{ variant.price | money }}</span>
+                      </div>
+                    </div>
+
+                    <div class="cpc-info-caret">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </a>
+                </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- if show_arrows -%}
+          <button type="button" class="cpc-arrow cpc-arrow--prev" aria-label="Previous product">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.5 4.5L7 10L12.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="cpc-arrow cpc-arrow--next" aria-label="Next product">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 4.5L13 10L7.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="cpc-empty">
+        <p>{{ 'sections.collection_template.empty' | t | default: 'Add products to this carousel' }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  /* Center Product Carousel Styles */
+  .cpc-section--{{ section_id }} {
+    padding: 4rem 0 var(--cpc-bottom-padding, 0);
+    margin-bottom: var(--cpc-bottom-margin, 0);
+    position: relative;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-header {
+    margin-bottom: 3rem;
+    text-align: {{ alignment }};
+    padding: 0 1.5rem;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-heading {
+    font-size: var(--cpc-heading-size, 2.4rem);
+    font-weight: 600;
+    margin: 0 0 1rem;
+    line-height: 1.2;
+    {%- if heading_color != blank -%}
+      color: var(--cpc-heading-color);
+    {%- endif -%}
+  }
+
+  .cpc-section--{{ section_id }} .cpc-subheading {
+    font-size: 1.6rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-carousel-wrapper {
+    position: relative;
+    padding: 0 0 13rem;
+    overflow: visible;
+  }
+
+
+  .cpc-section--{{ section_id }} .cpc-viewport {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track {
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: auto;
+    scroll-behavior: auto;
+    gap: 0;
+    padding: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x proximity;
+    contain: layout style paint;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track.is-dragging {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+    cursor: grabbing;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track.is-dragging .cpc-slide {
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track.is-dragging .cpc-card-image {
+    transition: transform 120ms ease;
+  }
+
+  /* 1. One consistent physical gap for all slides */
+  .cpc-section--{{ section_id }} .cpc-slide {
+    min-width: 0;
+    flex: 0 0 300px;
+    width: 300px;
+    height: 620px;
+    scroll-snap-align: center;
+    transform-origin: center;
+    transition:
+      transform 260ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 180ms linear,
+      filter 180ms linear;
+    opacity: 0.6;
+    filter: brightness(0.95) saturate(0.9);
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    overflow: visible;
+    margin-right: var(--cpc-gap);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-slide.is-correcting {
+    transition: none !important;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-slide:last-child {
+    margin-right: 0;
+  }
+
+  /* 2. Desktop side cards: keep true 300x388 tile size (no width scaling). */
+  .cpc-section--{{ section_id }} .cpc-slide:not(.is-active) {
+    transform: none;
+  }
+
+  /* 5. Center card remains clean - no translateX */
+  .cpc-section--{{ section_id }} .cpc-slide.is-active {
+    transition:
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 220ms ease;
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1) saturate(1);
+    z-index: 2;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    width: 300px;
+    position: relative;
+    z-index: 1;
+    transform-style: preserve-3d;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-media-tile {
+    position: relative;
+    width: 300px;
+    height: 500px;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.03);
+    border-radius: var(--cpc-card-radius);
+    box-shadow: 0 4px 16px rgba(var(--color-foreground), 0.08);
+    transition: box-shadow 260ms ease;
+    cursor: pointer;
+    will-change: box-shadow;
+    transform-style: preserve-3d;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-media-tile {
+    box-shadow: 0 8px 24px rgba(var(--color-foreground), 0.12);
+  }
+
+  @media screen and (min-width: 750px) {
+    .cpc-section--{{ section_id }} .cpc-slide {
+      display: flex;
+      align-items: flex-start;
+      flex: 0 0 316px;
+      width: 316px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide:not(.is-active) {
+      align-items: center;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-card {
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide:not(.is-active) .cpc-media-tile {
+      width: 300px;
+      height: 388px;
+      max-height: 388px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide:not(.is-active) .cpc-media-tile {
+      transition-delay: 0ms;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-media-tile {
+      transition-delay: 40ms;
+    }
+  }
+
+  .cpc-section--{{ section_id }} .cpc-badge {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    background: var(--cpc-card-badge-bg-color, rgba(var(--color-button), 1));
+    color: var(--cpc-card-badge-text-color, rgba(var(--color-button-text), 1));
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-card-image,
+  .cpc-section--{{ section_id }} .cpc-card-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 1.0s cubic-bezier(0.33, 1, 0.68, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-card-image,
+  .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-card-video {
+    transform: scale(1);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-card-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--color-foreground), 0.03);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-card {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: var(--cpc-card-content-padding, 1.2rem);
+    background: var(--cpc-card-content-bg, rgba(var(--color-background), 1));
+    color: var(--cpc-card-title-color, rgba(var(--color-foreground), 1));
+    {%- if card_content_border_width > 0 -%}
+      border: var(--cpc-card-content-border-width) solid var(--cpc-card-content-border-color, rgba(var(--color-foreground), 0.12));
+    {%- else -%}
+      border: 1px solid var(--cpc-card-content-border-color, rgba(var(--color-foreground), 0.12));
+    {%- endif -%}
+    {%- if card_content_border_radius > 0 -%}
+      border-radius: var(--cpc-card-content-border-radius);
+    {%- else -%}
+      border-radius: 1.4rem;
+    {%- endif -%}
+    box-shadow: 0 2px 12px rgba(var(--color-foreground), 0.06);
+    position: relative;
+    z-index: 10;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+    transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+    will-change: transform, opacity;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-card:hover {
+    opacity: 0.95;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-card:active {
+    opacity: 0.9;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-thumb {
+    flex-shrink: 0;
+    width: 5.6rem;
+    height: 5.6rem;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.03);
+  }
+
+  @media screen and (max-width: 749px) {
+    .cpc-section--{{ section_id }} .cpc-arrow {
+      display: none !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-thumb {
+      width: 4.4rem;
+      height: 4.4rem;
+    }
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-thumb-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-thumb-placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--cpc-card-title-color, rgba(var(--color-foreground), 1));
+    display: block;
+    white-space: nowrap;
+    overflow: visible;
+    width: calc(100% + 1.6rem);
+    margin-right: -1.6rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cpc-section--{{ section_id }} .cpc-info-title {
+      font-size: 1.4rem;
+    }
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-price {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--cpc-card-normal-price-color, rgba(var(--color-foreground), 1));
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-price.cpc-info-price--on-sale {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cpc-section--{{ section_id }} .cpc-info-price.cpc-info-price--on-sale {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.8rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .cpc-section--{{ section_id }} .cpc-info-price {
+      font-size: 1.3rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-price.cpc-info-price--on-sale {
+      gap: 0.1rem;
+    }
+  }
+
+  .cpc-section--{{ section_id }} .cpc-price-compare {
+    text-decoration: line-through;
+    opacity: 0.6;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--cpc-card-normal-price-color, rgba(var(--color-foreground), 0.6));
+  }
+
+  @media screen and (max-width: 749px) {
+    .cpc-section--{{ section_id }} .cpc-price-compare {
+      font-size: 1.1rem;
+    }
+  }
+
+  .cpc-section--{{ section_id }} .cpc-price-current {
+    color: var(--cpc-card-normal-price-color, rgba(var(--color-foreground), 1));
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-price.cpc-info-price--on-sale .cpc-price-current {
+    color: var(--cpc-card-discounted-price-color, rgba(var(--color-foreground), 1));
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-caret {
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cpc-card-caret-color, rgba(var(--color-foreground), 0.5));
+    position: relative;
+    z-index: 1;
+    margin-left: 0.4rem;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-info-caret svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-arrow {
+    position: absolute;
+    top: 44%;
+    transform: translateY(-50%);
+    width: var(--cpc-arrow-size, 44px);
+    height: var(--cpc-arrow-size, 44px);
+    border-radius: var(--cpc-arrow-radius, 999px);
+    background: var(--cpc-arrow-bg, rgba(255, 255, 255, 0.95));
+    border: 1px solid var(--cpc-arrow-border, rgba(var(--color-foreground), 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), background 0.3s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    will-change: transform;
+    color: var(--cpc-arrow-icon, rgba(var(--color-foreground), 1));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .cpc-section--{{ section_id }}[data-arrow-style="outline"] .cpc-arrow {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .cpc-section--{{ section_id }}[data-arrow-style="glass"] .cpc-arrow {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-arrow:hover:not(:disabled) {
+    transform: translateY(-50%) scale(1.1);
+    background: rgba(255, 255, 255, 1);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-arrow:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-arrow--prev {
+    left: 0;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-arrow--next {
+    right: 0;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-dot {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: none;
+    background: rgba(var(--color-foreground), 0.3);
+    cursor: pointer;
+    transition: background 0.3s cubic-bezier(0.33, 1, 0.68, 1), transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    will-change: transform;
+    padding: 0;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-dot:hover {
+    transform: scale(1.2);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-dot--active {
+    background: rgba(var(--color-foreground), 1);
+    transform: scale(1.3);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(var(--color-foreground), 0.6);
+  }
+
+  .cpc-section--{{ section_id }} .cpc-card-image {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-card,
+  .cpc-section--{{ section_id }} .cpc-card * {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track {
+    cursor: default;
+    touch-action: none;
+  }
+
+  /* Ensure info card links are always clickable */
+  .cpc-section--{{ section_id }} .cpc-info-card,
+  .cpc-section--{{ section_id }} .cpc-info-card * {
+    pointer-events: auto;
+  }
+
+  .cpc-section--{{ section_id }} .cpc-track:active {
+    cursor: default;
+  }
+
+  @media (max-height: 820px) and (min-width: 750px) {
+    .cpc-section--{{ section_id }} .cpc-slide,
+    .cpc-section--{{ section_id }} .cpc-slide.is-active {
+      height: 580px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-media-tile,
+    .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-media-tile {
+      height: 460px;
+      max-height: 460px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide:not(.is-active) .cpc-media-tile {
+      width: 300px;
+      height: 388px;
+      max-height: 388px;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-carousel-wrapper {
+      padding-bottom: 6rem;
+    }
+  }
+
+  /* Small laptops: scale entire section down proportionally using zoom */
+  @media screen and (min-width: 1281px) and (max-width: 1440px) {
+    .cpc-section--{{ section_id }} {
+      zoom: 0.9;
+    }
+  }
+
+  @media screen and (min-width: 990px) and (max-width: 1280px) {
+    .cpc-section--{{ section_id }} {
+      zoom: 0.78;
+    }
+  }
+
+  /* Mobile Optimizations - All mobile styles consolidated here after desktop styles */
+  @media screen and (max-width: 749px) {
+    .cpc-section--{{ section_id }} {
+      padding: 2rem 0 var(--cpc-bottom-padding, 0);
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-container {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-header {
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-heading {
+      font-size: clamp(1.8rem, 5vw, var(--cpc-heading-size, 2.4rem));
+      margin: 0 0 0.8rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-subheading {
+      font-size: 1.4rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-carousel-wrapper {
+      padding: 2rem 1rem 8rem;
+      overflow-x: hidden;
+      overflow-y: visible;
+      width: 100%;
+      background: transparent !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-viewport {
+      overflow-x: hidden !important;
+      overflow-y: visible !important;
+      width: 100%;
+      background: transparent !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-track {
+      touch-action: pan-x pan-y;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: auto;
+      overflow-y: visible !important;
+      padding: 0 0.5rem;
+      background: transparent !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide {
+      flex: 0 0 calc((100% - 2 * clamp(0.6rem, 1.5vw, 1rem)) / 3) !important;
+      width: calc((100% - 2 * clamp(0.6rem, 1.5vw, 1rem)) / 3) !important;
+      max-width: none !important;
+      height: auto !important;
+      min-height: 260px !important;
+      margin-right: clamp(0.6rem, 1.5vw, 1rem) !important;
+      scroll-snap-align: center;
+      /* MOBILE: No transform on slide - preserves border-radius */
+      opacity: 0.6 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: opacity 0.14s cubic-bezier(0.33, 1, 0.68, 1) !important;
+      overflow: visible !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide.is-correcting {
+      transition: none !important;
+    }
+
+    @media screen and (max-width: 749px) {
+      .cpc-section--{{ section_id }} .cpc-slide.is-correcting {
+        transition: none !important;
+        opacity: 0.6 !important;
+        filter: none !important;
+      }
+      
+      .cpc-section--{{ section_id }} .cpc-slide.is-correcting.is-active {
+        opacity: 1 !important;
+        filter: none !important;
+      }
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide.is-active {
+      /* MOBILE: Center product - no transform on slide itself */
+      height: auto !important;
+      min-height: 340px !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      z-index: 2 !important;
+      overflow: visible !important;
+    }
+
+    /* Mobile safeguard: avoid height/active-state animation retriggers during snap settle. */
+    .cpc-section--{{ section_id }} .cpc-slide.is-active,
+    .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-media-tile {
+      transition: none !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-card {
+      width: 100% !important;
+      max-width: none !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-card {
+      width: 100% !important;
+      max-width: none !important;
+      overflow: visible !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-media-tile {
+      width: 100% !important;
+      /* MOBILE: Side products - smaller height */
+      height: 180px !important;
+      overflow: hidden !important;
+      border-radius: var(--cpc-card-radius) !important;
+      will-change: transform !important;
+      transform: scale(1) !important;
+      transform-origin: center center !important;
+      transition: transform 0.14s cubic-bezier(0.33, 1, 0.68, 1) !important;
+      /* Ensure border-radius is preserved - no parent clipping */
+      position: relative !important;
+      z-index: 1 !important;
+      isolation: isolate !important;
+      background: rgba(var(--color-foreground), 0.03) !important;
+      /* Ensure border-radius is visible by having own background */
+    }
+
+    .cpc-section--{{ section_id }} .cpc-slide.is-active .cpc-media-tile {
+      /* MOBILE: Center product - limited height with subtle scale on media tile only */
+      height: 230px !important;
+      max-height: 230px !important;
+      margin-top: 1.5rem !important;
+      box-shadow: 0 8px 24px rgba(var(--color-foreground), 0.12) !important;
+      transform: scale(1.05) !important;
+      transform-origin: center center !important;
+      border-radius: var(--cpc-card-radius) !important;
+      /* Ensure border-radius stays visible during scale */
+      overflow: hidden !important;
+      z-index: 2 !important;
+      isolation: isolate !important;
+      background: rgba(var(--color-foreground), 0.03) !important;
+      /* Ensure border-radius is visible with own background */
+    }
+
+    .cpc-section--{{ section_id }} .cpc-card-image,
+    .cpc-section--{{ section_id }} .cpc-card-video {
+      border-radius: var(--cpc-card-radius) !important;
+      /* Ensure images respect parent border-radius */
+      display: block !important;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-badge {
+      top: 0.8rem;
+      left: 0.8rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 1rem;
+      border-radius: 1.6rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-card {
+      gap: 0.8rem;
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 1.2rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-title {
+      font-size: var(--cpc-mobile-info-text-size, 15px);
+      line-height: 1.3;
+      display: block !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      width: calc(100% + 1.2rem);
+      margin-right: -1.2rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-price {
+      font-size: var(--cpc-mobile-info-price-size, 18px);
+      gap: 0.6rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-price-compare {
+      font-size: 0.95rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-caret {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    .cpc-section--{{ section_id }} .cpc-info-thumb {
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 0.6rem;
+    }
+  }
+</style>
+
+<script>
+  // Immediately stop any GIFs and videos on page load (except in active slide)
+  (function() {
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector(`#CenterProductCarousel-${sectionId}`);
+    if (section) {
+      const allSlides = section.querySelectorAll('.cpc-slide');
+      allSlides.forEach((slide) => {
+        // Only stop GIFs and videos in non-active slides
+        if (!slide.classList.contains('is-active')) {
+          // Stop GIFs
+          const gifImages = slide.querySelectorAll('.cpc-gif-image[data-gif-url]');
+          gifImages.forEach((img) => {
+            const gifUrl = img.dataset.gifUrl;
+            const placeholderUrl = img.dataset.placeholderUrl;
+            if (gifUrl && placeholderUrl) {
+              const baseGifUrl = gifUrl.split('?')[0].split('#')[0];
+              // If it's showing the GIF, swap to placeholder
+              if (img.src.includes(baseGifUrl)) {
+                img.src = placeholderUrl;
+              }
+            }
+          });
+          // Stop videos
+          const videos = slide.querySelectorAll('.cpc-card-video');
+          videos.forEach((video) => {
+            video.pause();
+            video.currentTime = 0;
+          });
+        }
+      });
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    'use strict';
+
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector(`#CenterProductCarousel-${sectionId}`);
+    if (!section) return;
+
+    const viewport = section.querySelector('[data-viewport]');
+    const track = section.querySelector('[data-track]');
+    const prevBtn = section.querySelector('.cpc-arrow--prev');
+    const nextBtn = section.querySelector('.cpc-arrow--next');
+    const dots = Array.from(section.querySelectorAll('[data-dot-index]'));
+
+    const autoplayEnabled = section.dataset.autoplay === 'true';
+    const autoplayDelay = (parseInt(section.dataset.autoplayDelay, 10) || 5) * 1000;
+
+    if (!track || !viewport) return;
+
+    // MOBILE DETECTION - Check if we're on mobile (≤ 749px)
+    const mobileMediaQuery = window.matchMedia('(max-width: 749px)');
+    let isMobile = mobileMediaQuery.matches;
+    
+    // Update isMobile on resize
+    function updateMobileState() {
+      isMobile = mobileMediaQuery.matches;
+    }
+    mobileMediaQuery.addEventListener('change', updateMobileState);
+
+    function applyScrollSnapMode() {
+      if (!track) return;
+      // Desktop uses scripted centering; keep snap disabled to avoid post-animation kickback.
+      track.style.scrollSnapType = isMobile ? 'x proximity' : 'none';
+    }
+
+    let originalSlides = [];
+    let slides = [];
+    let originalCount = 0;
+    let clonesCount = 0;
+    let currentIndex = 0;
+    let currentRealIndex = 0;
+    let autoplayTimer = null;
+    let isPaused = false;
+    let scrollRaf = null;
+    let isScrolling = false;
+    let lastScrollEventAt = 0;
+    let isCorrecting = false;
+    let isProgrammaticScroll = false;
+    let programmaticScrollTimer = null;
+    let isArrowNavigation = false;
+    let isDragging = false;
+    let lastScrollLeft = 0;
+    let lastVideoRealIndex = -1;
+    let lastGifRealIndex = -1;
+    let isInertia = false;
+
+    function normalizeToMiddleCopy() {
+      if (!slides.length || originalCount <= 1) return;
+
+      const closestReal = getClosestIndexToCenter();
+      let corrected = closestReal;
+
+      if (closestReal < clonesCount) {
+        const offsetInPre = ((closestReal % originalCount) + originalCount) % originalCount;
+        corrected = clonesCount + offsetInPre;
+      } else if (closestReal >= clonesCount + originalCount) {
+        const offsetInPost = ((closestReal - clonesCount - originalCount) % originalCount + originalCount) % originalCount;
+        corrected = clonesCount + offsetInPost;
+      }
+
+      if (corrected !== closestReal) {
+        silentRebaseToRealIndex(corrected);
+      }
+
+      currentRealIndex = corrected;
+      currentIndex = getOriginalIndexByReal(corrected);
+      // Mobile finalizes active state in settleScroll() only.
+      if (!isMobile) {
+        setActiveByRealIndex(corrected);
+      }
+      updateDots();
+    }
+
+    function lockProgrammaticScroll(duration = 700) {
+      isProgrammaticScroll = true;
+      if (programmaticScrollTimer) {
+        clearTimeout(programmaticScrollTimer);
+        programmaticScrollTimer = null;
+      }
+
+      programmaticScrollTimer = setTimeout(() => {
+        isProgrammaticScroll = false;
+        programmaticScrollTimer = null;
+        // Arrow navigation finalizes at animation completion; avoid second settle recenter pass.
+        if (!isArrowNavigation) {
+          // Final sync after scripted scroll completes (desktop only).
+          scheduleSettle();
+        }
+      }, duration);
+    }
+
+    function ensureSingleActiveSlide() {
+      if (!slides.length) return;
+      const activeSlides = section.querySelectorAll('.cpc-slide.is-active');
+      const centeredIndex = Math.max(0, Math.min(slides.length - 1, getClosestIndexToCenter()));
+      if (activeSlides.length === 1) {
+        const activeIndex = slides.indexOf(activeSlides[0]);
+        if (activeIndex === centeredIndex) return;
+      }
+      setActiveByRealIndex(centeredIndex);
+    }
+
+    // IntersectionObserver removed - mobile now uses scroll-based detection like desktop
+
+    function getSlidesPerView() {
+      if (window.matchMedia('(min-width: 990px)').matches) return 3;
+      if (window.matchMedia('(min-width: 750px)').matches) return 2;
+      return 1;
+    }
+
+    /**
+     * Get closest slide to center using scroll position and offsets (not getBoundingClientRect)
+     * This is reliable even with CSS transforms and cloned slides
+     */
+    function getClosestIndexToCenter() {
+      if (slides.length === 0) return 0;
+
+      const scrollLeft = track.scrollLeft;
+      const trackCenter = track.offsetWidth / 2;
+      const viewportCenter = scrollLeft + trackCenter;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      slides.forEach((slide, index) => {
+        // Use offsetLeft + offsetWidth/2 to get slide center position
+        // This is unaffected by CSS transforms
+        const slideLeft = slide.offsetLeft;
+        const slideWidth = slide.offsetWidth;
+        const slideCenter = slideLeft + slideWidth / 2;
+        
+        // Calculate distance from viewport center to slide center
+        const distance = Math.abs(viewportCenter - slideCenter);
+        
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      return closestIndex;
+    }
+
+    function getOriginalIndexByReal(realIndex) {
+      const s = slides[realIndex];
+      const v = s ? parseInt(s.dataset.originalIndex || '0', 10) : 0;
+      return Number.isNaN(v) ? 0 : v;
+    }
+
+    function getRealIndex(originalIndex) {
+      return clonesCount + originalIndex;
+    }
+
+    /**
+     * Set active slide - ensures exactly ONE slide has .is-active at all times.
+     * Prevents class churn by never removing/re-adding on the already-active target.
+     */
+    function forceActiveSlide(targetSlide) {
+      if (!targetSlide) return;
+      slides.forEach((slide) => {
+        slide.classList.toggle('is-active', slide === targetSlide);
+      });
+    }
+
+    function setActiveByRealIndex(realIndex) {
+      if (isProgrammaticScroll) return;
+      // Clamp to valid range
+      realIndex = Math.max(0, Math.min(slides.length - 1, realIndex));
+
+      const targetSlide = slides[realIndex];
+      if (!targetSlide) return;
+
+      const activeSlides = slides.filter((slide) => slide.classList.contains('is-active'));
+      if (activeSlides.length === 1 && activeSlides[0] === targetSlide) {
+        return;
+      }
+
+      // If target is already active but duplicates exist, only remove extras.
+      if (targetSlide.classList.contains('is-active')) {
+        slides.forEach((slide) => {
+          if (slide !== targetSlide) slide.classList.remove('is-active');
+        });
+        return;
+      }
+
+      // Activate target once, remove all others.
+      slides.forEach((slide) => {
+        slide.classList.toggle('is-active', slide === targetSlide);
+      });
+
+      // Preload GIF for active slide immediately (in background, doesn't display yet)
+      if (!isDragging && !isInertia) {
+        const gifImages = targetSlide.querySelectorAll('.cpc-gif-image[data-gif-url]');
+        gifImages.forEach((img) => {
+          const gifUrl = img.dataset.gifUrl;
+          if (gifUrl) {
+            // Preload in background for faster display when scroll settles
+            preloadGif(gifUrl);
+          }
+        });
+      }
+    }
+
+    /**
+     * Preload GIF in background (doesn't display it, just loads into browser cache)
+     */
+    function preloadGif(gifUrl) {
+      if (!gifUrl) return;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = gifUrl;
+      document.head.appendChild(link);
+      // Remove after a short delay to clean up
+      setTimeout(() => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+      }, 1000);
+    }
+
+    /**
+     * VIDEO PLAYBACK CONTROL: Only ONE video plays at a time, only on centered slide, only after scroll settles
+     * 
+     * This function is called:
+     * - After scroll settles (in settleScroll() and correctPosition())
+     * - When active slide changes (via setActiveByRealIndex() -> scheduleSettle())
+     * 
+     * It ensures:
+     * - All videos are paused during drag/inertia
+     * - Only the center (active) slide's video plays
+     * - Videos reset to start (currentTime = 0) when switching slides
+     * 
+     * @param {number} realIndex - The real index of the slide that should have its video playing
+     */
+    function updateCenterVideo(realIndex) {
+      if (isCorrecting) return;
+      // Lock video during drag or inertia - pause all videos
+      if (isDragging || isInertia) {
+        pauseAllVideos(false);
+        return;
+      }
+
+      // Now play video ONLY for the centered slide
+      if (realIndex < 0 || realIndex >= slides.length) return;
+      const centerSlide = slides[realIndex];
+      if (!centerSlide) return;
+
+      const centerVideos = Array.from(centerSlide.querySelectorAll('.cpc-card-video'));
+      // If still on same index, only skip when center video is already healthy/playing.
+      if (realIndex === lastVideoRealIndex) {
+        const shouldResync = centerVideos.some((video) => video.paused || video.readyState < 2);
+        if (!shouldResync) return;
+      }
+
+      if (!isMobile) {
+        // Desktop: enforce strict single-video playback across all clones.
+        const allVideos = Array.from(section.querySelectorAll('.cpc-card-video'));
+        allVideos.forEach((video) => {
+          if (!centerVideos.includes(video)) {
+            video.pause();
+          }
+        });
+      } else {
+        // Mobile: lightweight path to reduce per-frame work.
+        const previousRealIndex = lastVideoRealIndex;
+        if (
+          previousRealIndex >= 0 &&
+          previousRealIndex < slides.length &&
+          previousRealIndex !== realIndex
+        ) {
+          const previousSlide = slides[previousRealIndex];
+          if (previousSlide) {
+            const previousVideos = previousSlide.querySelectorAll('.cpc-card-video');
+            previousVideos.forEach((video) => video.pause());
+          }
+        }
+      }
+
+      // Preload adjacent videos for faster switching
+      preloadAdjacentVideos(realIndex);
+
+      lastVideoRealIndex = realIndex;
+
+      const videos = centerVideos;
+      videos.forEach((video) => {
+        const tryPlay = () => {
+          if (!isDragging && !isInertia && !isCorrecting && video.paused) {
+            video.play().catch(() => {});
+          }
+        };
+
+        // Ensure video is set to preload auto for faster loading
+        if (video.preload !== 'auto') {
+          video.preload = 'auto';
+        }
+        video.muted = true;
+        video.playsInline = true;
+        
+        // If video has enough data loaded (readyState >= 2 means HAVE_CURRENT_DATA), play immediately
+        if (video.readyState >= 2) {
+          tryPlay();
+        } else if (video.readyState >= 1) {
+          // HAVE_METADATA - video metadata loaded, wait for data
+          const onCanPlay = () => {
+            video.removeEventListener('canplay', onCanPlay);
+            video.removeEventListener('loadeddata', onCanPlay);
+            tryPlay();
+          };
+          video.addEventListener('canplay', onCanPlay, { once: true });
+          video.addEventListener('loadeddata', onCanPlay, { once: true });
+          // Force fetch of playable data (some browsers stay at metadata-only).
+          try { video.load(); } catch (e) {}
+          setTimeout(() => {
+            if (video.readyState >= 2) tryPlay();
+          }, 350);
+        } else {
+          // Video hasn't started loading - force load
+          const onCanPlay = () => {
+            video.removeEventListener('canplay', onCanPlay);
+            video.removeEventListener('loadeddata', onCanPlay);
+            tryPlay();
+          };
+          video.addEventListener('canplay', onCanPlay, { once: true });
+          video.addEventListener('loadeddata', onCanPlay, { once: true });
+          
+          // Force load immediately
+          try { video.load(); } catch (e) {}
+          setTimeout(() => {
+            if (video.readyState >= 2) tryPlay();
+          }, 450);
+        }
+      });
+    }
+    
+    // Preload videos for adjacent slides (next and previous) for instant switching
+    function preloadAdjacentVideos(centerIndex) {
+      const preloadIndices = isMobile
+        ? [centerIndex - 1, centerIndex + 1]
+        : [centerIndex - 1, centerIndex + 1, centerIndex - 2, centerIndex + 2];
+      
+      preloadIndices.forEach((idx) => {
+        if (idx >= 0 && idx < slides.length) {
+          const slide = slides[idx];
+          if (slide) {
+            const videos = slide.querySelectorAll('.cpc-card-video');
+            videos.forEach((video) => {
+              if (video.preload !== 'auto') {
+                video.preload = 'auto';
+              }
+              if (video.readyState === 0) {
+                video.load();
+              }
+            });
+          }
+        }
+      });
+    }
+
+    /**
+     * Pause all videos in the section and reset their currentTime
+     */
+    function pauseAllVideos(resetTime = false) {
+      const allVideos = section.querySelectorAll('.cpc-card-video');
+      allVideos.forEach((video) => {
+        video.pause();
+        if (resetTime) video.currentTime = 0;
+      });
+    }
+
+    /**
+     * STRICT GIF CONTROL: Only ONE GIF plays at a time, only on centered slide, only after scroll settles
+     * @param {number} realIndex - The real index of the slide that should have its GIF playing
+     */
+    function updateCenterGif(realIndex) {
+      if (isCorrecting) return;
+      // Lock GIF during drag or inertia
+      if (isDragging || isInertia) return;
+      if (realIndex === lastGifRealIndex) return;
+
+      if (!isMobile) {
+        // Desktop: enforce strict single-GIF playback across all clones.
+        const allGifImages = section.querySelectorAll('.cpc-gif-image[data-gif-url]');
+        allGifImages.forEach((img) => {
+          const gifUrl = img.dataset.gifUrl;
+          const placeholderUrl = img.dataset.placeholderUrl;
+          if (!gifUrl || !placeholderUrl) return;
+          const baseGifUrl = gifUrl.split('?')[0].split('#')[0];
+          if (img.src && img.src.includes(baseGifUrl)) {
+            img.src = placeholderUrl;
+            img.removeAttribute('srcset');
+          }
+        });
+      } else if (lastGifRealIndex >= 0 && lastGifRealIndex < slides.length) {
+        // Mobile: reset only the previous active slide.
+        const previousSlide = slides[lastGifRealIndex];
+        if (previousSlide) {
+          const previousGifImages = previousSlide.querySelectorAll('.cpc-gif-image[data-gif-url]');
+          previousGifImages.forEach((img) => {
+            const gifUrl = img.dataset.gifUrl;
+            const placeholderUrl = img.dataset.placeholderUrl;
+            if (!gifUrl || !placeholderUrl) return;
+            const baseGifUrl = gifUrl.split('?')[0].split('#')[0];
+            if (img.src && img.src.includes(baseGifUrl)) {
+              img.src = placeholderUrl;
+              img.removeAttribute('srcset');
+            }
+          });
+        }
+      }
+
+      // Start GIF only for the centered slide
+      if (realIndex >= 0 && realIndex < slides.length) {
+        const centerSlide = slides[realIndex];
+        if (centerSlide) {
+          const gifImages = centerSlide.querySelectorAll('.cpc-gif-image[data-gif-url]');
+          gifImages.forEach((img) => {
+            const gifUrl = img.dataset.gifUrl;
+            const placeholderUrl = img.dataset.placeholderUrl;
+            
+            if (gifUrl && placeholderUrl) {
+              img.src = gifUrl;
+            }
+          });
+        }
+      }
+
+      lastGifRealIndex = realIndex;
+    }
+
+    function updateDots() {
+      // Dots removed - no-op
+    }
+
+    // Simple debounce settle engine
+    let settleTimer = null;
+    let settleRaf = null;
+    function getSettleDelay() {
+      return window.matchMedia('(max-width: 749px)').matches ? 50 : 90; // ms
+    }
+    const SETTLE_DELAY = 90; // ms
+
+    /**
+     * Schedule settle - finalizes loop correction + GIF after scroll stops
+     */
+    function scheduleSettle() {
+      if (isCorrecting) return;
+      if (isMobile) {
+        // Mobile: native snap is the only centering authority.
+        // Finalize active state on next frame (no delayed timer loops).
+        if (settleRaf) cancelAnimationFrame(settleRaf);
+        settleRaf = requestAnimationFrame(() => {
+          settleRaf = null;
+          if (isCorrecting || isDragging || isInertia) return;
+          settleScroll();
+        });
+        return;
+      }
+      if (isProgrammaticScroll) return;
+      if (isArrowNavigation) return;
+      clearTimeout(settleTimer);
+      const delay = getSettleDelay();
+      settleTimer = setTimeout(() => {
+        if (isArrowNavigation || isDragging || isInertia || isCorrecting || isProgrammaticScroll) return;
+        // finalize: loop correction + gif
+        settleScroll();
+      }, delay);
+    }
+
+    // rAF active preview updater - desktop-only live preview during scroll.
+    // Mobile uses settleScroll() as single source of truth to prevent double activation flicker.
+    let activeRaf = null;
+    function scheduleActivePreview() {
+      if (isMobile) {
+        if (activeRaf) {
+          cancelAnimationFrame(activeRaf);
+          activeRaf = null;
+        }
+        return;
+      }
+      if (isCorrecting) return;
+      if (isArrowNavigation) return;
+      if (isProgrammaticScroll) return;
+      if (activeRaf) return;
+      activeRaf = requestAnimationFrame(() => {
+        activeRaf = null;
+        if (!slides.length || isCorrecting || isArrowNavigation || isProgrammaticScroll) return; // Skip during correction/locked/programmatic scroll
+
+        // compute closest index based on current scrollLeft
+        const idx = getClosestIndexToCenter();
+
+        if (idx !== currentRealIndex) {
+          currentRealIndex = idx;
+          currentIndex = getOriginalIndexByReal(idx);
+          setActiveByRealIndex(idx); // THIS makes the "push up" immediate
+          updateDots();
+        }
+      });
+    }
+
+    // setupMobileObserver removed - mobile now uses scroll-based detection like desktop
+
+    /**
+     * Process scroll settle - handle correction, final active state, video, and GIF.
+     * Mobile finalizes active state here (single source of truth).
+     * Desktop still previews during scroll, then confirms here.
+     *
+     * VIDEO CONTROL: updateCenterVideo() is called here to ensure only the center slide's video plays
+     * after scroll settles. This reuses the existing active-slide detection from getClosestIndexToCenter()
+     */
+    function settleScroll() {
+      if (!isMobile && isArrowNavigation) return;
+      // Compute centered slide using scroll position (reliable with transforms)
+      const centeredIndex = getClosestIndexToCenter();
+      
+      // Handle infinite loop correction if needed (works for both mobile and desktop)
+      let needsCorrection = false;
+      
+      if (centeredIndex < clonesCount) {
+        // In prepended copies - jump to corresponding position in middle copy
+        needsCorrection = true;
+      } else if (centeredIndex >= clonesCount + originalCount) {
+        // In appended copies - jump to corresponding position in middle copy
+        needsCorrection = true;
+      }
+      
+      // If correction needed, handle it (desktop only).
+      if (!isMobile && needsCorrection) {
+        correctPosition();
+      } else {
+        // Finalize active state once per mode:
+        // - Mobile: settle is the only authority.
+        // - Desktop: preview already ran during user scroll; settle only enforces a single active slide.
+        currentRealIndex = centeredIndex;
+        currentIndex = getOriginalIndexByReal(centeredIndex);
+        if (isMobile) {
+          setActiveByRealIndex(centeredIndex);
+        } else {
+          ensureSingleActiveSlide();
+        }
+        updateDots();
+        updateCenterVideo(centeredIndex);
+        updateCenterGif(centeredIndex);
+      }
+    }
+
+    /**
+     * Handle scroll events - instantly update active state, schedule settle for correction + GIF
+     * Works on both mobile and desktop using scroll-based center detection
+     */
+    function onScroll() {
+      // Skip during correction to prevent stutter
+      if (isCorrecting || (!isMobile && isArrowNavigation)) return;
+      if (!isMobile && isProgrammaticScroll) return;
+      lastScrollEventAt = performance.now();
+      
+      if (isDragging || isInertia) {
+        scheduleActivePreview();
+        // no settle while dragging/inertia
+        return;
+      }
+      // Mobile: keep active state settle-driven to prevent card-to-card jumping while swiping.
+      if (isMobile) {
+        scheduleSettle();
+        return;
+      }
+      scheduleActivePreview();
+      scheduleSettle();
+    }
+
+    /**
+     * Correct position when in cloned regions - instant jump without fighting animation
+     */
+    function correctPosition() {
+      // Mobile relies on native scrolling/snap only; no JS correction.
+      if (isMobile) return;
+      if (isArrowNavigation) return;
+      // Desktop correction path only.
+      if (isCorrecting || slides.length === 0) return;
+      if (isProgrammaticScroll) return;
+      
+      // Use scroll position-based detection (reliable with transforms)
+      const closestReal = getClosestIndexToCenter();
+      let corrected = closestReal;
+      let needsJump = false;
+      
+      // With 3 copies per side, we have: [PRE x3] + [MIDDLE] + [POST x3]
+      // Middle starts at clonesCount, ends at clonesCount + originalCount
+      if (closestReal < clonesCount) {
+        // In prepended copies - jump to corresponding position in middle copy
+        const offsetInPre = closestReal % originalCount;
+        corrected = clonesCount + offsetInPre;
+        needsJump = true;
+      } else if (closestReal >= clonesCount + originalCount) {
+        // In appended copies - jump to corresponding position in middle copy
+        const offsetInPost = (closestReal - clonesCount - originalCount) % originalCount;
+        corrected = clonesCount + offsetInPost;
+        needsJump = true;
+      }
+      
+      // Only jump if we're actually in a clone region
+      if (needsJump) {
+        // Hard-lock one active slide immediately before any correction work.
+        const lockedActiveSlide =
+          section.querySelector('.cpc-slide.is-active') ||
+          slides[Math.max(0, Math.min(slides.length - 1, closestReal))] ||
+          slides[Math.max(0, Math.min(slides.length - 1, corrected))];
+        forceActiveSlide(lockedActiveSlide);
+
+        isCorrecting = true;
+        clearTimeout(settleTimer);
+        if (activeRaf) {
+          cancelAnimationFrame(activeRaf);
+          activeRaf = null;
+        }
+        
+        // Disable transitions on all slides during correction to prevent stutter.
+        slides.forEach(slide => slide.classList.add('is-correcting'));
+        
+        const target = slides[corrected];
+        if (target) {
+          const originalScrollSnapType = track.style.scrollSnapType;
+          const originalScrollBehavior = track.style.scrollBehavior;
+
+          track.style.scrollBehavior = 'auto';
+          
+          // Pause all videos during correction to prevent stutter
+          pauseAllVideos(false);
+          
+          requestAnimationFrame(() => {
+            track.scrollTo({
+              left: target.offsetLeft - (track.offsetWidth / 2) + (target.offsetWidth / 2),
+              behavior: 'auto'
+            });
+            
+            // Wait 1 rAF for jump to complete
+            requestAnimationFrame(() => {
+              if (!section.querySelector('.cpc-slide.is-active') && lockedActiveSlide) {
+                lockedActiveSlide.classList.add('is-active');
+              }
+              // Update indices and active state
+              currentRealIndex = corrected;
+              currentIndex = getOriginalIndexByReal(corrected);
+              // During correction, bypass programmatic guard and atomically switch to corrected target.
+              forceActiveSlide(target);
+              updateDots();
+              
+              // Re-enable transitions after correction
+              slides.forEach(slide => slide.classList.remove('is-correcting'));
+              
+              // Restore scroll behavior
+              track.style.scrollSnapType = originalScrollSnapType || '';
+              track.style.scrollBehavior = originalScrollBehavior || '';
+              
+              // Correction is a safe enforcement point on desktop.
+              setTimeout(() => {
+                isCorrecting = false;
+                updateCenterVideo(corrected);
+                updateCenterGif(corrected);
+                ensureSingleActiveSlide();
+              }, 50);
+            });
+          });
+        } else {
+          slides.forEach(slide => slide.classList.remove('is-correcting'));
+          isCorrecting = false;
+        }
+      } else {
+        // Already in middle copy - keep media in sync, no extra active enforcement here.
+        updateCenterVideo(corrected);
+        updateCenterGif(corrected);
+      }
+    }
+
+    // --- Controlled snap animation (prevents jitter + too-fast snapping) ---
+    let snapRaf = null;
+
+    function cancelSnap() {
+      if (snapRaf) cancelAnimationFrame(snapRaf);
+      snapRaf = null;
+    }
+
+    // quintic ease in/out - smoother, more premium feel
+    function easeInOutQuintic(t) {
+      return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+    }
+
+    function animateScrollLeft(toLeft, duration = 420) {
+      // MOBILE: Disable programmatic scrolling - let native snap handle it
+      if (isMobile) {
+        // On mobile, just let native scroll-snap handle centering
+        return;
+      }
+
+      // DESKTOP: Original animation logic
+      cancelSnap();
+
+      const fromLeft = track.scrollLeft;
+      const delta = toLeft - fromLeft;
+
+      if (Math.abs(delta) < 0.5) {
+        track.scrollLeft = toLeft;
+        scheduleSettle();
+        return;
+      }
+
+      const start = performance.now();
+
+      // IMPORTANT: disable snap during animation so browser doesn't "kick" it
+      const prevSnapType = track.style.scrollSnapType;
+      track.style.scrollSnapType = 'none';
+
+      function step(now) {
+        const t = Math.min(1, (now - start) / duration);
+        track.scrollLeft = fromLeft + delta * easeInOutQuintic(t);
+
+        if (t < 1) {
+          snapRaf = requestAnimationFrame(step);
+        } else {
+          snapRaf = null;
+          track.style.scrollSnapType = prevSnapType || '';
+          if (isArrowNavigation) {
+            // Arrow flow owns finalization: one center, one active commit, no second settle recenter.
+            const centeredIndex = getClosestIndexToCenter();
+            currentRealIndex = centeredIndex;
+            currentIndex = getOriginalIndexByReal(centeredIndex);
+            const previousProgrammatic = isProgrammaticScroll;
+            isProgrammaticScroll = false;
+            setActiveByRealIndex(centeredIndex);
+            isProgrammaticScroll = previousProgrammatic;
+            ensureSingleActiveSlide();
+            updateDots();
+            updateCenterVideo(centeredIndex);
+            updateCenterGif(centeredIndex);
+            isArrowNavigation = false;
+            return;
+          }
+          scheduleSettle();
+        }
+      }
+
+      snapRaf = requestAnimationFrame(step);
+    }
+
+    /**
+     * Scroll to centered position - uses controlled rAF animation
+     * Mobile and desktop both use offset math for reliable centering
+     */
+    function scrollToCentered(target, smooth = true, updateState = true) {
+      if (!target) return;
+      const useArrowLock = !isMobile && smooth;
+      const previousArrowNavigation = isArrowNavigation;
+      if (useArrowLock) {
+        isArrowNavigation = true;
+        if (activeRaf) {
+          cancelAnimationFrame(activeRaf);
+          activeRaf = null;
+        }
+        clearTimeout(settleTimer);
+      }
+
+      const targetRealIndex = slides.indexOf(target);
+      if (updateState && targetRealIndex >= 0) {
+        currentRealIndex = targetRealIndex;
+        currentIndex = getOriginalIndexByReal(targetRealIndex);
+        updateDots();
+      }
+
+      // Use offset math for reliable centering (works on both mobile and desktop)
+      const targetLeft =
+        target.offsetLeft - (track.offsetWidth / 2) + (target.offsetWidth / 2);
+
+      // MOBILE: Fast centering without long native smooth-scroll easing
+      if (isMobile) {
+        track.scrollLeft = targetLeft;
+        scheduleSettle();
+        return;
+      }
+
+      // DESKTOP: Use controlled rAF animation
+      if (smooth) {
+        lockProgrammaticScroll(700);
+        animateScrollLeft(targetLeft, 420);
+      } else {
+        lockProgrammaticScroll(220);
+        cancelSnap();
+        track.scrollLeft = targetLeft;
+        scheduleActivePreview();
+        scheduleSettle();
+        if (useArrowLock) {
+          isArrowNavigation = previousArrowNavigation;
+        }
+      }
+    }
+
+    function scrollToRealIndex(realIndex, smooth = true) {
+      if (slides.length === 0) return;
+      
+      // Clamp to valid range
+      realIndex = Math.max(0, Math.min(slides.length - 1, realIndex));
+      const target = slides[realIndex];
+      
+      if (!target) return;
+
+      if (!isMobile) {
+        // Desktop: keep .is-active settle/finalization-owned (no mid-animation pre-activation).
+        lockProgrammaticScroll(smooth ? 800 : 250);
+      }
+      currentRealIndex = realIndex;
+      currentIndex = getOriginalIndexByReal(realIndex);
+      updateDots();
+      
+      // Use unified scroll to centered function
+      scrollToCentered(target, smooth, false);
+
+      if (autoplayEnabled && !isPaused) resetAutoplay();
+    }
+
+    function scrollToOriginalIndex(originalIndex, smooth = true) {
+      if (originalCount === 0) return;
+      
+      originalIndex = ((originalIndex % originalCount) + originalCount) % originalCount;
+      const realIndex = getRealIndex(originalIndex);
+      scrollToRealIndex(realIndex, smooth);
+    }
+
+    function shiftCurrentRealIndexByGroup(offset) {
+      if (originalCount <= 0 || slides.length === 0) return currentRealIndex;
+      const shifted = currentRealIndex + offset;
+      const target = slides[shifted];
+      if (!target) return currentRealIndex;
+
+      // Disable transitions during group shift to prevent stutter (desktop only)
+      if (!isMobile) {
+        slides.forEach(slide => slide.classList.add('is-correcting'));
+      }
+      
+      const prevProgrammatic = isProgrammaticScroll;
+      isProgrammaticScroll = true;
+      cancelSnap();
+      
+      // Pause videos during shift
+      pauseAllVideos(false);
+      
+      const targetLeft = target.offsetLeft - (track.offsetWidth / 2) + (target.offsetWidth / 2);
+      
+      // MOBILE: Use direct assignment for smoother performance
+      if (isMobile) {
+        track.scrollLeft = targetLeft;
+      } else {
+        track.scrollLeft = targetLeft;
+      }
+      
+      currentRealIndex = shifted;
+      currentIndex = getOriginalIndexByReal(shifted);
+      
+      // Re-enable transitions after shift completes
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!isMobile) {
+            slides.forEach(slide => slide.classList.remove('is-correcting'));
+          }
+          // Update video after transition re-enabled
+          setTimeout(() => {
+            updateCenterVideo(shifted);
+          }, isMobile ? 100 : 50);
+        });
+      });
+      
+      isProgrammaticScroll = prevProgrammatic;
+      return shifted;
+    }
+
+    function silentRebaseToRealIndex(realIndex) {
+      if (isMobile) return false;
+      if (slides.length === 0) return false;
+      const target = slides[realIndex];
+      if (!target) return false;
+
+      const prevScrollSnapType = track.style.scrollSnapType;
+      const prevScrollBehavior = track.style.scrollBehavior;
+
+      isProgrammaticScroll = true;
+      track.style.scrollSnapType = 'none';
+      track.style.scrollBehavior = 'auto';
+
+      const targetLeft = target.offsetLeft - (track.offsetWidth / 2) + (target.offsetWidth / 2);
+      track.scrollLeft = targetLeft;
+
+      currentRealIndex = realIndex;
+      currentIndex = getOriginalIndexByReal(realIndex);
+
+      requestAnimationFrame(() => {
+        track.style.scrollSnapType = prevScrollSnapType || '';
+        track.style.scrollBehavior = prevScrollBehavior || '';
+      });
+
+      return true;
+    }
+
+    function scrollToPrev() {
+      if (isProgrammaticScroll) return;
+      if (slides.length <= 1) return;
+      if (!isMobile) {
+        isArrowNavigation = true;
+      }
+      const middleStart = clonesCount;
+      const nearLeftBoundary = currentRealIndex <= middleStart;
+      let baseRealIndex = currentRealIndex;
+      if (!isMobile && nearLeftBoundary) {
+        const rebased = currentRealIndex + originalCount;
+        if (rebased >= 0 && rebased < slides.length && silentRebaseToRealIndex(rebased)) {
+          baseRealIndex = rebased;
+        }
+      }
+      const newRealIndex = Math.max(0, baseRealIndex - 1);
+      scrollToRealIndex(newRealIndex, true);
+    }
+
+    function scrollToNext() {
+      if (isProgrammaticScroll) return;
+      if (slides.length <= 1) return;
+      if (!isMobile) {
+        isArrowNavigation = true;
+      }
+      const middleEnd = clonesCount + originalCount - 1;
+      const nearRightBoundary = currentRealIndex >= middleEnd;
+      let baseRealIndex = currentRealIndex;
+      if (!isMobile && nearRightBoundary) {
+        const rebased = currentRealIndex - originalCount;
+        if (rebased >= 0 && rebased < slides.length && silentRebaseToRealIndex(rebased)) {
+          baseRealIndex = rebased;
+        }
+      }
+      const newRealIndex = Math.min(slides.length - 1, baseRealIndex + 1);
+      scrollToRealIndex(newRealIndex, true);
+    }
+
+    function startAutoplay() {
+      if (!autoplayEnabled || isPaused || originalCount <= 1) return;
+      if (autoplayTimer) return;
+      autoplayTimer = window.setInterval(() => {
+        scrollToNext();
+      }, autoplayDelay);
+    }
+
+    function pauseAutoplay() {
+      isPaused = true;
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    function resumeAutoplay() {
+      isPaused = false;
+      startAutoplay();
+    }
+
+    function resetAutoplay() {
+      pauseAutoplay();
+      resumeAutoplay();
+    }
+
+    // ----- Drag / Swipe (reliable + click-safe) -----
+    function getDragThreshold() {
+      return window.matchMedia('(max-width: 749px)').matches ? 5 : 8;
+    }
+    const DRAG_START_PX = 8;
+
+    let isPointerDown = false;
+    let moved = false;
+    let didDrag = false; // true only when drag exceeded DRAG_START_PX; used for click suppression
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    // rAF-driven scroll scheduler
+    let dragRaf = null;
+    let pendingScrollLeft = 0;
+    let lastMoveX = 0;
+    let lastMoveT = 0;
+    let velocity = 0; // px/ms
+    let inertiaRaf = null;
+
+    // When we drag, suppress link clicks briefly after release
+    let suppressClickUntil = 0;
+
+    // Double-tap detection
+    let lastTapTime = 0;
+    let lastTapTarget = null;
+    const DOUBLE_TAP_DELAY = 300; // ms between taps
+    const DOUBLE_TAP_DISTANCE = 50; // max pixel distance between taps
+
+    /**
+     * Schedule scrollLeft update via rAF for smooth batched updates
+     */
+    function scheduleScrollLeft(value) {
+      pendingScrollLeft = value;
+      if (dragRaf) return;
+      dragRaf = requestAnimationFrame(() => {
+        track.scrollLeft = pendingScrollLeft;
+        dragRaf = null;
+      });
+    }
+
+    /**
+     * Stop ALL GIFs and videos in the section (including active slide) during drag
+     */
+    function stopAllGifsInSection() {
+      // Stop GIFs
+      const imgs = section.querySelectorAll('.cpc-gif-image[data-gif-url]');
+      imgs.forEach(img => {
+        const gifUrl = img.dataset.gifUrl;
+        const placeholderUrl = img.dataset.placeholderUrl;
+        if (!gifUrl || !placeholderUrl) return;
+        const base = gifUrl.split('?')[0].split('#')[0];
+        if (img.src && img.src.includes(base)) {
+          img.src = placeholderUrl;
+          img.removeAttribute('srcset');
+        }
+      });
+      // Stop videos
+      pauseAllVideos();
+      lastVideoRealIndex = -1;
+      lastGifRealIndex = -1;
+    }
+
+    /**
+     * Start inertia scroll after drag release
+     */
+    function startInertiaScroll() {
+      // MOBILE: Disable custom inertia - let native touch momentum handle it
+      if (isMobile) {
+        return;
+      }
+
+      // DESKTOP: Original inertia logic
+      cancelSnap();
+      
+      if (inertiaRaf) cancelAnimationFrame(inertiaRaf);
+      isInertia = true;
+
+      const DECAY = 0.95; // per frame-ish
+      let lastT = performance.now();
+
+      function step() {
+        const now = performance.now();
+        const dt = Math.min(32, now - lastT);
+        lastT = now;
+
+        // advance scroll
+        const next = track.scrollLeft + velocity * dt;
+        scheduleScrollLeft(next);
+
+        // Update center highlight during inertia
+        scheduleActivePreview();
+
+        // decay velocity
+        velocity *= Math.pow(DECAY, dt / 16);
+
+        if (Math.abs(velocity) < 0.03) {
+          isInertia = false;
+          inertiaRaf = null;
+
+          // snap to nearest slide (smooth)
+          const closest = getClosestIndexToCenter();
+          const target = slides[closest];
+          if (target) scrollToCentered(target, true);
+
+          return;
+        }
+
+        inertiaRaf = requestAnimationFrame(step);
+      }
+
+      inertiaRaf = requestAnimationFrame(step);
+    }
+
+    function handleWheel(e) {
+      cancelSnap();
+      
+      if (originalCount <= 1) return;
+
+      const absX = Math.abs(e.deltaX);
+      const absY = Math.abs(e.deltaY);
+
+      const isVerticalIntent = absY > absX && !e.shiftKey;
+
+      // Vertical scroll → PAGE scroll only
+      if (isVerticalIntent) {
+        e.preventDefault();
+        window.scrollBy({
+          top: e.deltaY,
+          behavior: 'auto'
+        });
+        return;
+      }
+
+      // Horizontal intent → carousel scroll with momentum
+      e.preventDefault();
+      const delta = absX > 0 ? e.deltaX : e.deltaY;
+      
+      // Apply momentum multiplier for smoother trackpad scrolling
+      const momentumMultiplier = Math.abs(delta) > 10 ? 1.2 : 1;
+      track.scrollLeft += delta * momentumMultiplier;
+      
+      // Update active preview and schedule settle
+      scheduleActivePreview();
+      scheduleSettle();
+    }
+
+    function handlePointerDown(e) {
+      // MOBILE: Disable custom drag handling - let native touch scrolling work
+      if (isMobile) {
+        return;
+      }
+
+      // DESKTOP: Original drag handling
+      cancelSnap();
+      
+      if (originalCount <= 1) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      // Don't start drag if clicking on info card link
+      const link = e.target.closest('a.cpc-info-card');
+      if (link) return; // Let the link handle the click
+
+      // Cancel any ongoing inertia
+      if (inertiaRaf) {
+        cancelAnimationFrame(inertiaRaf);
+        inertiaRaf = null;
+        isInertia = false;
+      }
+
+      isPointerDown = true;
+      moved = false;
+      didDrag = false;
+      isDragging = false;
+
+      startX = e.clientX;
+      startScrollLeft = track.scrollLeft;
+
+      // Reset velocity tracking
+      lastMoveX = e.clientX;
+      lastMoveT = performance.now();
+      velocity = 0;
+
+      // Do NOT start drag mode here: no .is-dragging, no cursor, no capture.
+      // Drag starts in handlePointerMove only when movement exceeds DRAG_START_PX.
+    }
+
+    function handlePointerMove(e) {
+      // MOBILE: Disable custom drag handling
+      if (isMobile) return;
+      
+      // DESKTOP: Original drag handling
+      if (!isPointerDown) return;
+
+      const dx = e.clientX - startX;
+      const dragThreshold = getDragThreshold();
+
+      // Start drag mode ONLY after movement exceeds threshold (keeps taps as taps)
+      if (!moved && Math.abs(dx) > dragThreshold) {
+        moved = true;
+        didDrag = true;
+        isDragging = true;
+        stopAllGifsInSection();
+        track.classList.add('is-dragging');
+        track.style.cursor = 'grabbing';
+        track.style.userSelect = 'none';
+        try {
+          track.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+
+      if (moved) {
+        // prevent the browser from interpreting as a "scroll/tap"
+        e.preventDefault();
+
+        // Reset double-tap tracking when dragging
+        lastTapTime = 0;
+        lastTapTarget = null;
+
+        // Compute velocity (px/ms)
+        const now = performance.now();
+        const dt = Math.max(8, now - lastMoveT);
+        const dxStep = e.clientX - lastMoveX;
+        // scrollLeft moves opposite to pointer movement:
+        const v = (-dxStep) / dt;
+        // smooth it:
+        velocity = velocity * 0.8 + v * 0.2;
+        lastMoveX = e.clientX;
+        lastMoveT = now;
+
+        // Drag-to-scroll using rAF scheduler
+        const next = startScrollLeft - dx;
+        scheduleScrollLeft(next);
+        
+        // Update center highlight while dragging
+        scheduleActivePreview();
+        
+        // Update last scroll position for settle engine
+        lastScrollLeft = next;
+      }
+    }
+
+    function handlePointerUp(e) {
+      // MOBILE: Disable custom drag handling
+      if (isMobile) return;
+      
+      // DESKTOP: Original drag handling
+      if (!isPointerDown) return;
+
+      isPointerDown = false;
+
+      track.classList.remove('is-dragging');
+      track.style.cursor = 'grab';
+      track.style.userSelect = '';
+
+      try {
+        track.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
+      isDragging = false;
+
+      if (didDrag) {
+        // Real drag (exceeded threshold): suppress accidental clicks for a short window
+        suppressClickUntil = Date.now() + 350;
+
+        // Start inertia if velocity is meaningful, otherwise snap immediately
+        const velocityThreshold = 0.15;
+        if (Math.abs(velocity) > velocityThreshold) {
+          startInertiaScroll();
+        } else {
+          const closest = getClosestIndexToCenter();
+          const target = slides[closest];
+          if (target) scrollToCentered(target, true);
+        }
+      }
+      didDrag = false;
+
+      // reset moved shortly after (keep window for click suppression)
+      setTimeout(() => {
+        moved = false;
+      }, 0);
+    }
+
+    function buildInfiniteLoop() {
+      lastVideoRealIndex = -1;
+      lastGifRealIndex = -1;
+
+      // For 1 or fewer slides, no loop needed (applies to both mobile and desktop)
+      if (originalCount <= 1) {
+        slides = Array.from(originalSlides);
+        clonesCount = 0;
+        currentRealIndex = 0;
+        currentIndex = 0;
+        setActiveByRealIndex(0);
+        updateDots();
+        return;
+      }
+
+      // Remove existing clones
+      const existingClones = track.querySelectorAll('.cpc-slide[data-clone="1"]');
+      existingClones.forEach(clone => clone.remove());
+
+      // Create clones: 1× on mobile, 3× on desktop for seamless infinite loop
+      const copiesPerSide = isMobile ? 1 : 3;
+      clonesCount = originalCount * copiesPerSide;
+
+      // Prepend 3 FULL copies in original order
+      for (let copy = 0; copy < copiesPerSide; copy++) {
+        for (let i = 0; i < originalCount; i++) {
+          const clone = originalSlides[i].cloneNode(true);
+          clone.dataset.clone = '1';
+          clone.dataset.originalIndex = i;
+          track.insertBefore(clone, originalSlides[0]);
+        }
+      }
+
+      // Append 3 FULL copies in original order
+      for (let copy = 0; copy < copiesPerSide; copy++) {
+        for (let i = 0; i < originalCount; i++) {
+          const clone = originalSlides[i].cloneNode(true);
+          clone.dataset.clone = '1';
+          clone.dataset.originalIndex = i;
+          track.appendChild(clone);
+        }
+      }
+
+      // Rebuild slides array
+      slides = Array.from(track.querySelectorAll('.cpc-slide'));
+
+      // Preload strategy:
+      // - keep all videos lightweight (metadata) by default
+      // - warm only center + adjacent slides for smoother playback and less memory pressure
+      const allVideos = Array.from(track.querySelectorAll('.cpc-card-video'));
+      allVideos.forEach((video) => {
+        video.loop = true;
+        video.preload = 'metadata';
+      });
+      
+      // Initial warm-up: center and immediate neighbors only
+      if (slides.length > 0) {
+        const initialIndex = clonesCount + currentIndex;
+        const warmRadius = isMobile ? 1 : 2;
+        for (let offset = -warmRadius; offset <= warmRadius; offset++) {
+          const idx = initialIndex + offset;
+          if (idx < 0 || idx >= slides.length) continue;
+          const warmSlide = slides[idx];
+          if (!warmSlide) continue;
+          warmSlide.querySelectorAll('.cpc-card-video').forEach((video) => {
+            video.preload = 'auto';
+            if (video.readyState === 0) {
+              video.load();
+            }
+          });
+        }
+        preloadAdjacentVideos(initialIndex);
+      }
+      
+      // Start in the middle copy (first slide of middle copy)
+      const middleStartIndex = clonesCount + currentIndex;
+      const middleStartSlide = slides[middleStartIndex];
+      if (middleStartSlide) {
+        track.scrollTo({
+          left: middleStartSlide.offsetLeft - (track.offsetWidth / 2) + (middleStartSlide.offsetWidth / 2),
+          behavior: 'auto'
+        });
+      }
+      
+      currentRealIndex = middleStartIndex;
+      setActiveByRealIndex(middleStartIndex);
+      ensureSingleActiveSlide();
+      updateDots();
+      
+      // Trigger active preview and settle after initialization
+      requestAnimationFrame(() => {
+        if (track) {
+          scheduleActivePreview();
+          scheduleSettle();
+        }
+      });
+    }
+
+    function init() {
+      if (section.dataset.cpcInitialized === 'true') return;
+      section.dataset.cpcInitialized = 'true';
+
+      // Get original slides
+      originalSlides = Array.from(track.querySelectorAll('.cpc-slide')).filter(slide => !slide.dataset.clone);
+      originalCount = originalSlides.length;
+      
+      if (originalCount === 0) return;
+
+      // Mark original slides with data-original-index
+      originalSlides.forEach((slide, index) => {
+        slide.dataset.originalIndex = index;
+      });
+
+      // Build infinite loop (skips on mobile)
+      buildInfiniteLoop();
+      applyScrollSnapMode();
+
+      // Add scroll listener for both mobile and desktop (both use scroll-based detection)
+      track.addEventListener('scroll', () => {
+        onScroll();
+      }, { passive: true });
+
+      // Button-only navigation (no swipe / wheel scrolling)
+      if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollToPrev();
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollToNext();
+        });
+      }
+
+      // Register click handler for product links and video play/pause
+          section.addEventListener('click', (e) => {
+        // MOBILE: Simplified tap behavior
+        if (isMobile) {
+          if (isProgrammaticScroll) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+          const link = e.target.closest('a.cpc-info-card');
+          const slide = e.target.closest('.cpc-slide');
+          
+          if (link && slide) {
+            // If slide is already active, allow default link navigation
+            if (slide.classList.contains('is-active')) {
+              // Double-tap detection for immediate navigation
+              const currentTime = Date.now();
+              const timeSinceLastTap = currentTime - lastTapTime;
+              const isDoubleTap = timeSinceLastTap < DOUBLE_TAP_DELAY && 
+                                 lastTapTarget === link;
+
+              if (isDoubleTap) {
+                // Double tap - navigate immediately
+                e.preventDefault();
+                e.stopPropagation();
+                const href = link.getAttribute('href');
+                if (href) {
+                  window.location.href = href;
+                }
+                lastTapTime = 0;
+                lastTapTarget = null;
+              } else {
+                // Single tap on active slide - allow default navigation
+                lastTapTime = currentTime;
+                lastTapTarget = link;
+                setTimeout(() => {
+                  if (Date.now() - lastTapTime >= DOUBLE_TAP_DELAY) {
+                    lastTapTime = 0;
+                    lastTapTarget = null;
+                  }
+                }, DOUBLE_TAP_DELAY);
+              }
+            } else {
+              // Slide not active - center it first (native snap will handle)
+              e.preventDefault();
+              e.stopPropagation();
+              scrollToCentered(slide, true);
+            }
+          } else if (slide && !link) {
+            // Click on card (not link) - center if not already active
+            if (!slide.classList.contains('is-active')) {
+              e.preventDefault();
+              e.stopPropagation();
+              scrollToCentered(slide, true);
+            }
+          }
+          return;
+        }
+
+        // DESKTOP: Original click handling
+        // Handle video play/pause ONLY when slide has video AND is already active (otherwise fall through to center-on-click)
+        const mediaTile = e.target.closest('.cpc-media-tile');
+        if (mediaTile && !e.target.closest('a.cpc-info-card')) {
+          const slide = mediaTile.closest('.cpc-slide');
+          const video = mediaTile.querySelector('.cpc-card-video');
+          if (slide && slide.classList.contains('is-active') && video) {
+            if (Date.now() < suppressClickUntil) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            if (video.paused) {
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+            return;
+          }
+        }
+
+        const link = e.target.closest('a.cpc-info-card');
+        if (!link) {
+          // Click anywhere on card (not link, not video): scroll slide to center
+          if (Date.now() < suppressClickUntil) return;
+          const slide = e.target.closest('.cpc-slide');
+          if (slide) {
+            // Do not interfere during drag or inertia
+            if (isDragging || isInertia) return;
+
+            const clickedIndex = slides.indexOf(slide);
+            const centeredIndex = getClosestIndexToCenter();
+
+            // Only center if this slide is NOT already centered
+            if (clickedIndex !== centeredIndex) {
+              e.preventDefault();
+              e.stopPropagation();
+              scrollToCentered(slide, true);
+            }
+          }
+          return;
+        }
+
+        // Desktop info-card behavior:
+        // - If not centered: center only (no navigation)
+        // - If centered: allow normal navigation
+        // - Never navigate during drag/inertia/programmatic scroll/suppressed click window
+        if (Date.now() < suppressClickUntil || isDragging || isInertia || isProgrammaticScroll) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        const slide = link.closest('.cpc-slide');
+        if (!slide) return;
+
+        const clickedIndex = slides.indexOf(slide);
+        const centeredIndex = getClosestIndexToCenter();
+        if (clickedIndex !== centeredIndex) {
+          e.preventDefault();
+          e.stopPropagation();
+          scrollToCentered(slide, true);
+          return;
+        }
+      }, false); // Use bubbling phase so link's default behavior works
+
+      if (autoplayEnabled) {
+        startAutoplay();
+        section.addEventListener('mouseenter', pauseAutoplay);
+        section.addEventListener('mouseleave', resumeAutoplay);
+        section.addEventListener('focusin', pauseAutoplay);
+        section.addEventListener('focusout', resumeAutoplay);
+      }
+
+      // Re-sync media when section leaves/re-enters viewport.
+      // Prevents blank paused videos after scrolling past and back.
+      if ('IntersectionObserver' in window) {
+        const visibilityObserver = new IntersectionObserver(
+          (entries) => {
+            const entry = entries[0];
+            if (!entry) return;
+
+            if (entry.isIntersecting) {
+              const centeredIndex = getClosestIndexToCenter();
+              lastVideoRealIndex = -1;
+              lastGifRealIndex = -1;
+              updateCenterVideo(centeredIndex);
+              updateCenterGif(centeredIndex);
+            } else {
+              pauseAllVideos(false);
+            }
+          },
+          { threshold: 0.12 }
+        );
+        visibilityObserver.observe(section);
+      }
+
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          // Update mobile state
+          updateMobileState();
+          // Rebuild (handles mobile/desktop switch)
+          buildInfiniteLoop();
+          applyScrollSnapMode();
+          // Both mobile and desktop use scroll-based detection, no observer needed
+        }, 250);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('shopify:section:load', function (e) {
+      const root = e.detail || e.target;
+      const loaded = root.querySelector
+        ? root.querySelector(`#CenterProductCarousel-${sectionId}`)
+        : (root.id === `CenterProductCarousel-${sectionId}` ? root : null);
+
+      if (loaded) setTimeout(init, 60);
+    });
+
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Center Product Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products",
+      "info": "Main heading shown above the carousel."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Optional subheading shown under the main heading."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "info": "Text alignment for heading and subheading."
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "info": "Font size of the main heading."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Leave empty to use theme default text color"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0,
+      "unit": "px",
+      "info": "Spacing between product cards."
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card border radius (top)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 18,
+      "unit": "px",
+      "info": "Top corner radius of each card image area."
+    },
+    {
+      "type": "range",
+      "id": "card_bottom_radius",
+      "label": "Card border radius (bottom)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 18,
+      "unit": "px",
+      "info": "Bottom corner radius of each card content area."
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card max width",
+      "min": 200,
+      "max": 800,
+      "step": 20,
+      "default": 400,
+      "unit": "px",
+      "info": "Maximum width for each card. Leave empty for full width."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false,
+      "info": "Show product vendor name in each card."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_swatches",
+      "label": "Show color swatches",
+      "default": true,
+      "info": "Show color swatches for available color variants."
+    },
+    {
+      "type": "color",
+      "id": "card_content_bg_color",
+      "label": "Card content background color",
+      "info": "Background color for the product information area"
+    },
+    {
+      "type": "header",
+      "content": "Card Element Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "info": "Color of the product title text in the info box."
+    },
+    {
+      "type": "color",
+      "id": "card_normal_price_color",
+      "label": "Normal price color",
+      "info": "Color of the regular (non-discounted) price."
+    },
+    {
+      "type": "color",
+      "id": "card_discounted_price_color",
+      "label": "Discounted price color",
+      "info": "Color of the discounted sale price."
+    },
+    {
+      "type": "color",
+      "id": "card_caret_color",
+      "label": "Arrow color",
+      "info": "Color of the right arrow (>) in the info box."
+    },
+    {
+      "type": "color",
+      "id": "card_badge_bg_color",
+      "label": "Badge background color",
+      "info": "Background color for the optional media badge."
+    },
+    {
+      "type": "color",
+      "id": "card_badge_text_color",
+      "label": "Badge text color",
+      "info": "Text color for the optional media badge."
+    },
+    {
+      "type": "header",
+      "content": "Mobile Info Box Typography"
+    },
+    {
+      "type": "range",
+      "id": "mobile_info_text_size",
+      "label": "Mobile info text size",
+      "min": 1,
+      "max": 28,
+      "step": 1,
+      "default": 15,
+      "unit": "px",
+      "info": "Product title font size in the mobile info box."
+    },
+    {
+      "type": "range",
+      "id": "mobile_info_price_size",
+      "label": "Mobile info price size",
+      "min": 1,
+      "max": 32,
+      "step": 1,
+      "default": 18,
+      "unit": "px",
+      "info": "Price font size in the mobile info box."
+    },
+    {
+      "type": "header",
+      "content": "Card Content Border"
+    },
+    {
+      "type": "color",
+      "id": "card_content_border_color",
+      "label": "Border color",
+      "info": "Border color of the card content panel."
+    },
+    {
+      "type": "range",
+      "id": "card_content_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 0,
+      "unit": "px",
+      "info": "Border width of the card content panel."
+    },
+    {
+      "type": "range",
+      "id": "card_content_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0,
+      "unit": "px",
+      "info": "Corner radius of the card content panel."
+    },
+    {
+      "type": "range",
+      "id": "card_content_padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "info": "Inner padding of the card content panel."
+    },
+    {
+      "type": "range",
+      "id": "card_content_margin",
+      "label": "Margin",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0,
+      "unit": "px",
+      "info": "Top margin between media and content panel."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true,
+      "info": "Show previous/next navigation arrows."
+    },
+    {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Arrow style",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "glass",
+          "label": "Glassy"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "info": "Visual style of navigation arrows."
+    },
+    {
+      "type": "range",
+      "id": "arrow_size",
+      "label": "Arrow button size",
+      "min": 28,
+      "max": 88,
+      "step": 2,
+      "default": 44,
+      "unit": "px",
+      "info": "Size of the arrow button container."
+    },
+    {
+      "type": "range",
+      "id": "arrow_radius",
+      "label": "Arrow button radius",
+      "min": 0,
+      "max": 44,
+      "step": 1,
+      "default": 22,
+      "unit": "px",
+      "info": "Corner radius of arrow buttons."
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Arrow button background",
+      "info": "Background color of arrow buttons."
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow icon color",
+      "info": "Icon color of arrow arrows."
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Arrow border color",
+      "info": "Border color of arrow buttons."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots indicator",
+      "default": true,
+      "info": "Show pagination dots below the carousel."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false,
+      "info": "Automatically cycle through slides."
+    },
+    {
+      "type": "range",
+      "id": "autoplay_seconds",
+      "label": "Autoplay delay",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s",
+      "info": "Only applies if autoplay is enabled"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 0,
+      "unit": "px",
+      "info": "Bottom padding under the carousel area."
+    },
+    {
+      "type": "range",
+      "id": "bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 0,
+      "unit": "px",
+      "info": "Bottom margin below the whole section."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Product displayed in this carousel card."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "Optional badge text to display on the media"
+        },
+        {
+          "type": "select",
+          "id": "media_source",
+          "label": "Media source",
+          "options": [
+            {
+              "value": "product_featured",
+              "label": "Product featured image"
+            },
+            {
+              "value": "custom_image_or_gif",
+              "label": "Custom image/GIF"
+            },
+            {
+              "value": "external_gif_url",
+              "label": "External GIF URL"
+            },
+            {
+              "value": "custom_video",
+              "label": "Custom video"
+            }
+          ],
+          "default": "product_featured",
+          "info": "Choose which media type to display for this product card."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_media",
+          "label": "Custom image/GIF",
+          "info": "Only used if media source is 'Custom image/GIF'"
+        },
+        {
+          "type": "text",
+          "id": "external_gif_url",
+          "label": "External GIF URL",
+          "info": "Only used if media source is 'External GIF URL'"
+        },
+        {
+          "type": "video",
+          "id": "custom_video",
+          "label": "Custom video",
+          "info": "Only used if media source is 'Custom video'"
+        },
+        {
+          "type": "image_picker",
+          "id": "placeholder_image",
+          "label": "Placeholder image",
+          "info": "Static image used for GIFs when not centered."
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "info": "Override default alt text for the image"
+        },
+        {
+          "type": "select",
+          "id": "focal_position",
+          "label": "Focal point",
+          "options": [
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center",
+          "info": "Object position for the displayed media framing."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Center Product Carousel",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1227 @@
+{% doc %}
+  @prompt
+    **Project:** Advanced Customizable Privacy Policy Page for Shopify
+    
+    I want to create a **modern, visually stunning, and highly responsive Privacy Policy page** for my Shopify store. The page must work perfectly on **all devices and screen sizes** including mobile phones, tablets, laptops, and large desktop monitors.
+    
+    The goal is to transform a normally boring legal page into a **premium, beautifully animated, and interactive experience**, while keeping the content clear and easy to read.
+    
+    ---
+    
+    ## Design & Visual Style
+    
+    The page should have a **clean, elegant, and modern UI** with a strong focus on **glassmorphism design**.
+    
+    Each section should appear as a **glass-style panel/card** with:
+    
+    * Semi-transparent glass background
+    * Backdrop blur effect
+    * Soft subtle borders
+    * Smooth shadows
+    * Rounded corners
+    * Elegant hover effects
+    
+    The layout should feel **premium, modern, and high-end**.
+    
+    ---
+    
+    ## Animations (Important)
+    
+    Animations should be **very smooth, modern, and visually impressive**, but still lightweight and performance-friendly.
+    
+    Include:
+    
+    * Smooth **scroll-triggered animations**
+    * **Fade-in and slide-up effects** when sections appear
+    * **Glass cards gently floating or revealing on scroll**
+    * **Subtle hover animations** for cards and headings
+    * **Animated section dividers**
+    * Optional **parallax background effect**
+    * Smooth **page transitions**
+    * **Back-to-top animated button**
+    * Smooth **scroll navigation**
+    
+    Animations should feel **premium and polished**, similar to modern tech websites.
+    
+    ---
+    
+    ## Full Customization in Shopify Theme Editor
+    
+    Everything should be **fully customizable without editing code** using the **Shopify Theme Editor**.
+    
+    Provide settings for:
+    
+    ### Background Options
+    
+    * Solid color background
+    * Gradient background (multi-color)
+    * Background image upload
+    * Overlay opacity control
+    
+    ### Typography Controls
+    
+    * Font family selector
+    * Heading font size control
+    * Body text size control
+    * Font weight options
+    * Line spacing
+    * Text color controls
+    
+    ### Layout Controls
+    
+    * Content width (narrow / medium / wide)
+    * Section spacing (top & bottom padding)
+    * Text alignment (left / center)
+    * Card spacing controls
+    
+    ---
+    
+    ## Content Editing (Very Important)
+    
+    I want the **ability to write and control all the content myself** directly inside the Shopify Theme Editor.
+    
+    Please **do NOT hardcode any Privacy Policy text**.
+    
+    Instead:
+    
+    * Create **modular sections and blocks**
+    * Allow me to **add, edit, remove, and reorder sections**
+    
+    Each section should include editable fields such as:
+    
+    * Section title
+    * Subtitle (optional)
+    * Rich text content
+    * Optional icon
+    
+    The text fields should support **Shopify rich text editing** so I can format:
+    
+    * Paragraphs
+    * Bullet lists
+    * Headings
+    * Links
+    
+    The idea is that I can **write whatever Privacy Policy content I want later**, while the developer only builds the **structure and design**.
+    
+    ---
+    
+    ## Template Structure
+    
+    This page should be created as a **custom Shopify template**.
+    
+    Inside the template:
+    
+    * The **glass-style sections should exist as template sections**
+    * I should be able to **add multiple glass sections**
+    * Each section should contain **editable text blocks**
+    
+    Example sections I might create later:
+    
+    * Hero section with page title
+    * Introduction
+    * Information We Collect
+    * How We Use Your Information
+    * Cookies & Tracking Technologies
+    * Data Protection
+    * Third-Party Services
+    * Your Rights
+    * Policy Updates
+    * Contact Information
+    
+    Each section should support:
+    
+    * Rich text content
+    * Optional icons
+    * Scroll animations
+    * Clean formatting
+    
+    ---
+    
+    ## Additional UX Features
+    
+    Include:
+    
+    * Optional **sticky side navigation or scroll progress indicator**
+    * **Smooth scrolling between sections**
+    * **Accordion option for sections**
+    * Mobile-optimized spacing
+    * Perfect readability for long legal content
+    
+    ---
+    
+    ## Performance Requirements
+    
+    The page must remain **fast and optimized**.
+    
+    * Use **Shopify Liquid + CSS + minimal JavaScript**
+    * Avoid heavy libraries
+    * Ensure **fast loading speed**
+    * Fully compatible with **Shopify Online Store 2.0 themes**
+    
+    ---
+    
+    ## Final Goal
+    
+    Create a **beautiful, glass-style, highly animated Privacy Policy page** that looks modern and premium while remaining **fully customizable and easy for me to edit inside Shopify**.
+    
+    The developer should focus on:
+    
+    * Building a **stunning visual layout**
+    * Adding **smooth modern animations**
+    * Providing **flexible editable content blocks**
+    * Keeping everything **responsive, lightweight, and customizable**.
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-privacy-glass-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: visible;
+    {% if block.settings.background_type == 'color' %}
+      background-color: {{ block.settings.background_color }};
+    {% elsif block.settings.background_type == 'gradient' %}
+      background: linear-gradient({{ block.settings.gradient_angle }}deg, {{ block.settings.gradient_color_1 }}, {{ block.settings.gradient_color_2 }});
+    {% elsif block.settings.background_type == 'image' and block.settings.background_image %}
+      background-image: url('{{ block.settings.background_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-attachment: {% if block.settings.enable_parallax %}fixed{% else %}scroll{% endif %};
+    {% endif %}
+  }
+
+  .ai-privacy-glass-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ai-privacy-glass-container-{{ ai_gen_id }} {
+    max-width: {% if block.settings.content_width == 'narrow' %}800px{% elsif block.settings.content_width == 'medium' %}1000px{% else %}1200px{% endif %};
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-privacy-glass-card-{{ ai_gen_id }} {
+    background: {{ block.settings.glass_background }};
+    backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    -webkit-backdrop-filter: blur({{ block.settings.glass_blur }}px);
+    border-radius: {{ block.settings.card_border_radius }}px;
+    border: {{ block.settings.glass_border_thickness }}px solid {{ block.settings.glass_border_color }};
+    padding: {{ block.settings.card_padding }}px;
+    margin-bottom: {{ block.settings.card_spacing }}px;
+    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y }}px {{ block.settings.shadow_blur }}px {{ block.settings.shadow_color }};
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(30px);
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-privacy-glass-card-{{ ai_gen_id }}.ai-animated-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-privacy-glass-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-{{ block.settings.hover_lift }}px);
+    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y | plus: 10 }}px {{ block.settings.shadow_blur | plus: 10 }}px {{ block.settings.shadow_color }};
+    border-color: {{ block.settings.glass_border_hover_color }};
+  }
+
+  .ai-privacy-glass-icon-{{ ai_gen_id }} {
+    font-size: {{ block.settings.icon_size }}px;
+    margin-bottom: 16px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-privacy-glass-card-{{ ai_gen_id }}:hover .ai-privacy-glass-icon-{{ ai_gen_id }} {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .ai-privacy-glass-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-weight: {{ block.settings.heading_font.weight }};
+    font-size: {{ block.settings.heading_size }}px;
+    line-height: {{ block.settings.heading_line_height }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 12px 0;
+    transition: color 0.3s ease;
+  }
+
+  .ai-privacy-glass-card-{{ ai_gen_id }}:hover .ai-privacy-glass-title-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_hover_color }};
+  }
+
+  .ai-privacy-glass-subtitle-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-weight: {{ block.settings.body_font.weight }};
+    font-size: {{ block.settings.subtitle_size }}px;
+    line-height: 1.5;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0 0 20px 0;
+    opacity: 0.9;
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-weight: {{ block.settings.body_font.weight }};
+    font-size: {{ block.settings.body_size }}px;
+    line-height: {{ block.settings.body_line_height }};
+    color: {{ block.settings.body_color }};
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} p {
+    margin: 0 0 16px 0;
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} ul,
+  .ai-privacy-glass-content-{{ ai_gen_id }} ol {
+    margin: 0 0 16px 0;
+    padding-left: 24px;
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} li {
+    margin-bottom: 8px;
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} a {
+    color: {{ block.settings.link_color }};
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+
+  .ai-privacy-glass-content-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-privacy-glass-divider-{{ ai_gen_id }} {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, {{ block.settings.divider_color }}, transparent);
+    margin: {{ block.settings.divider_spacing }}px 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.6s ease;
+  }
+
+  .ai-privacy-glass-divider-{{ ai_gen_id }}.ai-animated-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .ai-privacy-back-to-top-{{ ai_gen_id }} {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: {{ block.settings.back_to_top_bg }};
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: 2px solid {{ block.settings.back_to_top_border }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-privacy-back-to-top-{{ ai_gen_id }}.ai-visible-{{ ai_gen_id }} {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-privacy-back-to-top-{{ ai_gen_id }}:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-privacy-back-to-top-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+    fill: {{ block.settings.back_to_top_icon_color }};
+  }
+
+  .ai-privacy-progress-bar-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: {{ block.settings.progress_bar_color }};
+    width: 0%;
+    transition: width 0.1s ease;
+    z-index: 9999;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-privacy-glass-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.6 }}px 16px {{ block.settings.section_padding_bottom | times: 0.6 }}px;
+    }
+
+    .ai-privacy-glass-card-{{ ai_gen_id }} {
+      padding: {{ block.settings.card_padding | times: 0.7 }}px;
+      margin-bottom: {{ block.settings.card_spacing | times: 0.7 }}px;
+    }
+
+    .ai-privacy-glass-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .ai-privacy-glass-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_size | times: 0.9 }}px;
+    }
+
+    .ai-privacy-glass-content-{{ ai_gen_id }} {
+      font-size: {{ block.settings.body_size | times: 0.9 }}px;
+    }
+
+    .ai-privacy-back-to-top-{{ ai_gen_id }} {
+      bottom: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-privacy-glass-{{ ai_gen_id }} {
+      background-attachment: scroll !important;
+    }
+  }
+{% endstyle %}
+
+<privacy-policy-glass-{{ ai_gen_id }} class="ai-privacy-glass-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.show_progress_bar %}
+    <div class="ai-privacy-progress-bar-{{ ai_gen_id }}"></div>
+  {% endif %}
+
+  <div class="ai-privacy-glass-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-privacy-glass-container-{{ ai_gen_id }}">
+    {% if block.settings.section_title != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.section_icon != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.section_icon }}</div>
+        {% endif %}
+        <h1 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h1>
+        {% if block.settings.section_subtitle != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.section_subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-privacy-glass-divider-{{ ai_gen_id }}" data-animate></div>
+    {% endif %}
+
+    {% if block.settings.content_title_1 != blank or block.settings.content_text_1 != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.content_icon_1 != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.content_icon_1 }}</div>
+        {% endif %}
+        {% if block.settings.content_title_1 != blank %}
+          <h2 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.content_title_1 }}</h2>
+        {% endif %}
+        {% if block.settings.content_subtitle_1 != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.content_subtitle_1 }}</div>
+        {% endif %}
+        {% if block.settings.content_text_1 != blank %}
+          <div class="ai-privacy-glass-content-{{ ai_gen_id }}">{{ block.settings.content_text_1 }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-privacy-glass-divider-{{ ai_gen_id }}" data-animate></div>
+    {% endif %}
+
+    {% if block.settings.content_title_2 != blank or block.settings.content_text_2 != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.content_icon_2 != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.content_icon_2 }}</div>
+        {% endif %}
+        {% if block.settings.content_title_2 != blank %}
+          <h2 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.content_title_2 }}</h2>
+        {% endif %}
+        {% if block.settings.content_subtitle_2 != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.content_subtitle_2 }}</div>
+        {% endif %}
+        {% if block.settings.content_text_2 != blank %}
+          <div class="ai-privacy-glass-content-{{ ai_gen_id }}">{{ block.settings.content_text_2 }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-privacy-glass-divider-{{ ai_gen_id }}" data-animate></div>
+    {% endif %}
+
+    {% if block.settings.content_title_3 != blank or block.settings.content_text_3 != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.content_icon_3 != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.content_icon_3 }}</div>
+        {% endif %}
+        {% if block.settings.content_title_3 != blank %}
+          <h2 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.content_title_3 }}</h2>
+        {% endif %}
+        {% if block.settings.content_subtitle_3 != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.content_subtitle_3 }}</div>
+        {% endif %}
+        {% if block.settings.content_text_3 != blank %}
+          <div class="ai-privacy-glass-content-{{ ai_gen_id }}">{{ block.settings.content_text_3 }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-privacy-glass-divider-{{ ai_gen_id }}" data-animate></div>
+    {% endif %}
+
+    {% if block.settings.content_title_4 != blank or block.settings.content_text_4 != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.content_icon_4 != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.content_icon_4 }}</div>
+        {% endif %}
+        {% if block.settings.content_title_4 != blank %}
+          <h2 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.content_title_4 }}</h2>
+        {% endif %}
+        {% if block.settings.content_subtitle_4 != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.content_subtitle_4 }}</div>
+        {% endif %}
+        {% if block.settings.content_text_4 != blank %}
+          <div class="ai-privacy-glass-content-{{ ai_gen_id }}">{{ block.settings.content_text_4 }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-privacy-glass-divider-{{ ai_gen_id }}" data-animate></div>
+    {% endif %}
+
+    {% if block.settings.content_title_5 != blank or block.settings.content_text_5 != blank %}
+      <div class="ai-privacy-glass-card-{{ ai_gen_id }}" data-animate>
+        {% if block.settings.content_icon_5 != blank %}
+          <div class="ai-privacy-glass-icon-{{ ai_gen_id }}">{{ block.settings.content_icon_5 }}</div>
+        {% endif %}
+        {% if block.settings.content_title_5 != blank %}
+          <h2 class="ai-privacy-glass-title-{{ ai_gen_id }}">{{ block.settings.content_title_5 }}</h2>
+        {% endif %}
+        {% if block.settings.content_subtitle_5 != blank %}
+          <div class="ai-privacy-glass-subtitle-{{ ai_gen_id }}">{{ block.settings.content_subtitle_5 }}</div>
+        {% endif %}
+        {% if block.settings.content_text_5 != blank %}
+          <div class="ai-privacy-glass-content-{{ ai_gen_id }}">{{ block.settings.content_text_5 }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if block.settings.show_back_to_top %}
+    <button class="ai-privacy-back-to-top-{{ ai_gen_id }}" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 4l-8 8h5v8h6v-8h5z"/>
+      </svg>
+    </button>
+  {% endif %}
+</privacy-policy-glass-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class PrivacyPolicyGlass{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.animatedElements = new Set();
+      }
+
+      connectedCallback() {
+        this.setupScrollAnimations();
+        this.setupBackToTop();
+        this.setupProgressBar();
+        this.setupSmoothScroll();
+      }
+
+      setupScrollAnimations() {
+        const elements = this.querySelectorAll('[data-animate]');
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting && !this.animatedElements.has(entry.target)) {
+              setTimeout(() => {
+                entry.target.classList.add('ai-animated-{{ ai_gen_id }}');
+                this.animatedElements.add(entry.target);
+              }, index * 100);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        elements.forEach(el => observer.observe(el));
+      }
+
+      setupBackToTop() {
+        const backToTopBtn = this.querySelector('.ai-privacy-back-to-top-{{ ai_gen_id }}');
+        if (!backToTopBtn) return;
+
+        window.addEventListener('scroll', () => {
+          if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('ai-visible-{{ ai_gen_id }}');
+          } else {
+            backToTopBtn.classList.remove('ai-visible-{{ ai_gen_id }}');
+          }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      setupProgressBar() {
+        const progressBar = this.querySelector('.ai-privacy-progress-bar-{{ ai_gen_id }}');
+        if (!progressBar) return;
+
+        window.addEventListener('scroll', () => {
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+          progressBar.style.width = scrollPercent + '%';
+        });
+      }
+
+      setupSmoothScroll() {
+        const links = this.querySelectorAll('a[href^="#"]');
+        links.forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href === '#') return;
+            
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          });
+        });
+      }
+    }
+
+    customElements.define('privacy-policy-glass-{{ ai_gen_id }}', PrivacyPolicyGlass{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Privacy policy glass",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main section"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Page title",
+      "default": "Privacy Policy"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_subtitle",
+      "label": "Page subtitle",
+      "default": "Last updated: March 2026"
+    },
+    {
+      "type": "text",
+      "id": "section_icon",
+      "label": "Page icon (emoji)",
+      "default": "🔒"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_type",
+      "label": "Background type",
+      "options": [
+        {
+          "value": "color",
+          "label": "Solid color"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        }
+      ],
+      "default": "gradient"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient color 1",
+      "default": "#1a1a2e"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient color 2",
+      "default": "#16213e"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 5,
+      "unit": "deg",
+      "default": 135
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable parallax effect",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "card_spacing",
+      "label": "Card spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Glass card style"
+    },
+    {
+      "type": "color",
+      "id": "glass_background",
+      "label": "Glass background",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Backdrop blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "glass_border_color",
+      "label": "Border color",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "color",
+      "id": "glass_border_hover_color",
+      "label": "Border hover color",
+      "default": "rgba(255, 255, 255, 0.4)"
+    },
+    {
+      "type": "range",
+      "id": "glass_border_thickness",
+      "label": "Border thickness",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "hover_lift",
+      "label": "Hover lift",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Shadow"
+    },
+    {
+      "type": "range",
+      "id": "shadow_x",
+      "label": "Horizontal offset",
+      "min": -20,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "shadow_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "label": "Blur",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "rgba(0, 0, 0, 0.3)"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "label": "Heading line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_hover_color",
+      "label": "Heading hover color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "Body text size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.6
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body text color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#60a5fa"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#93c5fd"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 20,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Dividers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show dividers",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "rgba(255, 255, 255, 0.2)"
+    },
+    {
+      "type": "range",
+      "id": "divider_spacing",
+      "label": "Divider spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_back_to_top",
+      "label": "Show back to top button",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "back_to_top_bg",
+      "label": "Back to top background",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "color",
+      "id": "back_to_top_border",
+      "label": "Back to top border",
+      "default": "rgba(255, 255, 255, 0.3)"
+    },
+    {
+      "type": "color",
+      "id": "back_to_top_icon_color",
+      "label": "Back to top icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress_bar",
+      "label": "Show scroll progress bar",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_color",
+      "label": "Progress bar color",
+      "default": "#60a5fa"
+    },
+    {
+      "type": "header",
+      "content": "Content section 1"
+    },
+    {
+      "type": "text",
+      "id": "content_icon_1",
+      "label": "Icon (emoji)"
+    },
+    {
+      "type": "text",
+      "id": "content_title_1",
+      "label": "Title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_subtitle_1",
+      "label": "Subtitle"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text_1",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Content section 2"
+    },
+    {
+      "type": "text",
+      "id": "content_icon_2",
+      "label": "Icon (emoji)"
+    },
+    {
+      "type": "text",
+      "id": "content_title_2",
+      "label": "Title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_subtitle_2",
+      "label": "Subtitle"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text_2",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Content section 3"
+    },
+    {
+      "type": "text",
+      "id": "content_icon_3",
+      "label": "Icon (emoji)"
+    },
+    {
+      "type": "text",
+      "id": "content_title_3",
+      "label": "Title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_subtitle_3",
+      "label": "Subtitle"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text_3",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Content section 4"
+    },
+    {
+      "type": "text",
+      "id": "content_icon_4",
+      "label": "Icon (emoji)"
+    },
+    {
+      "type": "text",
+      "id": "content_title_4",
+      "label": "Title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_subtitle_4",
+      "label": "Subtitle"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text_4",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Content section 5"
+    },
+    {
+      "type": "text",
+      "id": "content_icon_5",
+      "label": "Icon (emoji)"
+    },
+    {
+      "type": "text",
+      "id": "content_title_5",
+      "label": "Title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content_subtitle_5",
+      "label": "Subtitle"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text_5",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Privacy policy glass"
+    }
+  ]
+}
+{% endschema %}

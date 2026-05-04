@@ -1,0 +1,1006 @@
+{% doc %}
+  @prompt
+    Act as an experienced Shopify theme developer.
+    Create a simple animated Shopify homepage layout with 4 sections.
+    Technology:
+    Shopify Liquid
+    responsive CSS
+    lightweight GSAP animations
+    Sections:
+    Hero
+    animated headline
+    hero image
+    CTA button
+    Featured Products
+    responsive product grid
+    hover zoom animation
+    Collections
+    collection cards
+    fade-in animation on scroll
+    Newsletter
+    simple email signup form
+    animated gradient background
+    Responsive requirements:
+    mobile first layout
+    tablet optimized spacing
+    desktop grid layouts
+    scalable design for ultra-wide screens
+    Shopify theme editor settings:
+    text
+    images
+    colors
+    enable/disable animations
+    Output:
+    Liquid sections
+    CSS
+    JS animation code
+    schema settings, no i want to fill it with carousel in 3d design instead of newsletter, make it responsive on all devices and screensizes, make it more animation !
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-carousel-ultra-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 60px 20px;
+    background: {{ block.settings.background_color }};
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-carousel-ultra-particles-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .ai-carousel-ultra-particle-{{ ai_gen_id }} {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: {{ block.settings.particle_color }};
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  .ai-carousel-ultra-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-carousel-ultra-title-{{ ai_gen_id }} {
+    font-size: clamp(28px, 6vw, {{ block.settings.title_size }}px);
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 10px;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .ai-carousel-ultra-subtitle-{{ ai_gen_id }} {
+    font-size: clamp(14px, 3vw, {{ block.settings.subtitle_size }}px);
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ai-carousel-ultra-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: clamp(350px, 55vw, {{ block.settings.carousel_height }}px);
+    perspective: clamp(800px, 120vw, {{ block.settings.perspective }}px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .ai-carousel-ultra-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }} {
+    position: absolute;
+    width: clamp(220px, 65vw, {{ block.settings.slide_width }}px);
+    height: 100%;
+    left: 50%;
+    top: 50%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    border-radius: {{ block.settings.slide_radius }}px;
+    overflow: hidden;
+    box-shadow: 
+      0 15px 50px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba({{ block.settings.glow_color | color_extract: 'red' }}, {{ block.settings.glow_color | color_extract: 'green' }}, {{ block.settings.glow_color | color_extract: 'blue' }}, 0.3);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+    z-index: 2;
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }}:hover::before {
+    left: 100%;
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }}:hover {
+    box-shadow: 
+      0 20px 70px rgba(0, 0, 0, 0.5),
+      0 0 50px rgba({{ block.settings.glow_color | color_extract: 'red' }}, {{ block.settings.glow_color | color_extract: 'green' }}, {{ block.settings.glow_color | color_extract: 'blue' }}, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .ai-carousel-ultra-slide-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }}:hover .ai-carousel-ultra-slide-image-{{ ai_gen_id }} {
+    transform: scale(1.1);
+  }
+
+  .ai-carousel-ultra-slide-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-carousel-ultra-slide-placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.4;
+  }
+
+  .ai-carousel-ultra-slide-content-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: clamp(16px, 4vw, 28px);
+    background: linear-gradient(to top, rgba(0,0,0,{{ block.settings.overlay_opacity }}) 0%, transparent 100%);
+    color: {{ block.settings.slide_text_color }};
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+  }
+
+  .ai-carousel-ultra-slide-{{ ai_gen_id }}:hover .ai-carousel-ultra-slide-content-{{ ai_gen_id }} {
+    transform: translateY(-5px);
+  }
+
+  .ai-carousel-ultra-slide-title-{{ ai_gen_id }} {
+    font-size: clamp(18px, 4vw, {{ block.settings.slide_title_size }}px);
+    font-weight: 700;
+    margin: 0 0 6px;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  .ai-carousel-ultra-slide-description-{{ ai_gen_id }} {
+    font-size: clamp(14px, 3vw, {{ block.settings.slide_description_size }}px);
+    margin: 0;
+    opacity: 0.95;
+    line-height: 1.4;
+  }
+
+  .ai-carousel-ultra-controls-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(16px, 4vw, 24px);
+    margin-top: clamp(30px, 6vw, 50px);
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }} {
+    width: clamp(50px, 10vw, 60px);
+    height: clamp(50px, 10vw, 60px);
+    border-radius: 50%;
+    background: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }}:hover::before {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_bg_color }};
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }}:active {
+    transform: scale(0.95);
+  }
+
+  .ai-carousel-ultra-button-{{ ai_gen_id }} svg {
+    width: clamp(20px, 5vw, 28px);
+    height: clamp(20px, 5vw, 28px);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ai-carousel-ultra-dots-{{ ai_gen_id }} {
+    display: flex;
+    gap: clamp(8px, 2vw, 12px);
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 350px;
+  }
+
+  .ai-carousel-ultra-dot-{{ ai_gen_id }} {
+    width: clamp(10px, 2.5vw, 12px);
+    height: clamp(10px, 2.5vw, 12px);
+    border-radius: 50%;
+    background: {{ block.settings.dot_color }};
+    opacity: 0.3;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 2px solid transparent;
+    padding: 0;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .ai-carousel-ultra-dot-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: {{ block.settings.dot_color }};
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+
+  .ai-carousel-ultra-dot-{{ ai_gen_id }}.active {
+    opacity: 1;
+    transform: scale(1.4);
+    border-color: {{ block.settings.dot_color }};
+  }
+
+  .ai-carousel-ultra-dot-{{ ai_gen_id }}:hover::after {
+    width: 150%;
+    height: 150%;
+    opacity: 0.3;
+  }
+
+  .ai-empty-state-{{ ai_gen_id }} {
+    text-align: center;
+    padding: clamp(50px, 10vw, 80px) 20px;
+    color: #999;
+    font-size: clamp(14px, 3vw, 18px);
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-carousel-ultra-{{ ai_gen_id }} {
+      padding: 40px 12px;
+    }
+
+    .ai-carousel-ultra-container-{{ ai_gen_id }} {
+      height: 380px;
+      perspective: 800px;
+    }
+
+    .ai-carousel-ultra-slide-{{ ai_gen_id }} {
+      width: 240px;
+    }
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    .ai-carousel-ultra-{{ ai_gen_id }} {
+      padding: 50px 16px;
+    }
+
+    .ai-carousel-ultra-container-{{ ai_gen_id }} {
+      height: 420px;
+      perspective: 1000px;
+    }
+
+    .ai-carousel-ultra-slide-{{ ai_gen_id }} {
+      width: 300px;
+    }
+  }
+
+  @media screen and (min-width: 769px) {
+    .ai-carousel-ultra-{{ ai_gen_id }} {
+      width: {{ block.settings.desktop_width_percent }}%;
+    }
+  }
+
+  @media screen and (min-width: 1441px) {
+    .ai-carousel-ultra-container-{{ ai_gen_id }} {
+      height: calc({{ block.settings.carousel_height }}px * 1.15);
+      perspective: calc({{ block.settings.perspective }}px * 1.15);
+    }
+
+    .ai-carousel-ultra-slide-{{ ai_gen_id }} {
+      width: calc({{ block.settings.slide_width }}px * 1.15);
+    }
+  }
+
+  @media screen and (min-width: 1921px) {
+    .ai-carousel-ultra-{{ ai_gen_id }} {
+      max-width: 2400px;
+    }
+
+    .ai-carousel-ultra-container-{{ ai_gen_id }} {
+      height: calc({{ block.settings.carousel_height }}px * 1.25);
+      perspective: calc({{ block.settings.perspective }}px * 1.25);
+    }
+
+    .ai-carousel-ultra-slide-{{ ai_gen_id }} {
+      width: calc({{ block.settings.slide_width }}px * 1.25);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-carousel-ultra-slide-{{ ai_gen_id }},
+    .ai-carousel-ultra-wrapper-{{ ai_gen_id }},
+    .ai-carousel-ultra-button-{{ ai_gen_id }},
+    .ai-carousel-ultra-dot-{{ ai_gen_id }},
+    .ai-carousel-ultra-slide-image-{{ ai_gen_id }},
+    .ai-carousel-ultra-slide-content-{{ ai_gen_id }} {
+      transition: none;
+    }
+  }
+{% endstyle %}
+
+<ai-carousel-ultra-{{ ai_gen_id }} class="ai-carousel-ultra-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-carousel-ultra-particles-{{ ai_gen_id }}" data-particles></div>
+
+  {% if block.settings.title != blank or block.settings.subtitle != blank %}
+    <div class="ai-carousel-ultra-header-{{ ai_gen_id }}">
+      {% if block.settings.title != blank %}
+        <h2 class="ai-carousel-ultra-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+      {% endif %}
+      {% if block.settings.subtitle != blank %}
+        <p class="ai-carousel-ultra-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.settings.product_list != blank %}
+    <div class="ai-carousel-ultra-container-{{ ai_gen_id }}">
+      <div class="ai-carousel-ultra-wrapper-{{ ai_gen_id }}" data-carousel-wrapper>
+        {% for product in block.settings.product_list %}
+          <div class="ai-carousel-ultra-slide-{{ ai_gen_id }}" data-slide="{{ forloop.index0 }}">
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 900 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                loading="lazy"
+                class="ai-carousel-ultra-slide-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-carousel-ultra-slide-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+
+            <div class="ai-carousel-ultra-slide-content-{{ ai_gen_id }}">
+              <h3 class="ai-carousel-ultra-slide-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <p class="ai-carousel-ultra-slide-description-{{ ai_gen_id }}">{{ product.price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ai-carousel-ultra-controls-{{ ai_gen_id }}">
+      <button class="ai-carousel-ultra-button-{{ ai_gen_id }}" data-prev aria-label="Previous slide">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="ai-carousel-ultra-dots-{{ ai_gen_id }}" data-dots></div>
+
+      <button class="ai-carousel-ultra-button-{{ ai_gen_id }}" data-next aria-label="Next slide">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  {% else %}
+    <div class="ai-empty-state-{{ ai_gen_id }}">
+      Next, add products to display in the ultra-animated carousel
+    </div>
+  {% endif %}
+</ai-carousel-ultra-{{ ai_gen_id }}>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+  (function() {
+    class AiCarouselUltra{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.slides = [];
+        this.totalSlides = 0;
+        this.isAnimating = false;
+        this.autoplayInterval = null;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
+        this.particles = [];
+      }
+
+      connectedCallback() {
+        this.wrapper = this.querySelector('[data-carousel-wrapper]');
+        this.slides = Array.from(this.querySelectorAll('[data-slide]'));
+        this.totalSlides = this.slides.length;
+
+        if (this.totalSlides === 0) return;
+
+        this.prevButton = this.querySelector('[data-prev]');
+        this.nextButton = this.querySelector('[data-next]');
+        this.dotsContainer = this.querySelector('[data-dots]');
+        this.particlesContainer = this.querySelector('[data-particles]');
+
+        this.initDots();
+        this.initControls();
+        this.initTouchControls();
+        this.updateCarousel();
+
+        const animationsEnabled = {{ block.settings.enable_animations | json }};
+        if (animationsEnabled && window.gsap) {
+          this.createParticles();
+          this.animateParticles();
+          this.animateIn();
+        }
+
+        const autoplay = {{ block.settings.enable_autoplay | json }};
+        if (autoplay) {
+          this.startAutoplay();
+        }
+
+        window.addEventListener('resize', () => this.handleResize());
+      }
+
+      createParticles() {
+        const particleCount = 30;
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'ai-carousel-ultra-particle-{{ ai_gen_id }}';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          this.particlesContainer.appendChild(particle);
+          this.particles.push(particle);
+        }
+      }
+
+      animateParticles() {
+        this.particles.forEach((particle, index) => {
+          gsap.to(particle, {
+            x: () => (Math.random() - 0.5) * 200,
+            y: () => (Math.random() - 0.5) * 200,
+            opacity: () => Math.random() * 0.8 + 0.2,
+            duration: () => Math.random() * 3 + 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            delay: index * 0.1
+          });
+        });
+      }
+
+      initDots() {
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'ai-carousel-ultra-dot-{{ ai_gen_id }}';
+          dot.setAttribute('data-dot', index);
+          dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+          if (index === 0) dot.classList.add('active');
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.dotsContainer.appendChild(dot);
+        });
+      }
+
+      initControls() {
+        this.prevButton.addEventListener('click', () => this.prev());
+        this.nextButton.addEventListener('click', () => this.next());
+
+        this.slides.forEach((slide, index) => {
+          slide.addEventListener('click', () => {
+            if (index !== this.currentIndex) {
+              this.goToSlide(index);
+            }
+          });
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') this.prev();
+          if (e.key === 'ArrowRight') this.next();
+        });
+      }
+
+      initTouchControls() {
+        this.addEventListener('touchstart', (e) => {
+          this.touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        this.addEventListener('touchend', (e) => {
+          this.touchEndX = e.changedTouches[0].screenX;
+          this.handleSwipe();
+        }, { passive: true });
+      }
+
+      handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = this.touchStartX - this.touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            this.next();
+          } else {
+            this.prev();
+          }
+        }
+      }
+
+      handleResize() {
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        const angleStep = 360 / this.totalSlides;
+        const baseRadius = {{ block.settings.carousel_radius }};
+        const screenWidth = window.innerWidth;
+        
+        let radius = baseRadius;
+        if (screenWidth < 480) {
+          radius = Math.min(baseRadius * 0.5, 280);
+        } else if (screenWidth < 768) {
+          radius = Math.min(baseRadius * 0.65, 350);
+        } else if (screenWidth < 1024) {
+          radius = Math.min(baseRadius * 0.8, 450);
+        }
+
+        this.slides.forEach((slide, index) => {
+          const angle = angleStep * (index - this.currentIndex);
+          const angleRad = (angle * Math.PI) / 180;
+
+          const x = Math.sin(angleRad) * radius;
+          const z = Math.cos(angleRad) * radius - radius;
+          const rotateY = angle;
+          const rotateX = Math.sin(angleRad) * 5;
+
+          let scale = 1 - Math.abs(z) / (radius * 2);
+          scale = Math.max(0.4, Math.min(1, scale));
+
+          const opacity = index === this.currentIndex ? 1 : Math.max(0.5, scale);
+
+          const animationsEnabled = {{ block.settings.enable_animations | json }};
+          if (animationsEnabled && window.gsap) {
+            gsap.to(slide, {
+              x: x,
+              y: 0,
+              z: z,
+              rotateY: rotateY,
+              rotateX: rotateX,
+              scale: scale,
+              opacity: opacity,
+              duration: 0.8,
+              ease: 'power2.out',
+              onUpdate: () => {
+                slide.style.zIndex = Math.round(scale * 100);
+              }
+            });
+          } else {
+            slide.style.transform = `
+              translate(-50%, -50%)
+              translate3d(${x}px, 0, ${z}px)
+              rotateY(${rotateY}deg)
+              rotateX(${rotateX}deg)
+              scale(${scale})
+            `;
+            slide.style.opacity = opacity;
+            slide.style.zIndex = Math.round(scale * 100);
+          }
+        });
+
+        this.updateDots();
+      }
+
+      updateDots() {
+        const dots = this.querySelectorAll('[data-dot]');
+        const animationsEnabled = {{ block.settings.enable_animations | json }};
+        
+        dots.forEach((dot, index) => {
+          if (index === this.currentIndex) {
+            dot.classList.add('active');
+            if (animationsEnabled && window.gsap) {
+              gsap.to(dot, { scale: 1.4, duration: 0.3, ease: 'back.out(2)' });
+            }
+          } else {
+            dot.classList.remove('active');
+            if (animationsEnabled && window.gsap) {
+              gsap.to(dot, { scale: 1, duration: 0.3, ease: 'power2.out' });
+            }
+          }
+        });
+      }
+
+      goToSlide(index) {
+        if (this.isAnimating || index === this.currentIndex) return;
+        this.isAnimating = true;
+        this.currentIndex = index;
+        this.updateCarousel();
+        
+        const animationsEnabled = {{ block.settings.enable_animations | json }};
+        const duration = animationsEnabled ? 800 : 0;
+        
+        setTimeout(() => {
+          this.isAnimating = false;
+        }, duration);
+      }
+
+      next() {
+        const nextIndex = (this.currentIndex + 1) % this.totalSlides;
+        this.goToSlide(nextIndex);
+      }
+
+      prev() {
+        const prevIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(prevIndex);
+      }
+
+      startAutoplay() {
+        const interval = {{ block.settings.autoplay_interval }} * 1000;
+        this.autoplayInterval = setInterval(() => {
+          this.next();
+        }, interval);
+
+        this.addEventListener('mouseenter', () => {
+          clearInterval(this.autoplayInterval);
+        });
+
+        this.addEventListener('mouseleave', () => {
+          this.startAutoplay();
+        });
+      }
+
+      animateIn() {
+        gsap.from(this.querySelector('.ai-carousel-ultra-header-{{ ai_gen_id }}'), {
+          opacity: 0,
+          y: -50,
+          duration: 1,
+          ease: 'power3.out'
+        });
+
+        gsap.from(this.slides, {
+          opacity: 0,
+          scale: 0.3,
+          rotateY: 180,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: 'back.out(1.5)',
+          onComplete: () => {
+            this.updateCarousel();
+          }
+        });
+
+        gsap.from(this.querySelector('.ai-carousel-ultra-controls-{{ ai_gen_id }}'), {
+          opacity: 0,
+          y: 50,
+          duration: 1,
+          delay: 0.5,
+          ease: 'power3.out'
+        });
+      }
+
+      disconnectedCallback() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+        }
+        window.removeEventListener('resize', () => this.handleResize());
+      }
+    }
+
+    customElements.define('ai-carousel-ultra-{{ ai_gen_id }}', AiCarouselUltra{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Ultra animated carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Featured collection"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover our amazing products"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "carousel_height",
+      "label": "Carousel height",
+      "min": 350,
+      "max": 750,
+      "step": 50,
+      "unit": "px",
+      "default": 550
+    },
+    {
+      "type": "range",
+      "id": "slide_width",
+      "label": "Slide width",
+      "min": 250,
+      "max": 550,
+      "step": 50,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "slide_radius",
+      "label": "Slide border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "3D settings"
+    },
+    {
+      "type": "range",
+      "id": "perspective",
+      "label": "Perspective",
+      "min": 600,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "carousel_radius",
+      "label": "Carousel radius",
+      "min": 350,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 550
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "slide_text_color",
+      "label": "Slide text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Glow color",
+      "default": "#667eea"
+    },
+    {
+      "type": "color",
+      "id": "particle_color",
+      "label": "Particle color",
+      "default": "#667eea"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.8
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Button hover background",
+      "default": "#667eea"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 14,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "slide_title_size",
+      "label": "Slide title size",
+      "min": 18,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "slide_description_size",
+      "label": "Slide description size",
+      "min": 14,
+      "max": 22,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable animations",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Autoplay interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ultra animated carousel"
+    }
+  ]
+}
+{% endschema %}

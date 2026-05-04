@@ -1,0 +1,1498 @@
+{% doc %}
+  @prompt
+    Shopify Developer Prompt – Animated Storytelling Character Section
+    
+    I need you to create an interactive storytelling section similar to the About page here:
+    
+    https://www.forhers.com/about
+    
+    The goal is to recreate a modern animated hero section with a centered character and animated text around it.
+    
+    This is NOT a normal content section.
+    It must replicate the visual storytelling animation style of the reference.
+    
+    1. Core Concept
+    
+    The section should display:
+    
+    A large character illustration positioned in the center
+    
+    Animated text appearing around or near the character
+    
+    Text that changes or animates as the user scrolls
+    
+    The section should feel like a visual story introduction, not a static block of text.
+    
+    2. Character Placement
+    
+    The character image must:
+    
+    Be perfectly centered horizontally
+    
+    Slightly above vertical center of the screen
+    
+    Be the visual focus of the section
+    
+    Requirements:
+    
+    Uploadable character image
+    
+    Adjustable size
+    
+    Optional floating animation
+    
+    Settings required in Shopify editor:
+    
+    Character image upload
+    
+    Character width control
+    
+    Character vertical position
+    
+    Character animation toggle
+    
+    Character animation speed
+    
+    3. Animated Text Effect
+    
+    Text should appear with modern animation effects.
+    
+    Examples of acceptable animations:
+    
+    Fade + slide in
+    
+    Typewriter effect
+    
+    Character-by-character reveal
+    
+    Word-by-word reveal
+    
+    Scroll-triggered transitions
+    
+    Text should animate dynamically when the user scrolls.
+    
+    The animation must feel premium and smooth like the reference site.
+    
+    Animated text is usually created with CSS keyframe animations or JavaScript scroll triggers.
+    
+    4. Text Positioning
+    
+    Text can appear:
+    
+    Left of the character
+    
+    Right of the character
+    
+    Above the character
+    
+    Below the character
+    
+    Allow positioning options inside Shopify editor.
+    
+    Controls required:
+    
+    Text alignment
+    
+    Text position
+    
+    Maximum width
+    
+    Spacing from character
+    
+    5. Scroll Interaction
+    
+    The section should support scroll-based animation.
+    
+    Examples:
+    
+    When user scrolls:
+    
+    New text appears
+    
+    Text fades out and new text fades in
+    
+    Character slightly moves or floats
+    
+    Content changes smoothly
+    
+    This creates the storytelling experience like the reference page.
+    
+    6. Background Customization
+    
+    The entire section background must be fully customizable.
+    
+    The Shopify editor must allow choosing:
+    
+    Solid Color
+    
+    Color picker.
+    
+    Gradient Background
+    
+    Two color pickers.
+    
+    Image Background
+    
+    Upload custom image.
+    
+    Additional controls:
+    
+    Background image position
+    
+    Background size (cover / contain)
+    
+    Overlay color
+    
+    Overlay opacity
+    
+    7. Typography Controls
+    
+    Allow full typography customization.
+    
+    Controls required:
+    
+    Title
+    
+    Font family
+    
+    Font size
+    
+    Font weight
+    
+    Color
+    
+    Body Text
+    
+    Font family
+    
+    Font size
+    
+    Color
+    
+    Line height
+    
+    Letter spacing
+    
+    8. Section Height
+    
+    The section should behave like a full screen hero area.
+    
+    Options:
+    
+    100vh full screen
+    
+    Adjustable height
+    
+    9. Responsiveness
+    
+    The section must be responsive across all devices.
+    
+    Supported devices:
+    
+    Mobile phones
+    
+    Tablets
+    
+    Laptops
+    
+    Desktop monitors
+    
+    Ultra-wide screens
+    
+    Smart TVs
+    
+    Desktop Layout
+    
+    Character centered
+    Text appears around it.
+    
+    Tablet Layout
+    
+    Character slightly smaller
+    Text stacked around it.
+    
+    Mobile Layout
+    
+    Character on top
+    Text below
+    
+    Animations must remain smooth.
+    
+    10. Shopify Customization
+    
+    Inside Shopify Theme Editor I must be able to:
+    
+    Upload the character image
+    
+    Edit animated texts
+    
+    Add multiple text steps
+    
+    Adjust text positions
+    
+    Change fonts
+    
+    Change colors
+    
+    Change background
+    
+    Adjust animation speed
+    
+    Toggle animations on/off
+    
+    11. Performance
+    
+    The animation must be lightweight.
+    
+    Requirements:
+    
+    CSS animations when possible
+    
+    Minimal JavaScript
+    
+    Smooth scrolling
+    
+    Optimized images
+    
+    12. Code Requirements
+    
+    Implementation must follow Shopify standards:
+    
+    Build as Shopify section (.liquid)
+    
+    Use schema settings for customization
+    
+    Clean modular code
+    
+    Compatible with Online Store 2.0
+    
+    Final Goal
+    
+    Create a modern animated storytelling section where:
+    
+    A character stands in the middle
+    
+    Text animates around it
+    
+    The section feels alive and interactive
+    
+    Everything is customizable from the Shopify theme editor
+    
+    Works perfectly on all devices, make the animations look better, make me able to customize background with either gradient color or picture or normal color , make me able to remove boxes or add boxes , make me able to change font and picture size , make it extremely responsive on all devices
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-storytelling-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    overflow-x: hidden;
+    overflow-y: visible;
+    {% if block.settings.background_type == 'color' %}
+      background-color: {{ block.settings.background_color }};
+    {% elsif block.settings.background_type == 'gradient' %}
+      background: linear-gradient({{ block.settings.gradient_angle }}deg, {{ block.settings.gradient_color_1 }} 0%, {{ block.settings.gradient_color_2 }} 100%);
+    {% elsif block.settings.background_type == 'image' and block.settings.background_image %}
+      background-image: url('{{ block.settings.background_image | image_url: width: 2000 }}');
+      background-size: {{ block.settings.background_size }};
+      background-position: {{ block.settings.background_position }};
+      background-repeat: no-repeat;
+    {% endif %}
+  }
+
+  .ai-storytelling-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+  }
+
+  .ai-storytelling-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .ai-storytelling-character-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    max-width: {{ block.settings.character_width }}%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    {% if block.settings.character_float_animation %}
+      animation: ai-storytelling-float-{{ ai_gen_id }} {{ block.settings.character_animation_speed }}s ease-in-out infinite;
+    {% endif %}
+  }
+
+  .ai-storytelling-character-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .ai-storytelling-character-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-storytelling-character-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-storytelling-text-box-{{ ai_gen_id }} {
+    position: absolute;
+    z-index: 3;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    max-width: {{ block.settings.text_max_width }}px;
+    padding: {{ block.settings.text_box_padding }}px;
+    background-color: {{ block.settings.text_box_bg_color }};
+    border-radius: {{ block.settings.text_box_radius }}px;
+    {% if block.settings.text_box_shadow %}
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    {% endif %}
+  }
+
+  .ai-storytelling-text-box-{{ ai_gen_id }}.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-storytelling-text-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+    font-weight: {{ block.settings.title_font.weight }};
+    font-size: {{ block.settings.title_font_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+  }
+
+  .ai-storytelling-text-body-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-weight: {{ block.settings.body_font.weight }};
+    font-size: {{ block.settings.body_font_size }}px;
+    color: {{ block.settings.body_color }};
+    line-height: {{ block.settings.body_line_height }};
+    letter-spacing: {{ block.settings.body_letter_spacing }}px;
+    margin: 0;
+  }
+
+  {% if block.settings.character_float_animation %}
+    @keyframes ai-storytelling-float-{{ ai_gen_id }} {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+  {% endif %}
+
+  @media screen and (max-width: 989px) {
+    .ai-storytelling-{{ ai_gen_id }} {
+      min-height: auto;
+      height: auto;
+      overflow-y: visible;
+    }
+
+    .ai-storytelling-container-{{ ai_gen_id }} {
+      flex-direction: column;
+      min-height: auto;
+      height: auto;
+      align-items: stretch;
+      padding: 30px 15px;
+    }
+
+    .ai-storytelling-character-wrapper-{{ ai_gen_id }} {
+      max-width: {{ block.settings.character_width_mobile }}%;
+      margin-bottom: 30px;
+    }
+
+    .ai-storytelling-text-box-{{ ai_gen_id }} {
+      position: relative;
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+
+    .ai-storytelling-text-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.8 }}px;
+    }
+
+    .ai-storytelling-text-body-{{ ai_gen_id }} {
+      font-size: {{ block.settings.body_font_size | times: 0.9 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-storytelling-text-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.7 }}px;
+    }
+
+    .ai-storytelling-text-body-{{ ai_gen_id }} {
+      font-size: {{ block.settings.body_font_size | times: 0.85 }}px;
+    }
+  }
+{% endstyle %}
+
+<animated-storytelling-{{ ai_gen_id }}
+  class="ai-storytelling-{{ ai_gen_id }}"
+  data-scroll-trigger="{{ block.settings.scroll_trigger }}"
+  data-animation-type="{{ block.settings.animation_type }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.background_type != 'color' or block.settings.overlay_opacity > 0 %}
+    <div class="ai-storytelling-overlay-{{ ai_gen_id }}"></div>
+  {% endif %}
+
+  <div class="ai-storytelling-container-{{ ai_gen_id }}">
+    <div class="ai-storytelling-character-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.character_image %}
+        <img
+          src="{{ block.settings.character_image | image_url: width: 1200 }}"
+          alt="{{ block.settings.character_image.alt | escape }}"
+          class="ai-storytelling-character-{{ ai_gen_id }}"
+          loading="lazy"
+          width="{{ block.settings.character_image.width }}"
+          height="{{ block.settings.character_image.height }}"
+        >
+      {% else %}
+        <div class="ai-storytelling-character-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% for i in (1..6) %}
+      {% liquid
+        assign text_enabled_key = 'text_' | append: i | append: '_enabled'
+        assign text_title_key = 'text_' | append: i | append: '_title'
+        assign text_body_key = 'text_' | append: i | append: '_body'
+        assign text_position_key = 'text_' | append: i | append: '_position'
+        assign text_offset_x_key = 'text_' | append: i | append: '_offset_x'
+        assign text_offset_y_key = 'text_' | append: i | append: '_offset_y'
+        assign text_delay_key = 'text_' | append: i | append: '_delay'
+
+        assign text_enabled = block.settings[text_enabled_key]
+        assign text_title = block.settings[text_title_key]
+        assign text_body = block.settings[text_body_key]
+        assign text_position = block.settings[text_position_key]
+        assign text_offset_x = block.settings[text_offset_x_key]
+        assign text_offset_y = block.settings[text_offset_y_key]
+        assign text_delay = block.settings[text_delay_key]
+      %}
+
+      {% if text_enabled %}
+        <div
+          class="ai-storytelling-text-box-{{ ai_gen_id }}"
+          data-position="{{ text_position }}"
+          data-offset-x="{{ text_offset_x }}"
+          data-offset-y="{{ text_offset_y }}"
+          data-delay="{{ text_delay }}"
+          style="
+            {% if text_position == 'top-left' %}
+              top: {{ text_offset_y }}%;
+              left: {{ text_offset_x }}%;
+            {% elsif text_position == 'top-right' %}
+              top: {{ text_offset_y }}%;
+              right: {{ text_offset_x }}%;
+            {% elsif text_position == 'bottom-left' %}
+              bottom: {{ text_offset_y }}%;
+              left: {{ text_offset_x }}%;
+            {% elsif text_position == 'bottom-right' %}
+              bottom: {{ text_offset_y }}%;
+              right: {{ text_offset_x }}%;
+            {% elsif text_position == 'center-left' %}
+              top: 50%;
+              left: {{ text_offset_x }}%;
+              transform: translateY(-50%);
+            {% elsif text_position == 'center-right' %}
+              top: 50%;
+              right: {{ text_offset_x }}%;
+              transform: translateY(-50%);
+            {% endif %}
+            transition-delay: {{ text_delay | divided_by: 1000.0 }}s;
+          "
+        >
+          {% if text_title != blank %}
+            <h3 class="ai-storytelling-text-title-{{ ai_gen_id }}">{{ text_title }}</h3>
+          {% endif %}
+          {% if text_body != blank %}
+            <div class="ai-storytelling-text-body-{{ ai_gen_id }}">{{ text_body }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</animated-storytelling-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AnimatedStorytelling{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.textBoxes = [];
+        this.observer = null;
+        this.scrollTrigger = this.dataset.scrollTrigger === 'true';
+        this.animationType = this.dataset.animationType || 'fade';
+      }
+
+      connectedCallback() {
+        this.textBoxes = Array.from(this.querySelectorAll('.ai-storytelling-text-box-{{ ai_gen_id }}'));
+        
+        if (this.scrollTrigger) {
+          this.setupScrollObserver();
+        } else {
+          this.animateSequentially();
+        }
+
+        this.repositionTextBoxesMobile();
+        window.addEventListener('resize', () => this.repositionTextBoxesMobile());
+      }
+
+      setupScrollObserver() {
+        const options = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.3
+        };
+
+        this.observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.animateSequentially();
+              this.observer.unobserve(entry.target);
+            }
+          });
+        }, options);
+
+        this.observer.observe(this);
+      }
+
+      animateSequentially() {
+        this.textBoxes.forEach((box, index) => {
+          const delay = parseInt(box.dataset.delay) || index * 300;
+          setTimeout(() => {
+            box.classList.add('visible');
+          }, delay);
+        });
+      }
+
+      repositionTextBoxesMobile() {
+        if (window.innerWidth <= 989) {
+          this.textBoxes.forEach((box) => {
+            box.style.position = 'relative';
+            box.style.top = 'auto';
+            box.style.left = 'auto';
+            box.style.right = 'auto';
+            box.style.bottom = 'auto';
+            box.style.transform = 'none';
+          });
+        } else {
+          this.textBoxes.forEach((box) => {
+            const position = box.dataset.position;
+            const offsetX = box.dataset.offsetX;
+            const offsetY = box.dataset.offsetY;
+            
+            box.style.position = 'absolute';
+            
+            if (position === 'top-left') {
+              box.style.top = offsetY + '%';
+              box.style.left = offsetX + '%';
+            } else if (position === 'top-right') {
+              box.style.top = offsetY + '%';
+              box.style.right = offsetX + '%';
+            } else if (position === 'bottom-left') {
+              box.style.bottom = offsetY + '%';
+              box.style.left = offsetX + '%';
+            } else if (position === 'bottom-right') {
+              box.style.bottom = offsetY + '%';
+              box.style.right = offsetX + '%';
+            } else if (position === 'center-left') {
+              box.style.top = '50%';
+              box.style.left = offsetX + '%';
+              box.style.transform = 'translateY(-50%)';
+            } else if (position === 'center-right') {
+              box.style.top = '50%';
+              box.style.right = offsetX + '%';
+              box.style.transform = 'translateY(-50%)';
+            }
+          });
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.observer) {
+          this.observer.disconnect();
+        }
+        window.removeEventListener('resize', () => this.repositionTextBoxesMobile());
+      }
+    }
+
+    customElements.define('animated-storytelling-{{ ai_gen_id }}', AnimatedStorytelling{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Animated storytelling",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_type",
+      "label": "Background type",
+      "options": [
+        {
+          "value": "color",
+          "label": "Solid color"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        }
+      ],
+      "default": "gradient"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient color 1",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient color 2",
+      "default": "#334fb4"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 135
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "background_size",
+      "label": "Background size",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "background_position",
+      "label": "Background position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Character"
+    },
+    {
+      "type": "image_picker",
+      "id": "character_image",
+      "label": "Character image"
+    },
+    {
+      "type": "range",
+      "id": "character_width",
+      "label": "Character width (desktop)",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "character_width_mobile",
+      "label": "Character width (mobile)",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "checkbox",
+      "id": "character_float_animation",
+      "label": "Enable floating animation",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "character_animation_speed",
+      "label": "Animation speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Animation settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_trigger",
+      "label": "Trigger on scroll",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        {
+          "value": "fade",
+          "label": "Fade in"
+        },
+        {
+          "value": "slide",
+          "label": "Slide up"
+        }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "header",
+      "content": "Text box style"
+    },
+    {
+      "type": "range",
+      "id": "text_max_width",
+      "label": "Max width",
+      "min": 150,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "text_box_padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "text_box_bg_color",
+      "label": "Background color",
+      "default": "rgba(255, 255, 255, 0.9)"
+    },
+    {
+      "type": "range",
+      "id": "text_box_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "text_box_shadow",
+      "label": "Enable shadow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title size",
+      "min": 14,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Body color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "body_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Text box 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_1_enabled",
+      "label": "Enable text box 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_1_title",
+      "label": "Title",
+      "default": "Innovative"
+    },
+    {
+      "type": "textarea",
+      "id": "text_1_body",
+      "label": "Body text",
+      "default": "Pushing boundaries with creative solutions"
+    },
+    {
+      "type": "select",
+      "id": "text_1_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "top-left"
+    },
+    {
+      "type": "range",
+      "id": "text_1_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_1_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_1_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Text box 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_2_enabled",
+      "label": "Enable text box 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_2_title",
+      "label": "Title",
+      "default": "Creative"
+    },
+    {
+      "type": "textarea",
+      "id": "text_2_body",
+      "label": "Body text",
+      "default": "Crafting unique experiences"
+    },
+    {
+      "type": "select",
+      "id": "text_2_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "top-right"
+    },
+    {
+      "type": "range",
+      "id": "text_2_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_2_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_2_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 300
+    },
+    {
+      "type": "header",
+      "content": "Text box 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_3_enabled",
+      "label": "Enable text box 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_3_title",
+      "label": "Title",
+      "default": "Passionate"
+    },
+    {
+      "type": "textarea",
+      "id": "text_3_body",
+      "label": "Body text",
+      "default": "Driven by purpose and vision"
+    },
+    {
+      "type": "select",
+      "id": "text_3_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center-left"
+    },
+    {
+      "type": "range",
+      "id": "text_3_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_3_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_3_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Text box 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_4_enabled",
+      "label": "Enable text box 4",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_4_title",
+      "label": "Title",
+      "default": "Bold"
+    },
+    {
+      "type": "textarea",
+      "id": "text_4_body",
+      "label": "Body text",
+      "default": "Taking risks to achieve greatness"
+    },
+    {
+      "type": "select",
+      "id": "text_4_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center-right"
+    },
+    {
+      "type": "range",
+      "id": "text_4_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_4_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_4_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 900
+    },
+    {
+      "type": "header",
+      "content": "Text box 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_5_enabled",
+      "label": "Enable text box 5",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_5_title",
+      "label": "Title",
+      "default": "Authentic"
+    },
+    {
+      "type": "textarea",
+      "id": "text_5_body",
+      "label": "Body text",
+      "default": "Staying true to our values"
+    },
+    {
+      "type": "select",
+      "id": "text_5_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "range",
+      "id": "text_5_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_5_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_5_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Text box 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_6_enabled",
+      "label": "Enable text box 6",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_6_title",
+      "label": "Title",
+      "default": "Impactful"
+    },
+    {
+      "type": "textarea",
+      "id": "text_6_body",
+      "label": "Body text",
+      "default": "Making a difference every day"
+    },
+    {
+      "type": "select",
+      "id": "text_6_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "bottom-right"
+    },
+    {
+      "type": "range",
+      "id": "text_6_offset_x",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_6_offset_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "text_6_delay",
+      "label": "Animation delay",
+      "min": 0,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "default": 1500
+    }
+  ],
+  "presets": [
+    {
+      "name": "Animated storytelling"
+    }
+  ]
+}
+{% endschema %}

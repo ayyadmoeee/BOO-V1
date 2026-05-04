@@ -1,0 +1,336 @@
+{%- liquid
+  assign section_id = section.id
+  assign heading = section.settings.heading
+  assign badge_blocks = section.blocks | where: 'type', 'badge'
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+-%}
+
+{%- style -%}
+  .trust-badges-{{ section_id }} {
+    padding-top: {{ padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.5 | round: 0 }}px;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .trust-badges-{{ section_id }} {
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+    }
+  }
+
+  .trust-badges-{{ section_id }}__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  {%- if heading != blank -%}
+    .trust-badges-{{ section_id }}__heading {
+      margin: 0 0 3rem 0;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      color: {{ section.settings.text_color }};
+    }
+
+  {%- endif -%}
+
+  .trust-badges-{{ section_id }}__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .trust-badges-{{ section_id }}__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .trust-badges-{{ section_id }}__grid {
+      grid-template-columns: repeat({{ badge_blocks.size | at_most: 4 }}, 1fr);
+    }
+  }
+
+  .trust-badges-{{ section_id }}__badge {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    {% if section.settings.background_style == 'card' %}
+      background: {{ section.settings.card_bg_color }};
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    {% endif %}
+  }
+
+  .trust-badges-{{ section_id }}__icon-wrapper {
+    margin: 0 auto 1.5rem;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .trust-badges-{{ section_id }}__icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .trust-badges-{{ section_id }}__icon svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ section.settings.icon_color }};
+  }
+
+  .trust-badges-{{ section_id }}__title {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: {{ section.settings.text_color }};
+  }
+
+  .trust-badges-{{ section_id }}__description {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: {{ section.settings.text_color }};
+    opacity: 0.8;
+  }
+
+  @media screen and (max-width: 768px) {
+    .trust-badges-{{ section_id }}__container {
+      padding: 0 1rem;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    {%- if heading != blank -%}
+      .trust-badges-{{ section_id }}__heading {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+    {%- endif -%}
+
+    .trust-badges-{{ section_id }}__grid {
+      gap: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .trust-badges-{{ section_id }}__badge {
+      position: relative;
+      padding: 1.5rem 1rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .trust-badges-{{ section_id }}__icon-wrapper {
+      position: relative;
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+    }
+
+    .trust-badges-{{ section_id }}__icon {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .trust-badges-{{ section_id }}__title {
+      font-size: 1rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .trust-badges-{{ section_id }}__description {
+      font-size: 0.875rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+{%- endstyle -%}
+
+<section class="trust-badges-{{ section_id }}" data-section-id="{{ section.id }}">
+  <div class="trust-badges-{{ section_id }}__container">
+    {%- if heading != blank -%}
+      <h2 class="trust-badges-{{ section_id }}__heading">{{ heading }}</h2>
+    {%- endif -%}
+
+    <div class="trust-badges-{{ section_id }}__grid">
+      {%- for block in badge_blocks -%}
+        <div class="trust-badges-{{ section_id }}__badge" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != blank -%}
+            <div class="trust-badges-{{ section_id }}__icon-wrapper">
+              {%- if block.settings.icon contains '.svg' -%}
+                <img src="{{ block.settings.icon | image_url: width: 64 }}" alt="" class="trust-badges-{{ section_id }}__icon">
+              {%- else -%}
+                {%- assign icon_class = 'trust-badges-' | append: section_id | append: '__icon' -%}
+                {{ block.settings.icon | image_url: width: 64 | image_tag: alt: '', class: icon_class }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.title != blank -%}
+            <h3 class="trust-badges-{{ section_id }}__title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.description != blank -%}
+            <p class="trust-badges-{{ section_id }}__description">{{ block.settings.description }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background Style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "card",
+          "label": "Card"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#000000",
+      "info": "For SVG icons only"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "On orders over $100"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "title": "Free Shipping",
+            "description": "On orders over $100"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "title": "Easy Returns",
+            "description": "30-day return policy"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "title": "Secure Payment",
+            "description": "100% secure checkout"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "title": "24/7 Support",
+            "description": "We're here to help"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

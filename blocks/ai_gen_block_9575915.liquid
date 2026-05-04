@@ -1,0 +1,987 @@
+{% doc %}
+  @prompt
+    Act as a Shopify frontend developer.
+    Create a Shopify section with a simple 3D product viewer.
+    Technology:
+    Shopify Liquid
+    Three.js
+    responsive CSS grid
+    Design:
+    two column layout on desktop
+    stacked layout on mobile
+    product model on the left
+    text and CTA on the right
+    Features:
+    rotating 3D product model
+    drag to rotate interaction
+    subtle lighting
+    Animations:
+    product rotates slowly
+    text fades in on scroll
+    Responsive behavior:
+    mobile: static image fallback
+    tablet: smaller 3D viewer
+    desktop: full viewer
+    Shopify settings:
+    product title
+    description
+    button text
+    button link
+    3D model upload
+    Return:
+    Liquid section
+    CSS
+    JS for Three.js
+    schema settings, make it more animated please and much customizable
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-viewer-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: 60px 20px;
+    background-color: {{ block.settings.background_color }};
+    overflow: hidden;
+  }
+
+  .ai-product-viewer-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ai-product-viewer-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+  }
+
+  .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: {{ block.settings.canvas_background }};
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    cursor: grab;
+    opacity: 0;
+    transform: scale(0.9) translateX(-50px);
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, {{ block.settings.shadow_opacity }});
+  }
+
+  .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}.visible {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+
+  .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}:active {
+    cursor: grabbing;
+  }
+
+  .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: {{ block.settings.glow_color }};
+    opacity: {{ block.settings.glow_intensity }};
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .ai-product-viewer-canvas-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .ai-product-viewer-fallback-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-viewer-canvas-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-product-viewer-fallback-{{ ai_gen_id }} {
+      display: block;
+    }
+  }
+
+  .ai-product-viewer-fallback-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-viewer-fallback-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-viewer-fallback-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-product-viewer-content-{{ ai_gen_id }} {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 1s ease 0.3s, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+  }
+
+  .ai-product-viewer-content-{{ ai_gen_id }}.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ai-product-viewer-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    color: {{ block.settings.text_color }};
+    margin: 0 0 20px;
+    line-height: 1.2;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+  }
+
+  .ai-product-viewer-content-{{ ai_gen_id }}.visible .ai-product-viewer-title-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-product-viewer-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin: 0 0 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease 0.7s, transform 0.8s ease 0.7s;
+  }
+
+  .ai-product-viewer-content-{{ ai_gen_id }}.visible .ai-product-viewer-description-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ai-product-viewer-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-product-viewer-content-{{ ai_gen_id }}.visible .ai-product-viewer-button-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease 0.9s, transform 0.8s ease 0.9s, background-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .ai-product-viewer-button-{{ ai_gen_id }}::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .ai-product-viewer-button-{{ ai_gen_id }}:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .ai-product-viewer-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .ai-product-viewer-loading-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .ai-product-viewer-spinner-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: {{ block.settings.button_color }};
+    border-radius: 50%;
+    margin: 0 auto 10px;
+  }
+
+  .ai-product-viewer-controls-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .ai-product-viewer-control-btn-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-product-viewer-control-btn-{{ ai_gen_id }}:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+
+  .ai-product-viewer-control-btn-{{ ai_gen_id }}.active {
+    background: {{ block.settings.button_color }};
+    color: white;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-viewer-{{ ai_gen_id }} {
+      padding: 40px 20px;
+    }
+
+    .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }} {
+      transform: scale(0.9) translateX(0);
+    }
+
+    .ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}.visible {
+      transform: scale(1) translateX(0);
+    }
+
+    .ai-product-viewer-content-{{ ai_gen_id }} {
+      transform: translateY(30px);
+    }
+
+    .ai-product-viewer-content-{{ ai_gen_id }}.visible {
+      transform: translateY(0);
+    }
+
+    .ai-product-viewer-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.8);
+    }
+
+    .ai-product-viewer-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+<product-viewer-{{ ai_gen_id }}
+  class="ai-product-viewer-{{ ai_gen_id }}"
+  data-model-url="{{ block.settings.model_file }}"
+  data-auto-rotate="{{ block.settings.auto_rotate }}"
+  data-rotation-speed="{{ block.settings.rotation_speed }}"
+  data-zoom-enabled="{{ block.settings.enable_zoom }}"
+  data-wireframe="{{ block.settings.show_wireframe }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-product-viewer-container-{{ ai_gen_id }}">
+    <div class="ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}">
+      <canvas class="ai-product-viewer-canvas-{{ ai_gen_id }}"></canvas>
+      <div class="ai-product-viewer-fallback-{{ ai_gen_id }}">
+        {% if block.settings.fallback_image %}
+          <img
+            src="{{ block.settings.fallback_image | image_url: width: 800 }}"
+            alt="{{ block.settings.fallback_image.alt | escape }}"
+            class="ai-product-viewer-fallback-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.fallback_image.width }}"
+            height="{{ block.settings.fallback_image.height }}"
+          >
+        {% else %}
+          <div class="ai-product-viewer-fallback-placeholder-{{ ai_gen_id }}">
+            {{ 'product-1' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="ai-product-viewer-loading-{{ ai_gen_id }}" style="display: none;">
+        <div class="ai-product-viewer-spinner-{{ ai_gen_id }}"></div>
+        <div>Loading 3D model...</div>
+      </div>
+      {% if block.settings.show_controls %}
+        <div class="ai-product-viewer-controls-{{ ai_gen_id }}">
+          <button class="ai-product-viewer-control-btn-{{ ai_gen_id }} ai-rotate-btn-{{ ai_gen_id }}" aria-label="Toggle rotation" title="Toggle auto-rotation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+          </button>
+          <button class="ai-product-viewer-control-btn-{{ ai_gen_id }} ai-reset-btn-{{ ai_gen_id }}" aria-label="Reset view" title="Reset view">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ai-product-viewer-content-{{ ai_gen_id }}">
+      {% if block.settings.title != blank %}
+        <h2 class="ai-product-viewer-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+      {% endif %}
+
+      {% if block.settings.description != blank %}
+        <div class="ai-product-viewer-description-{{ ai_gen_id }}">
+          {{ block.settings.description }}
+        </div>
+      {% endif %}
+
+      {% if block.settings.button_text != blank and block.settings.button_link != blank %}
+        <a
+          href="{{ block.settings.button_link }}"
+          class="ai-product-viewer-button-{{ ai_gen_id }}"
+        >
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</product-viewer-{{ ai_gen_id }}>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script>
+  (function() {
+    class ProductViewer{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.model = null;
+        this.isDragging = false;
+        this.previousMousePosition = { x: 0, y: 0 };
+        this.rotation = { x: 0, y: 0 };
+        this.targetRotation = { x: 0, y: 0 };
+        this.autoRotate = this.dataset.autoRotate === 'true';
+        this.rotationSpeed = parseFloat(this.dataset.rotationSpeed) || 0.5;
+        this.zoomEnabled = this.dataset.zoomEnabled === 'true';
+        this.wireframe = this.dataset.wireframe === 'true';
+        this.zoom = 5;
+        this.targetZoom = 5;
+        this.modelScale = 1;
+        this.targetModelScale = 1;
+      }
+
+      connectedCallback() {
+        if (window.innerWidth <= 749) {
+          this.setupScrollAnimation();
+          return;
+        }
+
+        const modelUrl = this.dataset.modelUrl;
+        if (!modelUrl) {
+          this.setupScrollAnimation();
+          return;
+        }
+
+        this.canvas = this.querySelector('.ai-product-viewer-canvas-{{ ai_gen_id }}');
+        this.loadingEl = this.querySelector('.ai-product-viewer-loading-{{ ai_gen_id }}');
+        this.canvasWrapper = this.querySelector('.ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}');
+
+        if (this.canvas) {
+          this.initThreeJS();
+          this.loadModel(modelUrl);
+          this.setupEventListeners();
+          this.animate();
+        }
+
+        this.setupScrollAnimation();
+        this.setupControls();
+      }
+
+      initThreeJS() {
+        this.scene = new THREE.Scene();
+
+        this.camera = new THREE.PerspectiveCamera(
+          45,
+          this.canvas.clientWidth / this.canvas.clientHeight,
+          0.1,
+          1000
+        );
+        this.camera.position.z = this.zoom;
+
+        this.renderer = new THREE.WebGLRenderer({
+          canvas: this.canvas,
+          antialias: true,
+          alpha: true
+        });
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        this.scene.add(ambientLight);
+
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight1.position.set(5, 5, 5);
+        this.scene.add(directionalLight1);
+
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+        directionalLight2.position.set(-5, -5, -5);
+        this.scene.add(directionalLight2);
+
+        const pointLight = new THREE.PointLight(0xffffff, 0.5);
+        pointLight.position.set(0, 3, 0);
+        this.scene.add(pointLight);
+      }
+
+      loadModel(url) {
+        if (this.loadingEl) {
+          this.loadingEl.style.display = 'block';
+          const spinner = this.loadingEl.querySelector('.ai-product-viewer-spinner-{{ ai_gen_id }}');
+          if (spinner) {
+            spinner.style.animation = 'spin 1s linear infinite';
+            const style = document.createElement('style');
+            style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+            document.head.appendChild(style);
+          }
+        }
+
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+          url,
+          (gltf) => {
+            this.model = gltf.scene;
+
+            const box = new THREE.Box3().setFromObject(this.model);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 3 / maxDim;
+            this.model.scale.multiplyScalar(scale);
+
+            this.model.position.sub(center.multiplyScalar(scale));
+
+            if (this.wireframe) {
+              this.model.traverse((child) => {
+                if (child.isMesh) {
+                  child.material.wireframe = true;
+                }
+              });
+            }
+
+            this.scene.add(this.model);
+
+            if (this.loadingEl) {
+              this.loadingEl.style.display = 'none';
+            }
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading 3D model:', error);
+            if (this.loadingEl) {
+              this.loadingEl.textContent = 'Failed to load 3D model';
+            }
+          }
+        );
+      }
+
+      setupEventListeners() {
+        this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
+        this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+        this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
+        this.canvas.addEventListener('mouseleave', this.onMouseUp.bind(this));
+
+        this.canvas.addEventListener('touchstart', this.onTouchStart.bind(this));
+        this.canvas.addEventListener('touchmove', this.onTouchMove.bind(this));
+        this.canvas.addEventListener('touchend', this.onTouchEnd.bind(this));
+
+        if (this.zoomEnabled) {
+          this.canvas.addEventListener('wheel', this.onWheel.bind(this));
+        }
+
+        window.addEventListener('resize', this.onResize.bind(this));
+      }
+
+      setupControls() {
+        const rotateBtn = this.querySelector('.ai-rotate-btn-{{ ai_gen_id }}');
+        const resetBtn = this.querySelector('.ai-reset-btn-{{ ai_gen_id }}');
+
+        if (rotateBtn) {
+          if (this.autoRotate) {
+            rotateBtn.classList.add('active');
+          }
+          rotateBtn.addEventListener('click', () => {
+            this.autoRotate = !this.autoRotate;
+            rotateBtn.classList.toggle('active');
+          });
+        }
+
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            this.targetRotation = { x: 0, y: 0 };
+            this.targetZoom = 5;
+            this.targetModelScale = 1;
+            this.autoRotate = true;
+            if (rotateBtn) {
+              rotateBtn.classList.add('active');
+            }
+          });
+        }
+      }
+
+      onMouseDown(event) {
+        this.isDragging = true;
+        this.autoRotate = false;
+        const rotateBtn = this.querySelector('.ai-rotate-btn-{{ ai_gen_id }}');
+        if (rotateBtn) {
+          rotateBtn.classList.remove('active');
+        }
+        this.previousMousePosition = {
+          x: event.clientX,
+          y: event.clientY
+        };
+      }
+
+      onMouseMove(event) {
+        if (!this.isDragging || !this.model) return;
+
+        const deltaX = event.clientX - this.previousMousePosition.x;
+        const deltaY = event.clientY - this.previousMousePosition.y;
+
+        this.targetRotation.y += deltaX * 0.01;
+        this.targetRotation.x += deltaY * 0.01;
+
+        this.previousMousePosition = {
+          x: event.clientX,
+          y: event.clientY
+        };
+      }
+
+      onMouseUp() {
+        this.isDragging = false;
+      }
+
+      onTouchStart(event) {
+        if (event.touches.length === 1) {
+          this.isDragging = true;
+          this.autoRotate = false;
+          const rotateBtn = this.querySelector('.ai-rotate-btn-{{ ai_gen_id }}');
+          if (rotateBtn) {
+            rotateBtn.classList.remove('active');
+          }
+          this.previousMousePosition = {
+            x: event.touches[0].clientX,
+            y: event.touches[0].clientY
+          };
+        }
+      }
+
+      onTouchMove(event) {
+        if (!this.isDragging || !this.model || event.touches.length !== 1) return;
+
+        event.preventDefault();
+
+        const deltaX = event.touches[0].clientX - this.previousMousePosition.x;
+        const deltaY = event.touches[0].clientY - this.previousMousePosition.y;
+
+        this.targetRotation.y += deltaX * 0.01;
+        this.targetRotation.x += deltaY * 0.01;
+
+        this.previousMousePosition = {
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY
+        };
+      }
+
+      onTouchEnd() {
+        this.isDragging = false;
+      }
+
+      onWheel(event) {
+        event.preventDefault();
+        this.targetZoom += event.deltaY * 0.01;
+        this.targetZoom = Math.max(2, Math.min(10, this.targetZoom));
+      }
+
+      onResize() {
+        if (!this.camera || !this.renderer || !this.canvas) return;
+
+        this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+      }
+
+      animate() {
+        requestAnimationFrame(this.animate.bind(this));
+
+        if (this.model) {
+          if (this.autoRotate) {
+            this.targetRotation.y += this.rotationSpeed * 0.01;
+          }
+
+          this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
+          this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
+
+          this.model.rotation.x = this.rotation.x;
+          this.model.rotation.y = this.rotation.y;
+
+          this.modelScale += (this.targetModelScale - this.modelScale) * 0.1;
+          this.model.scale.setScalar(this.modelScale);
+        }
+
+        this.zoom += (this.targetZoom - this.zoom) * 0.1;
+        this.camera.position.z = this.zoom;
+
+        if (this.renderer && this.scene && this.camera) {
+          this.renderer.render(this.scene, this.camera);
+        }
+      }
+
+      setupScrollAnimation() {
+        const content = this.querySelector('.ai-product-viewer-content-{{ ai_gen_id }}');
+        const canvasWrapper = this.querySelector('.ai-product-viewer-canvas-wrapper-{{ ai_gen_id }}');
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                if (content) content.classList.add('visible');
+                if (canvasWrapper) canvasWrapper.classList.add('visible');
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+
+        if (content) observer.observe(content);
+        if (canvasWrapper) observer.observe(canvasWrapper);
+      }
+    }
+
+    customElements.define('product-viewer-{{ ai_gen_id }}', ProductViewer{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "3D product viewer",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Experience our product in 3D"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Drag to rotate and explore every detail of our premium product. Crafted with precision and designed for excellence."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "3D model"
+    },
+    {
+      "type": "url",
+      "id": "model_file",
+      "label": "3D model URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback image"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto rotate",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rotation_speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "label": "Rotation speed",
+      "default": 0.5
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable zoom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wireframe",
+      "label": "Show wireframe",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show controls",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "canvas_background",
+      "label": "Canvas background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Glow color",
+      "default": "#334fb4"
+    },
+    {
+      "type": "range",
+      "id": "glow_intensity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Glow intensity",
+      "default": 0.2
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "min": 0,
+      "max": 0.5,
+      "step": 0.1,
+      "label": "Shadow opacity",
+      "default": 0.1
+    },
+    {
+      "type": "header",
+      "content": "Canvas style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Hover background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "min": 16,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D product viewer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,232 @@
+{% comment %}
+  Product Hotspot Swap (5 layouts)
+  - Pick 5 images (one per trigger product)
+  - Each image has 4 hotspots that link to products you choose
+  - On each product page, it auto-picks the matching layout by "Trigger product"
+{% endcomment %}
+
+{% assign sid = section.id | replace: '_', '' | downcase %}
+{% assign current_handle = product.handle %}
+
+{% assign active_block = nil %}
+{% for b in section.blocks %}
+  {% if b.type == 'layout' and b.settings.trigger_product != blank %}
+    {% if b.settings.trigger_product.handle == current_handle %}
+      {% assign active_block = b %}
+      {% break %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if active_block == nil %}
+  {% for b in section.blocks %}
+    {% if b.type == 'layout' %}
+      {% assign active_block = b %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% style %}
+#shopify-section-{{ section.id }}{
+  background: {{ section.settings.section_bg }} !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+#shopify-section-{{ section.id }} .page-width{
+  max-width:none !important;
+  padding:0 !important;
+}
+
+.phs-{{ sid }}{
+  width:100%;
+  background: {{ section.settings.section_bg }};
+  padding: {{ section.settings.pad_y }}px 0;
+}
+.phs-{{ sid }}__wrap{
+  width:100%;
+  max-width: {{ section.settings.max_width }}px;
+  margin: 0 auto;
+  padding: 0 {{ section.settings.pad_x }}px;
+}
+
+.phs-{{ sid }}__card{
+  position:relative;
+  overflow:hidden;
+  border-radius: {{ section.settings.radius }}px;
+  height: {{ section.settings.height_desktop }}px;
+  background: {{ section.settings.card_bg }};
+  box-shadow: 0 18px 45px rgba(0,0,0,.12);
+}
+
+.phs-{{ sid }}__img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit: {{ section.settings.image_fit }};
+  object-position: {{ section.settings.pos_x }}% {{ section.settings.pos_y }}%;
+  transform: scale({{ section.settings.image_scale | divided_by: 100.0 }});
+}
+
+.phs-{{ sid }}__overlay{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }});
+  pointer-events:none;
+}
+
+.phs-{{ sid }}__hotspot{
+  position:absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  text-decoration:none;
+}
+
+.phs-{{ sid }}__btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width: {{ section.settings.btn_size }}px;
+  height: {{ section.settings.btn_size }}px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: {{ section.settings.btn_bg }};
+  color: {{ section.settings.btn_color }};
+  border: 1px solid {{ section.settings.btn_border }};
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+  font-weight: 800;
+  font-size: {{ section.settings.btn_text_size }}px;
+  line-height:1;
+  cursor:pointer;
+}
+
+@media (max-width: 990px){
+  .phs-{{ sid }}__wrap{ padding: 0 16px; }
+  .phs-{{ sid }}__card{ height: {{ section.settings.height_mobile }}px; border-radius: {{ section.settings.radius_mobile }}px; }
+}
+{% endstyle %}
+
+<section class="phs-{{ sid }}">
+  <div class="phs-{{ sid }}__wrap">
+    <div class="phs-{{ sid }}__card">
+      {% if active_block != nil and active_block.settings.image != blank %}
+        <img class="phs-{{ sid }}__img" src="{{ active_block.settings.image | image_url: width: 2400 }}" alt="" loading="lazy">
+      {% endif %}
+
+      <div class="phs-{{ sid }}__overlay" aria-hidden="true"></div>
+
+      {% if active_block != nil %}
+        {% if active_block.settings.p1 != blank %}
+          <a class="phs-{{ sid }}__hotspot" href="{{ active_block.settings.p1.url }}" style="--x: {{ active_block.settings.p1_x }}; --y: {{ active_block.settings.p1_y }};">
+            <span class="phs-{{ sid }}__btn">{{ active_block.settings.p1_label | default: '+' }}</span>
+          </a>
+        {% endif %}
+
+        {% if active_block.settings.p2 != blank %}
+          <a class="phs-{{ sid }}__hotspot" href="{{ active_block.settings.p2.url }}" style="--x: {{ active_block.settings.p2_x }}; --y: {{ active_block.settings.p2_y }};">
+            <span class="phs-{{ sid }}__btn">{{ active_block.settings.p2_label | default: '+' }}</span>
+          </a>
+        {% endif %}
+
+        {% if active_block.settings.p3 != blank %}
+          <a class="phs-{{ sid }}__hotspot" href="{{ active_block.settings.p3.url }}" style="--x: {{ active_block.settings.p3_x }}; --y: {{ active_block.settings.p3_y }};">
+            <span class="phs-{{ sid }}__btn">{{ active_block.settings.p3_label | default: '+' }}</span>
+          </a>
+        {% endif %}
+
+        {% if active_block.settings.p4 != blank %}
+          <a class="phs-{{ sid }}__hotspot" href="{{ active_block.settings.p4.url }}" style="--x: {{ active_block.settings.p4_x }}; --y: {{ active_block.settings.p4_y }};">
+            <span class="phs-{{ sid }}__btn">{{ active_block.settings.p4_label | default: '+' }}</span>
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product hotspots (5 swap)",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "range", "id": "max_width", "min": 900, "max": 2000, "step": 50, "unit": "px", "label": "Max width", "default": 1400 },
+    { "type": "range", "id": "pad_x", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Side padding", "default": 24 },
+    { "type": "range", "id": "pad_y", "min": 0, "max": 140, "step": 4, "unit": "px", "label": "Top/bottom padding", "default": 20 },
+
+    { "type": "range", "id": "height_desktop", "min": 240, "max": 900, "step": 10, "unit": "px", "label": "Height (desktop)", "default": 520 },
+    { "type": "range", "id": "height_mobile", "min": 200, "max": 700, "step": 10, "unit": "px", "label": "Height (mobile)", "default": 360 },
+
+    { "type": "range", "id": "radius", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Radius (desktop)", "default": 22 },
+    { "type": "range", "id": "radius_mobile", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Radius (mobile)", "default": 18 },
+
+    { "type": "color", "id": "card_bg", "label": "Card background (only if image has transparency)", "default": "#ffffff" },
+
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Cover (fills card)" },
+        { "value": "contain", "label": "Contain (show full image)" }
+      ]
+    },
+    { "type": "range", "id": "image_scale", "min": 80, "max": 160, "step": 1, "unit": "%", "label": "Image zoom", "default": 100 },
+    { "type": "range", "id": "pos_x", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Image position X", "default": 50 },
+    { "type": "range", "id": "pos_y", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Image position Y", "default": 50 },
+
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 80, "step": 1, "unit": "%", "label": "Overlay opacity", "default": 0 },
+
+    { "type": "range", "id": "btn_size", "min": 26, "max": 70, "step": 2, "unit": "px", "label": "Button size", "default": 44 },
+    { "type": "range", "id": "btn_text_size", "min": 10, "max": 20, "step": 1, "unit": "px", "label": "Button text size", "default": 13 },
+    { "type": "color", "id": "btn_bg", "label": "Button background", "default": "rgba(255,255,255,0.85)" },
+    { "type": "color", "id": "btn_color", "label": "Button text color", "default": "#111111" },
+    { "type": "color", "id": "btn_border", "label": "Button border", "default": "rgba(0,0,0,0.10)" }
+  ],
+  "blocks": [
+    {
+      "type": "layout",
+      "name": "Layout (one product case)",
+      "settings": [
+        { "type": "product", "id": "trigger_product", "label": "Trigger product (when on this product, use this layout)" },
+        { "type": "image_picker", "id": "image", "label": "Image for this product page" },
+
+        { "type": "header", "content": "Hotspot 1" },
+        { "type": "product", "id": "p1", "label": "Link product 1" },
+        { "type": "text", "id": "p1_label", "label": "Button label 1", "default": "+" },
+        { "type": "range", "id": "p1_x", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position X 1", "default": 25 },
+        { "type": "range", "id": "p1_y", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position Y 1", "default": 35 },
+
+        { "type": "header", "content": "Hotspot 2" },
+        { "type": "product", "id": "p2", "label": "Link product 2" },
+        { "type": "text", "id": "p2_label", "label": "Button label 2", "default": "+" },
+        { "type": "range", "id": "p2_x", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position X 2", "default": 55 },
+        { "type": "range", "id": "p2_y", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position Y 2", "default": 40 },
+
+        { "type": "header", "content": "Hotspot 3" },
+        { "type": "product", "id": "p3", "label": "Link product 3" },
+        { "type": "text", "id": "p3_label", "label": "Button label 3", "default": "+" },
+        { "type": "range", "id": "p3_x", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position X 3", "default": 40 },
+        { "type": "range", "id": "p3_y", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position Y 3", "default": 65 },
+
+        { "type": "header", "content": "Hotspot 4" },
+        { "type": "product", "id": "p4", "label": "Link product 4" },
+        { "type": "text", "id": "p4_label", "label": "Button label 4", "default": "+" },
+        { "type": "range", "id": "p4_x", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position X 4", "default": 75 },
+        { "type": "range", "id": "p4_y", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position Y 4", "default": 60 }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    { "name": "Product hotspots (5 swap)" }
+  ]
+}
+{% endschema %}

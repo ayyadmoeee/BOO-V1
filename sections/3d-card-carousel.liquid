@@ -1,0 +1,989 @@
+{%- liquid
+  assign section_id = section.id
+  assign slides = section.blocks | where: 'type', 'slide'
+  assign card_radius = section.settings.card_radius | default: 24
+  assign card_width_mobile = section.settings.card_width_mobile | default: 280
+  assign card_width_desktop = section.settings.card_width_desktop | default: 320
+  assign card_spacing_desktop = section.settings.card_spacing_desktop | default: 40
+  assign perspective_depth = section.settings.perspective_depth | default: 1000
+  assign autoplay_enabled = section.settings.autoplay_enabled
+  assign autoplay_speed = section.settings.autoplay_speed | default: 5000
+-%}
+
+{%- style -%}
+  .card-carousel-{{ section_id }} {
+    position: relative;
+    width: 100%;
+    padding: 4rem 0;
+    background: var(--gradient-background, transparent);
+  }
+
+  .card-carousel-{{ section_id }}__container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 769px) {
+    .card-carousel-{{ section_id }}__container {
+      overflow: visible;
+    }
+  }
+
+  /* Mobile: 3D Carousel */
+  @media screen and (max-width: 768px) {
+    .card-carousel-{{ section_id }}__viewport {
+      position: relative;
+      width: 100%;
+      min-height: 500px;
+      height: auto;
+      perspective: {{ perspective_depth }}px;
+      perspective-origin: center center;
+      overflow: visible;
+      touch-action: pan-x pan-y;
+    }
+
+    .card-carousel-{{ section_id }}__track {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .card-carousel-{{ section_id }}__track--dragging {
+      transition: none;
+    }
+
+    .card-carousel-{{ section_id }}__card {
+      position: absolute;
+      width: {{ card_width_mobile }}px;
+      max-width: 85vw;
+      flex-shrink: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: auto;
+      cursor: grab;
+      isolation: isolate;
+      overflow: hidden;
+      backface-visibility: hidden;
+      border-radius: {{ card_radius }}px;
+    }
+
+    .card-carousel-{{ section_id }}__card:active {
+      cursor: grabbing;
+    }
+
+    .card-carousel-{{ section_id }}__card-link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .card-carousel-{{ section_id }}__card-link:hover {
+      text-decoration: none;
+    }
+
+    .card-carousel-{{ section_id }}__card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: {{ card_radius }}px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      isolation: isolate;
+    }
+    
+    /* Fix: Center Card Isolation - highest z-index and proper overflow */
+    .card-carousel-{{ section_id }}__card[data-is-center="true"] {
+      position: relative !important;
+      z-index: 10 !important;
+      overflow: visible; /* Allow shadow to show */
+    }
+    
+    .card-carousel-{{ section_id }}__card[data-is-center="true"] .card-carousel-{{ section_id }}__card-inner {
+      overflow: hidden; /* Clip content but allow shadow */
+    }
+    
+    /* Fix: Side cards - prevent edge bleed with overflow clipping */
+    .card-carousel-{{ section_id }}__card:not([data-is-center="true"]) {
+      overflow: hidden;
+      position: absolute;
+    }
+
+    .card-carousel-{{ section_id }}__card-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .card-carousel-{{ section_id }}__card-content {
+      padding: 1.5rem;
+    }
+
+    .card-carousel-{{ section_id }}__card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: #1a1a1a;
+    }
+
+    .card-carousel-{{ section_id }}__card-price {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin: 0 0 1rem 0;
+      color: #666;
+    }
+
+
+    .card-carousel-{{ section_id }}__pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 0 1rem;
+    }
+
+    .card-carousel-{{ section_id }}__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      padding: 0;
+    }
+
+    .card-carousel-{{ section_id }}__dot--active {
+      background: #1a1a1a;
+      transform: scale(1.2);
+    }
+  }
+
+  /* Desktop: Fan Layout */
+  @media screen and (min-width: 769px) {
+    .card-carousel-{{ section_id }}__viewport {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+      padding: 4rem 0;
+      min-height: 600px;
+    }
+
+    .card-carousel-{{ section_id }}__track {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 100%;
+      overflow: visible;
+      min-height: 600px;
+      height: auto;
+      user-select: none;
+      padding: 2rem 0;
+    }
+
+    .card-carousel-{{ section_id }}__track--dragging {
+      transition: none;
+      cursor: grabbing;
+    }
+
+    .card-carousel-{{ section_id }}__track--dragging .card-carousel-{{ section_id }}__card {
+      transition: none;
+    }
+
+    .card-carousel-{{ section_id }}__track--dragging .card-carousel-{{ section_id }}__card-inner {
+      pointer-events: none;
+    }
+
+    .card-carousel-{{ section_id }}__card {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform-origin: center center;
+      width: {{ card_width_desktop }}px;
+      height: auto;
+      flex-shrink: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: auto;
+      cursor: grab;
+    }
+
+    .card-carousel-{{ section_id }}__card:active {
+      cursor: grabbing;
+    }
+
+    .card-carousel-{{ section_id }}__card:hover:not(.card-carousel-{{ section_id }}__card--dragging) {
+      transform: translateY(-8px) scale(1.03);
+      z-index: 10;
+    }
+
+    .card-carousel-{{ section_id }}__card-link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .card-carousel-{{ section_id }}__card-link:hover {
+      text-decoration: none;
+    }
+
+    .card-carousel-{{ section_id }}__card-inner {
+      position: relative;
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      background: #ffffff;
+      border-radius: {{ card_radius }}px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      backface-visibility: hidden;
+      transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-carousel-{{ section_id }}__card:hover .card-carousel-{{ section_id }}__card-inner {
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-carousel-{{ section_id }}__card-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-radius: {{ card_radius }}px {{ card_radius }}px 0 0;
+    }
+
+    .card-carousel-{{ section_id }}__card-content {
+      padding: 2rem;
+    }
+
+    .card-carousel-{{ section_id }}__card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.75rem 0;
+      color: #1a1a1a;
+    }
+
+    .card-carousel-{{ section_id }}__card-price {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin: 0 0 1.25rem 0;
+      color: #666;
+    }
+
+
+    .card-carousel-{{ section_id }}__pagination {
+      display: none;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .card-carousel-{{ section_id }}__track,
+    .card-carousel-{{ section_id }}__card,
+    .card-carousel-{{ section_id }}__card-inner {
+      transition: none;
+      animation: none;
+    }
+
+    .card-carousel-{{ section_id }}__viewport {
+      perspective: none;
+    }
+
+    .card-carousel-{{ section_id }}__card {
+      transform: none !important;
+    }
+  }
+{%- endstyle -%}
+
+<div class="card-carousel-{{ section_id }}" data-section-id="{{ section_id }}">
+  <div class="card-carousel-{{ section_id }}__container">
+    <div class="card-carousel-{{ section_id }}__viewport" data-viewport>
+      <div class="card-carousel-{{ section_id }}__track" data-track>
+        {%- for block in slides -%}
+          {%- liquid
+            assign slide_index = forloop.index0
+            assign image = block.settings.image
+            assign title = block.settings.title
+            assign price_text = block.settings.price_text
+            assign button_label = block.settings.button_label
+            assign button_link = block.settings.button_link
+          -%}
+          <div class="card-carousel-{{ section_id }}__card" data-card data-index="{{ slide_index }}">
+            {%- if button_link != blank -%}
+              <a href="{{ button_link }}" class="card-carousel-{{ section_id }}__card-link" data-card-link>
+            {%- endif -%}
+            <div class="card-carousel-{{ section_id }}__card-inner">
+              {%- if image != blank -%}
+                <img
+                  src="{{ image | image_url: width: 600 }}"
+                  srcset="{{ image | image_url: width: 300 }} 300w,
+                          {{ image | image_url: width: 600 }} 600w,
+                          {{ image | image_url: width: 900 }} 900w"
+                  sizes="(max-width: 768px) {{ card_width_mobile }}px, {{ card_width_desktop }}px"
+                  alt="{{ image.alt | escape }}"
+                  class="card-carousel-{{ section_id }}__card-image"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div style="width: 100%; aspect-ratio: 3/4; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+                </div>
+              {%- endif -%}
+              
+              <div class="card-carousel-{{ section_id }}__card-content">
+                {%- if title != blank -%}
+                  <h3 class="card-carousel-{{ section_id }}__card-title">{{ title | escape }}</h3>
+                {%- endif -%}
+                
+                {%- if price_text != blank -%}
+                  <p class="card-carousel-{{ section_id }}__card-price">{{ price_text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+            {%- if button_link != blank -%}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    
+    {%- if slides.size > 1 -%}
+      <div class="card-carousel-{{ section_id }}__pagination" data-pagination>
+        {%- liquid
+          assign center_index = slides.size | divided_by: 2
+        -%}
+        {%- for block in slides -%}
+          <button
+            class="card-carousel-{{ section_id }}__dot{% if forloop.index0 == center_index %} card-carousel-{{ section_id }}__dot--active{% endif %}"
+            data-dot
+            data-index="{{ forloop.index0 }}"
+            aria-label="Go to slide {{ forloop.index }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+    
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector(`[data-section-id="${sectionId}"]`);
+    if (!section) return;
+    
+    const viewport = section.querySelector('[data-viewport]');
+    const track = section.querySelector('[data-track]');
+    const cards = section.querySelectorAll('[data-card]');
+    const dots = section.querySelectorAll('[data-dot]');
+    const totalSlides = cards.length;
+    
+    if (totalSlides === 0) return;
+    
+    // Check for reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Mobile breakpoint
+    const MOBILE_BREAKPOINT = 768;
+    let isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    // Start at center card for balanced initial view
+    let currentIndex = Math.floor(totalSlides / 2);
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let offsetX = 0;
+    let autoplayTimer = null;
+    let dragDistance = 0;
+    
+    // Update mobile state on resize
+    function updateMobileState() {
+      const wasMobile = isMobile;
+      isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+      
+      if (wasMobile !== isMobile) {
+        // Reset on breakpoint change
+        currentIndex = 0;
+        offsetX = 0;
+        updateCarousel();
+        if (isMobile && !prefersReducedMotion) {
+          startAutoplay();
+        } else {
+          stopAutoplay();
+        }
+      }
+    }
+    
+    window.addEventListener('resize', () => {
+      updateMobileState();
+      // Update layout on resize
+      requestAnimationFrame(() => {
+        updateCarousel();
+      });
+    });
+    
+    // Helper: Calculate wrapped difference for infinite loop
+    function getWrappedDiff(index, centerIndex, total) {
+      let diff = index - centerIndex;
+      
+      // Find shortest path (forward or backward)
+      if (diff > total / 2) {
+        diff = diff - total;
+      } else if (diff < -total / 2) {
+        diff = diff + total;
+      }
+      
+      return diff;
+    }
+    
+    // Mobile: Calculate card positions with 3D transforms (infinite loop)
+    function updateMobileLayout() {
+      if (!isMobile || prefersReducedMotion) {
+        cards.forEach((card, index) => {
+          card.style.transform = '';
+          card.style.opacity = '1';
+        });
+        return;
+      }
+      
+      const cardWidth = cards[0]?.offsetWidth || 280;
+      const centerOffset = (viewport.offsetWidth - cardWidth) / 2;
+      
+      cards.forEach((card, index) => {
+        // Calculate wrapped difference for infinite loop
+        const diff = getWrappedDiff(index, currentIndex, totalSlides);
+        const absDiff = Math.abs(diff);
+        const isCenter = absDiff === 0;
+        
+        // Mark center card for CSS targeting
+        if (isCenter) {
+          card.setAttribute('data-is-center', 'true');
+        } else {
+          card.removeAttribute('data-is-center');
+        }
+        
+        // Calculate position
+        const baseX = centerOffset + (diff * (cardWidth * 0.85));
+        // Fix: Round translateZ to avoid sub-pixel rendering issues
+        const zOffset = Math.round(-Math.abs(diff) * 50);
+        const rotateY = diff * 25;
+        
+        // Fix: Edge bleed prevention - slightly reduce scale of side cards (NOT center)
+        let scale = 1;
+        if (isCenter) {
+          scale = 1; // Center card full size
+        } else {
+          scale = Math.max(0.7, 1 - absDiff * 0.15) * 0.98; // Side cards slightly smaller to prevent edge bleed
+        }
+        
+        const opacity = absDiff <= 2 ? 1 : Math.max(0.3, 1 - (absDiff - 2) * 0.2);
+        
+        // Apply transform with offset from dragging
+        const finalX = baseX + offsetX;
+        card.style.transform = `
+          translateX(${finalX}px)
+          translateZ(${zOffset}px)
+          rotateY(${rotateY}deg)
+          scale(${scale})
+        `;
+        
+        // Fix: Center Card Isolation - ensure center card has highest z-index
+        if (isCenter) {
+          card.style.position = 'relative';
+          card.style.zIndex = '10';
+          card.style.willChange = 'transform';
+        } else {
+          card.style.position = 'absolute';
+          // Side cards - lower z-index, no will-change to prevent rendering issues
+          if (diff < 0) {
+            // Cards to the left (behind when rotated)
+            card.style.zIndex = String(Math.max(1, 5 - absDiff));
+          } else {
+            // Cards to the right (in front when rotated)
+            card.style.zIndex = String(Math.max(1, 10 - absDiff));
+          }
+          card.style.willChange = '';
+        }
+        
+        // Fix: Reduce shadow on side cards to prevent visual bleed
+        const cardInner = card.querySelector('.card-carousel-' + sectionId + '__card-inner');
+        if (cardInner) {
+          if (isCenter) {
+            // Center card - full shadow
+            cardInner.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05)';
+          } else {
+            // Side cards - reduced shadow to prevent overlap
+            cardInner.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.03)';
+          }
+        }
+        
+        card.style.opacity = opacity;
+        card.style.pointerEvents = absDiff <= 1 ? 'auto' : 'none';
+        
+        // Hide cards that are too far behind to prevent visual leak
+        if (absDiff > 2 && diff < 0) {
+          card.style.visibility = 'hidden';
+        } else {
+          card.style.visibility = 'visible';
+        }
+      });
+    }
+    
+    // Desktop: Calculate fan layout with drag support (infinite loop)
+    function updateDesktopLayout() {
+      if (isMobile) return;
+      
+      // Wait for layout to be ready
+      if (!viewport || viewport.offsetWidth === 0) {
+        requestAnimationFrame(updateDesktopLayout);
+        return;
+      }
+      
+      const cardWidth = cards[0]?.offsetWidth || {{ card_width_desktop | json }};
+      const cardSpacing = {{ card_spacing_desktop | json }};
+      
+      // Calculate center position - center of viewport minus half card width
+      const viewportCenter = viewport.offsetWidth / 2;
+      const cardCenter = cardWidth / 2;
+      const centerOffset = viewportCenter - cardCenter;
+      
+      cards.forEach((card, index) => {
+        // Calculate wrapped difference for infinite loop
+        const diff = getWrappedDiff(index, currentIndex, totalSlides);
+        const absDiff = Math.abs(diff);
+        
+        // Calculate base position relative to center
+        const baseX = centerOffset + (diff * (cardWidth + cardSpacing));
+        
+        // Apply drag offset
+        const finalX = baseX + offsetX;
+        
+        // Scale based on distance from center
+        let scale = 1.1;
+        if (absDiff === 0) {
+          scale = 1.1; // Center card largest
+        } else if (absDiff === 1) {
+          scale = 0.95; // Adjacent cards
+        } else {
+          scale = 0.9; // Further cards
+        }
+        
+        // Apply transform - translateX from left edge, properly center with scale
+        card.style.left = '0';
+        card.style.top = '50%';
+        card.style.transform = `translateX(${finalX}px) translateY(-50%) scale(${scale})`;
+        card.style.zIndex = String(10 - absDiff);
+        
+        // Smooth opacity for seamless looping
+        if (absDiff <= 2) {
+          card.style.opacity = '1';
+        } else if (absDiff === 3) {
+          card.style.opacity = '0.8';
+        } else {
+          card.style.opacity = '0';
+        }
+        
+        card.style.pointerEvents = 'auto';
+      });
+    }
+    
+    // Update carousel based on current layout
+    function updateCarousel() {
+      if (isMobile) {
+        updateMobileLayout();
+      } else {
+        updateDesktopLayout();
+      }
+      updatePagination();
+    }
+    
+    // Update pagination dots
+    function updatePagination() {
+      if (!isMobile) return;
+      
+      dots.forEach((dot, index) => {
+        if (index === currentIndex) {
+          dot.classList.add('card-carousel-' + sectionId + '__dot--active');
+        } else {
+          dot.classList.remove('card-carousel-' + sectionId + '__dot--active');
+        }
+      });
+    }
+    
+    // Snap to nearest card with infinite loop (works for both mobile and desktop)
+    function snapToCard() {
+      if (prefersReducedMotion) return;
+      
+      const cardWidth = cards[0]?.offsetWidth || (isMobile ? 280 : 320);
+      const threshold = cardWidth * 0.3;
+      
+      let newIndex = currentIndex;
+      
+      if (Math.abs(offsetX) > threshold) {
+        if (offsetX > 0) {
+          // Move to previous (loop to end if at start)
+          newIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        } else {
+          // Move to next (loop to start if at end)
+          newIndex = (currentIndex + 1) % totalSlides;
+        }
+      }
+      
+      // For desktop, make transition seamless by fading out distant cards
+      if (!isMobile && newIndex !== currentIndex) {
+        // Temporarily hide cards far from center during transition
+        cards.forEach((card, index) => {
+          const diff = getWrappedDiff(index, currentIndex, totalSlides);
+          const absDiff = Math.abs(diff);
+          if (absDiff > 2) {
+            card.style.opacity = '0';
+            card.style.transition = 'opacity 0.2s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          }
+        });
+        
+        currentIndex = newIndex;
+        offsetX = 0;
+        updateCarousel();
+        
+        // Restore transitions after brief delay
+        setTimeout(() => {
+          cards.forEach((card) => {
+            card.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          });
+        }, 100);
+      } else {
+        offsetX = 0;
+        currentIndex = newIndex;
+        track.classList.remove('card-carousel-' + sectionId + '__track--dragging');
+        updateCarousel();
+      }
+    }
+    
+    // Pointer events for drag (works on both mobile and desktop)
+    function handlePointerStart(e) {
+      if (prefersReducedMotion) return;
+      
+      isDragging = true;
+      startX = e.clientX || e.touches?.[0]?.clientX || 0;
+      dragDistance = 0;
+      track.classList.add('card-carousel-' + sectionId + '__track--dragging');
+      stopAutoplay();
+      
+      e.preventDefault();
+    }
+    
+    function handlePointerMove(e) {
+      if (!isDragging || prefersReducedMotion) return;
+      
+      currentX = e.clientX || e.touches?.[0]?.clientX || 0;
+      offsetX = currentX - startX;
+      dragDistance = Math.abs(offsetX);
+      
+      // Limit drag range
+      const cardWidth = cards[0]?.offsetWidth || (isMobile ? 280 : 320);
+      const maxOffset = cardWidth * 0.8;
+      offsetX = Math.max(-maxOffset, Math.min(maxOffset, offsetX));
+      
+      // Update layout based on current view
+      if (isMobile) {
+        updateMobileLayout();
+      } else {
+        updateDesktopLayout();
+      }
+      e.preventDefault();
+    }
+    
+    function handlePointerEnd(e) {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      
+      // Only prevent link navigation if user was dragging (moved more than 5px)
+      if (dragDistance > 5) {
+        e.preventDefault();
+        snapToCard();
+      } else {
+        // Small movement or click - allow link navigation
+        snapToCard();
+      }
+      
+      dragDistance = 0;
+      
+      if (isMobile && autoplayEnabled && !prefersReducedMotion) {
+        startAutoplay();
+      }
+    }
+    
+    // Prevent link navigation when dragging
+    const cardLinks = section.querySelectorAll('[data-card-link]');
+    cardLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        // If user was dragging (moved more than 5px), prevent navigation
+        if (dragDistance > 5) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+    });
+
+    // Attach pointer events (works on both mobile and desktop)
+    track.addEventListener('pointerdown', handlePointerStart);
+    track.addEventListener('touchstart', handlePointerStart, { passive: false });
+    track.addEventListener('mousedown', handlePointerStart);
+    
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('touchmove', handlePointerMove, { passive: false });
+    window.addEventListener('mousemove', handlePointerMove);
+    
+    window.addEventListener('pointerup', handlePointerEnd);
+    window.addEventListener('touchend', handlePointerEnd);
+    window.addEventListener('mouseup', handlePointerEnd);
+    window.addEventListener('mouseleave', handlePointerEnd);
+    
+    // Dot navigation (works on both mobile and desktop)
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        if (!prefersReducedMotion) {
+          currentIndex = index;
+          offsetX = 0;
+          updateCarousel();
+          if (isMobile) {
+            stopAutoplay();
+            startAutoplay();
+          }
+        }
+      });
+    });
+    
+    // Autoplay (mobile only)
+    const autoplayEnabled = {{ autoplay_enabled | json }};
+    const autoplaySpeed = {{ autoplay_speed | json }};
+    
+    function startAutoplay() {
+      if (!isMobile || !autoplayEnabled || prefersReducedMotion) return;
+      
+      stopAutoplay();
+      autoplayTimer = setInterval(() => {
+        // Loop infinitely
+        currentIndex = (currentIndex + 1) % totalSlides;
+        offsetX = 0;
+        updateCarousel();
+      }, autoplaySpeed);
+    }
+    
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+    
+    // Initialize - ensure layout is ready
+    function initializeCarousel() {
+      // Force layout calculation
+      if (viewport) {
+        viewport.offsetHeight; // Force reflow
+      }
+      updateCarousel();
+      
+      if (isMobile && autoplayEnabled && !prefersReducedMotion) {
+        startAutoplay();
+      }
+    }
+    
+    // Initialize with proper timing
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(initializeCarousel);
+        });
+      });
+    } else {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(initializeCarousel);
+      });
+    }
+    
+    // Pause autoplay on hover (mobile)
+    if (isMobile) {
+      section.addEventListener('mouseenter', stopAutoplay);
+      section.addEventListener('mouseleave', () => {
+        if (autoplayEnabled && !prefersReducedMotion) {
+          startAutoplay();
+        }
+      });
+    }
+    
+    // Cleanup on section unload
+    document.addEventListener('shopify:section:unload', function(e) {
+      if (e.detail.sectionId === sectionId) {
+        stopAutoplay();
+        window.removeEventListener('resize', updateMobileState);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "3D Card Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card Appearance"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "min": 200,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width (mobile)",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_width_desktop",
+      "min": 250,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width (desktop)",
+      "default": 320
+    },
+    {
+      "type": "header",
+      "content": "Desktop Layout"
+    },
+    {
+      "type": "range",
+      "id": "card_spacing_desktop",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Card spacing (desktop)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile 3D Carousel"
+    },
+    {
+      "type": "range",
+      "id": "perspective_depth",
+      "min": 500,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "label": "3D perspective depth",
+      "default": 1000,
+      "info": "Higher values = less dramatic 3D effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_enabled",
+      "label": "Enable autoplay (mobile only)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2000,
+      "max": 9500,
+      "step": 500,
+      "unit": "ms",
+      "label": "Autoplay speed",
+      "default": 5000,
+      "info": "Time between slides"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Card Title"
+        },
+        {
+          "type": "text",
+          "id": "price_text",
+          "label": "Price text",
+          "default": "$99.00"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Card link",
+          "info": "The entire card will be clickable and link to this URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 7,
+  "presets": [
+    {
+      "name": "3D Card Carousel",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+

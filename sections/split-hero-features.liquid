@@ -1,0 +1,4624 @@
+{%- liquid
+  assign section_id = section.id
+  assign top_heading = section.settings.top_heading
+  assign top_heading_tag = section.settings.top_heading_tag | default: 'h2'
+  assign top_heading_size = section.settings.top_heading_size | default: 4.8
+  assign top_heading_weight = section.settings.top_heading_weight | default: '700'
+  assign top_button_text = section.settings.top_button_text
+  assign top_button_url = section.settings.top_button_url
+  assign top_button_text_2 = section.settings.top_button_text_2
+  assign top_button_url_2 = section.settings.top_button_url_2
+  assign button_size_scale = section.settings.button_size_scale | default: 100 | divided_by: 100.0
+  assign button_size_scale_mobile = section.settings.button_size_scale_mobile | default: 100 | divided_by: 100.0
+  assign top_bg_type = section.settings.top_bg_type | default: 'image'
+  assign top_bg_image = section.settings.top_bg_image
+  assign top_bg_gradient = section.settings.top_bg_gradient
+  assign top_logo = section.settings.top_logo
+  assign top_center_image = section.settings.top_center_image
+  assign top_center_image_height = section.settings.top_center_image_height
+  assign top_center_image_x_offset = section.settings.top_center_image_x_offset | default: 0
+  assign top_center_image_x_offset_mobile = section.settings.top_center_image_x_offset_mobile | default: 0
+  assign top_center_image_y_offset = section.settings.top_center_image_y_offset | default: 0
+  assign top_center_image_y_offset_mobile = section.settings.top_center_image_y_offset_mobile | default: 0
+  assign center_image_anchor_bottom = section.settings.center_image_anchor_bottom
+  assign top_center_text_above = section.settings.top_center_text_above
+  assign top_center_text_overlap = section.settings.top_center_text_overlap
+  assign bottom_bg_color = section.settings.bottom_bg_color
+  assign bottom_bg_gradient = section.settings.bottom_bg_gradient
+  assign bridge_bg_color = section.settings.bridge_bg_color
+  assign bridge_bg_gradient = section.settings.bridge_bg_gradient
+  assign bottom_padding = section.settings.bottom_padding | default: 4
+  assign features_area_min_height = section.settings.features_area_min_height | default: 0
+  assign features_layout = section.settings.features_layout | default: '3-columns'
+  assign features_container_width = section.settings.features_container_width
+  assign section_radius = section.settings.section_radius | default: 24
+  assign button_location = section.settings.button_location | default: 'center'
+  assign button_vertical_position = section.settings.button_vertical_position | default: 'top'
+  assign button_radius = section.settings.button_radius | default: 0.8
+  assign button_primary_bg = section.settings.button_primary_bg
+  assign button_primary_text = section.settings.button_primary_text
+  assign button_secondary_bg = section.settings.button_secondary_bg
+  assign button_secondary_text = section.settings.button_secondary_text
+  assign full_width_enabled = section.settings.enable_full_width
+  assign feature_blocks = section.blocks | where: 'type', 'feature'
+-%}
+
+<section
+  id="SplitHeroFeatures-{{ section_id }}"
+  class="split-section split-section--{{ section_id }}{% if full_width_enabled %} split-section--full-width{% endif %}"
+  style="
+    --split-section-radius: {{ section_radius }}px;
+    --split-bottom-padding-raw: {{ bottom_padding }}rem;
+    --split-bottom-padding: min(var(--split-bottom-padding-raw), 40px);
+    --button-radius-raw: {{ button_radius }}rem;
+    --button-radius: var(--button-radius-raw);
+    --button-vertical-offset-raw: {{ section.settings.button_vertical_offset | default: 0 }}px;
+    --button-vertical-offset: var(--button-vertical-offset-raw);
+    --top-heading-size-raw: {{ top_heading_size }}rem;
+    --top-heading-size: var(--top-heading-size-raw);
+    --top-heading-weight: {{ top_heading_weight }};
+    --button-size-scale-raw: {{ button_size_scale }};
+    --button-size-scale: var(--button-size-scale-raw);
+    --button-size-scale-mobile: {{ button_size_scale_mobile }};
+    --top-center-text-overlap-size-mobile: {{ section.settings.top_center_text_overlap_size_mobile | default: 2.4 }}rem;
+    --disclaimer-collapsed-height-raw: {{ section.settings.disclaimer_collapsed_height | default: 120 }}px;
+    --disclaimer-collapsed-height: var(--disclaimer-collapsed-height-raw);
+    --mobile-features-gap-raw: {{ section.settings.mobile_features_gap | default: 1.2 }}rem;
+    --mobile-features-gap: var(--mobile-features-gap-raw);
+    --mobile-features-row-gap-raw: {{ section.settings.mobile_features_row_gap | default: 1.2 }}rem;
+    --mobile-features-row-gap: var(--mobile-features-row-gap-raw);
+    --mobile-features-user-scale: {{ section.settings.mobile_features_scale | default: 100 | divided_by: 100.0 }};
+    --mobile-title-scale: {{ section.settings.mobile_title_scale | default: 85 | divided_by: 100.0 }};
+    --mobile-description-scale: {{ section.settings.mobile_description_scale | default: 85 | divided_by: 100.0 }};
+    --mobile-middle-text-scale: {{ section.settings.mobile_middle_text_scale | default: 85 | divided_by: 100.0 }};
+    --mobile-image-scale: {{ section.settings.mobile_image_scale | default: 100 | divided_by: 100.0 }};
+    --mobile-box-padding-scale: {{ section.settings.mobile_box_padding_scale | default: 100 | divided_by: 100.0 }};
+    {% if section.settings.button_width != blank and section.settings.button_width > 0 %}
+      --button-width-raw: {{ section.settings.button_width }}px;
+      --button-width: var(--button-width-raw);
+    {% endif %}
+    {% if section.settings.button_height != blank and section.settings.button_height > 0 %}
+      --button-height-raw: {{ section.settings.button_height }}px;
+      --button-height: var(--button-height-raw);
+    {% endif %}
+    {% if features_container_width != blank and features_container_width > 0 %}
+      --features-container-width-raw: {{ features_container_width }}px;
+      --features-container-width: var(--features-container-width-raw);
+    {% endif %}
+    {% if features_area_min_height != blank and features_area_min_height > 0 %}
+      --features-grid-min-height-raw: {{ features_area_min_height }}px;
+      --features-grid-min-height: var(--features-grid-min-height-raw);
+    {% endif %}
+
+    {% if bottom_bg_gradient != blank %} --split-bottom-bg: {{ bottom_bg_gradient }};{% elsif bottom_bg_color != blank %} --split-bottom-bg: {{ bottom_bg_color }};{% endif %}
+    {% if bridge_bg_gradient != blank %} --split-bridge-bg: {{ bridge_bg_gradient }};{% elsif bridge_bg_color != blank %} --split-bridge-bg: {{ bridge_bg_color }};{% elsif bottom_bg_gradient != blank %} --split-bridge-bg: {{ bottom_bg_gradient }};{% elsif bottom_bg_color != blank %} --split-bridge-bg: {{ bottom_bg_color }};{% endif %}
+    {% if button_primary_bg != blank %} --button-primary-bg: {{ button_primary_bg }};{% endif %}
+    {% if button_primary_text != blank %} --button-primary-text: {{ button_primary_text }};{% endif %}
+    {% if section.settings.button_primary_hover_bg != blank %} --button-primary-hover-bg: {{ section.settings.button_primary_hover_bg }};{% endif %}
+    {% if section.settings.button_primary_hover_text != blank %} --button-primary-hover-text: {{ section.settings.button_primary_hover_text }};{% endif %}
+    {% if button_secondary_bg != blank %} --button-secondary-bg: {{ button_secondary_bg }};{% endif %}
+    {% if button_secondary_text != blank %} --button-secondary-text: {{ button_secondary_text }};{% endif %}
+    {% if section.settings.button_secondary_hover_bg != blank %} --button-secondary-hover-bg: {{ section.settings.button_secondary_hover_bg }};{% endif %}
+    {% if section.settings.button_secondary_hover_text != blank %} --button-secondary-hover-text: {{ section.settings.button_secondary_hover_text }};{% endif %}
+    {% if top_bg_type == 'gradient' and top_bg_gradient != blank %} --split-top-bg: {{ top_bg_gradient }};{% elsif top_bg_type == 'image' and top_bg_image != blank %} --split-top-bg-image: url({{ top_bg_image | image_url: width: 1600 }});{% endif %}
+  "
+>
+  <div class="split-top {% if top_bg_type == 'gradient' and top_bg_gradient != blank %}split-top--gradient{% endif %}">
+    <div class="split-top-background">
+      <div class="split-top-rive-animation">
+        {%- if top_bg_image != blank -%}
+          <canvas width="1728" height="736" style="vertical-align: top; width: 1728px; height: 736px;"></canvas>
+        {%- endif -%}
+      </div>
+    </div>
+    
+    <div class="split-top-content">
+      {%- if top_logo != blank -%}
+        <h3 class="split-top-logo">
+          {%- if top_logo contains '<svg' or top_logo contains '<img' -%}
+            {{ top_logo }}
+          {%- else -%}
+            <span>{{ top_logo }}</span>
+          {%- endif -%}
+        </h3>
+      {%- endif -%}
+
+      {%- if top_heading != blank -%}
+        {%- assign heading_lines = top_heading | split: '|' -%}
+        {%- for line in heading_lines -%}
+          <{{ top_heading_tag }} class="split-top-heading"><span>{{ line | strip }}</span></{{ top_heading_tag }}>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if top_center_text_above != blank -%}
+        <p class="split-top-center-text split-top-center-text--above">{{- top_center_text_above | newline_to_br -}}</p>
+      {%- endif -%}
+
+      {%- if top_center_text_overlap != blank -%}
+        <p class="split-top-center-text split-top-center-text--overlap">{{- top_center_text_overlap | newline_to_br -}}</p>
+      {%- endif -%}
+
+      {%- if top_center_image != blank -%}
+        <div class="split-top-image-wrapper{% if center_image_anchor_bottom %} split-top-image-wrapper--anchored{% endif %}">
+          <div class="split-top-image-spacer"></div>
+          <img
+            src="{{ top_center_image | image_url: width: 1400 }}"
+            srcset="{{ top_center_image | image_url: width: 700 }} 700w, {{ top_center_image | image_url: width: 1400 }} 1400w"
+            sizes="(max-width: 749px) 100vw, 1400px"
+            alt="{{ top_center_image.alt | default: '' | escape }}"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="high"
+          >
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- if top_button_text != blank or top_button_text_2 != blank -%}
+      <div class="split-top-buttons split-top-buttons--{{ button_location }} split-top-buttons--v-{{ button_vertical_position }}">
+        {%- if top_button_text != blank and top_button_url != blank -%}
+          <a href="{{ top_button_url }}" class="split-button-link" rel="noreferrer noopener" tabindex="-1">
+            <button type="button" class="split-button split-button--primary{% if section.settings.button_glassy_primary %} split-button--glassy{% endif %}{% if section.settings.button_glassy_hover_primary %} split-button--glassy-hover{% endif %}">
+              <span>{{ top_button_text }}</span>
+            </button>
+          </a>
+        {%- endif -%}
+        {%- if top_button_text_2 != blank and top_button_url_2 != blank -%}
+          <a href="{{ top_button_url_2 }}" class="split-button-link split-button-link--secondary" rel="noreferrer noopener" tabindex="-1">
+            <button type="button" class="split-button split-button--secondary{% if section.settings.button_glassy_secondary %} split-button--glassy{% endif %}{% if section.settings.button_glassy_hover_secondary %} split-button--glassy-hover{% endif %}">
+              <span>{{ top_button_text_2 }}</span>
+            </button>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div id="SplitTransitionBridge-{{ section_id }}" class="split-transition-bridge" data-split-bridge="true" aria-hidden="true"></div>
+
+  <div class="split-bottom">
+    <div class="split-bottom-container">
+      {%- if feature_blocks.size > 0 -%}
+        <div class="split-features-grid split-features-grid--{{ features_layout }}">
+          {%- for block in feature_blocks -%}
+            {%- liquid
+              assign image_position = block.settings.image_position | default: 'top'
+              assign title_color = block.settings.title_color
+              assign description_color = block.settings.description_color
+              assign image_size = block.settings.image_size_desktop | default: 120
+              assign image_size_mobile = block.settings.image_size_mobile | default: image_size
+              assign image_padding = block.settings.image_padding | default: 0
+              assign box_width = block.settings.box_width
+              assign box_height = block.settings.box_height
+              assign mobile_box_width = block.settings.mobile_box_width
+              assign mobile_box_height = block.settings.mobile_box_height
+              assign animation_type = block.settings.animation_type | default: 'fade-up'
+              assign animation_speed = block.settings.animation_speed | default: 800
+              assign animation_style = block.settings.animation_style | default: 'ease-out'
+              assign animation_delay = block.settings.animation_delay | default: 0
+              assign feature_description_2 = block.settings.feature_description_2
+              assign desc1_size = block.settings.desc1_size | default: 1.5
+              assign desc1_size_mobile = block.settings.desc1_size_mobile | default: 0
+              assign desc2_size = block.settings.desc2_size | default: 1.5
+              assign desc2_size_mobile = block.settings.desc2_size_mobile | default: 0
+              assign desc1_bold = block.settings.desc1_bold | default: false
+              assign desc2_bold = block.settings.desc2_bold | default: false
+              assign desc1_position = block.settings.desc1_position | default: 'left'
+              assign desc2_position = block.settings.desc2_position | default: 'right'
+              assign desc1_alignment = block.settings.desc1_alignment | default: 'left'
+              assign desc2_alignment = block.settings.desc2_alignment | default: 'right'
+              assign center_image_position = block.settings.center_image_position | default: 'center'
+              assign right_offset_value = block.settings.right_offset_value | default: 20
+              assign title_size = block.settings.title_size | default: 2
+              assign title_size_mobile = block.settings.title_size_mobile | default: 0
+              assign description_size = block.settings.description_size | default: 1.5
+              assign description_size_mobile = block.settings.description_size_mobile | default: 0
+              assign title_weight = block.settings.title_weight | default: '600'
+              assign description_weight = block.settings.description_weight | default: '400'
+              assign feature_button_text = block.settings.feature_button_text
+              assign feature_button_url = block.settings.feature_button_url
+              assign feature_button_style = block.settings.feature_button_style | default: 'primary'
+              assign feature_button_max_width_desktop = block.settings.feature_button_max_width_desktop | default: 240
+              assign feature_button_max_width_mobile = block.settings.feature_button_max_width_mobile | default: feature_button_max_width_desktop
+            -%}
+            <div 
+              class="split-feature-box split-feature-box--image-{{ image_position }} split-feature-box--animate split-feature-box--{{ animation_type }}{% if box_width != blank and box_width > 0 %} split-feature-box--custom-width{% endif %}{% if box_height != blank and box_height > 0 %} split-feature-box--custom-height{% endif %}{% if mobile_box_width != blank and mobile_box_width > 0 %} split-feature-box--custom-mobile-width{% endif %}{% if mobile_box_height != blank and mobile_box_height > 0 %} split-feature-box--custom-mobile-height{% endif %}{% if block.settings.enable_canvas_mode %} split-feature-box--canvas{% endif %}" 
+              data-animation-type="{{ animation_type }}"
+              data-animation-speed="{{ animation_speed }}"
+              data-animation-style="{{ animation_style }}"
+              data-animation-delay="{{ animation_delay }}"
+              {{ block.shopify_attributes }}
+              style="{% if title_color != blank %}--feature-title-color: {{ title_color }};{% endif %}{% if description_color != blank %}--feature-description-color: {{ description_color }};{% endif %}--feature-image-size-raw-desktop: {{ image_size }}px;--feature-image-size-raw-mobile: {{ image_size_mobile }}px;{% if image_padding != blank %}--feature-image-padding-raw: {{ image_padding }}px;--feature-image-padding: var(--feature-image-padding-raw);{% endif %}{% if box_width != blank and box_width > 0 %}--feature-box-width-raw: {{ box_width }}px;--feature-box-width: var(--feature-box-width-raw);{% endif %}{% if box_height != blank and box_height > 0 %}--feature-box-height-raw: {{ box_height }}px;--feature-box-height: var(--feature-box-height-raw);{% endif %}{% if mobile_box_width != blank and mobile_box_width > 0 %}--feature-box-mobile-width-raw: {{ mobile_box_width }}px;--feature-box-mobile-width: var(--feature-box-mobile-width-raw);{% endif %}{% if mobile_box_height != blank and mobile_box_height > 0 %}--feature-box-mobile-height-raw: {{ mobile_box_height }}px;--feature-box-mobile-height: var(--feature-box-mobile-height-raw);{% endif %}{% if image_position == 'middle' %}--desc1-size-raw: {{ desc1_size }}rem;--desc1-size: var(--desc1-size-raw);{% if desc1_size_mobile != blank and desc1_size_mobile > 0 %}--desc1-size-mobile-raw: {{ desc1_size_mobile }}rem;--desc1-size-mobile: var(--desc1-size-mobile-raw);{% endif %}--desc2-size-raw: {{ desc2_size }}rem;--desc2-size: var(--desc2-size-raw);{% if desc2_size_mobile != blank and desc2_size_mobile > 0 %}--desc2-size-mobile-raw: {{ desc2_size_mobile }}rem;--desc2-size-mobile: var(--desc2-size-mobile-raw);{% endif %}--desc1-weight: {% if desc1_bold %}700{% else %}400{% endif %};--desc2-weight: {% if desc2_bold %}700{% else %}400{% endif %};--desc1-align: {{ desc1_alignment }};--desc2-align: {{ desc2_alignment }};{% endif %}{% if image_position == 'right-offset' %}--right-offset-value-raw: {{ right_offset_value }}px;--right-offset-value: var(--right-offset-value-raw);{% endif %}--feature-title-size-raw: {{ title_size }}rem;--feature-title-size: var(--feature-title-size-raw);{% if title_size_mobile != blank and title_size_mobile > 0 %}--feature-title-size-mobile-raw: {{ title_size_mobile }}rem;--feature-title-size-mobile: var(--feature-title-size-mobile-raw);{% endif %}--feature-description-size-raw: {{ description_size }}rem;--feature-description-size: var(--feature-description-size-raw);{% if description_size_mobile != blank and description_size_mobile > 0 %}--feature-description-size-mobile-raw: {{ description_size_mobile }}rem;--feature-description-size-mobile: var(--feature-description-size-mobile-raw);{% endif %}--feature-title-weight: {{ title_weight }};--feature-description-weight: {{ description_weight }};--feature-description-align: {{ block.settings.description_align | default: 'left' }};{% if block.settings.feature_title_font %}--feature-title-font-family: {{ block.settings.feature_title_font.family }}, {{ block.settings.feature_title_font.fallback_families }};--feature-title-font-style: {{ block.settings.feature_title_font.style }};{% endif %}{% if block.settings.feature_description_font %}--feature-description-font-family: {{ block.settings.feature_description_font.family }}, {{ block.settings.feature_description_font.fallback_families }};--feature-description-font-style: {{ block.settings.feature_description_font.style }};{% endif %}--feature-image-offset-x-desktop: {{ block.settings.feature_image_offset_x_desktop | default: 0 }}px;--feature-image-offset-y-desktop: {{ block.settings.feature_image_offset_y_desktop | default: 0 }}px;--feature-image-offset-x-mobile: {{ block.settings.feature_image_offset_x_mobile | default: 0 }}px;--feature-image-offset-y-mobile: {{ block.settings.feature_image_offset_y_mobile | default: 0 }}px;--feature-title-offset-x-desktop: {{ block.settings.feature_title_offset_x_desktop | default: 0 }}px;--feature-title-offset-y-desktop: {{ block.settings.feature_title_offset_y_desktop | default: 0 }}px;--feature-title-offset-x-mobile: {{ block.settings.feature_title_offset_x_mobile | default: 0 }}px;--feature-title-offset-y-mobile: {{ block.settings.feature_title_offset_y_mobile | default: 0 }}px;--feature-desc1-offset-x-desktop: {{ block.settings.feature_desc1_offset_x_desktop | default: 0 }}px;--feature-desc1-offset-y-desktop: {{ block.settings.feature_desc1_offset_y_desktop | default: 0 }}px;--feature-desc1-offset-x-mobile: {{ block.settings.feature_desc1_offset_x_mobile | default: 0 }}px;--feature-desc1-offset-y-mobile: {{ block.settings.feature_desc1_offset_y_mobile | default: 0 }}px;--feature-desc2-offset-x-desktop: {{ block.settings.feature_desc2_offset_x_desktop | default: 0 }}px;--feature-desc2-offset-y-desktop: {{ block.settings.feature_desc2_offset_y_desktop | default: 0 }}px;--feature-desc2-offset-x-mobile: {{ block.settings.feature_desc2_offset_x_mobile | default: 0 }}px;--feature-desc2-offset-y-mobile: {{ block.settings.feature_desc2_offset_y_mobile | default: 0 }}px;--feature-button-offset-x-desktop: {{ block.settings.feature_button_offset_x_desktop | default: 0 }}px;--feature-button-offset-y-desktop: {{ block.settings.feature_button_offset_y_desktop | default: 0 }}px;--feature-button-offset-x-mobile: {{ block.settings.feature_button_offset_x_mobile | default: 0 }}px;--feature-button-offset-y-mobile: {{ block.settings.feature_button_offset_y_mobile | default: 0 }}px;--feature-canvas-min-height: {{ block.settings.feature_canvas_min_height | default: 360 }}px;--animation-duration: {{ animation_speed }}ms;--animation-timing: {{ animation_style }};--feature-button-max-width-desktop: {{ feature_button_max_width_desktop }}px;--feature-button-max-width-mobile: {{ feature_button_max_width_mobile }}px;--feature-button-font-size-desktop: {{ block.settings.feature_button_font_size_desktop | default: 1.4 }}rem;--feature-button-font-size-mobile: {{ block.settings.feature_button_font_size_mobile | default: 1.4 }}rem;{% if block.settings.feature_button_primary_bg != blank %}--feature-button-primary-bg: {{ block.settings.feature_button_primary_bg }};{% endif %}{% if block.settings.feature_button_primary_text != blank %}--feature-button-primary-text: {{ block.settings.feature_button_primary_text }};{% endif %}{% if block.settings.feature_button_primary_hover_bg != blank %}--feature-button-primary-hover-bg: {{ block.settings.feature_button_primary_hover_bg }};{% endif %}{% if block.settings.feature_button_primary_hover_text != blank %}--feature-button-primary-hover-text: {{ block.settings.feature_button_primary_hover_text }};{% endif %}{% if block.settings.feature_button_secondary_bg != blank %}--feature-button-secondary-bg: {{ block.settings.feature_button_secondary_bg }};{% endif %}{% if block.settings.feature_button_secondary_text != blank %}--feature-button-secondary-text: {{ block.settings.feature_button_secondary_text }};{% endif %}{% if block.settings.feature_button_secondary_hover_bg != blank %}--feature-button-secondary-hover-bg: {{ block.settings.feature_button_secondary_hover_bg }};{% endif %}{% if block.settings.feature_button_secondary_hover_text != blank %}--feature-button-secondary-hover-text: {{ block.settings.feature_button_secondary_hover_text }};{% endif %}transition: opacity {{ animation_speed }}ms {{ animation_style }}, transform {{ animation_speed }}ms {{ animation_style }}, box-shadow 0.3s ease;"
+            >
+              {%- if image_position == 'middle' -%}
+                {%- comment -%} Left side content {%- endcomment -%}
+                <div class="split-feature-middle-left">
+                  {%- if desc1_position == 'left' and block.settings.feature_description != blank -%}
+                    <p class="split-feature-description split-feature-description--middle split-feature-description--desc1">{{ block.settings.feature_description | newline_to_br }}</p>
+                  {%- endif -%}
+                  {%- if desc2_position == 'left' and feature_description_2 != blank -%}
+                    <p class="split-feature-description split-feature-description--middle split-feature-description--desc2">{{ feature_description_2 | newline_to_br }}</p>
+                  {%- endif -%}
+                </div>
+                
+                {%- comment -%} Middle image/icon {%- endcomment -%}
+                {%- if block.settings.feature_image != blank -%}
+                  <div class="split-feature-image split-feature-image--middle split-feature-image--middle-{{ center_image_position }}">
+                    <img
+                      src="{{ block.settings.feature_image | image_url: width: 400 }}"
+                      srcset="{{ block.settings.feature_image | image_url: width: 120 }} 120w, {{ block.settings.feature_image | image_url: width: 240 }} 240w, {{ block.settings.feature_image | image_url: width: 400 }} 400w"
+                      sizes="(max-width: 749px) {{ image_size_mobile }}px, {{ image_size }}px"
+                      alt="{{ block.settings.feature_image.alt | default: block.settings.feature_title | escape }}"
+                      loading="lazy"
+                      decoding="async"
+                      width="{{ image_size }}"
+                      height="{{ image_size | times: block.settings.feature_image.height | divided_by: block.settings.feature_image.width }}"
+                    >
+                  </div>
+                {%- elsif block.settings.feature_icon != blank -%}
+                  <div class="split-feature-icon split-feature-icon--middle split-feature-icon--middle-{{ center_image_position }}">
+                    {{ block.settings.feature_icon }}
+                  </div>
+                {%- endif -%}
+                
+                {%- comment -%} Right side content {%- endcomment -%}
+                <div class="split-feature-middle-right">
+                  {%- if desc1_position == 'right' and block.settings.feature_description != blank -%}
+                    <p class="split-feature-description split-feature-description--middle split-feature-description--desc1">{{ block.settings.feature_description | newline_to_br }}</p>
+                  {%- endif -%}
+                  {%- if desc2_position == 'right' and feature_description_2 != blank -%}
+                    <p class="split-feature-description split-feature-description--middle split-feature-description--desc2">{{ feature_description_2 | newline_to_br }}</p>
+                  {%- endif -%}
+                </div>
+              {%- elsif image_position == 'left-edge' or image_position == 'right-edge' -%}
+                {%- if block.settings.feature_image != blank -%}
+                  <div class="split-feature-image split-feature-image--{{ image_position }}">
+                    <img
+                      src="{{ block.settings.feature_image | image_url: width: 400 }}"
+                      srcset="{{ block.settings.feature_image | image_url: width: 120 }} 120w, {{ block.settings.feature_image | image_url: width: 240 }} 240w, {{ block.settings.feature_image | image_url: width: 400 }} 400w"
+                      sizes="(max-width: 749px) {{ image_size_mobile }}px, {{ image_size }}px"
+                      alt="{{ block.settings.feature_image.alt | default: block.settings.feature_title | escape }}"
+                      loading="lazy"
+                      decoding="async"
+                      width="{{ image_size }}"
+                      height="{{ image_size | times: block.settings.feature_image.height | divided_by: block.settings.feature_image.width }}"
+                    >
+                  </div>
+                {%- elsif block.settings.feature_icon != blank -%}
+                  <div class="split-feature-icon split-feature-icon--{{ image_position }}">
+                    {{ block.settings.feature_icon }}
+                  </div>
+                {%- endif -%}
+                
+                {%- if block.settings.feature_title != blank -%}
+                  <h3 class="split-feature-title">{{ block.settings.feature_title | newline_to_br }}</h3>
+                {%- endif -%}
+                
+                {%- if block.settings.feature_description != blank -%}
+                  <p class="split-feature-description split-feature-description--desc1">{{ block.settings.feature_description | newline_to_br }}</p>
+                {%- endif -%}
+              {%- else -%}
+                {%- if block.settings.feature_image != blank -%}
+                  <div class="split-feature-image">
+                    <img
+                      src="{{ block.settings.feature_image | image_url: width: 400 }}"
+                      srcset="{{ block.settings.feature_image | image_url: width: 120 }} 120w, {{ block.settings.feature_image | image_url: width: 240 }} 240w, {{ block.settings.feature_image | image_url: width: 400 }} 400w"
+                      sizes="(max-width: 749px) {{ image_size_mobile }}px, {{ image_size }}px"
+                      alt="{{ block.settings.feature_image.alt | default: block.settings.feature_title | escape }}"
+                      loading="lazy"
+                      decoding="async"
+                      width="{{ image_size }}"
+                      height="{{ image_size | times: block.settings.feature_image.height | divided_by: block.settings.feature_image.width }}"
+                    >
+                  </div>
+                {%- elsif block.settings.feature_icon != blank -%}
+                  <div class="split-feature-icon">
+                    {{ block.settings.feature_icon }}
+                  </div>
+                {%- endif -%}
+                
+                {%- if block.settings.feature_title != blank -%}
+                  <h3 class="split-feature-title">{{ block.settings.feature_title | newline_to_br }}</h3>
+                {%- endif -%}
+                
+                {%- if block.settings.feature_description != blank -%}
+                  <p class="split-feature-description split-feature-description--desc1">{{ block.settings.feature_description | newline_to_br }}</p>
+                {%- endif -%}
+              {%- endif -%}
+
+              {%- if feature_button_text != blank and feature_button_url != blank -%}
+                <div class="split-feature-box__button-wrap">
+                  <a href="{{ feature_button_url }}" class="split-button-link split-feature-box__button-link" rel="noreferrer noopener">
+                    <button type="button" class="split-button split-button--{{ feature_button_style }} split-feature-box__button">
+                      <span>{{ feature_button_text }}</span>
+                    </button>
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if section.settings.disclaimer_html != blank -%}
+    <div class="split-third">
+      <div class="split-disclaimer" data-disclaimer>
+        <div class="split-disclaimer__content" data-disclaimer-content>
+          {{ section.settings.disclaimer_html }}
+        </div>
+        <div class="split-disclaimer__fade" aria-hidden="true"></div>
+        {%- if section.settings.disclaimer_read_more_text != blank -%}
+          <button
+            type="button"
+            class="split-disclaimer__toggle"
+            data-disclaimer-toggle
+            data-read-more="{{ section.settings.disclaimer_read_more_text }}"
+            data-read-less="{{ section.settings.disclaimer_read_less_text | default: section.settings.disclaimer_read_more_text }}"
+          >
+            {{ section.settings.disclaimer_read_more_text }}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  {{ section.settings.top_heading_font | font_face: font_display: 'swap' }}
+  {{ section.settings.top_center_text_above_font | font_face: font_display: 'swap' }}
+  {{ section.settings.top_center_text_overlap_font | font_face: font_display: 'swap' }}
+  {% for block in section.blocks %}{% if block.type == 'feature' %}{{ block.settings.feature_title_font | font_face: font_display: 'swap' }}{{ block.settings.feature_description_font | font_face: font_display: 'swap' }}{% endif %}{% endfor %}
+  /* Split Section Base */
+  .split-section--{{ section_id }} {
+    width: 100%;
+    max-width: 1728px;
+    height: auto;
+    --split-top-height-balanced: clamp(520px, 42vw, 620px);
+    --split-top-height-cap: 680px;
+    --split-top-height-immersive: 736px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 0;
+    border-radius: var(--split-section-radius);
+    overflow: hidden;
+    background: var(--split-bridge-bg, var(--split-bottom-bg, rgba(var(--color-background), 1)));
+    box-shadow: 0 4px 24px rgba(var(--color-foreground), 0.08);
+  }
+
+  .split-section--{{ section_id }}.split-section--full-width {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+  }
+
+  .split-section--{{ section_id }}.split-section--full-width .split-top,
+  .split-section--{{ section_id }}.split-section--full-width .split-bottom {
+    border-radius: 0;
+  }
+
+  .split-section--{{ section_id }}.split-section--full-width .split-transition-bridge,
+  .split-section--{{ section_id }}.split-section--full-width .split-third {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .split-section--{{ section_id }} {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .split-section--{{ section_id }} .split-third {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .split-section--{{ section_id }} .split-top {
+      min-height: auto;
+      max-height: none;
+      aspect-ratio: 1728 / 736;
+      background-size: 100% 100%;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1727px) {
+    .split-section--{{ section_id }}:not(.split-section--full-width) {
+      width: calc(100% - clamp(24px, 4vw, 64px));
+      max-width: 1728px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .split-section--{{ section_id }}.split-section--full-width {
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  /* iPad portrait/tablet fit: keep section centered and visually smaller */
+  @media screen and (min-width: 750px) and (max-width: 1024px) {
+    .split-section--{{ section_id }}:not(.split-section--full-width) {
+      width: calc(100% - clamp(24px, 4vw, 64px));
+      max-width: 1728px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .split-section--{{ section_id }}.split-section--full-width {
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .split-section--{{ section_id }} .split-top {
+      min-height: auto;
+      max-height: none;
+      aspect-ratio: 1728 / 736;
+      background-size: 100% 100%;
+    }
+
+    .split-section--{{ section_id }} .split-top-content {
+      transform: scale(0.84);
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      top: clamp(420px, 50vw, 520px);
+      width: 100%;
+      max-width: 100%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .split-section--{{ section_id }} .split-bottom-container,
+    .split-section--{{ section_id }} .split-features-grid {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid {
+      height: auto;
+      padding: 0 16px 32px;
+      box-sizing: border-box;
+    }
+  }
+
+  /* Top Area (Hero) */
+  .split-section--{{ section_id }} .split-top {
+    width: 100%;
+    height: auto;
+    min-height: var(--split-top-height-balanced);
+    max-height: var(--split-top-height-cap);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    padding: 0;
+    background: var(--split-top-bg, rgba(var(--color-foreground), 0.03));
+    background-image: var(--split-top-bg-image, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: var(--split-section-radius) var(--split-section-radius) 0 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 1025px) and (max-width: 1439px) {
+    .split-section--{{ section_id }} .split-top {
+      min-height: auto;
+      max-height: none;
+      aspect-ratio: 1728 / 736;
+      background-size: 100% 100%;
+    }
+  }
+
+  @media screen and (min-width: 1440px) {
+    .split-section--{{ section_id }} .split-top {
+      min-height: var(--split-top-height-immersive);
+      max-height: none;
+    }
+  }
+
+  /* Content wrapper — scales as one piece on smaller screens */
+  .split-section--{{ section_id }} .split-top-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    transform-origin: top center;
+    z-index: 1;
+  }
+
+  /* Background wrapper */
+  .split-section--{{ section_id }} .split-top-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  /* Rive animation wrapper */
+  .split-section--{{ section_id }} .split-top-rive-animation {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .split-section--{{ section_id }} .split-top-rive-animation canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+
+  /* Top Logo */
+  .split-section--{{ section_id }} .split-top-logo {
+    position: relative;
+    z-index: 3;
+    margin: 0;
+    padding: 2rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: rgba(var(--color-foreground), 1);
+  }
+
+  .split-section--{{ section_id }} .split-top-logo span {
+    display: inline-block;
+  }
+
+  .split-section--{{ section_id }} .split-top-logo svg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+  }
+
+  /* Top center image (over background) */
+  .split-section--{{ section_id }} .split-top-center-image {
+    position: absolute;
+    z-index: 2;
+    width: var(--top-center-image-width, 280px);
+    max-width: 90%;
+    pointer-events: none;
+  }
+
+  /* Top positions */
+  .split-section--{{ section_id }} .split-top-center-image--top-left {
+    top: 2rem;
+    left: 2rem;
+    transform: translateY(var(--top-center-image-y-offset, 0px));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--top-center {
+    top: 2rem;
+    left: 50%;
+    transform: translate(-50%, var(--top-center-image-y-offset, 0px));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--top-right {
+    top: 2rem;
+    right: 2rem;
+    left: auto;
+    transform: translateY(var(--top-center-image-y-offset, 0px));
+  }
+
+  /* Center positions */
+  .split-section--{{ section_id }} .split-top-center-image--center-left {
+    top: 50%;
+    left: 2rem;
+    transform: translate(0, calc(-50% + var(--top-center-image-y-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + var(--top-center-image-y-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--center-right {
+    top: 50%;
+    right: 2rem;
+    left: auto;
+    transform: translate(0, calc(-50% + var(--top-center-image-y-offset, 0px)));
+  }
+
+  /* Bottom positions - at the bottom edge with 90px overflow */
+  .split-section--{{ section_id }} .split-top-center-image--bottom-left {
+    bottom: 0;
+    top: auto;
+    left: 0;
+    transform: translateY(calc(90px + var(--top-center-image-y-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--bottom-center {
+    bottom: 0;
+    top: auto;
+    left: 50%;
+    transform: translate(-50%, calc(90px + var(--top-center-image-y-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image--bottom-right {
+    bottom: 0;
+    top: auto;
+    right: 0;
+    left: auto;
+    transform: translateY(calc(90px + var(--top-center-image-y-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-center-image img {
+    width: 100%;
+    height: var(--top-center-image-height, auto);
+    display: block;
+    object-fit: var(--top-center-image-object-fit, contain);
+  }
+  
+  {% if top_center_image_height != blank and top_center_image_height > 0 %}
+  .split-section--{{ section_id }} .split-top-center-image {
+    --top-center-image-object-fit: cover;
+  }
+  {% endif %}
+
+  /* Mobile adjustments for top center image */
+  @media screen and (max-width: 768px) {
+
+
+    .split-section--{{ section_id }} .split-top-center-image--top-left,
+    .split-section--{{ section_id }} .split-top-center-image--bottom-left,
+    .split-section--{{ section_id }} .split-top-center-image--center-left {
+      left: 1rem;
+    }
+
+    .split-section--{{ section_id }} .split-top-center-image--top-right,
+    .split-section--{{ section_id }} .split-top-center-image--bottom-right,
+    .split-section--{{ section_id }} .split-top-center-image--center-right {
+      right: 1rem;
+    }
+
+    .split-section--{{ section_id }} .split-top-center-image--top-left,
+    .split-section--{{ section_id }} .split-top-center-image--top-center,
+    .split-section--{{ section_id }} .split-top-center-image--top-right {
+      top: 1rem;
+    }
+
+    .split-section--{{ section_id }} .split-top-center-image--bottom-left,
+    .split-section--{{ section_id }} .split-top-center-image--bottom-right {
+      bottom: 0;
+      transform: translateY(calc(90px + var(--top-center-image-y-offset, 0px)));
+    }
+
+    .split-section--{{ section_id }} .split-top-center-image--bottom-center {
+      bottom: 0;
+      transform: translate(-50%, calc(90px + var(--top-center-image-y-offset, 0px)));
+    }
+
+    .split-section--{{ section_id }} .split-top-center-text--above {
+      top: calc(18% + {{ section.settings.top_center_text_above_offset | default: 0 }}px);
+      font-size: clamp(1.8rem, 6vw, {{ section.settings.top_center_text_above_size | default: 3.6 }}rem);
+    }
+
+    .split-section--{{ section_id }} .split-top-center-text--overlap {
+      top: calc(48% + {{ section.settings.top_center_text_overlap_offset | default: 0 }}px);
+      font-size: clamp(1rem, 5.5vw, var(--top-center-text-overlap-size-mobile, 2.4rem));
+    }
+
+  }
+
+  /* Top Headings */
+  .split-section--{{ section_id }} .split-top-heading {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(2.4rem, 5vw, var(--top-heading-size, 4.8rem));
+    font-weight: var(--top-heading-weight, 700);
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 2rem;
+    color: rgba(var(--color-foreground), 1);
+    {% if section.settings.top_heading_font %}font-family: {{ section.settings.top_heading_font.family }}, {{ section.settings.top_heading_font.fallback_families }};font-style: {{ section.settings.top_heading_font.style }};{% endif %}
+  }
+
+  .split-section--{{ section_id }} .split-top-heading span {
+    display: block;
+  }
+
+  .split-section--{{ section_id }} .split-top-center-text {
+    position: absolute;
+    left: 50%;
+    width: min(92%, 1200px);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.2;
+    pointer-events: none;
+    transform: translateX(-50%);
+    white-space: pre-wrap;
+  }
+
+  .split-section--{{ section_id }} .split-top-center-text--above {
+    top: calc(22% + {{ section.settings.top_center_text_above_offset | default: 0 }}px);
+    z-index: 2;
+    font-size: {{ section.settings.top_center_text_above_size | default: 3.6 }}rem;
+    font-weight: {{ section.settings.top_center_text_above_weight | default: '700' }};
+    color: {{ section.settings.top_center_text_above_color | default: '#000000' }};
+    {% if section.settings.top_center_text_above_font %}font-family: {{ section.settings.top_center_text_above_font.family }}, {{ section.settings.top_center_text_above_font.fallback_families }};font-style: {{ section.settings.top_center_text_above_font.style }};{% endif %}
+  }
+
+  .split-section--{{ section_id }} .split-top-center-text--overlap {
+    top: calc(52% + {{ section.settings.top_center_text_overlap_offset | default: 0 }}px);
+    z-index: 0;
+    font-size: {{ section.settings.top_center_text_overlap_size | default: 3.2 }}rem;
+    font-weight: {{ section.settings.top_center_text_overlap_weight | default: '700' }};
+    color: {{ section.settings.top_center_text_overlap_color | default: '#000000' }};
+    {% if section.settings.top_center_text_overlap_font %}font-family: {{ section.settings.top_center_text_overlap_font.family }}, {{ section.settings.top_center_text_overlap_font.fallback_families }};font-style: {{ section.settings.top_center_text_overlap_font.style }};{% endif %}
+  }
+
+  /* Top Image Wrapper */
+  .split-section--{{ section_id }} .split-top-image-wrapper {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Spacer replaced by flex — image fills the true available height */
+  .split-section--{{ section_id }} .split-top-image-spacer {
+    display: none;
+  }
+
+  .split-section--{{ section_id }} .split-top-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translate(calc({{ top_center_image_x_offset }}px), calc(30px + {{ top_center_image_y_offset }}px));
+    object-fit: contain;
+    object-position: center;
+  }
+
+  @media screen and (max-width: 768px) {
+    .split-section--{{ section_id }} .split-top-image-wrapper img {
+      transform: translate(calc({{ top_center_image_x_offset }}px + {{ top_center_image_x_offset_mobile }}px), calc({{ top_center_image_y_offset }}px + {{ top_center_image_y_offset_mobile }}px)) scale({{ section.settings.top_center_image_size_mobile | default: 100 | divided_by: 100.0 }});
+    }
+  }
+
+  /* Center Image Anchor — bottom of image sits at the section boundary */
+  .split-section--{{ section_id }} .split-top-image-wrapper--anchored {
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  .split-section--{{ section_id }} .split-top-image-wrapper--anchored img {
+    object-position: bottom center;
+    transform: translate({{ top_center_image_x_offset }}px, {{ top_center_image_y_offset }}px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .split-section--{{ section_id }} .split-top-image-wrapper--anchored img {
+      transform: translate(calc({{ top_center_image_x_offset }}px + {{ top_center_image_x_offset_mobile }}px), calc({{ top_center_image_y_offset }}px + {{ top_center_image_y_offset_mobile }}px)) scale({{ section.settings.top_center_image_size_mobile | default: 100 | divided_by: 100.0 }});
+    }
+  }
+
+  /* Top Buttons */
+  .split-section--{{ section_id }} .split-top-buttons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+    width: 100%;
+  }
+
+  .split-section--{{ section_id }} .split-top-buttons--v-top {
+    top: 0;
+    bottom: auto;
+    transform: translateY(var(--button-vertical-offset, 0px));
+  }
+
+  .split-section--{{ section_id }} .split-top-buttons--v-center {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(calc(-50% + var(--button-vertical-offset, 0px)));
+  }
+
+  .split-section--{{ section_id }} .split-top-buttons--v-bottom {
+    top: auto;
+    bottom: 0;
+    transform: translateY(var(--button-vertical-offset, 0px));
+  }
+
+  /* Button Location Styles */
+  .split-section--{{ section_id }} .split-top-buttons--center {
+    justify-content: center;
+  }
+
+  .split-section--{{ section_id }} .split-top-buttons--left {
+    justify-content: flex-start;
+  }
+
+  .split-section--{{ section_id }} .split-top-buttons--right {
+    justify-content: flex-end;
+  }
+
+  .split-section--{{ section_id }} .split-button-link {
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .split-section--{{ section_id }} .split-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--button-width, auto);
+    height: var(--button-height, auto);
+    box-sizing: border-box;
+    padding: calc(1.4rem * var(--button-size-scale, 1)) calc(3.2rem * var(--button-size-scale, 1));
+    border-radius: var(--button-radius, 0.8rem);
+    font-size: calc(1.6rem * var(--button-size-scale, 1));
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    background: none;
+    font-family: inherit;
+  }
+
+  .split-section--{{ section_id }} .split-button--primary {
+    background: var(--button-primary-bg, rgba(var(--color-button), 1));
+    color: var(--button-primary-text, rgba(var(--color-button-text), 1));
+    border-color: transparent;
+  }
+
+  .split-section--{{ section_id }} .split-button--primary:hover {
+    background: var(--button-primary-hover-bg, color-mix(in srgb, var(--button-primary-bg, rgba(var(--color-button), 1)) 88%, white 12%));
+    color: var(--button-primary-hover-text, var(--button-primary-text, rgba(var(--color-button-text), 1)));
+    border-color: transparent;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .split-section--{{ section_id }} .split-button--secondary {
+    background: var(--button-secondary-bg, transparent);
+    color: var(--button-secondary-text, rgba(var(--color-foreground), 1));
+    border-color: transparent;
+  }
+
+  .split-section--{{ section_id }} .split-button--secondary:hover {
+    background: var(--button-secondary-hover-bg, var(--button-secondary-bg, rgba(var(--color-foreground), 0.05)));
+    color: var(--button-secondary-hover-text, var(--button-secondary-text, rgba(var(--color-foreground), 1)));
+    border-color: transparent;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  /* Optional glass style for top CTA buttons (tinted by selected colors) */
+  .split-section--{{ section_id }} .split-top .split-button.split-button--primary.split-button--glassy {
+    background: color-mix(in srgb, var(--button-primary-bg, rgba(var(--color-button), 1)) 30%, transparent) !important;
+    border-color: transparent !important;
+    color: var(--button-primary-text, rgba(var(--color-button-text), 1));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .split-section--{{ section_id }} .split-top .split-button.split-button--secondary.split-button--glassy {
+    background: color-mix(in srgb, var(--button-secondary-bg, rgba(var(--color-foreground), 0.05)) 30%, transparent) !important;
+    border-color: transparent !important;
+    color: var(--button-secondary-text, rgba(var(--color-foreground), 1));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .split-section--{{ section_id }} .split-top .split-button.split-button--primary.split-button--glassy:hover,
+  .split-section--{{ section_id }} .split-top .split-button.split-button--primary.split-button--glassy-hover:hover {
+    background: color-mix(in srgb, var(--button-primary-hover-bg, var(--button-primary-bg, rgba(var(--color-button), 1))) 30%, transparent) !important;
+    border-color: transparent !important;
+    color: var(--button-primary-hover-text, var(--button-primary-text, rgba(var(--color-button-text), 1))) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .split-section--{{ section_id }} .split-top .split-button.split-button--secondary.split-button--glassy:hover,
+  .split-section--{{ section_id }} .split-top .split-button.split-button--secondary.split-button--glassy-hover:hover {
+    background: color-mix(in srgb, var(--button-secondary-hover-bg, var(--button-secondary-bg, rgba(var(--color-foreground), 0.05))) 30%, transparent) !important;
+    border-color: transparent !important;
+    color: var(--button-secondary-hover-text, var(--button-secondary-text, rgba(var(--color-foreground), 1))) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Bottom Area */
+  .split-section--{{ section_id }} .split-transition-bridge {
+    display: block;
+    position: absolute;
+    top: var(--split-top-height-balanced);
+    left: 50%;
+    width: 100%;
+    max-width: 1728px;
+    height: 120px;
+    padding: 0 !important;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+    z-index: 5;
+    pointer-events: none;
+    box-sizing: border-box;
+    background: {% if bridge_bg_gradient != blank %}{{ bridge_bg_gradient }}{% elsif bridge_bg_color != blank %}{{ bridge_bg_color }}{% elsif bottom_bg_gradient != blank %}{{ bottom_bg_gradient }}{% elsif bottom_bg_color != blank %}{{ bottom_bg_color }}{% else %}rgba(var(--color-background), 1){% endif %};
+  }
+
+  @media screen and (min-width: 1440px) {
+    .split-section--{{ section_id }} .split-transition-bridge {
+      top: var(--split-top-height-immersive);
+    }
+  }
+
+  .split-section--{{ section_id }} .split-bottom {
+    width: 100%;
+    background: var(--split-bottom-bg, rgba(var(--color-background), 1));
+    border-radius: 0 0 var(--split-section-radius) var(--split-section-radius);
+    padding: 0 0 var(--split-bottom-padding, 4rem);
+    overflow: visible;
+    position: relative;
+  }
+
+  .split-section--{{ section_id }} .split-bottom-container {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    position: relative;
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  /* Features Grid */
+  .split-section--{{ section_id }} .split-features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+    width: 1100px;
+    min-height: var(--features-grid-min-height, auto);
+    height: auto;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px 32px 16px;
+    overflow: visible;
+    box-sizing: content-box;
+    align-content: start;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Disclaimer */
+  .split-section--{{ section_id }} .split-disclaimer {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+
+  .split-section--{{ section_id }} .split-third {
+    width: 100%;
+    max-width: 1728px;
+    height: 116.59px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+
+  .split-section--{{ section_id }} .split-disclaimer__content {
+    max-height: var(--disclaimer-collapsed-height, 120px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .split-section--{{ section_id }} .split-disclaimer__fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3.6rem;
+    height: 6rem;
+    background: linear-gradient(to bottom, rgba(12, 16, 26, 0) 0%, rgba(12, 16, 26, 1) 100%);
+    pointer-events: none;
+  }
+
+  .split-section--{{ section_id }} .split-disclaimer__toggle {
+    margin-top: 1rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    font-size: 1.2rem;
+    text-decoration: underline;
+  }
+
+  .split-section--{{ section_id }} .split-disclaimer.is-expanded .split-disclaimer__content {
+    max-height: none;
+  }
+
+  .split-section--{{ section_id }} .split-disclaimer.is-expanded .split-disclaimer__fade {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    /* 2 Columns Layout (for 2 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--2-columns {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* 3 Columns Layout (for 3+ boxes) */
+    .split-section--{{ section_id }} .split-features-grid--3-columns {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* 4 Columns Layout (for 4+ boxes) */
+    .split-section--{{ section_id }} .split-features-grid--4-columns {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Side by Side (for 2 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--side-by-side {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Stacked (for 2 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--stacked {
+      grid-template-columns: 1fr;
+    }
+
+    /* 1 Top, 2 Bottom Layout (for 3 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto;
+      gap: 2.4rem;
+      justify-content: stretch;
+      align-content: start;
+      justify-items: stretch;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:first-child {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-self: stretch;
+      margin: 0;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:nth-child(2),
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:nth-child(3) {
+      grid-row: 2;
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-self: stretch;
+    }
+
+    /* 2 Top, 1 Bottom Layout (for 3 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:first-child,
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:nth-child(2) {
+      grid-row: 1;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:last-child {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: 100%;
+      max-width: 100%;
+      margin: 2.4rem 0 0 0;
+    }
+
+    /* 1 Left, 2 Right Layout (for 3 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--1-left-2-right {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-left-2-right .split-feature-box:first-child {
+      grid-row: 1 / -1;
+    }
+
+    /* 2 Left, 1 Right Layout (for 3 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--2-left-1-right {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-left-1-right .split-feature-box:last-child {
+      grid-row: 1 / -1;
+      grid-column: 2;
+    }
+
+    /* 2 Top, 2 Bottom Layout (for 4 boxes) */
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(1),
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(2) {
+      grid-row: 1;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(3),
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(4) {
+      grid-row: 2;
+    }
+  }
+
+  /* Feature Box */
+  .split-section--{{ section_id }} .split-feature-box {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid transparent;
+    border-radius: 1.6rem;
+    padding: 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    --feature-image-offset-x: var(--feature-image-offset-x-desktop, 0px);
+    --feature-image-offset-y: var(--feature-image-offset-y-desktop, 0px);
+    --feature-title-offset-x: var(--feature-title-offset-x-desktop, 0px);
+    --feature-title-offset-y: var(--feature-title-offset-y-desktop, 0px);
+    --feature-desc1-offset-x: var(--feature-desc1-offset-x-desktop, 0px);
+    --feature-desc1-offset-y: var(--feature-desc1-offset-y-desktop, 0px);
+    --feature-desc2-offset-x: var(--feature-desc2-offset-x-desktop, 0px);
+    --feature-desc2-offset-y: var(--feature-desc2-offset-y-desktop, 0px);
+    --feature-button-offset-x: var(--feature-button-offset-x-desktop, 0px);
+    --feature-button-offset-y: var(--feature-button-offset-y-desktop, 0px);
+    --feature-image-size-raw: var(--feature-image-size-raw-desktop, 120px);
+    --feature-image-size: var(--feature-image-size-raw-desktop, 120px);
+    --feature-button-max-width: var(--feature-button-max-width-desktop, 240px);
+    --feature-button-font-size: var(--feature-button-font-size-desktop, 1.4rem);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box__button-wrap {
+    margin-top: auto;
+    padding: 0 0 2.4rem;
+    display: flex;
+    justify-content: center;
+    translate: var(--feature-button-offset-x, 0px) var(--feature-button-offset-y, 0px);
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box__button-link {
+    width: min(var(--feature-button-max-width, 240px), 100%);
+    display: flex;
+    justify-content: center;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box__button {
+    width: 100%;
+    pointer-events: auto;
+    cursor: pointer;
+    font-size: var(--feature-button-font-size, 1.4rem);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box .split-feature-box__button.split-button--primary {
+    background: var(--feature-button-primary-bg, var(--button-primary-bg, rgba(var(--color-button), 1)));
+    color: var(--feature-button-primary-text, var(--button-primary-text, rgba(var(--color-button-text), 1)));
+  }
+
+  .split-section--{{ section_id }} .split-feature-box .split-feature-box__button.split-button--primary:hover {
+    background: var(--feature-button-primary-hover-bg, var(--button-primary-hover-bg, var(--button-primary-bg, rgba(var(--color-button), 1))));
+    color: var(--feature-button-primary-hover-text, var(--button-primary-hover-text, var(--button-primary-text, rgba(var(--color-button-text), 1))));
+  }
+
+  .split-section--{{ section_id }} .split-feature-box .split-feature-box__button.split-button--secondary {
+    background: var(--feature-button-secondary-bg, var(--button-secondary-bg, transparent));
+    color: var(--feature-button-secondary-text, var(--button-secondary-text, rgba(var(--color-foreground), 1)));
+  }
+
+  .split-section--{{ section_id }} .split-feature-box .split-feature-box__button.split-button--secondary:hover {
+    background: var(--feature-button-secondary-hover-bg, var(--button-secondary-hover-bg, var(--button-secondary-bg, rgba(var(--color-foreground), 0.05))));
+    color: var(--feature-button-secondary-hover-text, var(--button-secondary-hover-text, var(--button-secondary-text, rgba(var(--color-foreground), 1))));
+  }
+
+  /* Animation States - Initially Hidden */
+  .split-section--{{ section_id }} .split-feature-box--animate {
+    opacity: 0;
+    transition: opacity var(--animation-duration, 800ms) var(--animation-timing, cubic-bezier(0.4, 0, 0.2, 1)), 
+                transform var(--animation-duration, 800ms) var(--animation-timing, cubic-bezier(0.4, 0, 0.2, 1)),
+                box-shadow 0.3s ease;
+  }
+
+  /* Animation Types */
+  /* Fade Up */
+  .split-section--{{ section_id }} .split-feature-box--fade-up {
+    transform: translateY(50px);
+  }
+
+  /* Fade Down */
+  .split-section--{{ section_id }} .split-feature-box--fade-down {
+    transform: translateY(-50px);
+  }
+
+  /* Fade Left */
+  .split-section--{{ section_id }} .split-feature-box--fade-left {
+    transform: translateX(-50px);
+  }
+
+  /* Fade Right */
+  .split-section--{{ section_id }} .split-feature-box--fade-right {
+    transform: translateX(50px);
+  }
+
+  /* Scale */
+  .split-section--{{ section_id }} .split-feature-box--scale {
+    transform: scale(0.7);
+  }
+
+  /* Scale Up */
+  .split-section--{{ section_id }} .split-feature-box--scale-up {
+    transform: scale(0.8) translateY(30px);
+  }
+
+  /* Rotate */
+  .split-section--{{ section_id }} .split-feature-box--rotate {
+    transform: rotate(-10deg) scale(0.9);
+  }
+
+  /* Flip */
+  .split-section--{{ section_id }} .split-feature-box--flip {
+    transform: rotateY(90deg);
+  }
+
+  /* Zoom In */
+  .split-section--{{ section_id }} .split-feature-box--zoom-in {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  /* Slide Up Rotate */
+  .split-section--{{ section_id }} .split-feature-box--slide-up-rotate {
+    transform: translateY(40px) rotate(5deg);
+  }
+
+  /* Fade Only */
+  .split-section--{{ section_id }} .split-feature-box--fade {
+    transform: none;
+  }
+
+  /* Animated State - When in view */
+  .split-section--{{ section_id }} .split-feature-box--animate.split-feature-box--visible {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1) rotate(0deg) rotateY(0deg);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box[style*="--feature-box-height"] {
+    height: var(--feature-box-height);
+    min-height: var(--feature-box-height);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box[style*="--feature-box-width"] {
+    width: min(100%, var(--feature-box-width));
+    max-width: min(100%, var(--feature-box-width));
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Image Position: Top (default) - Image flush with top */
+  .split-section--{{ section_id }} .split-feature-box--image-top {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    border-radius: 0;
+    border-top-left-radius: 1.6rem;
+    border-top-right-radius: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-description {
+    padding: 0 2.4rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-title {
+    padding-top: 2.4rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-description {
+    padding-bottom: 2.4rem;
+  }
+
+  /* Image Position: Bottom - Image flush with bottom */
+  .split-section--{{ section_id }} .split-feature-box--image-bottom {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    border-radius: 0;
+    border-bottom-left-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-description {
+    padding: 0 2.4rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-title {
+    padding-top: 2.4rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-description {
+    padding-bottom: 2.4rem;
+  }
+
+  /* Image Position: Left - Image flush with left */
+  .split-section--{{ section_id }} .split-feature-box--image-left {
+    flex-direction: row;
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left .split-feature-image {
+    width: 40%;
+    max-width: 40%;
+    min-width: var(--feature-image-size, auto);
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    border-top-left-radius: 1.6rem;
+    border-bottom-left-radius: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-left .split-feature-description {
+    padding: 2.4rem;
+    flex: 1;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left .split-feature-icon {
+    margin: 0;
+    padding: 2.4rem;
+    border-radius: 0;
+    border-top-left-radius: 1.6rem;
+    border-bottom-left-radius: 1.6rem;
+    width: var(--feature-image-size, 40%);
+    height: 100%;
+    min-height: var(--feature-image-size, auto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  /* Image Position: Right - Image flush with right */
+  .split-section--{{ section_id }} .split-feature-box--image-right {
+    flex-direction: row-reverse;
+    align-items: stretch;
+    text-align: right;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right .split-feature-image {
+    width: 40%;
+    max-width: 40%;
+    min-width: var(--feature-image-size, auto);
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    border-top-right-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  /* Right Offset - Same as right but with 20px X transform */
+  .split-section--{{ section_id }} .split-feature-box--image-right-offset {
+    flex-direction: row-reverse;
+    align-items: stretch;
+    text-align: right;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-offset .split-feature-image {
+    width: 40%;
+    max-width: 40%;
+    min-width: var(--feature-image-size, auto);
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    border-top-right-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+    flex-shrink: 0;
+    transform: translateX(var(--right-offset-value, 20px));
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-offset .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-right-offset .split-feature-description {
+    padding: 2.4rem;
+    flex: 1;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-offset .split-feature-icon {
+    margin: 0;
+    padding: 2.4rem;
+    border-radius: 0;
+    border-top-right-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+    transform: translateX(var(--right-offset-value, 20px));
+    width: var(--feature-image-size, 40%);
+    height: 100%;
+    min-height: var(--feature-image-size, auto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-right .split-feature-description {
+    padding: 2.4rem;
+    flex: 1;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right .split-feature-icon {
+    margin: 0;
+    padding: 2.4rem;
+    border-radius: 0;
+    border-top-right-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+    width: var(--feature-image-size, 40%);
+    height: 100%;
+    min-height: var(--feature-image-size, auto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  /* Image Position: Left Edge - Image on left box edge */
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    padding-left: calc(38% + 1.6rem);
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge .split-feature-image--left-edge {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 38%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    overflow: hidden;
+    z-index: 2;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge .split-feature-image--left-edge img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    border-radius: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge .split-feature-icon--left-edge {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: var(--feature-image-size, 50%);
+    height: var(--feature-image-size, 50%);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+    background: rgba(var(--color-background), 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-left-edge .split-feature-description {
+    padding: 2.4rem 2.4rem 2.4rem 0;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+
+  /* Image Position: Right Edge - Image on right box edge */
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge {
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    text-align: right;
+    position: relative;
+    overflow: hidden;
+    padding-right: calc(38% + 1.6rem);
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge .split-feature-image--right-edge {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: auto;
+    transform: translateY(-50%);
+    width: 38%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    overflow: hidden;
+    z-index: 2;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge .split-feature-image--right-edge img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    border-radius: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge .split-feature-icon--right-edge {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: var(--feature-image-size, 50%);
+    height: var(--feature-image-size, 50%);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+    background: rgba(var(--color-background), 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge .split-feature-title,
+  .split-section--{{ section_id }} .split-feature-box--image-right-edge .split-feature-description {
+    padding: 2.4rem 0 2.4rem 2.4rem;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+
+  /* Image Position: Middle (text on both sides) */
+  .split-section--{{ section_id }} .split-feature-box--image-middle {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    text-align: left;
+    padding: 0;
+    position: relative;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* When image is not centered, content areas take full width */
+  .split-section--{{ section_id }} .split-feature-box--image-middle:has(.split-feature-image--middle:not(.split-feature-image--middle-center)) .split-feature-middle-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle:has(.split-feature-icon--middle:not(.split-feature-icon--middle-center)) .split-feature-middle-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle:has(.split-feature-image--middle:not(.split-feature-image--middle-center)) .split-feature-middle-right,
+  .split-section--{{ section_id }} .split-feature-box--image-middle:has(.split-feature-icon--middle:not(.split-feature-icon--middle-center)) .split-feature-middle-right {
+    flex: 1 1 50%;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-left {
+    padding-right: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-right {
+    padding-left: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--middle {
+    margin: 0;
+    color: var(--feature-description-color, rgba(var(--color-foreground), 0.7));
+    line-height: 1.6;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--desc1 {
+    font-size: var(--desc1-size, 1.5rem);
+    font-weight: var(--desc1-weight, 400);
+    text-align: var(--desc1-align, left);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--desc2 {
+    font-size: var(--desc2-size, 1.5rem);
+    font-weight: var(--desc2-weight, 400);
+    text-align: var(--desc2-align, right);
+    margin-top: 1.2rem;
+  }
+
+  /* Default middle position (center) - keeps original layout */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-center,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-center {
+    width: var(--feature-image-size, 120px);
+    max-width: var(--feature-image-size, 120px);
+    height: 100%;
+    min-height: 200px;
+    flex-shrink: 0;
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-center img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  /* Absolute positioned images for other positions */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle:not(.split-feature-image--middle-center),
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle:not(.split-feature-icon--middle-center) {
+    position: absolute;
+    width: var(--feature-image-size, 120px);
+    height: var(--feature-image-size, 120px);
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Top positions */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-top-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-top-left {
+    top: 1.6rem;
+    left: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-top-center,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-top-center {
+    top: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-top-right,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-top-right {
+    top: 1.6rem;
+    right: 1.6rem;
+  }
+
+  /* Center positions */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-center-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-center-left {
+    top: 50%;
+    left: 1.6rem;
+    transform: translateY(-50%);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-center-right,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-center-right {
+    top: 50%;
+    right: 1.6rem;
+    transform: translateY(-50%);
+  }
+
+  /* Bottom positions */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-bottom-left,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-bottom-left {
+    bottom: 1.6rem;
+    left: 1.6rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-bottom-center,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-bottom-center {
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-bottom-right,
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-bottom-right {
+    bottom: 1.6rem;
+    right: 1.6rem;
+  }
+
+  /* Image styling for absolute positioned images */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle:not(.split-feature-image--middle-center) img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.8rem;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle:not(.split-feature-icon--middle-center) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border-color: transparent !important;
+  }
+
+  .split-section--{{ section_id }} .split-feature-image {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    translate: var(--feature-image-offset-x, 0px) var(--feature-image-offset-y, 0px);
+  }
+
+  .split-section--{{ section_id }} .split-feature-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    pointer-events: none;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box:hover .split-feature-image img {
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .split-section--{{ section_id }} .split-feature-icon {
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+    line-height: 1;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    translate: var(--feature-image-offset-x, 0px) var(--feature-image-offset-y, 0px);
+  }
+
+  /* Icon positioning for top/bottom - centered with padding */
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-icon,
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-icon {
+    padding: 2.4rem;
+    width: 100%;
+    height: var(--feature-image-size, auto);
+    min-height: var(--feature-image-size, auto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-top .split-feature-icon {
+    padding-bottom: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--image-bottom .split-feature-icon {
+    padding-top: 0;
+  }
+
+  /* Middle position icon size */
+  .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle {
+    width: var(--feature-image-size, 120px);
+    height: var(--feature-image-size, 120px);
+    font-size: calc(var(--feature-image-size, 120px) * 0.4);
+  }
+
+  .split-section--{{ section_id }} .split-feature-title {
+    font-size: var(--feature-title-size, 2rem);
+    font-weight: var(--feature-title-weight, 600);
+    margin: 0 0 1.2rem;
+    color: var(--feature-title-color, rgba(var(--color-foreground), 1));
+    line-height: 1.3;
+    translate: var(--feature-title-offset-x, 0px) var(--feature-title-offset-y, 0px);
+    font-family: var(--feature-title-font-family, inherit);
+    font-style: var(--feature-title-font-style, inherit);
+  }
+
+  .split-section--{{ section_id }} .split-feature-description {
+    font-size: var(--feature-description-size, 1.5rem);
+    font-weight: var(--feature-description-weight, 400);
+    text-align: var(--feature-description-align, left);
+    line-height: 1.6;
+    margin: 0;
+    color: var(--feature-description-color, rgba(var(--color-foreground), 0.7));
+    flex: 1;
+    white-space: nowrap;
+    width: max-content;
+    font-family: var(--feature-description-font-family, inherit);
+    font-style: var(--feature-description-font-style, inherit);
+  }
+
+  .split-section--{{ section_id }} .split-feature-description--desc1 {
+    translate: var(--feature-desc1-offset-x, 0px) var(--feature-desc1-offset-y, 0px);
+  }
+
+  .split-section--{{ section_id }} .split-feature-description--desc2 {
+    translate: var(--feature-desc2-offset-x, 0px) var(--feature-desc2-offset-y, 0px);
+  }
+
+  /* Canvas mode: free positioning inside the feature box */
+  .split-section--{{ section_id }} .split-feature-box--canvas {
+    display: block;
+    min-height: var(--feature-canvas-min-height, 360px);
+    overflow: visible;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas.split-feature-box--image-middle {
+    display: block;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-middle-left,
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-middle-right {
+    display: block;
+    padding: 0;
+    margin: 0;
+    flex: 0 0 auto;
+    position: static;
+    min-height: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-image,
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-icon {
+    position: absolute !important;
+    top: 28% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(85%, var(--feature-image-size, 120px)) !important;
+    max-width: min(85%, var(--feature-image-size, 120px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    translate: calc(-50% + var(--feature-image-offset-x, 0px)) calc(-50% + var(--feature-image-offset-y, 0px));
+    z-index: 2;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-icon {
+    width: var(--feature-image-size, 120px) !important;
+    max-width: var(--feature-image-size, 120px) !important;
+    height: var(--feature-image-size, 120px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-image img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-title {
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    width: calc(100% - 4.8rem);
+    margin: 0;
+    padding: 0 !important;
+    translate: calc(-50% + var(--feature-title-offset-x, 0px)) calc(-50% + var(--feature-title-offset-y, 0px));
+    z-index: 3;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-description--desc1 {
+    position: absolute;
+    top: 72%;
+    left: 50%;
+    width: calc(100% - 4.8rem);
+    margin: 0;
+    padding: 0 !important;
+    translate: calc(-50% + var(--feature-desc1-offset-x, 0px)) calc(-50% + var(--feature-desc1-offset-y, 0px));
+    z-index: 3;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-description--desc2 {
+    position: absolute;
+    top: 84%;
+    left: 50%;
+    width: calc(100% - 4.8rem);
+    margin: 0;
+    padding: 0 !important;
+    translate: calc(-50% + var(--feature-desc2-offset-x, 0px)) calc(-50% + var(--feature-desc2-offset-y, 0px));
+    z-index: 3;
+  }
+
+  .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-box__button-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: 2.4rem;
+    width: calc(100% - 4.8rem);
+    margin: 0;
+    padding: 0;
+    translate: calc(-50% + var(--feature-button-offset-x, 0px)) var(--feature-button-offset-y, 0px);
+    z-index: 4;
+  }
+
+  /* Mobile: same layout as desktop (small text allowed) */
+  @media screen and (max-width: 749px) {
+    .split-section--{{ section_id }} .split-feature-box {
+      --feature-image-offset-x: var(--feature-image-offset-x-mobile, var(--feature-image-offset-x-desktop, 0px));
+      --feature-image-offset-y: var(--feature-image-offset-y-mobile, var(--feature-image-offset-y-desktop, 0px));
+      --feature-title-offset-x: var(--feature-title-offset-x-mobile, var(--feature-title-offset-x-desktop, 0px));
+      --feature-title-offset-y: var(--feature-title-offset-y-mobile, var(--feature-title-offset-y-desktop, 0px));
+      --feature-desc1-offset-x: var(--feature-desc1-offset-x-mobile, var(--feature-desc1-offset-x-desktop, 0px));
+      --feature-desc1-offset-y: var(--feature-desc1-offset-y-mobile, var(--feature-desc1-offset-y-desktop, 0px));
+      --feature-desc2-offset-x: var(--feature-desc2-offset-x-mobile, var(--feature-desc2-offset-x-desktop, 0px));
+      --feature-desc2-offset-y: var(--feature-desc2-offset-y-mobile, var(--feature-desc2-offset-y-desktop, 0px));
+      --feature-button-offset-x: var(--feature-button-offset-x-mobile, var(--feature-button-offset-x-desktop, 0px));
+      --feature-button-offset-y: var(--feature-button-offset-y-mobile, var(--feature-button-offset-y-desktop, 0px));
+      --feature-image-size-raw: var(--feature-image-size-raw-mobile, var(--feature-image-size-raw-desktop, 120px));
+      --feature-image-size: var(--feature-image-size-raw-mobile, var(--feature-image-size-raw-desktop, 120px));
+      --feature-button-max-width: var(--feature-button-max-width-mobile, var(--feature-button-max-width-desktop, 240px));
+      --feature-button-font-size: var(--feature-button-font-size-mobile, var(--feature-button-font-size-desktop, 1.4rem));
+    }
+
+    .split-section--{{ section_id }} {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .split-section--{{ section_id }} .split-top {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      {%- if top_bg_type == 'image' and top_bg_image != blank %} background-image: url({{ top_bg_image | image_url: width: 800 }}) !important;{% endif %}
+    }
+
+    .split-section--{{ section_id }} .split-top-buttons {
+      padding: 2rem;
+      width: 100%;
+    }
+
+    .split-section--{{ section_id }} .split-top-buttons:has(.split-button-link + .split-button-link) {
+      flex-wrap: nowrap;
+      gap: 1rem;
+    }
+
+    .split-section--{{ section_id }} .split-top-buttons:has(.split-button-link + .split-button-link) .split-button-link {
+      flex: 1 1 0;
+      max-width: calc(50% - 0.5rem);
+      min-width: 0;
+    }
+
+    .split-section--{{ section_id }} .split-top-buttons:has(.split-button-link + .split-button-link) .split-button {
+      width: 100%;
+    }
+
+    .split-section--{{ section_id }} .split-button {
+      text-align: center;
+    }
+
+    .split-section--{{ section_id }} .split-bottom {
+      padding: 2rem 0 var(--split-bottom-padding, 2.2rem);
+      font-size: 1rem;
+      overflow: visible;
+    }
+
+    .split-section--{{ section_id }} .split-bottom-container {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      padding: 0;
+      display: block;
+      overflow: visible;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid {
+      width: 100%;
+      max-width: min(100%, 1100px);
+      height: auto;
+      margin: 0 auto;
+      padding: 0 16px 32px 16px;
+      gap: var(--mobile-features-gap, 1.2rem);
+      align-content: start;
+      box-sizing: border-box;
+      overflow: visible;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box {
+      min-height: 0;
+      height: auto !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box[style*="--feature-box-height"] {
+      min-height: 0 !important;
+      height: auto !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--canvas {
+      min-height: calc(var(--feature-canvas-min-height, 360px) * 0.82);
+    }
+
+    /* Keep exact desktop grid layouts on mobile (scaled down) */
+    .split-section--{{ section_id }} .split-features-grid--2-columns {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--3-columns {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--4-columns {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--side-by-side {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--stacked {
+      grid-template-columns: 1fr;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--mobile-features-gap, 1.2rem);
+      row-gap: 0;
+      align-items: stretch;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:first-child {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      height: 100% !important;
+      overflow: visible;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:nth-child(2),
+    .split-section--{{ section_id }} .split-features-grid--1-top-2-bottom .split-feature-box:nth-child(3) {
+      grid-row: 2;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-top: var(--mobile-features-row-gap, var(--mobile-features-gap, 1.2rem)) !important;
+      height: 100% !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: var(--mobile-features-gap, 1.2rem);
+      row-gap: 0;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:first-child,
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:nth-child(2) {
+      grid-row: 1;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-1-bottom .split-feature-box:last-child {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: var(--mobile-features-row-gap, var(--mobile-features-gap, 1.2rem)) 0 0 0 !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-left-2-right {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--1-left-2-right .split-feature-box:first-child {
+      grid-row: 1 / -1;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-left-1-right {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-left-1-right .split-feature-box:last-child {
+      grid-row: 1 / -1;
+      grid-column: 2;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: var(--mobile-features-gap, 1.2rem);
+      row-gap: 0;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(1),
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(2) {
+      grid-row: 1;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(3),
+    .split-section--{{ section_id }} .split-features-grid--2-top-2-bottom .split-feature-box:nth-child(4) {
+      grid-row: 2;
+      margin-top: var(--mobile-features-row-gap, var(--mobile-features-gap, 1.2rem)) !important;
+    }
+
+    /* Keep desktop layout, only reduce text sizes on mobile */
+    .split-section--{{ section_id }} .split-top-heading {
+      font-size: calc(var(--top-heading-size, 4.8rem) * 0.68);
+    }
+
+    .split-section--{{ section_id }} .split-top-logo {
+      font-size: 1.15rem;
+    }
+
+    .split-section--{{ section_id }} .split-top-center-text--above {
+      top: calc(22% + {{ section.settings.top_center_text_above_offset | default: 0 }}px);
+      font-size: calc({{ section.settings.top_center_text_above_size | default: 3.6 }}rem * 0.75);
+    }
+
+    .split-section--{{ section_id }} .split-top-center-text--overlap {
+      top: calc(52% + {{ section.settings.top_center_text_overlap_offset | default: 0 }}px);
+      font-size: var(--top-center-text-overlap-size-mobile, 2.4rem);
+      white-space: nowrap;
+      text-wrap: nowrap;
+      width: auto;
+      max-width: 94%;
+    }
+
+    .split-section--{{ section_id }} .split-button {
+      padding: calc(1.4rem * var(--button-size-scale-mobile, var(--button-size-scale, 1))) calc(3.2rem * var(--button-size-scale-mobile, var(--button-size-scale, 1)));
+      font-size: calc(1.35rem * var(--button-size-scale-mobile, var(--button-size-scale, 1)));
+    }
+
+    .split-section--{{ section_id }} .split-feature-title {
+      font-size: var(--feature-title-size-mobile, calc(var(--feature-title-size, 2rem) * var(--mobile-title-scale, 0.85)));
+    }
+
+    .split-section--{{ section_id }} .split-feature-description {
+      font-size: var(--feature-description-size-mobile, calc(var(--feature-description-size, 1.5rem) * var(--mobile-description-scale, 0.85)));
+      white-space: normal;
+      width: auto;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--desc1 {
+      font-size: var(--desc1-size-mobile, calc(var(--desc1-size, 1.5rem) * var(--mobile-middle-text-scale, 0.85)));
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--desc2 {
+      font-size: var(--desc2-size-mobile, calc(var(--desc2-size, 1.5rem) * var(--mobile-middle-text-scale, 0.85)));
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      align-items: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-left,
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-right {
+      min-width: 0;
+      max-width: 100%;
+      overflow: visible;
+      width: 100%;
+      padding: calc(1rem * var(--mobile-box-padding-scale, 1)) calc(1.2rem * var(--mobile-box-padding-scale, 1));
+      align-items: center;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-left {
+      order: 1;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-image--middle-center,
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-icon--middle-center {
+      order: 2;
+      margin: 0 auto;
+      min-height: 0;
+      height: auto;
+      max-height: calc(52vw * var(--mobile-image-scale, 1));
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-middle-right {
+      order: 3;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--image-middle .split-feature-description--middle {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--canvas.split-feature-box--image-middle {
+      display: block;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-middle-left,
+    .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-middle-right {
+      width: auto;
+      max-width: none;
+      overflow: visible;
+      padding: 0;
+      align-items: initial;
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-title {
+      top: 58%;
+      width: calc(100% - 3.2rem);
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-description--desc1 {
+      top: 74%;
+      width: calc(100% - 3.2rem);
+    }
+
+    .split-section--{{ section_id }} .split-feature-box--canvas .split-feature-description--desc2 {
+      top: 86%;
+      width: calc(100% - 3.2rem);
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-mobile-width {
+      width: min(100%, var(--feature-box-mobile-width, 100%)) !important;
+      max-width: min(100%, var(--feature-box-mobile-width, 100%)) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-mobile-height {
+      min-height: var(--feature-box-mobile-height) !important;
+      height: var(--feature-box-mobile-height) !important;
+    }
+  }
+
+  /* Vertical size caps for small laptops and mobile */
+  @media screen and (min-width: 1025px) and (max-width: 1279px) {
+    .split-section--{{ section_id }} .split-top {
+      min-height: clamp(400px, 44vw, 500px);
+      max-height: 70vh;
+      max-height: 70dvh;
+    }
+
+    .split-section--{{ section_id }} .split-top-content {
+      transform: scale(0.9);
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      top: clamp(400px, 44vw, 500px);
+    }
+  }
+
+  @media screen and (min-width: 1280px) and (max-width: 1439px) {
+    .split-section--{{ section_id }} .split-top {
+      min-height: clamp(360px, 56vh, 520px);
+      max-height: 68vh;
+      max-height: 68dvh;
+    }
+
+    .split-section--{{ section_id }} .split-top-content {
+      transform: scale(0.94);
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      top: clamp(360px, 56dvh, 520px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .split-section--{{ section_id }} .split-top {
+      height: auto;
+      min-height: clamp(300px, 52svh, 420px);
+      max-height: none;
+      background-position: top center;
+    }
+
+    .split-section--{{ section_id }} .split-top-content {
+      transform: scale(0.72);
+    }
+
+    /* Center image sits above all split-top content on mobile */
+    .split-section--{{ section_id }} .split-top-image-wrapper {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 15;
+      overflow: visible;
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      left: 50%;
+      width: 100%;
+      max-width: 100%;
+      transform: translate(-50%, -50%);
+    }
+
+    .split-section--{{ section_id }} {
+      overscroll-behavior-y: auto;
+      touch-action: pan-y;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1365px), screen and (min-width: 750px) and (max-height: 767px) {
+    .split-section--{{ section_id }} .split-bottom {
+      padding: 1.6rem 0 var(--split-bottom-padding, 2rem);
+      height: auto !important;
+      min-height: unset !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    .split-section--{{ section_id }} .split-bottom-container {
+      width: 100%;
+      max-width: 100%;
+      height: auto !important;
+      min-height: unset !important;
+      max-height: none !important;
+      margin: 0 auto;
+      padding: 0;
+      overflow: visible !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid {
+      width: 100% !important;
+      max-width: min(100%, 1100px) !important;
+      height: auto !important;
+      min-height: unset !important;
+      max-height: none !important;
+      margin: 0 auto;
+      padding: 0 16px 24px;
+      gap: 2.4rem;
+      align-content: start;
+      box-sizing: border-box;
+      overflow: visible !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box {
+      width: 100% !important;
+      max-width: min(100%, var(--small-desktop-box-max-width, 100%)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box[style*="--feature-box-width"] {
+      width: min(100%, var(--small-desktop-box-max-width, 100%)) !important;
+      max-width: min(100%, var(--small-desktop-box-max-width, 100%)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box[style*="--feature-box-height"] {
+      height: auto !important;
+      min-height: unset !important;
+      max-height: none !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-width {
+      width: min(100%, var(--feature-box-width, 100%)) !important;
+      max-width: min(100%, var(--feature-box-width, 100%)) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-height {
+      height: var(--feature-box-height) !important;
+      min-height: var(--feature-box-height) !important;
+      max-height: none !important;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-width {
+      width: min(100%, var(--feature-box-width, 100%)) !important;
+      max-width: min(100%, var(--feature-box-width, 100%)) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-height {
+      height: var(--feature-box-height) !important;
+      min-height: var(--feature-box-height) !important;
+      max-height: none !important;
+    }
+  }
+
+  @media screen and (max-width: 1082px) and (max-height: 544px) and (hover: hover) and (pointer: fine) {
+    .split-section--{{ section_id }} {
+      --split-1082-factor: 0.78;
+      --split-1082-feature-scale: 0.88;
+      --top-heading-size: calc(var(--top-heading-size-raw) * var(--split-1082-factor));
+      --button-size-scale: calc(var(--button-size-scale-raw) * var(--split-1082-factor));
+      --split-bottom-padding: min(calc(var(--split-bottom-padding-raw) * var(--split-1082-factor)), 40px);
+      --testimonial-slide-width: calc(var(--testimonial-slide-width-raw) * var(--split-1082-factor));
+      --testimonial-gap: calc(var(--testimonial-gap-raw) * var(--split-1082-factor));
+      --disclaimer-collapsed-height: calc(var(--disclaimer-collapsed-height-raw) * var(--split-1082-factor));
+      --button-radius: calc(var(--button-radius-raw) * var(--split-1082-factor));
+      --button-vertical-offset: calc(var(--button-vertical-offset-raw) * var(--split-1082-factor));
+      --split-top-height-1082: clamp(300px, 58dvh, 500px);
+    }
+
+    .split-section--{{ section_id }}[style*="--button-width-raw"] {
+      --button-width: calc(var(--button-width-raw) * var(--split-1082-factor));
+    }
+
+    .split-section--{{ section_id }}[style*="--button-height-raw"] {
+      --button-height: calc(var(--button-height-raw) * var(--split-1082-factor));
+    }
+
+    .split-section--{{ section_id }} .split-top {
+      min-height: var(--split-top-height-1082);
+      max-height: clamp(340px, 60dvh, 520px);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .split-section--{{ section_id }} .split-top-background,
+    .split-section--{{ section_id }} .split-top-rive-animation {
+      z-index: 0 !important;
+      pointer-events: none;
+    }
+
+    .split-section--{{ section_id }} .split-top-image-wrapper {
+      z-index: 1 !important;
+    }
+
+    .split-section--{{ section_id }},
+    .split-section--{{ section_id }} .split-top,
+    .split-section--{{ section_id }} .split-bottom,
+    .split-section--{{ section_id }} .split-bottom-container,
+    .split-section--{{ section_id }} .split-features-grid,
+    .split-section--{{ section_id }} .split-top-buttons {
+      box-sizing: border-box !important;
+    }
+
+    .split-section--{{ section_id }} .split-top-buttons {
+      width: 100%;
+      max-width: 100%;
+      padding-inline: clamp(12px, 1.8vw, 18px) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid {
+      width: min(100%, 1100px) !important;
+      max-width: min(100%, 1100px) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      gap: clamp(1.2rem, 1.8vw, 1.8rem) !important;
+      padding: 0 10px 18px !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box {
+      --feature-title-size: calc(var(--feature-title-size-raw, 2rem) * var(--split-1082-feature-scale)) !important;
+      --feature-description-size: calc(var(--feature-description-size-raw, 1.5rem) * var(--split-1082-feature-scale)) !important;
+      --desc1-size: calc(var(--desc1-size-raw, 1.5rem) * var(--split-1082-feature-scale)) !important;
+      --desc2-size: calc(var(--desc2-size-raw, 1.5rem) * var(--split-1082-feature-scale)) !important;
+      --feature-image-size: calc(var(--feature-image-size-raw-desktop, 120px) * var(--split-1082-feature-scale)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box[style*="--feature-box-width-raw"] {
+      --feature-box-width: calc(var(--feature-box-width-raw) * var(--split-1082-factor)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box.split-feature-box--custom-width {
+      width: min(100%, var(--feature-box-width, 100%)) !important;
+      max-width: min(100%, var(--feature-box-width, 100%)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-features-grid .split-feature-box[style*="--feature-box-height-raw"] {
+      --feature-box-height: calc(var(--feature-box-height-raw) * var(--split-1082-factor)) !important;
+    }
+
+    .split-section--{{ section_id }} .split-top-center-text--above {
+      position: absolute !important;
+      left: 50% !important;
+      top: clamp(8%, 10dvh, 14%) !important;
+      font-size: clamp(1.3rem, calc({{ section.settings.top_center_text_above_size | default: 3.6 }}rem * 0.52), 1.9rem) !important;
+      line-height: 1.15 !important;
+      z-index: 30 !important;
+      transform: translateX(-50%) !important;
+      width: min(94%, 980px) !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .split-section--{{ section_id }} .split-transition-bridge {
+      top: var(--split-top-height-1082);
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    const sectionId = 'SplitHeroFeatures-{{ section_id }}';
+    const section = document.getElementById(sectionId);
+    
+    if (!section) return;
+
+    const featureBoxes = section.querySelectorAll('.split-feature-box--animate');
+    
+    if (featureBoxes.length === 0) return;
+
+    // Create Intersection Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.2 // Trigger when 20% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Add visible class to each box with custom delay
+          featureBoxes.forEach((box) => {
+            const customDelay = parseInt(box.dataset.animationDelay) || 0;
+            const baseDelay = 150; // Base delay between boxes
+            const index = Array.from(featureBoxes).indexOf(box);
+            const totalDelay = customDelay + (index * baseDelay);
+            
+            setTimeout(() => {
+              box.classList.add('split-feature-box--visible');
+            }, totalDelay);
+          });
+          
+          // Unobserve after animation triggers
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Start observing the bottom section
+    const bottomSection = section.querySelector('.split-bottom');
+    if (bottomSection) {
+      observer.observe(bottomSection);
+    }
+  })();
+</script>
+
+<script>
+  (function() {
+    const section = document.getElementById('SplitHeroFeatures-{{ section_id }}');
+    if (!section) return;
+    const splitTop = section.querySelector('.split-top');
+    const bridge = section.querySelector('.split-transition-bridge');
+    if (!splitTop || !bridge) return;
+
+    function positionBridge() {
+      bridge.style.top = splitTop.offsetHeight + 'px';
+    }
+
+    // ResizeObserver keeps the bridge in sync with split-top's rendered height.
+    // rAF defers the read until after the browser has fully committed layout,
+    // preventing stale mid-reflow offsetHeight values on initial page load.
+    if (typeof ResizeObserver !== 'undefined') {
+      let rafId = null;
+      const ro = new ResizeObserver(() => {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(positionBridge);
+      });
+      ro.observe(splitTop);
+    } else {
+      positionBridge();
+      window.addEventListener('resize', positionBridge);
+      window.addEventListener('load', positionBridge);
+    }
+  })();
+</script>
+
+<script>
+(function() {
+  const section = document.getElementById('SplitHeroFeatures-{{ section_id }}');
+  if (!section) return;
+
+  const track = section.querySelector('[data-testimonials-track]');
+  const slides = track ? Array.from(track.querySelectorAll('[data-testimonials-slide]')) : [];
+  const prevBtn = section.querySelector('[data-testimonials-prev]');
+  const nextBtn = section.querySelector('[data-testimonials-next]');
+
+  let activeIndex = 0;
+
+  function scrollToIndex(index) {
+    if (!slides.length) return;
+    activeIndex = (index + slides.length) % slides.length;
+    slides[activeIndex].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => scrollToIndex(activeIndex - 1));
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => scrollToIndex(activeIndex + 1));
+  }
+
+  if (track) {
+    track.addEventListener('scroll', () => {
+      const trackLeft = track.getBoundingClientRect().left;
+      let closest = 0;
+      let closestOffset = Infinity;
+      slides.forEach((slide, idx) => {
+        const offset = Math.abs(slide.getBoundingClientRect().left - trackLeft);
+        if (offset < closestOffset) {
+          closestOffset = offset;
+          closest = idx;
+        }
+      });
+      activeIndex = closest;
+    }, { passive: true });
+  }
+
+  const disclaimer = section.querySelector('[data-disclaimer]');
+  const disclaimerToggle = section.querySelector('[data-disclaimer-toggle]');
+  if (disclaimer && disclaimerToggle) {
+    disclaimerToggle.addEventListener('click', () => {
+      const isExpanded = disclaimer.classList.toggle('is-expanded');
+      const readMore = disclaimerToggle.getAttribute('data-read-more') || disclaimerToggle.textContent;
+      const readLess = disclaimerToggle.getAttribute('data-read-less') || readMore;
+      disclaimerToggle.textContent = isExpanded ? readLess : readMore;
+    });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Split Hero & Features",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Top Area (Hero)"
+    },
+    {
+      "type": "text",
+      "id": "top_heading",
+      "label": "Heading",
+      "default": "Welcome to Our Store",
+      "info": "Use | to split into two separate lines (e.g., 'Test what your body's|been telling you')"
+    },
+    {
+      "type": "select",
+      "id": "top_heading_tag",
+      "label": "Heading Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "top_heading_size",
+      "label": "Heading Size",
+      "min": 2,
+      "max": 10,
+      "step": 0.2,
+      "default": 4.8,
+      "unit": "rem",
+      "info": "Font size for the top heading (desktop). Mobile uses responsive clamp."
+    },
+    {
+      "type": "select",
+      "id": "top_heading_weight",
+      "label": "Heading Weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "info": "Font weight of the main hero heading."
+    },
+    {
+      "type": "font_picker",
+      "id": "top_heading_font",
+      "label": "Heading Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "text",
+      "id": "top_button_text",
+      "label": "Primary Button Text",
+      "default": "Shop Now",
+      "info": "Label for the primary top button."
+    },
+    {
+      "type": "url",
+      "id": "top_button_url",
+      "label": "Primary Button URL",
+      "info": "Destination URL for the primary top button."
+    },
+    {
+      "type": "text",
+      "id": "top_button_text_2",
+      "label": "Secondary Button Text",
+      "info": "Label for the secondary top button."
+    },
+    {
+      "type": "url",
+      "id": "top_button_url_2",
+      "label": "Secondary Button URL",
+      "info": "Destination URL for the secondary top button."
+    },
+    {
+      "type": "header",
+      "content": "Top Hero Buttons"
+    },
+    {
+      "type": "select",
+      "id": "button_location",
+      "label": "Top buttons horizontal position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "info": "Horizontal alignment of the buttons"
+    },
+    {
+      "type": "select",
+      "id": "button_vertical_position",
+      "label": "Top buttons vertical anchor",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "top",
+      "info": "Vertical anchor for the top-section buttons"
+    },
+    {
+      "type": "range",
+      "id": "button_vertical_offset",
+      "label": "Top buttons vertical offset",
+      "min": -300,
+      "max": 500,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Fine-tune vertical button position"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_glassy_primary",
+      "label": "Primary button glassy",
+      "default": false,
+      "info": "Apply glass style to the primary top button."
+    },
+    {
+      "type": "checkbox",
+      "id": "button_glassy_hover_primary",
+      "label": "Primary button glassy on hover",
+      "default": false,
+      "info": "Apply glass style to primary button on hover."
+    },
+    {
+      "type": "checkbox",
+      "id": "button_glassy_secondary",
+      "label": "Secondary button glassy",
+      "default": false,
+      "info": "Apply glass style to the secondary top button."
+    },
+    {
+      "type": "checkbox",
+      "id": "button_glassy_hover_secondary",
+      "label": "Secondary button glassy on hover",
+      "default": false,
+      "info": "Apply glass style to secondary button on hover."
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Top/feature buttons border radius",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "default": 0.8,
+      "unit": "rem",
+      "info": "Border radius for all buttons"
+    },
+    {
+      "type": "range",
+      "id": "button_size_scale",
+      "label": "Top buttons size (desktop scale)",
+      "min": 60,
+      "max": 180,
+      "step": 5,
+      "default": 100,
+      "unit": "%",
+      "info": "Scales top hero button text size and padding on desktop."
+    },
+    {
+      "type": "range",
+      "id": "button_size_scale_mobile",
+      "label": "Top buttons size (mobile scale)",
+      "min": 60,
+      "max": 180,
+      "step": 5,
+      "default": 100,
+      "unit": "%",
+      "info": "Scales top hero button text size and padding on mobile."
+    },
+    {
+      "type": "range",
+      "id": "button_width",
+      "label": "Top buttons fixed width",
+      "min": 0,
+      "max": 500,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Set to 0 for auto width. Applies to top hero buttons only."
+    },
+    {
+      "type": "range",
+      "id": "button_height",
+      "label": "Top buttons fixed height",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px",
+      "info": "Set to 0 for auto height. Applies to top hero buttons only."
+    },
+    {
+      "type": "header",
+      "content": "Top Hero Primary Button Colors"
+    },
+    {
+      "type": "color",
+      "id": "button_primary_bg",
+      "label": "Primary Button Background Color",
+      "info": "Leave empty to use theme default"
+    },
+    {
+      "type": "color",
+      "id": "button_primary_text",
+      "label": "Primary Button Text Color",
+      "info": "Leave empty to use theme default"
+    },
+    {
+      "type": "color",
+      "id": "button_primary_hover_bg",
+      "label": "Primary Hover Background Color",
+      "info": "Primary button background color on hover."
+    },
+    {
+      "type": "color",
+      "id": "button_primary_hover_text",
+      "label": "Primary Hover Text Color",
+      "info": "Primary button text color on hover."
+    },
+    {
+      "type": "header",
+      "content": "Top Hero Secondary Button Colors"
+    },
+    {
+      "type": "color",
+      "id": "button_secondary_bg",
+      "label": "Secondary Button Background Color",
+      "info": "Leave empty for transparent"
+    },
+    {
+      "type": "color",
+      "id": "button_secondary_text",
+      "label": "Secondary Button Text Color",
+      "info": "Leave empty to use theme default"
+    },
+    {
+      "type": "color",
+      "id": "button_secondary_hover_bg",
+      "label": "Secondary Hover Background Color",
+      "info": "Secondary button background color on hover."
+    },
+    {
+      "type": "color",
+      "id": "button_secondary_hover_text",
+      "label": "Secondary Hover Text Color",
+      "info": "Secondary button text color on hover."
+    },
+    {
+      "type": "select",
+      "id": "top_bg_type",
+      "label": "Top Background Type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        }
+      ],
+      "default": "image",
+      "info": "Choose whether the top hero uses an image or gradient background."
+    },
+    {
+      "type": "image_picker",
+      "id": "top_bg_image",
+      "label": "Top Background Image",
+      "info": "Only used if background type is 'Image'"
+    },
+    {
+      "type": "text",
+      "id": "top_bg_gradient",
+      "label": "Top Background Gradient",
+      "info": "CSS gradient value (e.g., linear-gradient(135deg, #667eea 0%, #764ba2 100%))"
+    },
+    {
+      "type": "html",
+      "id": "top_logo",
+      "label": "Top Logo",
+      "info": "Logo text or SVG HTML (e.g., 'labs by' with SVG). Can include text and SVG code."
+    },
+    {
+      "type": "image_picker",
+      "id": "top_center_image",
+      "label": "Center Image",
+      "info": "Image displayed in the top hero area (over the background)"
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_height",
+      "label": "Center Image Height",
+      "min": 0,
+      "max": 1500,
+      "step": 20,
+      "default": 0,
+      "unit": "px",
+      "info": "Height of the center image. Leave at 0 to maintain aspect ratio."
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_size_mobile",
+      "label": "Center Image Size (Mobile)",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "default": 100,
+      "unit": "%",
+      "info": "Scale of the center image on mobile. 100% = default size, 150% = 50% larger."
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_x_offset",
+      "label": "Center Image X Offset",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Horizontal offset for the center image. Positive values move it right, negative values move it left."
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_x_offset_mobile",
+      "label": "Center Image X Offset (Mobile)",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Additional horizontal offset for mobile only. Positive values move it right, negative values move it left."
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_y_offset",
+      "label": "Center Image Y Offset",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Vertical offset for the center image. Positive values move it down, negative values move it up."
+    },
+    {
+      "type": "range",
+      "id": "top_center_image_y_offset_mobile",
+      "label": "Center Image Y Offset (Mobile)",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Additional vertical offset for mobile only. Positive values move it down, negative values move it up."
+    },
+    {
+      "type": "checkbox",
+      "id": "center_image_anchor_bottom",
+      "label": "Center Image Anchor",
+      "default": false,
+      "info": "Anchors the image so its bottom sits exactly at the border between the top and bottom sections."
+    },
+    {
+      "type": "header",
+      "content": "Center Text"
+    },
+    {
+      "type": "font_picker",
+      "id": "top_center_text_above_font",
+      "label": "Above Text Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "font_picker",
+      "id": "top_center_text_overlap_font",
+      "label": "Overlap Text Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "textarea",
+      "id": "top_center_text_above",
+      "label": "Centered Text Above Image",
+      "default": "Centered text above the image",
+      "info": "Centered text shown above the hero image."
+    },
+    {
+      "type": "range",
+      "id": "top_center_text_above_size",
+      "label": "Above Text Size",
+      "min": 1,
+      "max": 10,
+      "step": 0.1,
+      "default": 3.6,
+      "unit": "rem",
+      "info": "Font size for centered text above the image."
+    },
+    {
+      "type": "select",
+      "id": "top_center_text_above_weight",
+      "label": "Above Text Weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "info": "Font weight for centered text above the image."
+    },
+    {
+      "type": "color",
+      "id": "top_center_text_above_color",
+      "label": "Above Text Color",
+      "default": "#000000",
+      "info": "Text color for centered text above the image."
+    },
+    {
+      "type": "range",
+      "id": "top_center_text_above_offset",
+      "label": "Above Text Vertical Offset",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Vertical offset for centered text above the image."
+    },
+    {
+      "type": "textarea",
+      "id": "top_center_text_overlap",
+      "label": "Centered Text Overlapped By Image",
+      "default": "Centered text behind the image",
+      "info": "Centered text placed behind/overlapped by the hero image."
+    },
+    {
+      "type": "range",
+      "id": "top_center_text_overlap_size",
+      "label": "Overlapped Text Size",
+      "min": 1,
+      "max": 10,
+      "step": 0.1,
+      "default": 3.2,
+      "unit": "rem",
+      "info": "Font size for overlapped centered text."
+    },
+    {
+      "type": "range",
+      "id": "top_center_text_overlap_size_mobile",
+      "label": "Overlapped Text Size (Mobile)",
+      "min": 0.8,
+      "max": 6,
+      "step": 0.1,
+      "default": 2.4,
+      "unit": "rem",
+      "info": "Mobile font size for overlapped centered text."
+    },
+    {
+      "type": "select",
+      "id": "top_center_text_overlap_weight",
+      "label": "Overlapped Text Weight",
+      "default": "700",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "info": "Font weight for overlapped centered text."
+    },
+    {
+      "type": "color",
+      "id": "top_center_text_overlap_color",
+      "label": "Overlapped Text Color",
+      "default": "#000000",
+      "info": "Text color for overlapped centered text."
+    },
+    {
+      "type": "range",
+      "id": "top_center_text_overlap_offset",
+      "label": "Overlapped Text Vertical Offset",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "default": 0,
+      "unit": "px",
+      "info": "Vertical offset for overlapped centered text."
+    },
+    {
+      "type": "header",
+      "content": "Bottom Area"
+    },
+    {
+      "type": "color",
+      "id": "bottom_bg_color",
+      "label": "Bottom Background Color",
+      "info": "Leave empty to use theme default"
+    },
+    {
+      "type": "color_background",
+      "id": "bottom_bg_gradient",
+      "label": "Bottom Background Gradient",
+      "info": "Optional. Overrides bottom background color when set."
+    },
+    {
+      "type": "color",
+      "id": "bridge_bg_color",
+      "label": "Middle Bridge Color",
+      "info": "Used when no bridge gradient is set."
+    },
+    {
+      "type": "color_background",
+      "id": "bridge_bg_gradient",
+      "label": "Middle Bridge Gradient",
+      "info": "Optional. Overrides the bridge color."
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "Bottom Area Padding (max 40px)",
+      "min": 2,
+      "max": 10,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem",
+      "info": "Controls spacing below the feature containers. Final applied value is capped at 40px."
+    },
+    {
+      "type": "range",
+      "id": "features_area_min_height",
+      "label": "Features area min height",
+      "min": 0,
+      "max": 2000,
+      "step": 20,
+      "default": 0,
+      "unit": "px",
+      "info": "Adds bottom space for the feature container area while keeping boxes aligned to the top. Set 0 for automatic height."
+    },
+    {
+      "type": "header",
+      "content": "Mobile Features Layout"
+    },
+    {
+      "type": "range",
+      "id": "mobile_features_gap",
+      "label": "Mobile Box Spacing",
+      "min": 0,
+      "max": 4,
+      "step": 0.1,
+      "default": 1.2,
+      "unit": "rem",
+      "info": "Horizontal spacing between feature boxes on mobile scaled layout."
+    },
+    {
+      "type": "range",
+      "id": "mobile_features_row_gap",
+      "label": "Mobile Upper/Lower Row Spacing",
+      "min": 0,
+      "max": 6,
+      "step": 0.1,
+      "default": 1.2,
+      "unit": "rem",
+      "info": "Vertical spacing between feature rows on mobile layouts."
+    },
+    {
+      "type": "range",
+      "id": "mobile_features_scale",
+      "label": "Global mobile features scale",
+      "min": 60,
+      "max": 100,
+      "step": 1,
+      "default": 100,
+      "unit": "%",
+      "info": "Scales the whole features grid on mobile (all boxes together). Does not replace per-feature width/height."
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_scale",
+      "label": "Mobile Title Size",
+      "min": 50,
+      "max": 130,
+      "step": 1,
+      "default": 85,
+      "unit": "%",
+      "info": "Mobile scale multiplier for feature titles."
+    },
+    {
+      "type": "range",
+      "id": "mobile_description_scale",
+      "label": "Mobile Description Size",
+      "min": 50,
+      "max": 130,
+      "step": 1,
+      "default": 85,
+      "unit": "%",
+      "info": "Mobile scale multiplier for feature descriptions."
+    },
+    {
+      "type": "range",
+      "id": "mobile_middle_text_scale",
+      "label": "Mobile Middle Box Text Size",
+      "min": 50,
+      "max": 130,
+      "step": 1,
+      "default": 85,
+      "unit": "%",
+      "info": "Mobile scale multiplier for middle-layout side texts."
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_scale",
+      "label": "Mobile Middle Image Size",
+      "min": 60,
+      "max": 140,
+      "step": 1,
+      "default": 100,
+      "unit": "%",
+      "info": "Mobile scale multiplier for middle feature image size."
+    },
+    {
+      "type": "range",
+      "id": "mobile_box_padding_scale",
+      "label": "Mobile Box Inner Padding",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "default": 100,
+      "unit": "%",
+      "info": "Mobile scale multiplier for inner padding of middle feature content."
+    },
+    {
+      "type": "select",
+      "id": "features_layout",
+      "label": "Features Layout",
+      "options": [
+        {
+          "value": "2-columns",
+          "label": "2 Columns (for 2 boxes)"
+        },
+        {
+          "value": "side-by-side",
+          "label": "Side by Side (for 2 boxes)"
+        },
+        {
+          "value": "stacked",
+          "label": "Stacked (for 2 boxes)"
+        },
+        {
+          "value": "3-columns",
+          "label": "3 Columns (for 3+ boxes)"
+        },
+        {
+          "value": "1-top-2-bottom",
+          "label": "1 on Top, 2 on Bottom (for 3 boxes)"
+        },
+        {
+          "value": "2-top-1-bottom",
+          "label": "2 on Top, 1 on Bottom (for 3 boxes)"
+        },
+        {
+          "value": "1-left-2-right",
+          "label": "1 on Left, 2 on Right (for 3 boxes)"
+        },
+        {
+          "value": "2-left-1-right",
+          "label": "2 on Left, 1 on Right (for 3 boxes)"
+        },
+        {
+          "value": "4-columns",
+          "label": "4 Columns (for 4+ boxes)"
+        },
+        {
+          "value": "2-top-2-bottom",
+          "label": "2 on Top, 2 on Bottom (for 4 boxes)"
+        }
+      ],
+      "default": "3-columns",
+      "info": "Layout arrangement for feature boxes. Choose based on number of boxes (desktop only)"
+    },
+    {
+      "type": "range",
+      "id": "features_container_width",
+      "label": "Features Container Width",
+      "min": 0,
+      "max": 1600,
+      "step": 50,
+      "default": 0,
+      "unit": "px",
+      "info": "Maximum width of the features grid container. Leave at 0 for full width (100%)"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "range",
+      "id": "section_radius",
+      "label": "Section Border Radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "info": "Corner radius for the overall split section container."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_width",
+      "label": "Enable full width layout",
+      "default": false,
+      "info": "Controls full width from the editor without showing a storefront toggle button."
+    },
+    {
+      "type": "header",
+      "content": "Disclaimer"
+    },
+    {
+      "type": "html",
+      "id": "disclaimer_html",
+      "label": "Disclaimer HTML",
+      "info": "Custom HTML shown in the disclaimer area below features."
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_read_more_text",
+      "label": "Read More Label",
+      "default": "Read more",
+      "info": "Label used for expanding collapsed disclaimer content."
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_read_less_text",
+      "label": "Read Less Label",
+      "default": "Read less",
+      "info": "Label used for collapsing expanded disclaimer content."
+    },
+    {
+      "type": "range",
+      "id": "disclaimer_collapsed_height",
+      "label": "Disclaimer collapsed height",
+      "min": 80,
+      "max": 260,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "info": "Collapsed visible height of disclaimer content."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Box",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "feature_image",
+          "label": "Feature Image",
+          "info": "Image displayed in this feature box."
+        },
+        {
+          "type": "html",
+          "id": "feature_icon",
+          "label": "Feature Icon (HTML/SVG)",
+          "info": "Alternative to image. Paste SVG or icon HTML here."
+        },
+        {
+          "type": "text",
+          "id": "feature_title",
+          "label": "Feature Title",
+          "default": "Feature Title",
+          "info": "Main title text for this feature box."
+        },
+        {
+          "type": "font_picker",
+          "id": "feature_title_font",
+          "label": "Title Font",
+          "default": "assistant_n4"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_description",
+          "label": "Feature Description",
+          "default": "Describe your feature here",
+          "info": "Primary description text for this feature box."
+        },
+        {
+          "type": "font_picker",
+          "id": "feature_description_font",
+          "label": "Description Font",
+          "default": "assistant_n4"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_description_2",
+          "label": "Feature Description 2",
+          "info": "Second description for middle position (text on both sides)"
+        },
+        {
+          "type": "text",
+          "id": "feature_button_text",
+          "label": "Button Text",
+          "info": "Optional CTA button label inside this feature box."
+        },
+        {
+          "type": "url",
+          "id": "feature_button_url",
+          "label": "Button Link",
+          "info": "Optional CTA destination URL for this feature box."
+        },
+        {
+          "type": "select",
+          "id": "feature_button_style",
+          "label": "Button Style",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "info": "Choose which button style variant to apply."
+        },
+        {
+          "type": "range",
+          "id": "feature_button_max_width_desktop",
+          "label": "Button Max Width — Desktop",
+          "min": 120,
+          "max": 420,
+          "step": 10,
+          "default": 240,
+          "unit": "px",
+          "info": "Maximum width for the feature CTA button on desktop."
+        },
+        {
+          "type": "range",
+          "id": "feature_button_max_width_mobile",
+          "label": "Button Max Width — Mobile",
+          "min": 40,
+          "max": 420,
+          "step": 10,
+          "default": 240,
+          "unit": "px",
+          "info": "Maximum width for the feature CTA button on mobile (overrides desktop)."
+        },
+        {
+          "type": "range",
+          "id": "feature_button_font_size_desktop",
+          "label": "Button Text Size — Desktop",
+          "min": 0.8,
+          "max": 3.0,
+          "step": 0.1,
+          "default": 1.4,
+          "unit": "rem"
+        },
+        {
+          "type": "range",
+          "id": "feature_button_font_size_mobile",
+          "label": "Button Text Size — Mobile",
+          "min": 0.8,
+          "max": 3.0,
+          "step": 0.1,
+          "default": 1.4,
+          "unit": "rem"
+        },
+        {
+          "type": "header",
+          "content": "Feature Button Colors (Primary Override)"
+        },
+        {
+          "type": "color",
+          "id": "feature_button_primary_bg",
+          "label": "Primary Background",
+          "info": "Per-feature override. Leave empty to inherit top hero primary button color."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_primary_text",
+          "label": "Primary Text",
+          "info": "Per-feature override. Leave empty to inherit top hero primary button text color."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_primary_hover_bg",
+          "label": "Primary Hover Background",
+          "info": "Per-feature override. Leave empty to inherit top hero primary hover background."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_primary_hover_text",
+          "label": "Primary Hover Text",
+          "info": "Per-feature override. Leave empty to inherit top hero primary hover text color."
+        },
+        {
+          "type": "header",
+          "content": "Feature Button Colors (Secondary Override)"
+        },
+        {
+          "type": "color",
+          "id": "feature_button_secondary_bg",
+          "label": "Secondary Background",
+          "info": "Per-feature override. Leave empty to inherit top hero secondary button color."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_secondary_text",
+          "label": "Secondary Text",
+          "info": "Per-feature override. Leave empty to inherit top hero secondary button text color."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_secondary_hover_bg",
+          "label": "Secondary Hover Background",
+          "info": "Per-feature override. Leave empty to inherit top hero secondary hover background."
+        },
+        {
+          "type": "color",
+          "id": "feature_button_secondary_hover_text",
+          "label": "Secondary Hover Text",
+          "info": "Per-feature override. Leave empty to inherit top hero secondary hover text color."
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "Title Size",
+          "min": 1,
+          "max": 5,
+          "step": 0.1,
+          "default": 2,
+          "unit": "rem",
+          "info": "Font size for the feature title"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "Title Size — Mobile Override",
+          "min": 0,
+          "max": 5,
+          "step": 0.1,
+          "default": 0,
+          "unit": "rem",
+          "info": "Optional mobile-only title size. Set to 0 to inherit desktop size with section mobile scaling."
+        },
+        {
+          "type": "range",
+          "id": "description_size",
+          "label": "Description size (standard layouts)",
+          "min": 0.8,
+          "max": 3,
+          "step": 0.1,
+          "default": 1.5,
+          "unit": "rem",
+          "info": "Used for top/bottom/left/right/edge layouts. For middle layout, use Description 1/2 size below."
+        },
+        {
+          "type": "range",
+          "id": "description_size_mobile",
+          "label": "Description Size — Mobile Override (standard layouts)",
+          "min": 0,
+          "max": 3,
+          "step": 0.1,
+          "default": 0,
+          "unit": "rem",
+          "info": "Optional mobile-only description size for standard layouts. Set to 0 to inherit desktop size with section mobile scaling."
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "Title Weight",
+          "default": "600",
+          "options": [
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "info": "Font weight for this feature title."
+        },
+        {
+          "type": "select",
+          "id": "description_weight",
+          "label": "Description weight (standard layouts)",
+          "default": "400",
+          "options": [
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "info": "Used for top/bottom/left/right/edge layouts. For middle layout, use Description 1/2 bold below."
+        },
+        {
+          "type": "select",
+          "id": "description_align",
+          "label": "Description Alignment",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "info": "Text alignment for the feature description (standard layouts)."
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image/Icon Position",
+          "options": [
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            },
+            {
+              "value": "right-offset",
+              "label": "Right (Offset)"
+            },
+            {
+              "value": "middle",
+              "label": "Middle (Text on Both Sides)"
+            },
+            {
+              "value": "left-edge",
+              "label": "Left Edge (On Box Edge)"
+            },
+            {
+              "value": "right-edge",
+              "label": "Right Edge (On Box Edge)"
+            }
+          ],
+          "default": "top",
+          "info": "Position of the image or icon within the feature box"
+        },
+        {
+          "type": "range",
+          "id": "right_offset_value",
+          "label": "Right Offset Value",
+          "min": 0,
+          "max": 200,
+          "step": 5,
+          "default": 20,
+          "unit": "px",
+          "info": "Horizontal offset amount when Image/Icon Position is set to 'Right (Offset)'. Controls how far the image extends to the right."
+        },
+        {
+          "type": "header",
+          "content": "Middle Position Settings",
+          "info": "These settings only apply when Image/Icon Position is set to 'Middle'"
+        },
+        {
+          "type": "select",
+          "id": "center_image_position",
+          "label": "Center Image Position",
+          "options": [
+            {
+              "value": "top-left",
+              "label": "Top Left"
+            },
+            {
+              "value": "top-center",
+              "label": "Top Center"
+            },
+            {
+              "value": "top-right",
+              "label": "Top Right"
+            },
+            {
+              "value": "center-left",
+              "label": "Center Left"
+            },
+            {
+              "value": "center",
+              "label": "Center (Default)"
+            },
+            {
+              "value": "center-right",
+              "label": "Center Right"
+            },
+            {
+              "value": "bottom-left",
+              "label": "Bottom Left"
+            },
+            {
+              "value": "bottom-center",
+              "label": "Bottom Center"
+            },
+            {
+              "value": "bottom-right",
+              "label": "Bottom Right"
+            }
+          ],
+          "default": "center",
+          "info": "Position of the image/icon when Image/Icon Position is set to 'Middle'"
+        },
+        {
+          "type": "select",
+          "id": "desc1_position",
+          "label": "Description 1 position (middle only)",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left",
+          "info": "Which side to display the first description"
+        },
+        {
+          "type": "select",
+          "id": "desc2_position",
+          "label": "Description 2 position (middle only)",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right",
+          "info": "Which side to display the second description"
+        },
+        {
+          "type": "select",
+          "id": "desc1_alignment",
+          "label": "Description 1 alignment (middle only)",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left",
+          "info": "Text alignment for the first description"
+        },
+        {
+          "type": "select",
+          "id": "desc2_alignment",
+          "label": "Description 2 alignment (middle only)",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right",
+          "info": "Text alignment for the second description"
+        },
+        {
+          "type": "range",
+          "id": "desc1_size",
+          "label": "Description 1 size (middle only)",
+          "min": 0.8,
+          "max": 3,
+          "step": 0.1,
+          "default": 1.5,
+          "unit": "rem",
+          "info": "Font size for the first description"
+        },
+        {
+          "type": "range",
+          "id": "desc1_size_mobile",
+          "label": "Description 1 size — Mobile Override (middle only)",
+          "min": 0,
+          "max": 3,
+          "step": 0.1,
+          "default": 0,
+          "unit": "rem",
+          "info": "Optional mobile-only size for Description 1 in middle layout. Set to 0 to inherit desktop size with section mobile scaling."
+        },
+        {
+          "type": "range",
+          "id": "desc2_size",
+          "label": "Description 2 size (middle only)",
+          "min": 0.8,
+          "max": 3,
+          "step": 0.1,
+          "default": 1.5,
+          "unit": "rem",
+          "info": "Font size for the second description"
+        },
+        {
+          "type": "range",
+          "id": "desc2_size_mobile",
+          "label": "Description 2 size — Mobile Override (middle only)",
+          "min": 0,
+          "max": 3,
+          "step": 0.1,
+          "default": 0,
+          "unit": "rem",
+          "info": "Optional mobile-only size for Description 2 in middle layout. Set to 0 to inherit desktop size with section mobile scaling."
+        },
+        {
+          "type": "checkbox",
+          "id": "desc1_bold",
+          "label": "Description 1 bold (middle only)",
+          "default": false,
+          "info": "Make the first description bold"
+        },
+        {
+          "type": "checkbox",
+          "id": "desc2_bold",
+          "label": "Description 2 bold (middle only)",
+          "default": false,
+          "info": "Make the second description bold"
+        },
+        {
+          "type": "range",
+          "id": "image_size_desktop",
+          "label": "Image/Icon Size — Desktop",
+          "min": 40,
+          "max": 300,
+          "step": 10,
+          "default": 120,
+          "unit": "px",
+          "info": "Size of the feature image or icon on desktop"
+        },
+        {
+          "type": "range",
+          "id": "image_size_mobile",
+          "label": "Image/Icon Size — Mobile",
+          "min": 40,
+          "max": 300,
+          "step": 10,
+          "default": 120,
+          "unit": "px",
+          "info": "Size of the feature image or icon on mobile (overrides desktop)"
+        },
+        {
+          "type": "range",
+          "id": "image_padding",
+          "label": "Image/Icon Padding",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 0,
+          "unit": "px",
+          "info": "Padding around the image or icon"
+        },
+        {
+          "type": "range",
+          "id": "box_width",
+          "label": "Feature box width (this box)",
+          "min": 0,
+          "max": 2000,
+          "step": 20,
+          "default": 0,
+          "unit": "px",
+          "info": "Per-feature width override. Leave at 0 to use layout column width."
+        },
+        {
+          "type": "range",
+          "id": "box_height",
+          "label": "Feature box height (this box)",
+          "min": 0,
+          "max": 2000,
+          "step": 20,
+          "default": 0,
+          "unit": "px",
+          "info": "Per-feature height override. Leave at 0 for auto content height."
+        },
+        {
+          "type": "range",
+          "id": "mobile_box_width",
+          "label": "Feature box width on mobile (this box)",
+          "min": 0,
+          "max": 1000,
+          "step": 10,
+          "default": 0,
+          "unit": "px",
+          "info": "Per-feature mobile width override. Leave at 0 to keep the mobile layout width."
+        },
+        {
+          "type": "range",
+          "id": "mobile_box_height",
+          "label": "Feature box height on mobile (this box)",
+          "min": 0,
+          "max": 1000,
+          "step": 10,
+          "default": 0,
+          "unit": "px",
+          "info": "Per-feature mobile height override. Leave at 0 for auto content height."
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_canvas_mode",
+          "label": "Enable canvas mode",
+          "default": false,
+          "info": "Turn this feature box into a free-position canvas. Use the X/Y offset controls below to place image and text."
+        },
+        {
+          "type": "range",
+          "id": "feature_canvas_min_height",
+          "label": "Canvas min height",
+          "min": 220,
+          "max": 900,
+          "step": 10,
+          "default": 360,
+          "unit": "px",
+          "info": "Minimum height of this box when canvas mode is enabled."
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "info": "Leave empty to use theme default"
+        },
+        {
+          "type": "color",
+          "id": "description_color",
+          "label": "Description Color",
+          "info": "Leave empty to use theme default"
+        },
+        {
+          "type": "header",
+          "content": "Position Offsets"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "range",
+          "id": "feature_image_offset_x_desktop",
+          "label": "X — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_image_offset_y_desktop",
+          "label": "Y — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_image_offset_x_mobile",
+          "label": "X — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_image_offset_y_mobile",
+          "label": "Y — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Title"
+        },
+        {
+          "type": "range",
+          "id": "feature_title_offset_x_desktop",
+          "label": "X — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_title_offset_y_desktop",
+          "label": "Y — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_title_offset_x_mobile",
+          "label": "X — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_title_offset_y_mobile",
+          "label": "Y — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Description 1"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc1_offset_x_desktop",
+          "label": "X — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc1_offset_y_desktop",
+          "label": "Y — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc1_offset_x_mobile",
+          "label": "X — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc1_offset_y_mobile",
+          "label": "Y — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Description 2"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc2_offset_x_desktop",
+          "label": "X — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc2_offset_y_desktop",
+          "label": "Y — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc2_offset_x_mobile",
+          "label": "X — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_desc2_offset_y_mobile",
+          "label": "Y — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "range",
+          "id": "feature_button_offset_x_desktop",
+          "label": "X — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_button_offset_y_desktop",
+          "label": "Y — Desktop",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_button_offset_x_mobile",
+          "label": "X — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "feature_button_offset_y_mobile",
+          "label": "Y — Mobile",
+          "min": -200,
+          "max": 200,
+          "step": 5,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Animation Settings"
+        },
+        {
+          "type": "select",
+          "id": "animation_type",
+          "label": "Animation Type",
+          "options": [
+            {
+              "value": "fade-up",
+              "label": "Fade Up"
+            },
+            {
+              "value": "fade-down",
+              "label": "Fade Down"
+            },
+            {
+              "value": "fade-left",
+              "label": "Fade Left"
+            },
+            {
+              "value": "fade-right",
+              "label": "Fade Right"
+            },
+            {
+              "value": "scale",
+              "label": "Scale"
+            },
+            {
+              "value": "scale-up",
+              "label": "Scale Up"
+            },
+            {
+              "value": "rotate",
+              "label": "Rotate"
+            },
+            {
+              "value": "flip",
+              "label": "Flip"
+            },
+            {
+              "value": "zoom-in",
+              "label": "Zoom In"
+            },
+            {
+              "value": "slide-up-rotate",
+              "label": "Slide Up Rotate"
+            },
+            {
+              "value": "fade",
+              "label": "Fade Only"
+            }
+          ],
+          "default": "fade-up",
+          "info": "Animation style when box comes into view"
+        },
+        {
+          "type": "range",
+          "id": "animation_speed",
+          "label": "Animation Speed",
+          "min": 300,
+          "max": 2000,
+          "step": 100,
+          "default": 800,
+          "unit": "ms",
+          "info": "Duration of the animation"
+        },
+        {
+          "type": "select",
+          "id": "animation_style",
+          "label": "Animation Easing Style",
+          "options": [
+            {
+              "value": "ease",
+              "label": "Ease"
+            },
+            {
+              "value": "ease-in",
+              "label": "Ease In"
+            },
+            {
+              "value": "ease-out",
+              "label": "Ease Out"
+            },
+            {
+              "value": "ease-in-out",
+              "label": "Ease In Out"
+            },
+            {
+              "value": "linear",
+              "label": "Linear"
+            },
+            {
+              "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+              "label": "Smooth"
+            },
+            {
+              "value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+              "label": "Bounce"
+            },
+            {
+              "value": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+              "label": "Ease Out Quad"
+            }
+          ],
+          "default": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "info": "Easing function for the animation"
+        },
+        {
+          "type": "range",
+          "id": "animation_delay",
+          "label": "Animation Delay",
+          "min": 0,
+          "max": 1000,
+          "step": 50,
+          "default": 0,
+          "unit": "ms",
+          "info": "Additional delay before animation starts (in addition to automatic stagger)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Hero & Features",
+      "blocks": [
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

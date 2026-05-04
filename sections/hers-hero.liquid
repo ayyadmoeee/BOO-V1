@@ -1,0 +1,284 @@
+{{ 'section-hers-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hers-hero.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .hers-hero {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .hers-hero {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="hers-hero color-{{ section.settings.color_scheme }} gradient" data-rotation-interval="{{ section.settings.rotation_interval | default: 5 }}">
+  <div class="hers-hero__container page-width">
+    {%- if section.settings.logo != blank -%}
+      <div class="hers-hero__logo">
+        <a href="{{ routes.root_url }}" class="hers-hero__logo-link">
+          {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+          {{ section.settings.logo | image_url: width: 200 | image_tag: loading: 'eager', alt: logo_alt, class: 'hers-hero__logo-image' }}
+        </a>
+      </div>
+    {%- endif -%}
+
+    <div class="hers-hero__content">
+      <h1 class="hers-hero__headline">
+        <div class="hers-hero__headline-rotator">
+          <div class="hers-hero__headline-item hers-hero__headline-item--active">
+            <span class="hers-hero__headline-line hers-hero__headline-line--green">{{ section.settings.headline_line_1 }}</span>
+            <span class="hers-hero__headline-line hers-hero__headline-line--black">{{ section.settings.headline_line_2 }}</span>
+          </div>
+          {%- if section.settings.headline_line_1_alt != blank and section.settings.headline_line_2_alt != blank -%}
+            <div class="hers-hero__headline-item">
+              <span class="hers-hero__headline-line hers-hero__headline-line--green">{{ section.settings.headline_line_1_alt }}</span>
+              <span class="hers-hero__headline-line hers-hero__headline-line--black">{{ section.settings.headline_line_2_alt }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </h1>
+      {%- if section.settings.tagline != blank -%}
+        <p class="hers-hero__tagline">{{ section.settings.tagline }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="hers-hero__cards-grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'treatment_card' -%}
+          <a
+            href="{{ block.settings.link }}"
+            class="hers-hero__card{% if block.settings.is_new %} hers-hero__card--new{% endif %}"
+            {{ block.shopify_attributes }}
+            aria-label="{{ block.settings.title | escape }}"
+          >
+            {%- if block.settings.is_new -%}
+              <span class="hers-hero__badge" aria-label="New">New</span>
+            {%- endif -%}
+            <div class="hers-hero__card-illustration">
+              {%- if block.settings.illustration != blank -%}
+                {{ block.settings.illustration | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.title, class: 'hers-hero__card-image' }}
+              {%- endif -%}
+            </div>
+            <h3 class="hers-hero__card-title">
+              {%- assign title_words = block.settings.title | split: ' ' -%}
+              {%- assign highlight_words_array = block.settings.highlight_words | split: ',' -%}
+              {%- for word in title_words -%}
+                {%- assign word_lower = word | downcase | strip -%}
+                {%- assign should_highlight = false -%}
+                {%- for highlight_word in highlight_words_array -%}
+                  {%- assign highlight_clean = highlight_word | downcase | strip -%}
+                  {%- if word_lower == highlight_clean -%}
+                    {%- assign should_highlight = true -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if should_highlight -%}
+                  <span class="hers-hero__card-title-word hers-hero__card-title-word--highlight">{{ word }}</span>
+                {%- else -%}
+                  <span class="hers-hero__card-title-word">{{ word }}</span>
+                {%- endif -%}
+                {%- unless forloop.last -%}<span class="hers-hero__card-title-space"> </span>{%- endunless -%}
+              {%- endfor -%}
+            </h3>
+            <span class="hers-hero__card-arrow" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hers Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "headline_line_1",
+      "label": "Headline Line 1",
+      "default": "Glowing skin"
+    },
+    {
+      "type": "text",
+      "id": "headline_line_2",
+      "label": "Headline Line 2",
+      "default": "personalized to you"
+    },
+    {
+      "type": "text",
+      "id": "headline_line_1_alt",
+      "label": "Alternate Headline Line 1",
+      "info": "Second headline to rotate with"
+    },
+    {
+      "type": "text",
+      "id": "headline_line_2_alt",
+      "label": "Alternate Headline Line 2",
+      "info": "Second headline to rotate with"
+    },
+    {
+      "type": "range",
+      "id": "rotation_interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Rotation Interval (seconds)",
+      "default": 5,
+      "info": "Time between headline rotations"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Customized care starts here"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "treatment_card",
+      "name": "Treatment Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Test for what matters"
+        },
+        {
+          "type": "text",
+          "id": "highlight_words",
+          "label": "Highlight Words (comma-separated)",
+          "info": "Words to highlight in pale green or coral",
+          "default": "matters"
+        },
+        {
+          "type": "image_picker",
+          "id": "illustration",
+          "label": "3D Illustration"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_new",
+          "label": "Show 'New' Badge",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hers Hero",
+      "blocks": [
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Test for what matters",
+            "highlight_words": "matters",
+            "is_new": true
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Lose weight",
+            "highlight_words": "weight"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Grow fuller hair",
+            "highlight_words": "hair"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Relieve menopause",
+            "highlight_words": "menopause"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Ease perimenopause",
+            "highlight_words": "perimenopause"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Reduce anxiety",
+            "highlight_words": "anxiety"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Get glowing skin",
+            "highlight_words": "glowing,skin"
+          }
+        },
+        {
+          "type": "treatment_card",
+          "settings": {
+            "title": "Browse all treatments"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

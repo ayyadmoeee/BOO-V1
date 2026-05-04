@@ -1,0 +1,221 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu' %}
+{% endcomment %}
+
+<style>
+
+  /* ===== SIMPLE CLEAN MENU ===== */
+.header__inline-menu {
+  position: relative;
+}
+
+.list-menu--inline {
+  display: flex;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Main menu items - Simple */
+.header__menu-item {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333 !important;
+  padding: 0.8rem 0;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.header__menu-item:hover {
+  color: #000 !important;
+}
+
+/* Simple underline on hover */
+.header__menu-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #000;
+  transition: width 0.3s ease;
+}
+
+.header__menu-item:hover::after {
+  width: 100%;
+}
+
+.header__active-menu-item {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+/* Simple caret */
+.header__menu-item svg {
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+.header__menu-item:hover svg {
+  transform: rotate(180deg);
+}
+
+/* ===== MEGA MENU DROPDOWN ===== */
+.mega-menu__content {
+  background: #fff !important;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.2s ease;
+  margin-top: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Background color options */
+.mega-menu__content.color-scheme-1 { background: #fff !important; }
+.mega-menu__content.color-scheme-2 { background: #f8f9fa !important; }
+.mega-menu__content.color-scheme-3 { background: #f8f9fa !important; border: 1px solid #dee2e6; }
+
+/* Mega menu grid */
+.mega-menu__list {
+  padding: 1.5rem !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Level 2 links - Simple */
+.mega-menu__link--level-2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000 !important;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.mega-menu__link--level-2:hover {
+  color: #555 !important;
+}
+
+/* Level 3 links - Simple */
+.mega-menu__link {
+  color: #666 !important;
+  padding: 0.4rem 0;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.mega-menu__link:hover {
+  color: #000 !important;
+}
+
+.mega-menu__link--active {
+  color: #000 !important;
+  font-weight: 500;
+}
+
+/* Mobile */
+@media (max-width: 989px) {
+  .header__inline-menu { display: none; }
+}
+/* ===== END SIMPLE MENU ===== */
+</style>
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        {%- if link.links != blank -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="header__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="header__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                tabindex="-1"
+              >
+                <ul
+                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                    <li>
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

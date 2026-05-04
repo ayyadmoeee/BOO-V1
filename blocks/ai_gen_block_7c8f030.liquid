@@ -1,0 +1,402 @@
+{% doc %}
+  @prompt
+    Create a terms of service page section with the following features:
+    - Clean, modern typography matching a professional legal document style with clear hierarchy (large heading, subheadings, body text)
+    - Customizable background that supports solid colors, gradients, and images
+    - Fully responsive design that works seamlessly on mobile and desktop devices
+    - Proper text formatting for legal content including paragraphs, bold text, and proper spacing
+    - Settings to control background type (color/gradient/image), text colors, padding, and typography
+    - Maximum readability with appropriate line height and text width constraints
+    - The section should display "TERMS AND CONDITIONS" as the main heading with customizable content below
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-terms-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-terms-background-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  {% if block.settings.background_type == 'color' %}
+    .ai-terms-background-{{ ai_gen_id }} {
+      background-color: {{ block.settings.background_color }};
+    }
+  {% elsif block.settings.background_type == 'gradient' %}
+    .ai-terms-background-{{ ai_gen_id }} {
+      background: {{ block.settings.background_gradient }};
+    }
+  {% elsif block.settings.background_type == 'image' and block.settings.background_image %}
+    .ai-terms-background-{{ ai_gen_id }} {
+      background-image: url('{{ block.settings.background_image | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  {% endif %}
+
+  .ai-terms-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 1;
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.padding_top }}px {{ block.settings.padding_horizontal }}px {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-terms-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    text-align: {{ block.settings.text_alignment }};
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: {{ block.settings.line_height }};
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} h2 {
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.subheading_color }};
+    margin: {{ block.settings.section_spacing }}px 0 {{ block.settings.paragraph_spacing }}px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} h3 {
+    font-size: calc({{ block.settings.subheading_size }}px * 0.85);
+    color: {{ block.settings.subheading_color }};
+    margin: {{ block.settings.paragraph_spacing }}px 0 {{ block.settings.paragraph_spacing }}px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} p {
+    margin: 0 0 {{ block.settings.paragraph_spacing }}px;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} strong {
+    font-weight: 600;
+    color: {{ block.settings.subheading_color }};
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} ul,
+  .ai-terms-content-{{ ai_gen_id }} ol {
+    margin: 0 0 {{ block.settings.paragraph_spacing }}px;
+    padding-left: 24px;
+  }
+
+  .ai-terms-content-{{ ai_gen_id }} li {
+    margin-bottom: 8px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-terms-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_top | times: 0.6 }}px {{ block.settings.padding_horizontal | times: 0.5 }}px {{ block.settings.padding_bottom | times: 0.6 }}px;
+    }
+
+    .ai-terms-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.7 }}px;
+      margin-bottom: {{ block.settings.heading_spacing | times: 0.7 }}px;
+    }
+
+    .ai-terms-content-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-terms-content-{{ ai_gen_id }} h2 {
+      font-size: {{ block.settings.subheading_size | times: 0.75 }}px;
+      margin-top: {{ block.settings.section_spacing | times: 0.7 }}px;
+    }
+
+    .ai-terms-content-{{ ai_gen_id }} h3 {
+      font-size: calc({{ block.settings.subheading_size }}px * 0.65);
+    }
+  }
+{% endstyle %}
+
+<terms-section-{{ ai_gen_id }} class="ai-terms-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-terms-background-{{ ai_gen_id }}"></div>
+  <div class="ai-terms-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h1 class="ai-terms-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+    {% endif %}
+    
+    {% if block.settings.content != blank %}
+      <div class="ai-terms-content-{{ ai_gen_id }}">
+        {{ block.settings.content }}
+      </div>
+    {% else %}
+      <div class="ai-terms-content-{{ ai_gen_id }}">
+        <h2>1. Agreement to Terms</h2>
+        <p>By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
+        
+        <h2>2. Use License</h2>
+        <p>Permission is granted to temporarily download one copy of the materials on our website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+        <ul>
+          <li>Modify or copy the materials</li>
+          <li>Use the materials for any commercial purpose or for any public display</li>
+          <li>Attempt to reverse engineer any software contained on our website</li>
+          <li>Remove any copyright or other proprietary notations from the materials</li>
+        </ul>
+        
+        <h2>3. Disclaimer</h2>
+        <p>The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+        
+        <h2>4. Limitations</h2>
+        <p>In no event shall our company or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website.</p>
+        
+        <h2>5. Revisions</h2>
+        <p>The materials appearing on our website may include technical, typographical, or photographic errors. We do not warrant that any of the materials on our website are accurate, complete, or current. We may make changes to the materials contained on our website at any time without notice.</p>
+        
+        <h2>6. Links</h2>
+        <p>We have not reviewed all of the sites linked to our website and are not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by us of the site. Use of any such linked website is at the user's own risk.</p>
+        
+        <h2>7. Governing Law</h2>
+        <p>These terms and conditions are governed by and construed in accordance with the laws and you irrevocably submit to the exclusive jurisdiction of the courts in that location.</p>
+      </div>
+    {% endif %}
+  </div>
+</terms-section-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Terms of service",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "TERMS AND CONDITIONS"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Terms content"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background_type",
+      "label": "Background type",
+      "options": [
+        {
+          "value": "color",
+          "label": "Solid color"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        }
+      ],
+      "default": "color"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "label": "Subheading size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Body text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body text color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.6
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "justify",
+          "label": "Justify"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 16,
+      "max": 80,
+      "step": 8,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Heading bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_spacing",
+      "label": "Section spacing",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "paragraph_spacing",
+      "label": "Paragraph spacing",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Terms of service"
+    }
+  ]
+}
+{% endschema %}

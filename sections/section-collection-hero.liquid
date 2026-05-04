@@ -1,0 +1,254 @@
+{%- liquid
+  assign section_id = section.id
+  assign background_image = section.settings.background_image
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+  assign text_alignment = section.settings.text_alignment
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+-%}
+
+{%- style -%}
+  .collection-hero-{{ section_id }} {
+    position: relative;
+    padding-top: {{ padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.5 | round: 0 }}px;
+    {% if background_image != blank %}
+      background-image: url('{{ background_image | image_url: width: 1400 }}');
+      background-size: cover;
+      background-position: center;
+      min-height: 400px;
+    {% else %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+  }
+
+  @media screen and (min-width: 750px) {
+    .collection-hero-{{ section_id }} {
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+      {% if background_image != blank %}
+        min-height: 500px;
+      {% endif %}
+    }
+  }
+
+  .collection-hero-{{ section_id }}__overlay {
+    position: absolute;
+    inset: 0;
+    background: {{ section.settings.overlay_color | color_modify: 'alpha', overlay_opacity }};
+  }
+
+  .collection-hero-{{ section_id }}__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+    text-align: {{ text_alignment }};
+  }
+
+  .collection-hero-{{ section_id }}__content {
+    display: inline-block;
+    max-width: 800px;
+  }
+
+  {% if text_alignment == 'center' %}
+    .collection-hero-{{ section_id }}__content {
+      margin: 0 auto;
+    }
+  {% elsif text_alignment == 'right' %}
+    .collection-hero-{{ section_id }}__content {
+      margin-left: auto;
+    }
+  {% endif %}
+
+  .collection-hero-{{ section_id }}__title {
+    margin: 0 0 1rem 0;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: {{ section.settings.text_color }};
+  }
+
+  .collection-hero-{{ section_id }}__description {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: {{ section.settings.text_color }};
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 768px) {
+    .collection-hero-{{ section_id }} {
+      position: relative;
+      width: 100%;
+      overflow-x: hidden;
+      {% if background_image != blank %}
+        min-height: 300px;
+      {% endif %}
+    }
+
+    .collection-hero-{{ section_id }}__overlay {
+      position: absolute;
+      inset: 0;
+    }
+
+    .collection-hero-{{ section_id }}__container {
+      padding: 0 1.5rem;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .collection-hero-{{ section_id }}__content {
+      position: relative;
+      max-width: 100%;
+      width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .collection-hero-{{ section_id }}__title {
+      font-size: 1.75rem;
+      line-height: 1.2;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      margin: 0 0 1rem 0;
+    }
+
+    .collection-hero-{{ section_id }}__description {
+      font-size: 1rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+{%- endstyle -%}
+
+<section class="collection-hero-{{ section_id }}" data-section-id="{{ section.id }}">
+  <div class="collection-hero-{{ section_id }}__overlay"></div>
+  <div class="collection-hero-{{ section_id }}__container">
+    <div class="collection-hero-{{ section_id }}__content">
+      {%- if collection.title != blank -%}
+        <h1 class="collection-hero-{{ section_id }}__title">{{ collection.title }}</h1>
+      {%- elsif section.settings.title != blank -%}
+        <h1 class="collection-hero-{{ section_id }}__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+
+      {%- if collection.description != blank -%}
+        <div class="collection-hero-{{ section_id }}__description">{{ collection.description }}</div>
+      {%- elsif section.settings.description != blank -%}
+        <div class="collection-hero-{{ section_id }}__description">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Custom Title",
+      "info": "Leave blank to use collection title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Custom Description",
+      "info": "Leave blank to use collection description"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f5f5f5",
+      "info": "Used when no background image is set"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 120
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Hero"
+    }
+  ]
+}
+{% endschema %}
+

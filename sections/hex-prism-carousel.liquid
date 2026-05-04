@@ -1,0 +1,2392 @@
+{%- liquid
+  assign section_id = section.id
+  assign perspective = section.settings.perspective | default: 1400
+  assign perspective_mobile = section.settings.perspective_mobile | default: 1000
+  assign radius_base = section.settings.radius | default: 300
+  assign radius_mobile_base = section.settings.radius_mobile | default: 220
+  assign card_gap_multiplier = section.settings.card_gap_multiplier | default: 100 | divided_by: 100.0
+  assign radius = radius_base | times: card_gap_multiplier | round
+  assign radius_mobile = radius_mobile_base | times: card_gap_multiplier | round
+  assign face_width = section.settings.face_width | default: 360
+  assign face_height = section.settings.face_height | default: 520
+  assign face_width_mobile = section.settings.face_width_mobile | default: 280
+  assign face_height_mobile = section.settings.face_height_mobile | default: 420
+  assign card_aspect_ratio = section.settings.card_aspect_ratio | default: ''
+  
+  comment
+    If aspect ratio is provided, calculate height from width
+    Aspect ratio format: "4 / 5" or "1 / 1" etc.
+  endcomment
+  if card_aspect_ratio != blank
+    assign ratio_parts = card_aspect_ratio | split: '/'
+    if ratio_parts.size == 2
+      assign ratio_width = ratio_parts[0] | strip | plus: 0.0
+      assign ratio_height = ratio_parts[1] | strip | plus: 0.0
+      if ratio_width > 0 and ratio_height > 0
+        assign calculated_height = face_width | times: ratio_height | divided_by: ratio_width
+        assign face_height = calculated_height | round
+        assign calculated_height_mobile = face_width_mobile | times: ratio_height | divided_by: ratio_width
+        assign face_height_mobile = calculated_height_mobile | round
+      endif
+    endif
+  endif
+  assign corner_radius = section.settings.corner_radius | default: 14
+  assign side_opacity_raw = section.settings.side_opacity | default: 2
+  assign side_opacity = side_opacity_raw | divided_by: 10.0
+  assign side2_opacity_raw = section.settings.side2_opacity | default: 2
+  assign side2_opacity = side2_opacity_raw | divided_by: 10.0
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign section_bg_image = section.settings.section_bg_image
+  assign image_max_width = section.settings.image_max_width | default: 700
+  assign padding_top = section.settings.padding_top | default: 0
+  assign padding_bottom = section.settings.padding_bottom | default: 0
+  assign blocks_count = section.blocks.size
+  assign section_title = section.settings.section_title | default: ''
+  assign section_title_tag = section.settings.section_title_tag | default: 'h2'
+  assign section_title_color = section.settings.section_title_color | default: 'rgba(255,255,255,0.95)'
+  assign section_title_top_padding = section.settings.section_title_top_padding | default: 60
+  assign section_title_size = section.settings.section_title_size | default: 32
+  assign section_title_mobile_size = section.settings.section_title_mobile_size | default: 24
+  assign section_title_weight = section.settings.section_title_weight | default: '800'
+  assign show_age_filter = section.settings.show_age_filter
+  assign age_filter_title = section.settings.age_filter_title | default: 'Choose Age'
+  assign age_filter_title_color = section.settings.age_filter_title_color | default: 'rgba(255,255,255,0.9)'
+  assign age_filter_title_size = section.settings.age_filter_title_size | default: 16
+  assign age_filter_title_weight = section.settings.age_filter_title_weight | default: '700'
+  assign side_icon_size = section.settings.side_icon_size | default: 24
+  assign side_icon_width_2x = side_icon_size | times: 2
+  assign side_icon_alt = section.settings.side_icon_alt | default: ''
+  assign side_icon_json_url = section.settings.side_icon_json_url | default: ''
+  assign tile_icon_size = section.settings.tile_icon_size | default: 36
+  assign tile_icon_size_2x = tile_icon_size | times: 2
+  assign tile_icon_offset_top = section.settings.tile_icon_offset_top | default: 12
+  assign tile_icon_offset_left = section.settings.tile_icon_offset_left | default: 12
+  assign age_filter_values = section.settings.age_filter_values | default: '0.5-4,4-7,7-10'
+  assign age_filters = age_filter_values | split: ','
+  assign filter_gap = section.settings.filter_gap | default: 10
+  assign filter_top_padding = section.settings.filter_top_padding | default: 60
+  assign filter_bottom_margin = section.settings.filter_bottom_margin | default: 24
+  assign filter_ui_scale = section.settings.filter_ui_scale | default: 100 | divided_by: 100.0
+  assign carousel_box_scale = section.settings.carousel_box_scale | default: 100 | divided_by: 100.0
+  assign card_name_size = section.settings.card_name_size | default: 12
+  assign card_name_weight = section.settings.card_name_weight | default: '800'
+  assign hide_on_desktop = section.settings.hide_on_desktop
+-%}
+
+<section
+  class="hex-prism-carousel hex-prism-carousel--{{ section_id }}"
+  data-section-id="{{ section_id }}"
+  data-perspective="{{ perspective }}"
+  data-radius="{{ radius }}"
+  data-face-width="{{ face_width }}"
+  data-face-height="{{ face_height }}"
+  data-corner-radius="{{ corner_radius }}"
+  data-side-opacity="{{ side_opacity }}"
+  style="background-color: {{ background_color }};{% if section_bg_image != blank %} background-image: url('{{ section_bg_image | image_url: width: 1200 }}'); background-size: cover; background-position: center;{% endif %} --card-r: {{ corner_radius }}px; --card-w: {{ face_width }}px; --card-h: {{ face_height }}px; --card-w-m: {{ face_width_mobile }}px; --card-h-m: {{ face_height_mobile }}px; --persp-d: {{ perspective }}px; --persp-m: {{ perspective_mobile }}px; --radius-d: {{ radius }}px; --radius-m: {{ radius_mobile }}px; --faces: {{ blocks_count }}; --filter-ui-scale: {{ filter_ui_scale }}; --carousel-box-scale: {{ carousel_box_scale }};"
+>
+  {%- if section_title != blank -%}
+    <{{ section_title_tag }} class="hex-prism-carousel__section-title hex-prism-carousel__section-title--{{ section_id }}">
+      {{ section_title }}
+    </{{ section_title_tag }}>
+  {%- endif -%}
+  {%- if show_age_filter or section.settings.side_icon != blank or side_icon_json_url != blank -%}
+    <div class="hex-prism-carousel__filters hex-prism-carousel__filters--{{ section_id }}"{% if show_age_filter %} data-filters{% endif %}>
+      <div class="hex-prism-carousel__filters-header hex-prism-carousel__filters-header--{{ section_id }}{% unless show_age_filter %} hex-prism-carousel__filters-header--icon-only--{{ section_id }}{% endunless %}">
+        {%- if show_age_filter -%}
+          <div class="hex-prism-carousel__filters-title hex-prism-carousel__filters-title--{{ section_id }}">
+            {{ age_filter_title }}
+          </div>
+        {%- endif -%}
+        {%- unless show_age_filter -%}
+          {%- if section.settings.side_icon != blank or side_icon_json_url != blank -%}
+            <span class="hex-prism-carousel__side-icon-wrap hex-prism-carousel__side-icon-wrap--{{ section_id }}">
+              {%- if side_icon_json_url != blank -%}
+                <span
+                  class="hex-prism-carousel__side-icon hex-prism-carousel__side-icon--{{ section_id }} hex-prism-carousel__side-icon--lottie--{{ section_id }}"
+                  data-hpc-side-icon-json="{{ side_icon_json_url | escape }}"
+                  {% if side_icon_alt != blank %}
+                    role="img"
+                    aria-label="{{ side_icon_alt | escape }}"
+                  {% else %}
+                    aria-hidden="true"
+                  {% endif %}
+                ></span>
+              {%- elsif section.settings.side_icon != blank -%}
+                <img
+                  src="{{ section.settings.side_icon | image_url: width: side_icon_width_2x }}"
+                  alt="{{ side_icon_alt | escape }}"
+                  width="{{ side_icon_size }}"
+                  height="{{ side_icon_size }}"
+                  loading="lazy"
+                  class="hex-prism-carousel__side-icon hex-prism-carousel__side-icon--{{ section_id }}"
+                  {% if side_icon_alt == blank %}aria-hidden="true"{% endif %}
+                >
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        {%- endunless -%}
+      </div>
+      {%- if show_age_filter -%}
+        <div class="hex-prism-carousel__filters-row hex-prism-carousel__filters-row--{{ section_id }}">
+          <div class="hex-prism-carousel__filters-chip-group hex-prism-carousel__filters-chip-group--{{ section_id }}">
+            {%- for f in age_filters -%}
+              {%- assign v = f | strip -%}
+              {%- if v != blank and v != 'all' and v != 'All' -%}
+                <button type="button"
+                  class="hex-prism-carousel__chip hex-prism-carousel__chip--{{ section_id }}"
+                  data-age-filter="{{ v | escape }}">
+                  {{ v }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+
+            <button type="button"
+              class="hex-prism-carousel__chip hex-prism-carousel__chip--{{ section_id }} hex-prism-carousel__chip--reset hex-prism-carousel__chip--reset--{{ section_id }}"
+              data-age-reset
+              aria-label="Reset filters"
+              title="Reset filters">
+              {%- if section.settings.reset_icon != blank -%}
+                <img
+                  src="{{ section.settings.reset_icon | image_url: width: 72 }}"
+                  alt=""
+                  width="18"
+                  height="18"
+                  loading="lazy"
+                  class="hex-prism-carousel__reset-icon"
+                >
+              {%- else -%}
+                ↺
+              {%- endif -%}
+            </button>
+          </div>
+          {%- if section.settings.side_icon != blank or side_icon_json_url != blank -%}
+            <span class="hex-prism-carousel__side-icon-wrap hex-prism-carousel__side-icon-wrap--{{ section_id }} hex-prism-carousel__side-icon-wrap--row--{{ section_id }}">
+              {%- if side_icon_json_url != blank -%}
+                <span
+                  class="hex-prism-carousel__side-icon hex-prism-carousel__side-icon--{{ section_id }} hex-prism-carousel__side-icon--lottie--{{ section_id }}"
+                  data-hpc-side-icon-json="{{ side_icon_json_url | escape }}"
+                  {% if side_icon_alt != blank %}
+                    role="img"
+                    aria-label="{{ side_icon_alt | escape }}"
+                  {% else %}
+                    aria-hidden="true"
+                  {% endif %}
+                ></span>
+              {%- elsif section.settings.side_icon != blank -%}
+                <img
+                  src="{{ section.settings.side_icon | image_url: width: side_icon_width_2x }}"
+                  alt="{{ side_icon_alt | escape }}"
+                  width="{{ side_icon_size }}"
+                  height="{{ side_icon_size }}"
+                  loading="lazy"
+                  class="hex-prism-carousel__side-icon hex-prism-carousel__side-icon--{{ section_id }}"
+                  {% if side_icon_alt == blank %}aria-hidden="true"{% endif %}
+                >
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="hex-prism-carousel__scene hex-prism-carousel__scene--{{ section_id }}">
+    <div class="hex-prism-carousel__box hex-prism-carousel__box--{{ section_id }}">
+      <div class="hex-prism-carousel__prism hex-prism-carousel__prism--{{ section_id }}" data-prism>
+        {%- for block in section.blocks -%}
+        {%- liquid
+          assign face_image = null
+          assign gradient_start = '#4a90e2'
+          assign gradient_end = '#7b68ee'
+          assign face_link = '#'
+          assign face_alt = 'Carousel card ' | append: forloop.index
+          
+          if block.settings.image
+            assign face_image = block.settings.image
+            assign face_alt = block.settings.image.alt | default: face_alt
+          endif
+          
+          if block.settings.link != blank
+            assign face_link = block.settings.link
+          endif
+          
+          if block.settings.gradient_start != blank
+            assign gradient_start = block.settings.gradient_start
+          endif
+          
+          if block.settings.gradient_end != blank
+            assign gradient_end = block.settings.gradient_end
+          endif
+          
+          assign face_name = block.settings.name | default: face_alt
+          assign face_ages = block.settings.ages | default: ''
+          assign face_product = block.settings.product
+          assign product_handle_from_link = ''
+
+          if face_product and face_link == '#'
+            assign face_link = face_product.url
+          endif
+
+          if face_product == blank and face_link contains '/products/'
+            assign product_handle_from_link = face_link | split: '/products/' | last | split: '?' | first | split: '#' | first
+            assign face_product = all_products[product_handle_from_link]
+          endif
+
+          if face_product and face_product.title != blank
+            assign face_name = face_product.title
+          endif
+
+          assign face_icon = block.settings.card_icon | default: section.settings.tile_top_left_icon
+          assign face_is_discounted = false
+          if face_product
+            for v in face_product.variants
+              if v.compare_at_price and v.compare_at_price > v.price
+                assign face_is_discounted = true
+                break
+              endif
+            endfor
+          endif
+        -%}
+        <a
+          href="{{ face_link }}"
+          class="hex-prism-carousel__face hex-prism-carousel__face--{{ section_id }}"
+          data-face
+          data-face-index="{{ forloop.index0 }}"
+          data-ages="{{ face_ages | escape }}"
+          aria-label="{{ face_alt }}"
+          tabindex="0"
+          style="--i: {{ forloop.index0 }};"
+        >
+          <div class="hex-prism-carousel__face-inner hex-prism-carousel__face-inner--{{ section_id }}">
+            {%- if face_icon != blank and face_is_discounted -%}
+              <span class="hex-prism-carousel__card-icon hex-prism-carousel__card-icon--{{ section_id }}" aria-hidden="true">
+                <img
+                  src="{{ face_icon | image_url: width: tile_icon_size_2x }}"
+                  alt=""
+                  width="{{ tile_icon_size }}"
+                  height="{{ tile_icon_size }}"
+                  loading="lazy"
+                >
+              </span>
+            {%- endif -%}
+            <div class="hex-prism-carousel__clip hex-prism-carousel__clip--{{ section_id }}">
+              {%- if face_image -%}
+                {%- assign image_width_2x = image_max_width | times: 2 -%}
+                {%- assign image_1x_url = face_image | image_url: width: image_max_width -%}
+                {%- assign image_2x_url = face_image | image_url: width: image_width_2x -%}
+                <img
+                  src="{{ image_1x_url }}"
+                  srcset="{{ image_1x_url }} 1x, {{ image_2x_url }} 2x"
+                  sizes="(max-width: 768px) 100vw, {{ image_max_width }}px"
+                  alt="{{ face_alt }}"
+                  loading="lazy"
+                  class="hex-prism-carousel__image hex-prism-carousel__image--{{ section_id }}"
+                >
+              {%- else -%}
+                <div
+                  class="hex-prism-carousel__gradient hex-prism-carousel__gradient--{{ section_id }}"
+                  style="background: linear-gradient(135deg, {{ gradient_start }}, {{ gradient_end }});"
+                ></div>
+              {%- endif -%}
+            </div>
+            <span class="hex-prism-carousel__name hex-prism-carousel__name--{{ section_id }}" aria-hidden="true">
+              {{ face_name }}
+            </span>
+
+            {% if section.settings.enable_tile_quick_add and face_product %}
+              <button
+                type="button"
+                class="hex-prism-carousel__quickadd-trigger hex-prism-carousel__quickadd-trigger--{{ section_id }}"
+                data-hpc-qa-trigger
+                aria-label="Quick add {{ face_product.title | escape }}"
+              >+</button>
+
+              <div class="hex-prism-carousel__quickadd-panel hex-prism-carousel__quickadd-panel--{{ section_id }}" data-hpc-qa-panel>
+                <p class="hex-prism-carousel__quickadd-title">{{ section.settings.quick_add_title | default: 'Choose size' }}</p>
+                <div class="hex-prism-carousel__quickadd-sizes">
+                  {%- for v in face_product.variants -%}
+                    <button
+                      type="button"
+                      class="hex-prism-carousel__quickadd-size{% unless v.available %} hex-prism-carousel__quickadd-size--soldout{% endunless %}"
+                      data-hpc-qa-size
+                      data-variant-id="{{ v.id }}"
+                      {% unless v.available %}disabled aria-disabled="true"{% endunless %}
+                    >
+                      {{ v.title }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+                {%- if section.settings.quick_add_size_guide_image != blank -%}
+                  <button type="button" class="hex-prism-carousel__quickadd-size-guide" data-hpc-open-size-guide>
+                    {{ section.settings.quick_add_size_guide_link_label | default: 'Open size guide' }}
+                  </button>
+                {%- endif -%}
+              </div>
+            {% endif %}
+          </div>
+        </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if section.settings.enable_tile_quick_add and section.settings.quick_add_size_guide_image != blank -%}
+    <div class="hex-prism-carousel__size-guide-modal hex-prism-carousel__size-guide-modal--{{ section_id }}" data-hpc-size-guide-modal hidden>
+      <div class="hex-prism-carousel__size-guide-overlay" data-hpc-size-guide-close></div>
+      <div class="hex-prism-carousel__size-guide-popup" role="dialog" aria-modal="true" aria-label="Size guide">
+        <button type="button" class="hex-prism-carousel__size-guide-close" data-hpc-size-guide-close aria-label="Close size guide">×</button>
+        <h3 class="hex-prism-carousel__size-guide-heading">{{ section.settings.quick_add_size_guide_heading | default: 'Size guide' }}</h3>
+        <div class="hex-prism-carousel__size-guide-image-wrap">
+          <img
+            src="{{ section.settings.quick_add_size_guide_image | image_url: width: 1288 }}"
+            alt="{{ section.settings.quick_add_size_guide_heading | default: 'Size guide' | escape }}"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  .hex-prism-carousel--{{ section_id }} {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    overflow: visible;
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    margin-top: -60px;
+    display: block;
+  }
+
+  .hex-prism-carousel__scene--{{ section_id }} {
+    perspective: var(--persp-d);
+    perspective-origin: center center;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    touch-action: pan-y pinch-zoom;
+    cursor: grab;
+  }
+
+  .hex-prism-carousel__scene--{{ section_id }}:active {
+    cursor: grabbing;
+  }
+
+  .hex-prism-carousel__box--{{ section_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    transform-origin: center center;
+    transform: translate3d(0, 0, 0) scale(var(--carousel-box-scale));
+    -webkit-transform: translate3d(0, 0, 0) scale(var(--carousel-box-scale));
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .hex-prism-carousel__prism--{{ section_id }} {
+    position: relative;
+    width: var(--card-w);
+    height: var(--card-h);
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transform: translateZ(0) rotateY(var(--rot, 0deg));
+    transition: transform 480ms cubic-bezier(0.23, 1, 0.32, 1);
+    --radius: var(--radius-d);
+    --step: calc(360deg / var(--faces));
+  }
+
+  .hex-prism-carousel__face--{{ section_id }} {
+    position: absolute;
+    width: var(--card-w);
+    height: var(--card-h);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    transform: rotateY(calc(var(--i) * var(--step))) translateZ(calc(var(--radius) + var(--z, 0px)));
+    display: block;
+    text-decoration: none;
+    outline: none;
+    pointer-events: auto;
+    opacity: 1;
+    /* Ensure CSS variable is available to children */
+    --card-r: var(--card-r, {{ corner_radius }}px);
+  }
+
+  .hex-prism-carousel--{{ section_id }} .hex-prism-carousel__face--{{ section_id }}::after {
+    content: none !important;
+  }
+
+  .hex-prism-carousel--{{ section_id }} .hex-prism-carousel__face--{{ section_id }} > svg,
+  .hex-prism-carousel--{{ section_id }} .hex-prism-carousel__face--{{ section_id }} .icon {
+    display: none !important;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+  }
+
+  .hex-prism-carousel__face-inner--{{ section_id }} {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 480ms cubic-bezier(0.23, 1, 0.32, 1), opacity 480ms cubic-bezier(0.23, 1, 0.32, 1);
+    /* IMPORTANT: inner is NOT the clipper */
+    border-radius: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+    /* Pass CSS variable down */
+    --card-r: var(--card-r, {{ corner_radius }}px);
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="active"] {
+    z-index: 10;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="active"] .hex-prism-carousel__face-inner--{{ section_id }} {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side"] {
+    z-index: 7;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side"] .hex-prism-carousel__face-inner--{{ section_id }} {
+    opacity: {{ side_opacity }};
+    transform: scale(0.92);
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side"] .hex-prism-carousel__face-inner--{{ section_id }}::after {
+    content: none;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side2"] {
+    z-index: 4;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side2"] .hex-prism-carousel__face-inner--{{ section_id }} {
+    opacity: {{ side2_opacity }};
+    transform: scale(0.86);
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="side2"] .hex-prism-carousel__face-inner--{{ section_id }}::after {
+    content: none;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="far"] {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    z-index: 1;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="far"] .hex-prism-carousel__face-inner--{{ section_id }} {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  .hex-prism-carousel__image--{{ section_id }},
+  .hex-prism-carousel__gradient--{{ section_id }} {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .hex-prism-carousel__image--{{ section_id }} {
+    object-fit: cover;
+  }
+
+
+
+  /* Hide on desktop if setting is enabled */
+  {%- if hide_on_desktop -%}
+  @media (min-width: 1025px) {
+    .hex-prism-carousel--{{ section_id }} {
+      display: none !important;
+    }
+  }
+  {%- endif -%}
+
+  /* Tablet/iPad styles */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hex-prism-carousel--{{ section_id }} {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hex-prism-carousel__section-title--{{ section_id }}{
+      font-size: {{ section_title_mobile_size }}px;
+      padding: 20px 18px 10px;
+    }
+
+    .hex-prism-carousel--{{ section_id }} {
+      display: block;
+      min-height: auto;
+      --radius: var(--radius-m);
+      --card-w: min(var(--card-w-m), calc(100vw - 72px));
+      --card-h: var(--card-h-m);
+    }
+
+    .hex-prism-carousel__scene--{{ section_id }} {
+      min-height: auto;
+      padding: 20px 0;
+      perspective: var(--persp-m);
+      touch-action: pan-y pinch-zoom;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .hex-prism-carousel__prism--{{ section_id }} {
+      --radius: var(--radius-m);
+      width: min(var(--card-w-m), calc(100vw - 72px));
+      height: var(--card-h-m);
+    }
+
+    .hex-prism-carousel__face--{{ section_id }} {
+      width: min(var(--card-w-m), calc(100vw - 72px));
+      height: var(--card-h-m);
+    }
+
+    .hex-prism-carousel__image--{{ section_id }} {
+      object-fit: cover;
+      background: transparent;
+    }
+  }
+
+  .hex-prism-carousel__clip--{{ section_id }}{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+
+    /* The actual radius + clip - use direct value as fallback */
+    border-radius: {{ corner_radius }}px !important;
+    overflow: hidden !important;
+    clip-path: inset(0 round {{ corner_radius }}px) !important;
+    -webkit-clip-path: inset(0 round {{ corner_radius }}px) !important;
+
+    /* Helps avoid compositor weirdness */
+    transform: translateZ(0);
+    contain: paint;
+    isolation: isolate;
+    background: rgba(255,255,255,0.02);
+    /* Force hardware acceleration */
+    will-change: transform;
+  }
+
+  /* Force border-radius on image/gradient inside clip */
+  .hex-prism-carousel__clip--{{ section_id }} .hex-prism-carousel__image--{{ section_id }},
+  .hex-prism-carousel__clip--{{ section_id }} .hex-prism-carousel__gradient--{{ section_id }} {
+    border-radius: {{ corner_radius }}px !important;
+    display: block;
+  }
+
+  /* Kill theme link overlays that can draw square layers */
+  .hex-prism-carousel--{{ section_id }} .hex-prism-carousel__face--{{ section_id }}::before,
+  .hex-prism-carousel--{{ section_id }} .hex-prism-carousel__face--{{ section_id }}::after{
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ===== Filters UI ===== */
+  .hex-prism-carousel__filters--{{ section_id }}{
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: calc({{ filter_top_padding }}px * var(--filter-ui-scale)) 18px calc(8px * var(--filter-ui-scale));
+    display: flex;
+    flex-direction: column;
+    gap: calc({{ filter_gap }}px * var(--filter-ui-scale));
+    position: relative;
+    z-index: 3;
+    pointer-events: auto;
+  }
+
+  .hex-prism-carousel__filters-title--{{ section_id }}{
+    font-size: calc({{ age_filter_title_size }}px * var(--filter-ui-scale));
+    font-weight: {{ age_filter_title_weight }};
+    color: {{ age_filter_title_color }};
+  }
+
+  .hex-prism-carousel__filters-header--{{ section_id }}{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(12px * var(--filter-ui-scale));
+  }
+
+  .hex-prism-carousel__filters-header--icon-only--{{ section_id }}{
+    justify-content: flex-end;
+  }
+
+  .hex-prism-carousel__side-icon-wrap--{{ section_id }}{
+    flex-shrink: 0;
+    width: calc({{ side_icon_size }}px * var(--filter-ui-scale));
+    height: calc({{ side_icon_size }}px * var(--filter-ui-scale));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hex-prism-carousel__side-icon--{{ section_id }}{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .hex-prism-carousel__side-icon--lottie--{{ section_id }} svg{
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+
+  .hex-prism-carousel__filters-row--{{ section_id }}{
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc({{ filter_gap }}px * var(--filter-ui-scale));
+    align-items: center;
+  }
+
+  .hex-prism-carousel__filters-chip-group--{{ section_id }}{
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc({{ filter_gap }}px * var(--filter-ui-scale));
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .hex-prism-carousel__side-icon-wrap--row--{{ section_id }}{
+    margin-inline-start: auto;
+  }
+
+  .hex-prism-carousel__chip--{{ section_id }}{
+    appearance: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.9);
+    border-radius: 999px;
+    padding: calc(8px * var(--filter-ui-scale)) calc(12px * var(--filter-ui-scale));
+    font-size: calc(13px * var(--filter-ui-scale));
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  }
+
+  .hex-prism-carousel__chip--{{ section_id }}:hover{
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  .hex-prism-carousel__chip--{{ section_id }}.is-active{
+    background: rgba(0,0,0,0.5);
+    border-color: rgba(0,0,0,0.7);
+  }
+
+  .hex-prism-carousel__chip--reset--{{ section_id }}{
+    min-width: calc(38px * var(--filter-ui-scale));
+    width: calc(38px * var(--filter-ui-scale));
+    height: calc(38px * var(--filter-ui-scale));
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(18px * var(--filter-ui-scale));
+  }
+
+  .hex-prism-carousel__reset-icon{
+    width: calc(18px * var(--filter-ui-scale));
+    height: calc(18px * var(--filter-ui-scale));
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Section title */
+  .hex-prism-carousel__section-title--{{ section_id }}{
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: {{ section_title_top_padding }}px 18px 12px;
+    font-size: {{ section_title_size }}px;
+    font-weight: {{ section_title_weight }};
+    color: {{ section_title_color }};
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Push scene down slightly when filters exist */
+  .hex-prism-carousel__filters--{{ section_id }} + .hex-prism-carousel__scene--{{ section_id }}{
+    min-height: 520px;
+    margin-top: {{ filter_bottom_margin }}px;
+  }
+
+  /* Add space when title exists but no filters */
+  .hex-prism-carousel__section-title--{{ section_id }} + .hex-prism-carousel__scene--{{ section_id }}{
+    margin-top: 12px;
+  }
+
+  /* ===== Inactive faces (filtered out) ===== */
+  .hex-prism-carousel__face--{{ section_id }}[data-filtered="true"]{
+    pointer-events: none !important;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-filtered="true"] .hex-prism-carousel__face-inner--{{ section_id }}{
+    opacity: 0.35 !important;
+    filter: blur(1.5px) grayscale(0.2);
+    transform: scale(0.95);
+  }
+
+  /* ===== Name label (vertical, bottom-right) ===== */
+  .hex-prism-carousel__name--{{ section_id }}{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 5;
+    padding: 8px 6px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.45);
+    color: rgba(255,255,255,0.95);
+    font-weight: {{ card_name_weight }};
+    font-size: {{ card_name_size }}px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+  }
+
+  .hex-prism-carousel__card-icon--{{ section_id }}{
+    position: absolute;
+    top: {{ tile_icon_offset_top }}px;
+    left: {{ tile_icon_offset_left }}px;
+    width: {{ tile_icon_size }}px;
+    height: {{ tile_icon_size }}px;
+    z-index: 11;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hex-prism-carousel__card-icon--{{ section_id }} img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Desktop hover shows label */
+  @media (hover:hover) and (pointer:fine){
+    .hex-prism-carousel__face--{{ section_id }}:hover .hex-prism-carousel__name--{{ section_id }}{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mobile: show label on active card */
+  @media (max-width: 768px){
+    .hex-prism-carousel__face--{{ section_id }}[data-state="active"] .hex-prism-carousel__name--{{ section_id }}{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Quick add (+) */
+  .hex-prism-carousel__quickadd-trigger--{{ section_id }}{
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 12;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .2s ease, transform .2s ease, background .2s ease;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}[data-state="active"] .hex-prism-carousel__quickadd-trigger--{{ section_id }},
+  .hex-prism-carousel__face--{{ section_id }}:hover .hex-prism-carousel__quickadd-trigger--{{ section_id }}{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px){
+    .hex-prism-carousel__quickadd-trigger--{{ section_id }}{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hex-prism-carousel__quickadd-panel--{{ section_id }}{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 13;
+    border-radius: var(--card-r, {{ corner_radius }}px);
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(12,12,12,0.74);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 18px 12px;
+    transform: translateY(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .hex-prism-carousel__face--{{ section_id }}.hpc-quickadd-open .hex-prism-carousel__quickadd-panel--{{ section_id }}{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .hex-prism-carousel__quickadd-title{
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .hex-prism-carousel__quickadd-sizes{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hex-prism-carousel__quickadd-size{
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-radius: 999px;
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease;
+  }
+
+  .hex-prism-carousel__quickadd-size:hover{
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.45);
+  }
+
+  .hex-prism-carousel__quickadd-size[disabled]{
+    opacity: .55;
+    cursor: not-allowed;
+  }
+
+  .hex-prism-carousel__quickadd-size--soldout{
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+
+  .hex-prism-carousel__quickadd-size-guide{
+    margin-top: 12px;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .hex-prism-carousel__size-guide-modal{
+    position: fixed;
+    inset: 0;
+    z-index: 12000;
+  }
+  .hex-prism-carousel__size-guide-modal[hidden]{ display:none !important; }
+  .hex-prism-carousel__size-guide-overlay{
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+  }
+  .hex-prism-carousel__size-guide-popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(752px, calc(100vw - 28px));
+    max-height: min(631px, calc(100vh - 40px));
+    background: #fff;
+    border-radius: 16px;
+    overflow: auto;
+    padding: 14px 14px 18px;
+  }
+  .hex-prism-carousel__size-guide-close{
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .hex-prism-carousel__size-guide-heading{
+    margin: 0 36px 10px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+  }
+  .hex-prism-carousel__size-guide-image-wrap img{
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    body.hpc-modal-lock,
+    html.hpc-modal-lock {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    'use strict';
+    
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector(`[data-section-id="${sectionId}"]`);
+    if (!section) return;
+    
+    const prism = section.querySelector('[data-prism]');
+    const scene = section.querySelector('.hex-prism-carousel__scene--' + sectionId);
+    const faces = Array.from(section.querySelectorAll('[data-face]'));
+    
+    if (!prism || faces.length === 0) return;
+    
+    let rotationIndex = 0;
+    let activeIndex = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let dragOffset = 0;
+    let swipeDirection = null; // 'horizontal' or 'vertical' or null
+    let isTransitionLocked = false;
+    let transitionUnlockTimer = null;
+    const supportsPointerEvents = typeof window.PointerEvent !== 'undefined';
+    const prefersTouchInput = window.matchMedia('(hover: none), (pointer: coarse)').matches || (navigator.maxTouchPoints || 0) > 0;
+    const usePointerDragHandlers = supportsPointerEvents;
+    const useTouchDragHandlers = !supportsPointerEvents;
+    const useTouchMoveLock = supportsPointerEvents && prefersTouchInput;
+    const swipeInputCooldownMs = 120;
+    const gestureLockThresholdPx = 4;
+    const numFaces = faces.length;
+    const degPerFace = 360 / numFaces;
+    const filterWrap = section.querySelector('[data-filters]');
+    const chips = filterWrap ? Array.from(filterWrap.querySelectorAll('[data-age-filter]')) : [];
+    const resetBtn = filterWrap ? filterWrap.querySelector('[data-age-reset]') : null;
+    let activeFilter = 'all';
+    
+    function mod(n, m) {
+      return ((n % m) + m) % m;
+    }
+
+    function detectSwipeDirection(deltaX, deltaY) {
+      if (deltaX < gestureLockThresholdPx && deltaY < gestureLockThresholdPx) return null;
+      return deltaX >= deltaY ? 'horizontal' : 'vertical';
+    }
+    
+    function faceMatchesFilter(faceEl, filterValue) {
+      if (!filterValue || filterValue === 'all') return true;
+      const raw = (faceEl.getAttribute('data-ages') || '').toLowerCase();
+      if (!raw) return false;
+      const list = raw.split(',').map(s => s.trim()).filter(Boolean);
+      return list.includes(String(filterValue).toLowerCase());
+    }
+    
+    function applyFilter() {
+      faces.forEach(face => {
+        const match = faceMatchesFilter(face, activeFilter);
+        face.setAttribute('data-filtered', match ? 'false' : 'true');
+      });
+    }
+    
+    function getWrappedDiff(faceIndex, activeIndex) {
+      let diff = faceIndex - activeIndex;
+      if (diff > numFaces / 2) diff -= numFaces;
+      if (diff < -numFaces / 2) diff += numFaces;
+      return diff;
+    }
+    
+    function updateUI() {
+      activeIndex = mod(rotationIndex, numFaces);
+      
+      const rotation = -rotationIndex * degPerFace;
+      prism.style.setProperty('--rot', `${rotation}deg`);
+      
+      faces.forEach((face, index) => {
+        const diff = getWrappedDiff(index, activeIndex);
+        const absDiff = Math.abs(diff);
+        
+        if (diff === 0) {
+          face.setAttribute('data-state', 'active');
+          face.setAttribute('tabindex', '0');
+          face.style.setProperty('--z', '18px');
+        } else if (absDiff === 1) {
+          face.setAttribute('data-state', 'side');
+          face.setAttribute('tabindex', '-1');
+          face.style.setProperty('--z', '6px');
+        } else if (absDiff === 2) {
+          face.setAttribute('data-state', 'side2');
+          face.setAttribute('tabindex', '-1');
+          face.style.setProperty('--z', '0px');
+        } else {
+          face.setAttribute('data-state', 'far');
+          face.setAttribute('tabindex', '-1');
+          face.style.setProperty('--z', '-40px');
+        }
+      });
+
+      section.dispatchEvent(new CustomEvent('hpc:changed', { detail: { activeIndex } }));
+    }
+
+    function lockTransition() {
+      isTransitionLocked = true;
+      if (transitionUnlockTimer) clearTimeout(transitionUnlockTimer);
+      transitionUnlockTimer = setTimeout(() => {
+        isTransitionLocked = false;
+      }, swipeInputCooldownMs);
+    }
+    
+    function goNext() {
+      if (numFaces <= 1 || isTransitionLocked) return;
+      lockTransition();
+      for (let i = 0; i < numFaces; i++) {
+        rotationIndex += 1;
+        const idx = mod(rotationIndex, numFaces);
+        if (faceMatchesFilter(faces[idx], activeFilter)) break;
+      }
+      
+      updateUI();
+    }
+    
+    function goPrev() {
+      if (numFaces <= 1 || isTransitionLocked) return;
+      lockTransition();
+      for (let i = 0; i < numFaces; i++) {
+        rotationIndex -= 1;
+        const idx = mod(rotationIndex, numFaces);
+        if (faceMatchesFilter(faces[idx], activeFilter)) break;
+      }
+      
+      updateUI();
+    }
+    
+    function handlePointerDown(e) {
+      if (numFaces <= 1) return;
+      if (!scene || !scene.contains(e.target)) return;
+      if (e.target.closest('[data-hpc-qa-trigger]') || e.target.closest('[data-hpc-qa-panel]') || e.target.closest('[data-hpc-open-size-guide]') || e.target.closest('[data-hpc-size-guide-modal]')) return;
+      if (typeof e.button === 'number' && e.button !== 0) return;
+      if (e.touches && e.touches.length > 1) return;
+      
+      isDragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      currentX = startX;
+      dragOffset = 0;
+      swipeDirection = null; // Reset direction on new drag
+      section.style.cursor = 'grabbing';
+      section.style.userSelect = 'none';
+      // Don't prevent default here - let first move determine direction
+    }
+    
+    function handlePointerMove(e) {
+      if (!isDragging) return;
+      if (e.touches && !e.touches.length) return;
+      
+      const x = e.touches ? e.touches[0].clientX : e.clientX;
+      const y = e.touches ? e.touches[0].clientY : e.clientY;
+      const deltaX = Math.abs(x - startX);
+      const deltaY = Math.abs(y - startY);
+      
+      // Lock direction early, with bias toward horizontal intent.
+      if (!swipeDirection) {
+        const detectedDirection = detectSwipeDirection(deltaX, deltaY);
+        if (detectedDirection === 'horizontal') {
+          swipeDirection = 'horizontal';
+          if (e.cancelable) {
+            e.preventDefault();
+          }
+        } else if (detectedDirection === 'vertical') {
+          swipeDirection = 'vertical';
+          return;
+        }
+      }
+      
+      // If horizontal swipe is locked, ALWAYS prevent default to stop vertical scrolling
+      if (swipeDirection === 'horizontal') {
+        // Aggressively prevent default to stop any vertical movement
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        dragOffset = x - startX;
+        currentX = x;
+      }
+      // If vertical, do nothing - let browser handle it naturally
+    }
+    
+    // Separate touchmove handler for mobile devices (non-passive to allow preventDefault)
+    function handleTouchMove(e) {
+      if (!useTouchDragHandlers) return;
+      if (!isDragging) return;
+      if (!e.touches || !e.touches.length) return;
+      
+      // If horizontal is already locked, prevent default immediately to stop vertical scrolling
+      if (swipeDirection === 'horizontal') {
+        e.preventDefault();
+        const x = e.touches[0].clientX;
+        dragOffset = x - startX;
+        currentX = x;
+        return;
+      }
+      
+      // Otherwise, detect direction (same logic as pointermove but for touch)
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
+      const deltaX = Math.abs(x - startX);
+      const deltaY = Math.abs(y - startY);
+      
+      // Lock direction early, with bias toward horizontal intent.
+      if (!swipeDirection) {
+        const detectedDirection = detectSwipeDirection(deltaX, deltaY);
+        if (detectedDirection === 'horizontal') {
+          swipeDirection = 'horizontal';
+          e.preventDefault();
+          dragOffset = x - startX;
+          currentX = x;
+        } else if (detectedDirection === 'vertical') {
+          swipeDirection = 'vertical';
+          return;
+        }
+      }
+    }
+
+    // Lightweight lock path for pointer-enabled touch devices:
+    // only prevents vertical page scroll during horizontal swipes.
+    function handleTouchMoveLock(e) {
+      if (!useTouchMoveLock) return;
+      if (!isDragging) return;
+      if (!e.touches || !e.touches.length) return;
+
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
+      const deltaX = Math.abs(x - startX);
+      const deltaY = Math.abs(y - startY);
+
+      if (!swipeDirection) {
+        const detectedDirection = detectSwipeDirection(deltaX, deltaY);
+        if (!detectedDirection) return;
+        swipeDirection = detectedDirection;
+      }
+
+      if (swipeDirection === 'horizontal' && e.cancelable) {
+        e.preventDefault();
+      }
+    }
+    
+    function handlePointerUp(e) {
+      if (!isDragging) {
+        dragOffset = 0;
+        swipeDirection = null;
+        return;
+      }
+      
+      // Only process carousel rotation if it was a horizontal swipe
+      if (swipeDirection === 'horizontal') {
+        const threshold = section.dataset.faceWidth ? parseFloat(section.dataset.faceWidth) * 0.06 : 24;
+        const wasDrag = Math.abs(dragOffset) > threshold;
+        
+        if (wasDrag) {
+          if (e.cancelable) {
+            e.preventDefault();
+          }
+          e.stopPropagation();
+          if (dragOffset > 0) {
+            goPrev();
+          } else {
+            goNext();
+          }
+        }
+      }
+      // If vertical, do nothing - browser already handled scrolling
+      
+      // Always reset state
+      isDragging = false;
+      section.style.cursor = '';
+      section.style.userSelect = '';
+      swipeDirection = null;
+      dragOffset = 0;
+    }
+    
+    function handleClick(e) {
+      if (e.target.closest('[data-hpc-qa-trigger]') || e.target.closest('[data-hpc-qa-panel]') || e.target.closest('[data-hpc-open-size-guide]') || e.target.closest('[data-hpc-size-guide-modal]')) {
+        return;
+      }
+
+      const faceLink = e.target.closest('[data-face]');
+      if (!faceLink) return;
+      
+      // Don't allow clicks on filtered cards
+      if (faceLink.getAttribute('data-filtered') === 'true') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      
+      e.preventDefault();
+      e.stopPropagation();
+      const href = faceLink.getAttribute('href');
+      if (href && href !== '#') {
+        window.location.href = href;
+      }
+    }
+    
+    function handleKeydown(e) {
+      if (!section.contains(document.activeElement) && !section.matches(':hover')) return;
+      
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      }
+    }
+    
+    function init() {
+      if (faces.length === 0) return;
+      
+      section.style.setProperty('--faces', String(numFaces));
+      
+      faces.forEach((face, index) => {
+        face.style.setProperty('--i', index);
+      });
+
+      if (usePointerDragHandlers) {
+        section.addEventListener('pointerdown', handlePointerDown);
+        section.addEventListener('pointermove', handlePointerMove);
+        section.addEventListener('pointerup', handlePointerUp);
+        section.addEventListener('pointercancel', handlePointerUp);
+        if (useTouchMoveLock) {
+          section.addEventListener('touchmove', handleTouchMoveLock, { passive: false });
+        }
+      } else {
+        // Touch path (mobile/coarse pointers) for reliable scroll locking.
+        section.addEventListener('touchstart', handlePointerDown, { passive: true });
+        section.addEventListener('touchmove', handleTouchMove, { passive: false });
+        section.addEventListener('touchend', handlePointerUp, { passive: true });
+        section.addEventListener('touchcancel', handlePointerUp, { passive: true });
+      }
+      section.addEventListener('click', handleClick, true);
+      section.addEventListener('keydown', handleKeydown);
+      
+      // Wire filter chip clicks
+      if (chips.length) {
+        chips.forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeFilter = btn.getAttribute('data-age-filter') || 'all';
+            chips.forEach(c => c.classList.toggle('is-active', c === btn));
+            applyFilter();
+            // Keep the current activeIndex but if it becomes filtered, advance until you find a match
+            if (!faceMatchesFilter(faces[activeIndex], activeFilter)) {
+              // advance up to numFaces to find a match
+              for (let i = 0; i < numFaces; i++) {
+                rotationIndex += 1;
+                const nextIdx = mod(rotationIndex, numFaces);
+                if (faceMatchesFilter(faces[nextIdx], activeFilter)) break;
+              }
+              updateUI();
+            } else {
+              updateUI();
+            }
+          });
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          activeFilter = 'all';
+          chips.forEach(c => c.classList.remove('is-active'));
+          applyFilter();
+          updateUI();
+        });
+      }
+      
+      applyFilter();
+      updateUI();
+    }
+    
+    function cleanup() {
+      section.removeEventListener('pointerdown', handlePointerDown);
+      section.removeEventListener('pointermove', handlePointerMove);
+      section.removeEventListener('pointerup', handlePointerUp);
+      section.removeEventListener('pointercancel', handlePointerUp);
+      section.removeEventListener('touchstart', handlePointerDown);
+      section.removeEventListener('touchmove', handleTouchMove);
+      section.removeEventListener('touchmove', handleTouchMoveLock);
+      section.removeEventListener('touchend', handlePointerUp);
+      section.removeEventListener('touchcancel', handlePointerUp);
+      section.removeEventListener('click', handleClick, true);
+      section.removeEventListener('keydown', handleKeydown);
+      
+      if (transitionUnlockTimer) {
+        clearTimeout(transitionUnlockTimer);
+        transitionUnlockTimer = null;
+      }
+      isTransitionLocked = false;
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail.sectionId === sectionId) {
+        cleanup();
+        setTimeout(init, 100);
+      }
+    });
+    
+    document.addEventListener('shopify:section:unload', function(e) {
+      if (e.detail.sectionId === sectionId) {
+        cleanup();
+      }
+    });
+  })();
+</script>
+
+<script>
+  (function() {
+    const section = document.querySelector('.hex-prism-carousel--{{ section_id }}');
+    if (!section) return;
+
+    const modal = section.querySelector('[data-hpc-size-guide-modal]');
+    const modalCloseEls = modal ? modal.querySelectorAll('[data-hpc-size-guide-close]') : [];
+    let openFace = null;
+
+    function setModalLock(locked) {
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.body.classList.toggle('hpc-modal-lock', locked);
+        document.documentElement.classList.toggle('hpc-modal-lock', locked);
+      }
+    }
+
+    function openSizeGuide() {
+      if (!modal) return;
+      modal.hidden = false;
+      setModalLock(true);
+    }
+
+    function closeSizeGuide() {
+      if (!modal) return;
+      modal.hidden = true;
+      setModalLock(false);
+    }
+
+    function closePanel() {
+      if (!openFace) return;
+      openFace.classList.remove('hpc-quickadd-open');
+      openFace = null;
+    }
+
+    function openPanel(face) {
+      if (openFace && openFace !== face) openFace.classList.remove('hpc-quickadd-open');
+      openFace = face;
+      face.classList.add('hpc-quickadd-open');
+    }
+
+    function addVariant(variantId, buttonEl) {
+      if (!variantId) return;
+      if (buttonEl) buttonEl.disabled = true;
+
+      const formData = new FormData();
+      formData.append('id', variantId);
+      formData.append('quantity', '1');
+      formData.append('sections', 'cart-drawer,cart-icon-bubble');
+      formData.append('sections_url', window.location.pathname);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' },
+        body: formData
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.status) return;
+          return fetch('/?sections=cart-drawer,cart-icon-bubble&_=' + Date.now(), { cache: 'no-store' })
+            .then((r) => r.json())
+            .then((data) => {
+              const liveDrawer = document.querySelector('cart-drawer');
+              if (!liveDrawer) return;
+
+              const html = data && data['cart-drawer'];
+              if (html) {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const newDrawer = doc.querySelector('cart-drawer');
+                if (newDrawer) {
+                  liveDrawer.innerHTML = newDrawer.innerHTML;
+                  liveDrawer.className = newDrawer.className;
+                }
+              }
+
+              const bubbleHtml = data && data['cart-icon-bubble'];
+              if (bubbleHtml) {
+                const bubbleContainer = document.getElementById('cart-icon-bubble');
+                if (bubbleContainer) {
+                  const doc = new DOMParser().parseFromString(bubbleHtml, 'text/html');
+                  const newBubble = doc.getElementById('cart-icon-bubble');
+                  if (newBubble) bubbleContainer.innerHTML = newBubble.innerHTML;
+                }
+              }
+
+              if (typeof liveDrawer.open === 'function') {
+                liveDrawer.open();
+              } else {
+                liveDrawer.classList.add('active');
+                liveDrawer.setAttribute('open', '');
+                document.body.classList.add('overflow-hidden');
+              }
+            });
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (buttonEl) buttonEl.disabled = false;
+        });
+    }
+
+    section.querySelectorAll('[data-face]').forEach((face) => {
+      const trigger = face.querySelector('[data-hpc-qa-trigger]');
+      const panel = face.querySelector('[data-hpc-qa-panel]');
+      if (!trigger || !panel) return;
+
+      ['pointerdown', 'mousedown', 'touchstart'].forEach((evtName) => {
+        trigger.addEventListener(evtName, (e) => {
+          if (evtName !== 'touchstart') e.preventDefault();
+          e.stopPropagation();
+        }, { passive: false });
+      });
+
+      trigger.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (face.classList.contains('hpc-quickadd-open')) closePanel();
+        else openPanel(face);
+      }, { passive: false });
+
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (face.classList.contains('hpc-quickadd-open')) closePanel();
+        else openPanel(face);
+      });
+
+      panel.querySelectorAll('[data-hpc-qa-size]').forEach((sizeBtn) => {
+        sizeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!face.classList.contains('hpc-quickadd-open')) return;
+          addVariant(sizeBtn.getAttribute('data-variant-id'), sizeBtn);
+          closePanel();
+        });
+      });
+
+      const guideBtn = panel.querySelector('[data-hpc-open-size-guide]');
+      if (guideBtn) {
+        guideBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!face.classList.contains('hpc-quickadd-open')) return;
+          closePanel();
+          openSizeGuide();
+        });
+      }
+    });
+
+    section.addEventListener('click', (e) => {
+      const insideQuickAdd = e.target.closest('[data-hpc-qa-trigger]') || e.target.closest('[data-hpc-qa-panel]');
+      if (!insideQuickAdd) closePanel();
+    });
+
+    section.addEventListener('hpc:changed', () => {
+      closePanel();
+    });
+
+    if (modal) {
+      modalCloseEls.forEach((el) => {
+        el.addEventListener('click', () => {
+          closeSizeGuide();
+          closePanel();
+        });
+      });
+
+      const popup = modal.querySelector('.hex-prism-carousel__size-guide-popup');
+      modal.addEventListener('click', (e) => {
+        if (!popup) return;
+        if (!popup.contains(e.target)) {
+          closeSizeGuide();
+          closePanel();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) {
+          closeSizeGuide();
+          closePanel();
+        }
+      });
+
+      modal.addEventListener('touchmove', (e) => {
+        if (window.matchMedia('(max-width: 768px)').matches) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+    }
+  })();
+</script>
+
+<script>
+  (function() {
+    const sectionId = '{{ section_id }}';
+    const section = document.querySelector(`[data-section-id="${sectionId}"]`);
+    if (!section) return;
+
+    function getIconNodes() {
+      return Array.from(section.querySelectorAll('[data-hpc-side-icon-json]'));
+    }
+
+    function renderLottieIcons() {
+      if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
+      getIconNodes().forEach((node) => {
+        const jsonUrl = node.getAttribute('data-hpc-side-icon-json');
+        if (!jsonUrl) return;
+        if (node.__hpcLottieAnim && typeof node.__hpcLottieAnim.destroy === 'function') {
+          node.__hpcLottieAnim.destroy();
+        }
+        node.innerHTML = '';
+        node.__hpcLottieAnim = window.lottie.loadAnimation({
+          container: node,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: jsonUrl,
+          rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+        });
+      });
+    }
+
+    function loadLottieLibraryAndRender() {
+      if (!getIconNodes().length) return;
+
+      if (window.lottie && typeof window.lottie.loadAnimation === 'function') {
+        renderLottieIcons();
+        return;
+      }
+
+      if (!window.__hpcLottieLoaderPromise) {
+        window.__hpcLottieLoaderPromise = new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      window.__hpcLottieLoaderPromise.then(renderLottieIcons).catch(() => {});
+    }
+
+    function destroyLottieIcons() {
+      getIconNodes().forEach((node) => {
+        if (node.__hpcLottieAnim && typeof node.__hpcLottieAnim.destroy === 'function') {
+          node.__hpcLottieAnim.destroy();
+          node.__hpcLottieAnim = null;
+        }
+        node.innerHTML = '';
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadLottieLibraryAndRender);
+    } else {
+      loadLottieLibraryAndRender();
+    }
+
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail.sectionId === sectionId) {
+        loadLottieLibraryAndRender();
+      }
+    });
+
+    document.addEventListener('shopify:section:unload', function(e) {
+      if (e.detail.sectionId === sectionId) {
+        destroyLottieIcons();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Hex Prism Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "3D Perspective Settings"
+    },
+    {
+      "type": "range",
+      "id": "perspective",
+      "label": "Perspective",
+      "min": 500,
+      "max": 3000,
+      "step": 50,
+      "unit": "px",
+      "default": 1400,
+      "info": "CSS perspective value for 3D effect"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Prism Radius",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 300,
+      "info": "Base distance of cards from center"
+    },
+    {
+      "type": "range",
+      "id": "card_gap_multiplier",
+      "label": "Card Gap (Multiplier)",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "Adjust spacing between cards (50% = closer, 150% = wider). Multiplies the radius setting."
+    },
+    {
+      "type": "header",
+      "content": "Mobile 3D Settings"
+    },
+    {
+      "type": "range",
+      "id": "perspective_mobile",
+      "label": "Perspective (Mobile)",
+      "min": 600,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1000,
+      "info": "CSS perspective value for 3D effect on mobile (smaller = stronger depth)"
+    },
+    {
+      "type": "range",
+      "id": "radius_mobile",
+      "label": "Prism Radius (Mobile)",
+      "min": 160,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 220,
+      "info": "Distance of cards from center on mobile (reduced to keep side faces visible)"
+    },
+    {
+      "type": "header",
+      "content": "Card Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "face_width",
+      "label": "Card Width",
+      "min": 250,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 360,
+      "info": "Width of each card"
+    },
+    {
+      "type": "range",
+      "id": "face_height",
+      "label": "Card Height",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520,
+      "info": "Height of each card (ignored if aspect ratio is set)"
+    },
+    {
+      "type": "text",
+      "id": "card_aspect_ratio",
+      "label": "Card Aspect Ratio",
+      "info": "Optional: Card width to height ratio (e.g., '4 / 5' for portrait, '1 / 1' for square, '16 / 9' for landscape). If set, height will be calculated from width automatically. Leave empty to use manual height settings."
+    },
+    {
+      "type": "header",
+      "content": "Mobile Card Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "face_width_mobile",
+      "label": "Card Width (Mobile)",
+      "min": 220,
+      "max": 340,
+      "step": 10,
+      "unit": "px",
+      "default": 280,
+      "info": "Width of each card on mobile devices"
+    },
+    {
+      "type": "range",
+      "id": "face_height_mobile",
+      "label": "Card Height (Mobile)",
+      "min": 320,
+      "max": 520,
+      "step": 20,
+      "unit": "px",
+      "default": 420,
+      "info": "Height of each card on mobile devices"
+    },
+    {
+      "type": "header",
+      "content": "Section Title"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Shop by Age",
+      "info": "Title displayed at the top of the section"
+    },
+    {
+      "type": "select",
+      "id": "section_title_tag",
+      "label": "Section Title Tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "section_title_color",
+      "label": "Section Title Color",
+      "default": "#ffffff",
+      "info": "Color used for the carousel section title."
+    },
+    {
+      "type": "range",
+      "id": "section_title_top_padding",
+      "label": "Top Padding for Section Title",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60,
+      "info": "Top padding for the section title"
+    },
+    {
+      "type": "range",
+      "id": "section_title_size",
+      "label": "Section Title Size (Mobile)",
+      "min": 16,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 32,
+      "info": "Mobile font size of the section title."
+    },
+    {
+      "type": "range",
+      "id": "section_title_mobile_size",
+      "label": "Section Title Size (Desktop)",
+      "min": 14,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "info": "Desktop font size of the section title."
+    },
+    {
+      "type": "select",
+      "id": "section_title_weight",
+      "label": "Section Title Weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "default": "800",
+      "info": "Font weight of the section title."
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner Radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "info": "Corner radius applied to each prism card face."
+    },
+    {
+      "type": "range",
+      "id": "side_opacity",
+      "label": "Side Card Opacity (±1)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2,
+      "info": "Opacity of first side cards (1 = 0.1, 5 = 0.5)"
+    },
+    {
+      "type": "range",
+      "id": "side2_opacity",
+      "label": "Side Card Opacity (±2)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2,
+      "info": "Opacity of second side cards (1 = 0.1, 5 = 0.5)"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Image Max Width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 700,
+      "info": "Maximum image width for performance optimization"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff",
+      "info": "Background color of the carousel section."
+    },
+    {
+      "type": "image_picker",
+      "id": "section_bg_image",
+      "label": "Background Image",
+      "info": "Optional background image — overlaid on top of the background color."
+    },
+    {
+      "type": "header",
+      "content": "Card Top-Left Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile_top_left_icon",
+      "label": "Icon image",
+      "info": "Optional icon shown in the top-left of discounted cards."
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_size",
+      "min": 12,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_offset_top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon offset top",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tile_icon_offset_left",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon offset left",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on Desktop",
+      "default": false,
+      "info": "Hide this section on desktop screens (1025px and above). Section will still be visible on tablets and mobile devices."
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0,
+      "info": "Top padding for the section"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0,
+      "info": "Bottom padding for the section"
+    },
+    {
+      "type": "header",
+      "content": "Opposite Side Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "side_icon",
+      "label": "Opposite side icon",
+      "info": "Independent icon shown on the opposite side at the same top level as the filter controls."
+    },
+    {
+      "type": "text",
+      "id": "side_icon_json_url",
+      "label": "Opposite side icon .json URL",
+      "info": "Optional Lottie JSON URL. Upload your .json in Shopify Files and paste the file URL here. This takes priority over image icon."
+    },
+    {
+      "type": "text",
+      "id": "side_icon_alt",
+      "label": "Opposite side icon alt text",
+      "info": "Optional accessibility text. Leave blank if decorative."
+    },
+    {
+      "type": "range",
+      "id": "side_icon_size",
+      "label": "Opposite side icon size",
+      "min": 12,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "info": "Size of the opposite-side icon."
+    },
+    {
+      "type": "header",
+      "content": "Filtering"
+    },
+    {
+      "type": "text",
+      "id": "age_filter_title",
+      "label": "Age filter title",
+      "default": "Choose Age",
+      "info": "Label shown above the age filter buttons."
+    },
+    {
+      "type": "color",
+      "id": "age_filter_title_color",
+      "label": "Age Filter Title Color",
+      "default": "#ffffff",
+      "info": "Text color of the age filter title."
+    },
+    {
+      "type": "range",
+      "id": "age_filter_title_size",
+      "label": "Age Filter Title Size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "info": "Font size of the age filter title."
+    },
+    {
+      "type": "select",
+      "id": "age_filter_title_weight",
+      "label": "Age Filter Title Weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "default": "700",
+      "info": "Font weight of the age filter title."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_age_filter",
+      "label": "Show age filter",
+      "default": true,
+      "info": "Show or hide the age filter controls."
+    },
+    {
+      "type": "text",
+      "id": "age_filter_values",
+      "label": "Age filter values (comma-separated)",
+      "default": "0.5-4,4-7,7-10",
+      "info": "These are the filter buttons. Example: 0.5-4,4-7,7-10"
+    },
+    {
+      "type": "image_picker",
+      "id": "reset_icon",
+      "label": "Reset filter icon",
+      "info": "Shown as the reset button at the far right of the filter row"
+    },
+    {
+      "type": "header",
+      "content": "Filter Spacing"
+    },
+    {
+      "type": "range",
+      "id": "filter_ui_scale",
+      "label": "Filter Size",
+      "min": 70,
+      "max": 140,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "Scales filter title, chips, reset button, and filter spacing."
+    },
+    {
+      "type": "range",
+      "id": "filter_gap",
+      "label": "Gap Between Filter Buttons",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "info": "Spacing between filter buttons"
+    },
+    {
+      "type": "range",
+      "id": "filter_top_padding",
+      "label": "Top Padding for Filters",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60,
+      "info": "Top padding for the filter section"
+    },
+    {
+      "type": "range",
+      "id": "filter_bottom_margin",
+      "label": "Space Below Filters",
+      "min": -100,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "info": "Space between filter section and carousel (can be negative)"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Box Scale"
+    },
+    {
+      "type": "range",
+      "id": "carousel_box_scale",
+      "label": "Carousel Box Size",
+      "min": 70,
+      "max": 120,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "info": "Scales the full 3D carousel box without changing configured card dimensions."
+    },
+    {
+      "type": "header",
+      "content": "Card Name Label"
+    },
+    {
+      "type": "range",
+      "id": "card_name_size",
+      "label": "Card Name Size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "info": "Font size of card names shown under each face."
+    },
+    {
+      "type": "select",
+      "id": "card_name_weight",
+      "label": "Card Name Weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "300"
+        },
+        {
+          "value": "400",
+          "label": "400"
+        },
+        {
+          "value": "500",
+          "label": "500"
+        },
+        {
+          "value": "600",
+          "label": "600"
+        },
+        {
+          "value": "700",
+          "label": "700"
+        },
+        {
+          "value": "800",
+          "label": "800"
+        },
+        {
+          "value": "900",
+          "label": "900"
+        }
+      ],
+      "default": "800",
+      "info": "Font weight of card names shown under each face."
+    },
+    {
+      "type": "header",
+      "content": "Quick Add Popup"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tile_quick_add",
+      "label": "Enable tile quick add (+)",
+      "default": true,
+      "info": "Enable quick add size picker on card click."
+    },
+    {
+      "type": "text",
+      "id": "quick_add_title",
+      "label": "Quick add popup title",
+      "default": "Choose size",
+      "info": "Heading shown in quick add size chooser."
+    },
+    {
+      "type": "text",
+      "id": "quick_add_size_guide_heading",
+      "label": "Size guide popup heading",
+      "default": "Size guide",
+      "info": "Heading text in the size guide popup."
+    },
+    {
+      "type": "text",
+      "id": "quick_add_size_guide_link_label",
+      "label": "Size guide link label",
+      "default": "Open size guide",
+      "info": "Label of the size guide link in quick add."
+    },
+    {
+      "type": "image_picker",
+      "id": "quick_add_size_guide_image",
+      "label": "Size guide image (752x631 popup)",
+      "info": "Image displayed in the size guide popup."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "face",
+      "name": "Card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Card name",
+          "default": "Bunny Set",
+          "info": "Label used for the card caption and accessibility fallback."
+        },
+        {
+          "type": "text",
+          "id": "ages",
+          "label": "Ages (comma-separated)",
+          "default": "2-4",
+          "info": "Must match filter values above. Example: 0-1,1-2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: 700x1000px or larger"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional link for this card"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product for quick add",
+          "info": "Used for + quick add sizes and product URL fallback"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_icon",
+          "label": "Card top-left icon",
+          "info": "Optional unique icon for this card. If empty, section icon is used."
+        },
+        {
+          "type": "header",
+          "content": "Fallback Gradient",
+          "info": "Used if no image is provided"
+        },
+        {
+          "type": "color",
+          "id": "gradient_start",
+          "label": "Gradient Start Color",
+          "default": "#4a90e2",
+          "info": "Start color of the card gradient background."
+        },
+        {
+          "type": "color",
+          "id": "gradient_end",
+          "label": "Gradient End Color",
+          "default": "#7b68ee",
+          "info": "End color of the card gradient background."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hex Prism Carousel",
+      "blocks": [
+        {
+          "type": "face"
+        },
+        {
+          "type": "face"
+        },
+        {
+          "type": "face"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

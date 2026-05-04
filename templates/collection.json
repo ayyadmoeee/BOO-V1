@@ -1,0 +1,326 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "shop_color_grid_mytb9M": {
+      "type": "shop-color-grid",
+      "blocks": {
+        "tile_iBHdYW": {
+          "type": "tile",
+          "settings": {
+            "product": "dinoboo",
+            "custom_image": "shopify://shop_images/DinoBoo.png",
+            "text_color": "#ffffff",
+            "age_range": "0.5-3,4"
+          }
+        },
+        "tile_GVynen": {
+          "type": "tile",
+          "settings": {
+            "product": "bunboo",
+            "custom_image": "shopify://shop_images/BunBoo.png",
+            "card_icon": "shopify://shop_images/8011d0b10e5b130bd3b2e402e8f5a424.png",
+            "text_color": "#ffffff",
+            "age_range": "0.5-3, 4"
+          }
+        },
+        "tile_MBTBfD": {
+          "type": "tile",
+          "settings": {
+            "product": "shaboo",
+            "custom_image": "shopify://shop_images/ShaBoo_e6861927-ed26-48c2-8d6d-65aea7ae9292.png",
+            "text_color": "#ffffff",
+            "age_range": "4,5-7"
+          }
+        },
+        "tile_ViQ7GJ": {
+          "type": "tile",
+          "settings": {
+            "product": "foxboo",
+            "custom_image": "shopify://shop_images/FoxBoo_2.png",
+            "text_color": "#ffffff",
+            "age_range": "4,5-7"
+          }
+        },
+        "tile_3dYtDP": {
+          "type": "tile",
+          "settings": {
+            "product": "griboo",
+            "custom_image": "shopify://shop_images/GriBoo_2.png",
+            "text_color": "#ffffff",
+            "age_range": "4,5-7"
+          }
+        }
+      },
+      "block_order": [
+        "tile_iBHdYW",
+        "tile_GVynen",
+        "tile_MBTBfD",
+        "tile_ViQ7GJ",
+        "tile_3dYtDP"
+      ],
+      "custom_css": [],
+      "name": "Shop color grid (full screen)",
+      "settings": {
+        "hide_on_mobile": true,
+        "section_font": "assistant_n4",
+        "heading_text": "Baby Clothes & Kids Costumes",
+        "heading_tag": "h1",
+        "heading_color": "#000000",
+        "heading_weight": 900,
+        "subheading_weight": 600,
+        "filter_title_weight": 600,
+        "filter_button_weight": 500,
+        "hover_text_weight": 900,
+        "carousel_title_weight": 700,
+        "quick_add_title_weight": 700,
+        "quick_add_size_weight": 600,
+        "quick_add_size_guide_link_weight": 500,
+        "size_guide_heading_weight": 700,
+        "filter_title": "Select your Age",
+        "filter_btn_bg_color": "#888888",
+        "filter_btn_text_color": "#ffffff",
+        "filter_btn_active_bg_color": "#212121",
+        "filter_btn_radius": 20,
+        "reset_icon": "shopify://shop_images/Reset_Icon_71351e35-0398-499f-98aa-05905e28b5e3.png",
+        "filter_button_1_text": "0.5 - 3 Years",
+        "filter_button_1_range": "0.5-3",
+        "filter_button_2_text": "4 Years",
+        "filter_button_2_range": "4",
+        "filter_button_3_text": "5 - 7 Years",
+        "filter_button_3_range": "5-7",
+        "enable_tile_quick_add": true,
+        "quick_add_title": "Choose size",
+        "quick_add_circle_size": 40,
+        "quick_add_plus_size": 26,
+        "quick_add_size_button_width": 0,
+        "quick_add_size_guide_heading": "Size guide",
+        "quick_add_size_guide_link_label": "Open size guide",
+        "quick_add_size_guide_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png",
+        "section_bg": "#ffffff",
+        "section_bg_image": "shopify://shop_images/generate-a-light-grey-background-gradient.png",
+        "section_padding_top": 0,
+        "section_padding_bottom": 0,
+        "section_padding_left": 0,
+        "section_padding_right": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 0,
+        "heading_padding_top": 0,
+        "heading_padding_bottom": 0,
+        "heading_padding_left": 20,
+        "heading_padding_right": 20,
+        "age_filter_margin_top": 0,
+        "age_filter_margin_bottom": 24,
+        "mobile_carousel_padding_top": 20,
+        "mobile_carousel_padding_bottom": 40,
+        "mobile_carousel_padding_left": 0,
+        "mobile_carousel_padding_right": 0,
+        "grid_wrap_padding_top": 0,
+        "grid_wrap_padding_bottom": 40,
+        "grid_wrap_padding_left": 40,
+        "grid_wrap_padding_right": 40,
+        "grid_vertical_align": "start",
+        "grid_offset_top": 0,
+        "max_width": 1500,
+        "gap": 26,
+        "columns": 5,
+        "tile_aspect_ratio": "3/7",
+        "tile_aspect_ratio_mobile": "",
+        "tile_h_mobile": 240,
+        "tile_bg": "#ffffff",
+        "image_fit": "cover",
+        "image_scale": 100,
+        "hover_zoom": 106,
+        "radius": 12,
+        "overlay_opacity": 35,
+        "overlay_hover_opacity": 33,
+        "tile_top_left_icon": "shopify://shop_images/8011d0b10e5b130bd3b2e402e8f5a424.png",
+        "tile_icon_size": 38,
+        "tile_icon_offset_top": 12,
+        "tile_icon_offset_left": 12
+      }
+    },
+    "hex_prism_carousel_WBiKbP": {
+      "type": "hex-prism-carousel",
+      "blocks": {
+        "face_A8LFkw": {
+          "type": "face",
+          "settings": {
+            "name": "FoxBoo",
+            "ages": "2-4",
+            "image": "shopify://shop_images/FoxBoo_Mob.png",
+            "link": "shopify://products/foxboo",
+            "product": "foxboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        },
+        "face_E3wKmb": {
+          "type": "face",
+          "settings": {
+            "name": "Bunny Set",
+            "ages": "0.5-3,4",
+            "image": "shopify://shop_images/DinoBoo.png",
+            "link": "shopify://products/dinoboo",
+            "product": "dinoboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        },
+        "face_3HAW8z": {
+          "type": "face",
+          "settings": {
+            "name": "Bunny Set",
+            "ages": "0.5-3,4",
+            "image": "shopify://shop_images/BunBoo_Mob.png",
+            "link": "shopify://products/bunboo",
+            "product": "bunboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        },
+        "face_r6ihhE": {
+          "type": "face",
+          "settings": {
+            "name": "Bunny Set",
+            "ages": "4,5-7",
+            "image": "shopify://shop_images/Shaboo_Mob.png",
+            "link": "shopify://products/shaboo",
+            "product": "shaboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        },
+        "face_W9JEMc": {
+          "type": "face",
+          "settings": {
+            "name": "Bunny Set",
+            "ages": "4,5-7",
+            "image": "shopify://shop_images/FoxBoo_Mob.png",
+            "link": "shopify://products/foxboo",
+            "product": "foxboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        },
+        "face_iJTAd7": {
+          "type": "face",
+          "settings": {
+            "name": "Bunny Set",
+            "ages": "4,5-7",
+            "image": "shopify://shop_images/Griboo_Mob.png",
+            "link": "shopify://products/griboo",
+            "product": "griboo",
+            "gradient_start": "#4a90e2",
+            "gradient_end": "#7b68ee"
+          }
+        }
+      },
+      "block_order": [
+        "face_A8LFkw",
+        "face_E3wKmb",
+        "face_3HAW8z",
+        "face_r6ihhE",
+        "face_W9JEMc",
+        "face_iJTAd7"
+      ],
+      "name": "Hex Prism Carousel",
+      "settings": {
+        "perspective": 1400,
+        "radius": 300,
+        "card_gap_multiplier": 100,
+        "perspective_mobile": 1600,
+        "radius_mobile": 200,
+        "face_width": 320,
+        "face_height": 500,
+        "card_aspect_ratio": "",
+        "face_width_mobile": 240,
+        "face_height_mobile": 400,
+        "section_title": "Choose Your Character",
+        "section_title_tag": "h2",
+        "section_title_color": "#000000",
+        "section_title_top_padding": 80,
+        "section_title_size": 25,
+        "section_title_mobile_size": 14,
+        "section_title_weight": "900",
+        "corner_radius": 14,
+        "side_opacity": 3,
+        "side2_opacity": 3,
+        "image_max_width": 700,
+        "background_color": "#ffffff",
+        "section_bg_image": "shopify://shop_images/generate-a-light-grey-background-gradient.png",
+        "tile_icon_size": 36,
+        "tile_icon_offset_top": 12,
+        "tile_icon_offset_left": 12,
+        "hide_on_desktop": true,
+        "padding_top": 0,
+        "padding_bottom": 100,
+        "side_icon_json_url": "https://cdn.shopify.com/s/files/1/0795/2298/8256/files/Swipe_Right.json?v=1773777240",
+        "side_icon_alt": "",
+        "side_icon_size": 50,
+        "age_filter_title": "Choose Age",
+        "age_filter_title_color": "#000000",
+        "age_filter_title_size": 16,
+        "age_filter_title_weight": "700",
+        "show_age_filter": true,
+        "age_filter_values": "0.5-3,4,5-7",
+        "reset_icon": "shopify://shop_images/Reset_Icon_71351e35-0398-499f-98aa-05905e28b5e3.png",
+        "filter_ui_scale": 85,
+        "filter_gap": 10,
+        "filter_top_padding": 12,
+        "filter_bottom_margin": -24,
+        "carousel_box_scale": 78,
+        "card_name_size": 12,
+        "card_name_weight": "700",
+        "enable_tile_quick_add": true,
+        "quick_add_title": "Choose size",
+        "quick_add_size_guide_heading": "Size guide",
+        "quick_add_size_guide_link_label": "Open size guide",
+        "quick_add_size_guide_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "shop_color_grid_mytb9M",
+    "hex_prism_carousel_WBiKbP"
+  ]
+}
