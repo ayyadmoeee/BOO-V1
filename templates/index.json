@@ -667,18 +667,19 @@
     "shop_color_grid_ifdnEa": {
       "type": "shop-color-grid",
       "blocks": {
-        "tile_Rbgae7": {
-          "type": "tile",
-          "settings": {
-            "product": "bunboo",
-            "text_color": "#ffffff",
-            "age_range": "0.5-3,4"
-          }
-        },
         "tile_hPQHAX": {
           "type": "tile",
           "settings": {
             "product": "dinoboo",
+            "custom_image": "shopify://shop_images/DinoBoo_Mobile_Hexprism.png",
+            "text_color": "#ffffff",
+            "age_range": "0.5-3,4"
+          }
+        },
+        "tile_Rbgae7": {
+          "type": "tile",
+          "settings": {
+            "product": "bunboo",
             "text_color": "#ffffff",
             "age_range": "0.5-3,4"
           }
@@ -709,8 +710,8 @@
         }
       },
       "block_order": [
-        "tile_Rbgae7",
         "tile_hPQHAX",
+        "tile_Rbgae7",
         "tile_6bAzm9",
         "tile_tNNNai",
         "tile_W3yWNi"
