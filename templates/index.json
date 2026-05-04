@@ -15,6 +15,7 @@
         "feature_k74rjy": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_showing_hand_with_a_green_sleeve_pointing_upwards_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -96,6 +97,7 @@
         "feature_FmkppN": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_showing_the_tail_of_the_DinoBoo_with_yellow_balls_on_it.png",
             "feature_icon": "",
             "feature_title": "Feature Title",
             "feature_title_font": "assistant_n4",
@@ -177,6 +179,7 @@
         "feature_7cfFGW": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_face_Green_dinosaur-themed_hooded_towel_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -293,8 +296,10 @@
         "button_secondary_hover_bg": "#000000",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/Homepage_Background_Dense_jungle_with_sunlight_filtering_through_the_canopy.jpg",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/Homepage_showing_all_products_DinoBoo_BunBoo_GriBoo_FoxBoo_ShaBoo.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 155,
         "top_center_image_x_offset": 0,
