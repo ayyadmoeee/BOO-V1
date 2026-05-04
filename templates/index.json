@@ -1082,6 +1082,7 @@
         "top_bg_type": "image",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/DinoBoo_Street_Background_Street_scene_with_cars_parked_along_a_tree-lined_road.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 100,
         "top_center_image_x_offset": 0,
