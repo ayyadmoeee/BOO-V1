@@ -680,6 +680,7 @@
           "type": "tile",
           "settings": {
             "product": "bunboo",
+            "custom_image": "shopify://shop_images/BunBoo_Mob_Hexprism.png",
             "text_color": "#ffffff",
             "age_range": "0.5-3,4"
           }
@@ -688,6 +689,7 @@
           "type": "tile",
           "settings": {
             "product": "foxboo",
+            "custom_image": "shopify://shop_images/FoxBoo_Mobile_Hexprism.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
@@ -696,6 +698,7 @@
           "type": "tile",
           "settings": {
             "product": "griboo",
+            "custom_image": "shopify://shop_images/Griboo_Mob_Hexprism.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
@@ -704,6 +707,7 @@
           "type": "tile",
           "settings": {
             "product": "shaboo",
+            "custom_image": "shopify://shop_images/Shaboo_Mob_Hexprism.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
