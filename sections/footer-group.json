@@ -18,7 +18,7 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "ooter-policies-custom",
+            "menu": "",
             "lb_mobile_custom_menu": false
           }
         },
@@ -26,7 +26,6 @@
           "type": "payment_option",
           "settings": {
             "payment_label": "Visa",
-            "payment_icon": "shopify://shop_images/whishpay.CgBAaM5Z.svg",
             "payment_link": ""
           }
         },
@@ -42,7 +41,7 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "mobile-custom-menu",
+            "menu": "",
             "lb_mobile_custom_menu": true
           }
         },
@@ -65,7 +64,7 @@
         "newsletter_enable": true,
         "newsletter_heading": "Subscribe to our emails",
         "lb_brand_title": "BOO",
-        "lb_brand_image": "shopify://shop_images/lo._go_copy.png",
+        "lb_brand_image": "shopify://shop_images/BOO_Logo.png",
         "lb_brand_image_max_width": 120,
         "lb_brand_description": "<p>Contemporary culture, elevated essentials, and timeless pieces built with intention.</p>",
         "lb_company_title": "BRAND",
