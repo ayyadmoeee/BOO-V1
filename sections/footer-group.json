@@ -18,7 +18,7 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "",
+            "menu": "footer-no-1",
             "lb_mobile_custom_menu": false
           }
         },
