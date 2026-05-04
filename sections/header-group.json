@@ -138,7 +138,8 @@
       ],
       "name": "Hero Slideshow Header",
       "settings": {
-        "menu": "main-menu",
+        "logo": "shopify://shop_images/Logo_BOO_Footer.png",
+        "menu": "main-menu-1",
         "text_color": "#ffffff",
         "section_bottom_padding": 66,
         "menu_pill_padding_y": 6,
