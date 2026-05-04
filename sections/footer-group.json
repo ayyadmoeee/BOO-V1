@@ -42,7 +42,7 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "",
+            "menu": "main-menu",
             "lb_mobile_custom_menu": true
           }
         },
