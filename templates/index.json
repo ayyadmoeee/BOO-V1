@@ -1932,6 +1932,7 @@
         "feature_fab4pi": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/GriBoo_Face.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1939,7 +1940,7 @@
             "feature_description_font": "besley_n4",
             "feature_description_2": "Breathe Fire!",
             "feature_button_text": "",
-            "feature_button_url": "shopify://products/bunboo",
+            "feature_button_url": "shopify://products/griboo",
             "feature_button_style": "primary",
             "feature_button_max_width_desktop": 240,
             "feature_button_max_width_mobile": 240,
