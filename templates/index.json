@@ -1641,6 +1641,7 @@
         "feature_ND4JGb": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Foxboo_four_fingers_handHand_making_a_peace_sign_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1722,6 +1723,7 @@
         "feature_Rh6pUH": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/Pink_and_red_hoodie_with_a_fox_design_on_a_white_background_FoxBoo.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1837,8 +1839,10 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/Pink_wall_with_a_white_headboard_and_pink_pillows_0d546289-29ce-45f2-96de-7144bc1395ff.png",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/FoxBoo_Child_wearing_a_pink_and_red_animal-themed_hoodie_making_a_playful_gesture.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 110,
         "top_center_image_x_offset": 0,
