@@ -25,7 +25,8 @@
         "payment_option_iEACre": {
           "type": "payment_option",
           "settings": {
-            "payment_label": "Visa",
+            "payment_label": "Whish Pay",
+            "payment_icon": "shopify://shop_images/whishpay.CgBAaM5Z.svg",
             "payment_link": ""
           }
         },
