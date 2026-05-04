@@ -1574,7 +1574,7 @@
         "top_center_text_overlap_color": "#ffffff",
         "top_center_text_overlap_offset": -50,
         "bottom_bg_color": "rgba(0,0,0,0)",
-        "bottom_bg_gradient": "linear-gradient(0deg, rgba(92, 28, 28, 1), rgba(52, 105, 140, 1) 40%, rgba(102, 160, 195, 1) 75%, rgba(180, 210, 230, 1) 100%)",
+        "bottom_bg_gradient": "linear-gradient(0deg, rgba(28, 65, 92, 1), rgba(52, 105, 140, 1) 40%, rgba(102, 160, 195, 1) 75%, rgba(180, 210, 230, 1) 100%)",
         "bridge_bg_color": "",
         "bridge_bg_gradient": "linear-gradient(0deg, rgba(148, 187, 213, 0.35), rgba(180, 210, 230, 0.18) 40%, rgba(180, 210, 230, 0.08) 65%, rgba(180, 210, 230, 0) 100%)",
         "bottom_padding": 4,
