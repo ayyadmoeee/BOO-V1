@@ -86,6 +86,8 @@
         "slide_ETHy6N": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_BunBOo_the_pink_bunny_costume_against_a_dark_background_Desktop_Size.jpg",
+            "mobile_image": "shopify://shop_images/Child_wearing_BunBOo_the_pink_bunny_costume_against_a_dark_background_Mobile_Size.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center-left",
@@ -99,6 +101,8 @@
         "slide_7MJUwU": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_ShaBoo_the_shark_costume_against_a_dark_background_Desktop_Size.jpg",
+            "mobile_image": "shopify://shop_images/Child_wearing_ShaBoo_the_shark_costume_against_a_dark_background_Mobile_Size.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center",
@@ -112,6 +116,8 @@
         "slide_9WGLJC": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/Child_wearing_GtiBoo_the_dark_hoodie_with_a_hood_reaching_out_against_a_gray_background_Desktop_Size_Homepage_Header.jpg",
+            "mobile_image": "shopify://shop_images/Child_wearing_GtiBoo_the_dark_hoodie_with_a_hood_reaching_out_against_a_gray_background_Mobile_Size_Homepage_Header.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center",
