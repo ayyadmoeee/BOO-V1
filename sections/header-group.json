@@ -17,7 +17,7 @@
       "settings": {
         "logo": "shopify://shop_images/Logo_BOO_Footer.png",
         "show_on_homepage": false,
-        "menu": "main-menu",
+        "menu": "main-menu-1",
         "text_color": "#ffffff",
         "menu_pill_padding_y": 4,
         "menu_pill_padding_x": 10,
