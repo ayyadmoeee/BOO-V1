@@ -15,7 +15,7 @@
       "type": "hero-header",
       "name": "Hero Header",
       "settings": {
-        "logo": "shopify://shop_images/LOGO_-_White_w_shadow.png",
+        "logo": "shopify://shop_images/Logo_BOO_Footer.png",
         "show_on_homepage": false,
         "menu": "main-menu",
         "text_color": "#ffffff",
@@ -57,7 +57,7 @@
         "slide_jF8PyN": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/DinoBoo.jpg",
+            "image": "shopify://shop_images/Child_wearing_DinoBoo_the_green_dinosaur_costume_against_a_dark_background.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center",
@@ -71,8 +71,8 @@
         "slide_6QADXU": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/FoxBoo.jpg",
-            "mobile_image": "shopify://shop_images/FoxBoo_4eb36f17-6125-4cad-b047-b2900503393c.jpg",
+            "image": "shopify://shop_images/Child_wearing_Foxboo_the_pink_animal_onesie_against_a_dark_background_Desktop_Size.jpg",
+            "mobile_image": "shopify://shop_images/Child_wearing_Foxboo_the_pink_animal_onesie_against_a_dark_background_Mobile_Size.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "custom",
@@ -86,8 +86,6 @@
         "slide_ETHy6N": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/BunBoo.jpg",
-            "mobile_image": "shopify://shop_images/BunBoo_829e8bd0-a2e1-4ae9-978b-dd77f1c78193.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center-left",
@@ -101,8 +99,6 @@
         "slide_7MJUwU": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Shaboo.jpg",
-            "mobile_image": "shopify://shop_images/Shaboo_7bc63e05-919f-48ff-b914-b850030d4909.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center",
@@ -116,8 +112,6 @@
         "slide_9WGLJC": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/GriBoo.jpg",
-            "mobile_image": "shopify://shop_images/Griboo_22aead4f-c3b7-4e98-98a6-2657b515cef7.jpg",
             "title": "",
             "subtitle": "",
             "text_position": "center",
@@ -138,7 +132,6 @@
       ],
       "name": "Hero Slideshow Header",
       "settings": {
-        "logo": "shopify://shop_images/LOGO_-_White.png",
         "menu": "main-menu",
         "text_color": "#ffffff",
         "section_bottom_padding": 66,
