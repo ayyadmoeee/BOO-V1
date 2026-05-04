@@ -465,6 +465,7 @@
           "settings": {
             "name": "FoxBoo",
             "ages": "4,5-7",
+            "image": "shopify://shop_images/FoxBoo_Mobile_Hexprism.png",
             "link": "shopify://products/foxboo",
             "product": "foxboo",
             "gradient_start": "#4a90e2",
@@ -476,6 +477,7 @@
           "settings": {
             "name": "DinoBoo",
             "ages": "0.5-3,4",
+            "image": "shopify://shop_images/DinoBoo_Mobile_Hexprism.png",
             "link": "shopify://products/dinoboo",
             "product": "dinoboo",
             "gradient_start": "#4a90e2",
@@ -487,6 +489,7 @@
           "settings": {
             "name": "ShaBoo",
             "ages": "4,5-7",
+            "image": "shopify://shop_images/Shaboo_Mob_Hexprism.png",
             "link": "shopify://products/shaboo",
             "product": "shaboo",
             "gradient_start": "#4a90e2",
@@ -498,6 +501,7 @@
           "settings": {
             "name": "FoxBoo",
             "ages": "4,5-7",
+            "image": "shopify://shop_images/FoxBoo_Mobile_Hexprism.png",
             "link": "shopify://products/foxboo",
             "product": "foxboo",
             "gradient_start": "#4a90e2",
@@ -509,6 +513,7 @@
           "settings": {
             "name": "GriBoo",
             "ages": "4,5-7",
+            "image": "shopify://shop_images/Griboo_Mob_Hexprism.png",
             "link": "shopify://products/griboo",
             "product": "griboo",
             "gradient_start": "#4a90e2",
@@ -520,6 +525,7 @@
           "settings": {
             "name": "BunBoo",
             "ages": "0.5-3,4",
+            "image": "shopify://shop_images/BunBoo_Mob_Hexprism.png",
             "link": "shopify://products/bunboo",
             "product": "bunboo",
             "gradient_start": "#4a90e2",
