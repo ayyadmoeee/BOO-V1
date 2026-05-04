@@ -802,6 +802,7 @@
         "feature_WaC7m8": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_showing_hand_with_a_green_sleeve_pointing_upwards_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -883,6 +884,7 @@
         "feature_RGtrUV": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_showing_the_tail_of_the_DinoBoo_with_yellow_balls_on_it.png",
             "feature_icon": "",
             "feature_title": "Feature Title",
             "feature_title_font": "assistant_n4",
@@ -964,6 +966,7 @@
         "feature_BjimTf": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/DinoBoo_Homepage_face_Green_dinosaur-themed_hooded_towel_on_a_white_background.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1080,9 +1083,10 @@
         "button_secondary_hover_bg": "#000000",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/DinoBoo_Street_Background_Street_scene_with_cars_parked_along_a_tree-lined_road.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/DinoBoo_Street_Background_Street_scene_with_cars_parked_along_a_tree-lined_road.png",
+        "top_center_image": "shopify://shop_images/Foreground_Kid_Child_in_a_green_dinosaur_costume_riding_a_blue_balance_bike_on_a_white_background.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 100,
         "top_center_image_x_offset": 0,
