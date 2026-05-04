@@ -1851,6 +1851,7 @@
         "feature_PdLRKP": {
           "type": "feature",
           "settings": {
+            "feature_image": "shopify://shop_images/GriBoo_Hand_3_fingers.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -2048,8 +2049,10 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
+        "top_bg_image": "shopify://shop_images/BunBoo_Background_homepage.png",
         "top_bg_gradient": "",
         "top_logo": "",
+        "top_center_image": "shopify://shop_images/GriBoo_Kid_Homepage.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
