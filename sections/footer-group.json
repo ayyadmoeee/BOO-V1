@@ -34,7 +34,7 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "footer",
+            "menu": "footer-no-2",
             "lb_mobile_custom_menu": false
           }
         },
