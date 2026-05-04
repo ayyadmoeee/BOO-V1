@@ -15,7 +15,6 @@
         "feature_k74rjy": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELEMENT_1.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -97,7 +96,6 @@
         "feature_FmkppN": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELement_2.png",
             "feature_icon": "",
             "feature_title": "Feature Title",
             "feature_title_font": "assistant_n4",
@@ -179,7 +177,6 @@
         "feature_7cfFGW": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELement_3.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -296,10 +293,8 @@
         "button_secondary_hover_bg": "#000000",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/Background.jpg",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/Foreground_Firefly_Upscaler_2x_scale_copy_51463a5e-120a-4e14-aa52-0ac858a2b5ee.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 155,
         "top_center_image_x_offset": 0,
@@ -362,28 +357,24 @@
         "sliding_image_fyTDBM": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Apr_27_2026_04_19_15_AM.png",
             "alt_text": ""
           }
         },
         "sliding_image_VJYKJM": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_7bayg47bayg47bay_1.png",
             "alt_text": ""
           }
         },
         "sliding_image_r3B4Vd": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_Apr_27_2026_04_21_02_AM.png",
             "alt_text": ""
           }
         },
         "sliding_image_Qf9MyM": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_a2dd65a2dd65a2dd.png",
             "alt_text": ""
           }
         },
@@ -396,7 +387,6 @@
         "sliding_image_PqwkYT": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_7c8xro7c8xro7c8x.png",
             "alt_text": ""
           }
         },
@@ -409,14 +399,12 @@
         "sliding_image_6iDdnn": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_cay1bbcay1bbcay1.png",
             "alt_text": ""
           }
         },
         "sliding_image_Hfz6Kq": {
           "type": "sliding_image",
           "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_lte7d7lte7d7lte7.png",
             "alt_text": ""
           }
         }
@@ -435,14 +423,12 @@
       ],
       "name": "Hers Labs Hero",
       "settings": {
-        "background_image": "shopify://shop_images/Background.jpg",
         "background_image_height_desktop": 0,
         "background_image_height_mobile": 0,
         "section_height_desktop": 600,
         "section_height_mobile": 200,
         "padding_top": 0,
         "padding_bottom": 20,
-        "characters_image": "shopify://shop_images/Foreground.png",
         "characters_alt_text": "Character onesies",
         "characters_max_width_desktop": 64,
         "characters_max_width_mobile": 95,
@@ -465,7 +451,6 @@
           "settings": {
             "name": "FoxBoo",
             "ages": "4,5-7",
-            "image": "shopify://shop_images/FoxBoo_Mob.png",
             "link": "shopify://products/foxboo",
             "product": "foxboo",
             "gradient_start": "#4a90e2",
@@ -477,10 +462,8 @@
           "settings": {
             "name": "DinoBoo",
             "ages": "0.5-3,4",
-            "image": "shopify://shop_images/DinoBoo.png",
             "link": "shopify://products/dinoboo",
             "product": "dinoboo",
-            "card_icon": "shopify://shop_images/Ninja-png-1744870695-2539971.png",
             "gradient_start": "#4a90e2",
             "gradient_end": "#7b68ee"
           }
@@ -490,7 +473,6 @@
           "settings": {
             "name": "ShaBoo",
             "ages": "4,5-7",
-            "image": "shopify://shop_images/Shaboo_Mob.png",
             "link": "shopify://products/shaboo",
             "product": "shaboo",
             "gradient_start": "#4a90e2",
@@ -502,7 +484,6 @@
           "settings": {
             "name": "FoxBoo",
             "ages": "4,5-7",
-            "image": "shopify://shop_images/FoxBoo_Mob.png",
             "link": "shopify://products/foxboo",
             "product": "foxboo",
             "gradient_start": "#4a90e2",
@@ -514,7 +495,6 @@
           "settings": {
             "name": "GriBoo",
             "ages": "4,5-7",
-            "image": "shopify://shop_images/Griboo_Mob.png",
             "link": "shopify://products/griboo",
             "product": "griboo",
             "gradient_start": "#4a90e2",
@@ -526,10 +506,8 @@
           "settings": {
             "name": "BunBoo",
             "ages": "0.5-3,4",
-            "image": "shopify://shop_images/BunBoo_Mob.png",
             "link": "shopify://products/bunboo",
             "product": "bunboo",
-            "card_icon": "shopify://shop_images/Ninja-png-1744870695-2539971.png",
             "gradient_start": "#4a90e2",
             "gradient_end": "#7b68ee"
           }
@@ -582,7 +560,6 @@
         "age_filter_title_weight": "700",
         "show_age_filter": true,
         "age_filter_values": "0.5-3,4,5-7",
-        "reset_icon": "shopify://shop_images/Reset_Icon_71351e35-0398-499f-98aa-05905e28b5e3.png",
         "filter_ui_scale": 85,
         "filter_gap": 10,
         "filter_top_padding": 12,
@@ -593,8 +570,7 @@
         "enable_tile_quick_add": true,
         "quick_add_title": "Choose size",
         "quick_add_size_guide_heading": "Size guide",
-        "quick_add_size_guide_link_label": "Open size guide",
-        "quick_add_size_guide_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png"
+        "quick_add_size_guide_link_label": "Open size guide"
       }
     },
     "best_sellers_on_sale_ygnM6X": {
@@ -604,7 +580,6 @@
           "type": "product_card",
           "settings": {
             "product": "shaboo",
-            "custom_image": "shopify://shop_images/SHABOO.png",
             "age_range": "0.5-4"
           }
         },
@@ -612,7 +587,6 @@
           "type": "product_card",
           "settings": {
             "product": "griboo",
-            "custom_image": "shopify://shop_images/Griboo.png",
             "age_range": "0.5-4"
           }
         },
@@ -620,7 +594,6 @@
           "type": "product_card",
           "settings": {
             "product": "foxboo",
-            "custom_image": "shopify://shop_images/FOXBOO.png",
             "age_range": "5-7"
           }
         },
@@ -628,7 +601,6 @@
           "type": "product_card",
           "settings": {
             "product": "dinoboo",
-            "custom_image": "shopify://shop_images/DIBABOOOO.png",
             "age_range": "5-7"
           }
         },
@@ -636,7 +608,6 @@
           "type": "product_card",
           "settings": {
             "product": "foxboo",
-            "custom_image": "shopify://shop_images/FOXBOO.png",
             "age_range": "0.5-4"
           }
         }
@@ -680,8 +651,6 @@
           "type": "tile",
           "settings": {
             "product": "bunboo",
-            "custom_image": "shopify://shop_images/BunBoo.png",
-            "card_icon": "shopify://shop_images/8011d0b10e5b130bd3b2e402e8f5a424.png",
             "text_color": "#ffffff",
             "age_range": "0.5-3,4"
           }
@@ -690,8 +659,6 @@
           "type": "tile",
           "settings": {
             "product": "dinoboo",
-            "custom_image": "shopify://shop_images/DinoBoo.png",
-            "card_icon": "shopify://shop_images/allpng-plain-white-plate-for-kitchen-use.png",
             "text_color": "#ffffff",
             "age_range": "0.5-3,4"
           }
@@ -700,7 +667,6 @@
           "type": "tile",
           "settings": {
             "product": "foxboo",
-            "custom_image": "shopify://shop_images/FoxBoo_2.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
@@ -709,7 +675,6 @@
           "type": "tile",
           "settings": {
             "product": "griboo",
-            "custom_image": "shopify://shop_images/GriBoo_2.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
@@ -718,7 +683,6 @@
           "type": "tile",
           "settings": {
             "product": "shaboo",
-            "custom_image": "shopify://shop_images/ShaBoo_e6861927-ed26-48c2-8d6d-65aea7ae9292.png",
             "text_color": "#ffffff",
             "age_range": "4,5-7"
           }
@@ -753,7 +717,6 @@
         "filter_btn_text_color": "#ffffff",
         "filter_btn_active_bg_color": "#212121",
         "filter_btn_radius": 20,
-        "reset_icon": "shopify://shop_images/Reset_Icon_71351e35-0398-499f-98aa-05905e28b5e3.png",
         "filter_button_1_text": "0.5 - 3 Years",
         "filter_button_1_range": "0.5-3",
         "filter_button_2_text": "4 Years",
@@ -767,7 +730,6 @@
         "quick_add_size_button_width": 0,
         "quick_add_size_guide_heading": "Size guide",
         "quick_add_size_guide_link_label": "Open size guide",
-        "quick_add_size_guide_image": "shopify://shop_images/generate-a-size-guide-image-for-our-website.png",
         "section_bg": "#ffffff",
         "section_padding_top": 24,
         "section_padding_bottom": 0,
@@ -804,7 +766,6 @@
         "radius": 26,
         "overlay_opacity": 0,
         "overlay_hover_opacity": 15,
-        "tile_top_left_icon": "shopify://shop_images/8011d0b10e5b130bd3b2e402e8f5a424.png",
         "tile_icon_size": 36,
         "tile_icon_offset_top": 12,
         "tile_icon_offset_left": 12
@@ -816,7 +777,6 @@
         "feature_WaC7m8": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELEMENT_1.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -898,7 +858,6 @@
         "feature_RGtrUV": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELement_2.png",
             "feature_icon": "",
             "feature_title": "Feature Title",
             "feature_title_font": "assistant_n4",
@@ -980,7 +939,6 @@
         "feature_BjimTf": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/ELement_3.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1097,10 +1055,8 @@
         "button_secondary_hover_bg": "#000000",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/DinoBoo_Street_Background.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/Foreground_Kid.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 100,
         "top_center_image_x_offset": 0,
@@ -1151,7 +1107,6 @@
         "feature_667RJ4": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Gemini_Generated_Image_xwz3oyxwz3oyxwz3_-_Copy.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1233,7 +1188,6 @@
         "feature_BgAGCC": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Gemini_Generated_Image_n1upirn1upirn1up_-_Copy.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1349,10 +1303,8 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/BunBoo_Background.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/Gemini_Generated_Image_drvl55drvl55drvl_c82a2cb1-159a-4f57-811c-f2eed2a3bda6.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
@@ -1403,7 +1355,6 @@
         "feature_ywdycx": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Element_1.1.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1485,7 +1436,6 @@
         "feature_edCmTh": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Element_2.1.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1601,10 +1551,8 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/Shaboo_Background.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/Shaboo_Foreground_Kid.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
@@ -1626,7 +1574,7 @@
         "top_center_text_overlap_color": "#ffffff",
         "top_center_text_overlap_offset": -50,
         "bottom_bg_color": "rgba(0,0,0,0)",
-        "bottom_bg_gradient": "linear-gradient(0deg, rgba(28, 65, 92, 1), rgba(52, 105, 140, 1) 40%, rgba(102, 160, 195, 1) 75%, rgba(180, 210, 230, 1) 100%)",
+        "bottom_bg_gradient": "linear-gradient(0deg, rgba(92, 28, 28, 1), rgba(52, 105, 140, 1) 40%, rgba(102, 160, 195, 1) 75%, rgba(180, 210, 230, 1) 100%)",
         "bridge_bg_color": "",
         "bridge_bg_gradient": "linear-gradient(0deg, rgba(148, 187, 213, 0.35), rgba(180, 210, 230, 0.18) 40%, rgba(180, 210, 230, 0.08) 65%, rgba(180, 210, 230, 0) 100%)",
         "bottom_padding": 4,
@@ -1655,7 +1603,6 @@
         "feature_ND4JGb": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Foxboo_four_fingers_hand_8fb90257-d17d-440d-8cfc-9952464657e1.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1737,7 +1684,6 @@
         "feature_Rh6pUH": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Gemini_Generated_Image_rnfe7vrnfe7vrnfe_-_Copy.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -1853,10 +1799,8 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/123.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/Fox_Boo_Girl_2.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 110,
         "top_center_image_x_offset": 0,
@@ -1907,7 +1851,6 @@
         "feature_PdLRKP": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Gemini_Generated_Image_f9zxy6f9zxy6f9zx_-_Copy.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "bungee_n4",
@@ -1989,7 +1932,6 @@
         "feature_fab4pi": {
           "type": "feature",
           "settings": {
-            "feature_image": "shopify://shop_images/Gemini_Generated_Image_7q90vd7q90vd7q90_-_Copy.png",
             "feature_icon": "",
             "feature_title": "",
             "feature_title_font": "assistant_n4",
@@ -2105,10 +2047,8 @@
         "button_secondary_hover_bg": "",
         "button_secondary_hover_text": "",
         "top_bg_type": "image",
-        "top_bg_image": "shopify://shop_images/BunBoo_Background.png",
         "top_bg_gradient": "",
         "top_logo": "",
-        "top_center_image": "shopify://shop_images/GriBoo_Kid.png",
         "top_center_image_height": 0,
         "top_center_image_size_mobile": 105,
         "top_center_image_x_offset": 0,
