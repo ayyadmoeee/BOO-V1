@@ -444,7 +444,7 @@
             {% endif %}
           </div>
 
-          {% form 'product', display_product, class: 'ai-product-glass-' | append: section_id | append: '__form', id: 'product-form-' | append: section_id %}
+          {% form section_id %}
             {% if display_product.has_only_default_variant == false %}
               <div>
                 {% for option in display_product.options_with_values %}
@@ -912,3 +912,14 @@
   "presets": [{ "name": "AOH" }]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% form 'product', display_product, class: 'ai-product-glass-' | append:
+    section_id | append: '__form', id: 'product-form-' | append: section_id %}"
+  to: "{% form section_id %}"
+  position: 15538..15559
+{% endcomment %}

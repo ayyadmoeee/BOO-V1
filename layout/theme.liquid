@@ -38,8 +38,8 @@
         if (!isMobile) return;
 
         var root = document.documentElement;
-        var isHome = {{ template.name == 'index' | json }};
-        var isProductPage = {{ request.page_type == 'product' | json }};
+        var isHome = {{ template.name | json }};
+        var isProductPage = {{ request.page_type | json }};
         if (isHome) {
           root.classList.add('boo-home-mobile-stable');
         }
@@ -468,3 +468,16 @@
     {%- endif -%}
   </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ template.name == 'index' | json }}"
+  to: "{{ template.name | json }}"
+  position: 1539..1565
+- from: "{{ request.page_type == 'product' | json }}"
+  to: "{{ request.page_type | json }}"
+  position: 1595..1625
+{% endcomment %}
